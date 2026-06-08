@@ -132,10 +132,44 @@
       font-size: 18px;
       letter-spacing: 2px;
       margin-top: 15px;
+      cursor: pointer;
+      font-family: "Courier New", monospace;
     }
 
     .classifiedButton:hover {
       background: #8b0000;
+    }
+
+    #videoPlayerArea {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .videoBox {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      background: #000;
+      border: 1px solid #5f0000;
+      box-shadow: 0 0 25px rgba(150, 0, 0, 0.5);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .videoWrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .videoWrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
     }
 
     #startOverlay {
@@ -175,6 +209,10 @@
       font-size: 14px;
       margin-top: 18px;
       line-height: 1.5;
+    }
+
+    .fallbackLink {
+      color: #ff5555;
     }
 
     @media (max-width: 500px) {
@@ -235,18 +273,33 @@
     <section id="videoArea">
       <h2>TRANSMISSION UNLOCKED</h2>
 
-      <a
-        class="classifiedButton"
-        href="https://proceon-my.sharepoint.com/:v:/g/personal/j_vanmaarseveen_proceon_nl/IQCzYk7xPM3hTp4jBAx1fXcbAWetAI7GLYzhW29wu23t8Sw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=tLe75U"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        OPEN CLASSIFIED VIDEO
-      </a>
+      <button class="classifiedButton" onclick="loadVideo()">
+        LOAD CLASSIFIED VIDEO
+      </button>
+
+      <div id="videoPlayerArea">
+        <div class="videoBox">
+          <div class="videoWrapper">
+            <iframe
+              id="videoFrame"
+              src=""
+              title="Classified transmission"
+              allow="autoplay; fullscreen"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
 
       <p class="videoNote">
-        The file could not be embedded securely.<br>
-        Open the classified transmission in a separate window.
+        Als het filmpje niet in de site laadt, gebruik dan de noodlink:<br>
+        <a
+          class="fallbackLink"
+          href="https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=f14e62b3-cd3c-4ee1-9e23-040c757d771b&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create"
+          target="_blank"
+          rel="noopener noreferrer">
+          open video in nieuw tabblad
+        </a>
       </p>
     </section>
   </main>
@@ -256,6 +309,9 @@
     let remainingSeconds = countdownSeconds;
     let countdownInterval;
     let unlocked = false;
+    let videoLoaded = false;
+
+    const videoEmbedLink = "https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=f14e62b3-cd3c-4ee1-9e23-040c757d771b&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create";
 
     function openTransmission() {
       document.getElementById("startOverlay").style.display = "none";
@@ -309,6 +365,17 @@
 
       document.getElementById("lockedArea").style.display = "none";
       document.getElementById("videoArea").style.display = "block";
+    }
+
+    function loadVideo() {
+      if (videoLoaded) {
+        return;
+      }
+
+      videoLoaded = true;
+
+      document.getElementById("videoPlayerArea").style.display = "block";
+      document.getElementById("videoFrame").src = videoEmbedLink;
     }
   </script>
 
