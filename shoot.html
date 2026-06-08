@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>MI6 Target Range</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #080808;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.07),
+          rgba(0, 255, 100, 0.07) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 900px;
+      background: #000900;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      padding: 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 26px;
+      color: #00ff66;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.9);
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: #8dffb0;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .gameArea {
+      position: relative;
+      width: 100%;
+      height: 460px;
+      background:
+        linear-gradient(#101010 0%, #161616 45%, #050505 46%, #000000 100%);
+      border: 2px solid #00ff66;
+      box-shadow: inset 0 0 35px rgba(0, 255, 100, 0.18);
+      overflow: hidden;
+      cursor: crosshair;
+      touch-action: manipulation;
+    }
+
+    .gameArea::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(0, 255, 100, 0.08) 50%,
+          transparent 100%
+        );
+      animation: radarSweep 3s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes radarSweep {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .floorGrid {
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      bottom: 0;
+      height: 48%;
+      background:
+        linear-gradient(rgba(0, 255, 100, 0.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 100, 0.18) 1px, transparent 1px);
+      background-size: 40px 28px;
+      transform: perspective(240px) rotateX(58deg);
+      transform-origin: bottom;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .crosshair {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 70px;
+      height: 70px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    .crosshair::before,
+    .crosshair::after {
+      content: "";
+      position: absolute;
+      background: #00ff66;
+      box-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+    }
+
+    .crosshair::before {
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 70px;
+    }
+
+    .crosshair::after {
+      top: 50%;
+      left: 0;
+      height: 2px;
+      width: 70px;
+    }
+
+    .target {
+      position: absolute;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 4px solid #ffffff;
+      background: radial-gradient(circle, #ff3333 0%, #660000 70%);
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 38px;
+      font-weight: bold;
+      box-shadow:
+        0 0 18px rgba(255, 0, 0, 0.8),
+        inset 0 0 16px rgba(0, 0, 0, 0.6);
+      user-select: none;
+      animation: targetPulse 0.8s infinite alternate;
+    }
+
+    @keyframes targetPulse {
+      from {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      to {
+        transform: scale(1.08);
+        filter: brightness(1.35);
+      }
+    }
+
+    .target.hit {
+      animation: hitFlash 0.18s linear;
+      background: #ffffff;
+      color: #ff0000;
+    }
+
+    @keyframes hitFlash {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .hudBox {
+      border: 1px solid #00aa44;
+      background: rgba(0, 20, 0, 0.9);
+      padding: 10px;
+      color: #baffc9;
+    }
+
+    button {
+      padding: 12px 18px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #005c22;
+    }
+
+    #message {
+      min-height: 24px;
+      margin-top: 12px;
+      color: #8dffb0;
+    }
+
+    #winBox {
+      display: none;
+      margin-top: 20px;
+      padding: 18px;
+      border: 1px solid #00ff66;
+      background: rgba(0, 35, 0, 0.95);
+      color: #baffc9;
+      text-align: left;
+      line-height: 1.7;
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
+    }
+
+    .backLink {
+      display: inline-block;
+      margin-top: 20px;
+      color: #00ff66;
+      text-decoration: none;
+      border-bottom: 1px solid #00ff66;
+      font-weight: bold;
+    }
+
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.75);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .flash.active {
+      animation: muzzleFlash 0.12s linear;
+    }
+
+    @keyframes muzzleFlash {
+      0% { opacity: 0.75; }
+      100% { opacity: 0; }
+    }
+
+    @media (max-width: 650px) {
+      .terminal {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      .gameArea {
+        height: 390px;
+      }
+
+      .hud {
+        grid-template-columns: 1fr;
+      }
+
+      .target {
+        width: 68px;
+        height: 68px;
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="flash" id="flash"></div>
+
+  <main class="terminal">
+    <h1>MI6 TARGET RANGE // TRAINING SIM</h1>
+
+    <div class="subtitle">
+      Hit 10 authorization targets.<br>
+      Q and M markers are part of the old command chain.
+    </div>
+
+    <div class="gameArea" id="gameArea">
+      <div class="floorGrid"></div>
+      <div class="crosshair"></div>
+    </div>
+
+    <div class="hud">
+      <div class="hudBox">
+        HITS: <span id="hits">0</span> / 10
+      </div>
+      <div class="hudBox">
+        MISSES: <span id="misses">0</span>
+      </div>
+      <div class="hudBox">
+        STATUS: <span id="status">STANDBY</span>
+      </div>
+    </div>
+
+    <button onclick="startGame()">START / RESTART TRAINING</button>
+
+    <div id="message"></div>
+
+    <div id="winBox">
+      <strong>ACCESS GRANTED // TARGET SEQUENCE COMPLETE</strong><br><br>
+
+      Recovered command fragment:<br><br>
+
+      Q and M were not the intended targets.<br>
+      Their initials were used to open an old MI6 authorization layer.<br><br>
+
+      UNLOCK CODE:<br>
+      <strong>EYESONLY</strong><br><br>
+
+      Enter this code in the mission terminal when requested.
+    </div>
+
+    <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+  </main>
+
+  <script>
+    const gameArea = document.getElementById("gameArea");
+    const hitsDisplay = document.getElementById("hits");
+    const missesDisplay = document.getElementById("misses");
+    const statusDisplay = document.getElementById("status");
+    const message = document.getElementById("message");
+    const winBox = document.getElementById("winBox");
+    const flash = document.getElementById("flash");
+
+    const targetGoal = 10;
+
+    let hits = 0;
+    let misses = 0;
+    let currentTarget = null;
+    let targetTimer = null;
+    let gameRunning = false;
+
+    function startGame() {
+      hits = 0;
+      misses = 0;
+      gameRunning = true;
+
+      hitsDisplay.textContent = hits;
+      missesDisplay.textContent = misses;
+      statusDisplay.textContent = "ACTIVE";
+      message.textContent = "TRAINING RANGE ACTIVE // WAIT FOR TARGET";
+      winBox.style.display = "none";
+
+      removeCurrentTarget();
+      spawnTarget();
+    }
+
+    function spawnTarget() {
+      if (!gameRunning) {
+        return;
+      }
+
+      removeCurrentTarget();
+
+      const target = document.createElement("div");
+      target.className = "target";
+      target.textContent = Math.random() < 0.5 ? "Q" : "M";
+
+      const areaWidth = gameArea.clientWidth;
+      const areaHeight = gameArea.clientHeight;
+
+      const targetSize = window.innerWidth < 650 ? 68 : 76;
+
+      const x = Math.floor(Math.random() * (areaWidth - targetSize));
+      const y = Math.floor(Math.random() * (areaHeight - targetSize));
+
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+
+      target.addEventListener("click", function(event) {
+        event.stopPropagation();
+        hitTarget(target);
+      });
+
+      target.addEventListener("touchstart", function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        hitTarget(target);
+      }, { passive: false });
+
+      gameArea.appendChild(target);
+      currentTarget = target;
+
+      clearTimeout(targetTimer);
+      targetTimer = setTimeout(function() {
+        if (gameRunning) {
+          message.textContent = "TARGET LOST // NEW MARKER DEPLOYED";
+          spawnTarget();
+        }
+      }, 1800);
+    }
+
+    function hitTarget(target) {
+      if (!gameRunning || !target) {
+        return;
+      }
+
+      hits++;
+      hitsDisplay.textContent = hits;
+      message.textContent = "TARGET HIT // AUTHORIZATION MARKER CONFIRMED";
+
+      showFlash();
+
+      target.classList.add("hit");
+
+      clearTimeout(targetTimer);
+
+      if (hits >= targetGoal) {
+        setTimeout(function() {
+          winGame();
+        }, 180);
+      } else {
+        setTimeout(function() {
+          spawnTarget();
+        }, 220);
+      }
+    }
+
+    function showFlash() {
+      flash.classList.remove("active");
+      void flash.offsetWidth;
+      flash.classList.add("active");
+    }
+
+    function removeCurrentTarget() {
+      if (currentTarget && currentTarget.parentNode) {
+        currentTarget.parentNode.removeChild(currentTarget);
+      }
+
+      currentTarget = null;
+    }
+
+    function winGame() {
+      gameRunning = false;
+      clearTimeout(targetTimer);
+      removeCurrentTarget();
+
+      statusDisplay.textContent = "COMPLETE";
+      message.textContent = "TRAINING COMPLETE // CODE FRAGMENT UNLOCKED";
+      winBox.style.display = "block";
+      winBox.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function missShot() {
+      if (!gameRunning) {
+        return;
+      }
+
+      misses++;
+      missesDisplay.textContent = misses;
+      message.textContent = "MISS // RECALIBRATE AIM";
+
+      showFlash();
+    }
+
+    gameArea.addEventListener("click", function() {
+      missShot();
+    });
+
+    startGame();
+  </script>
+
+</body>
+</html>
