@@ -37,7 +37,7 @@
 
     .terminal {
       width: 100%;
-      max-width: 900px;
+      max-width: 920px;
       padding: 28px;
       background: #000900;
       border: 2px solid #00ff66;
@@ -69,13 +69,27 @@
       letter-spacing: 3px;
     }
 
-    .protocolBox {
+    .protocolGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
       margin: 22px 0;
+    }
+
+    .protocolBox {
       padding: 16px;
       border: 1px dashed #00aa44;
       background: rgba(0, 30, 0, 0.65);
       color: #baffc9;
       line-height: 1.6;
+      box-sizing: border-box;
+    }
+
+    .protocolTitle {
+      color: #00ff66;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
     }
 
     .protocolButton {
@@ -208,7 +222,7 @@
       51%, 100% { opacity: 0; }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .terminal {
         padding: 20px;
       }
@@ -219,6 +233,10 @@
 
       .corruptWords {
         font-size: 16px;
+      }
+
+      .protocolGrid {
+        grid-template-columns: 1fr;
       }
 
       .wordRow {
@@ -253,16 +271,30 @@ Restore botanical keywords to continue.</div>
       WORD 2: D_G_T_L_S<br>
       WORD 3: _L__ND_R<br>
       WORD 4: T_X_S<br>
-      WORD 5: N_GHTSH_DE
+      WORD 5: EXTERNAL PROTOCOL REQUIRED<br>
+      WORD 6: EXTERNAL PROTOCOL REQUIRED
     </div>
 
-    <div class="protocolBox">
-      SPECIMEN 5 NOT FOUND IN LOCAL ARCHIVE.<br>
-      Run containment protocol to recover missing specimen.
-      <br>
-      <a class="protocolButton" href="snake.html">
-        OPEN BOTANICAL CONTAINMENT PROTOCOL
-      </a>
+    <div class="protocolGrid">
+      <div class="protocolBox">
+        <div class="protocolTitle">PROTOCOL A // CONTAINMENT</div>
+        SPECIMEN 5 NOT FOUND IN LOCAL ARCHIVE.<br>
+        Run containment protocol to recover missing specimen.
+        <br>
+        <a class="protocolButton" href="snake.html">
+          OPEN BOTANICAL CONTAINMENT PROTOCOL
+        </a>
+      </div>
+
+      <div class="protocolBox">
+        <div class="protocolTitle">PROTOCOL B // PIXEL STACK</div>
+        SPECIMEN 6 LOCKED IN EXTERNAL MEMORY.<br>
+        Complete the pixel herb stack to recover missing specimen.
+        <br>
+        <a class="protocolButton" href="tetris.html">
+          OPEN PIXEL HERB STACK
+        </a>
+      </div>
     </div>
 
     <div class="text">Enter restored keywords:</div>
@@ -297,6 +329,12 @@ Restore botanical keywords to continue.</div>
       <span id="status5" class="status"></span>
     </div>
 
+    <div class="wordRow">
+      <input id="word6" type="text" placeholder="WORD 6">
+      <button id="button6" onclick="checkSingleWord(6)">CHECK</button>
+      <span id="status6" class="status"></span>
+    </div>
+
     <div id="terminalMessage"></div>
 
     <div id="continueArea">
@@ -315,7 +353,8 @@ FILE READY FOR RECOVERY.</div>
       2: "DIGITALIS",
       3: "OLEANDER",
       4: "TAXUS",
-      5: "NIGHTSHADE"
+      5: "NIGHTSHADE",
+      6: "ROZENBOTTEL"
     };
 
     const solved = {
@@ -323,7 +362,8 @@ FILE READY FOR RECOVERY.</div>
       2: false,
       3: false,
       4: false,
-      5: false
+      5: false,
+      6: false
     };
 
     function cleanInput(value) {
@@ -373,7 +413,8 @@ FILE READY FOR RECOVERY.</div>
         solved[2] &&
         solved[3] &&
         solved[4] &&
-        solved[5]
+        solved[5] &&
+        solved[6]
       ) {
         const message = document.getElementById("terminalMessage");
         message.style.color = "#00ff66";
