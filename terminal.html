@@ -37,7 +37,7 @@
 
     .terminal {
       width: 100%;
-      max-width: 850px;
+      max-width: 900px;
       padding: 28px;
       background: #000900;
       border: 2px solid #00ff66;
@@ -67,6 +67,32 @@
       line-height: 1.8;
       font-size: 22px;
       letter-spacing: 3px;
+    }
+
+    .protocolBox {
+      margin: 22px 0;
+      padding: 16px;
+      border: 1px dashed #00aa44;
+      background: rgba(0, 30, 0, 0.65);
+      color: #baffc9;
+      line-height: 1.6;
+    }
+
+    .protocolButton {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      text-decoration: none;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    .protocolButton:hover {
+      background: #005c22;
     }
 
     .wordRow {
@@ -131,11 +157,11 @@
       font-size: 14px;
     }
 
-    .status.correctStatus {
+    .correctStatus {
       color: #00ff66;
     }
 
-    .status.wrongStatus {
+    .wrongStatus {
       color: #ff4444;
     }
 
@@ -226,7 +252,17 @@ Restore botanical keywords to continue.</div>
       WORD 1: B_LL_D_NNA<br>
       WORD 2: D_G_T_L_S<br>
       WORD 3: _L__ND_R<br>
-      WORD 4: T_X_S
+      WORD 4: T_X_S<br>
+      WORD 5: N_GHTSH_DE
+    </div>
+
+    <div class="protocolBox">
+      SPECIMEN 5 NOT FOUND IN LOCAL ARCHIVE.<br>
+      Run containment protocol to recover missing specimen.
+      <br>
+      <a class="protocolButton" href="snake.html">
+        OPEN BOTANICAL CONTAINMENT PROTOCOL
+      </a>
     </div>
 
     <div class="text">Enter restored keywords:</div>
@@ -255,6 +291,12 @@ Restore botanical keywords to continue.</div>
       <span id="status4" class="status"></span>
     </div>
 
+    <div class="wordRow">
+      <input id="word5" type="text" placeholder="WORD 5">
+      <button id="button5" onclick="checkSingleWord(5)">CHECK</button>
+      <span id="status5" class="status"></span>
+    </div>
+
     <div id="terminalMessage"></div>
 
     <div id="continueArea">
@@ -272,14 +314,16 @@ FILE READY FOR RECOVERY.</div>
       1: "BELLADONNA",
       2: "DIGITALIS",
       3: "OLEANDER",
-      4: "TAXUS"
+      4: "TAXUS",
+      5: "NIGHTSHADE"
     };
 
     const solved = {
       1: false,
       2: false,
       3: false,
-      4: false
+      4: false,
+      5: false
     };
 
     function cleanInput(value) {
@@ -324,7 +368,13 @@ FILE READY FOR RECOVERY.</div>
     }
 
     function checkIfComplete() {
-      if (solved[1] && solved[2] && solved[3] && solved[4]) {
+      if (
+        solved[1] &&
+        solved[2] &&
+        solved[3] &&
+        solved[4] &&
+        solved[5]
+      ) {
         const message = document.getElementById("terminalMessage");
         message.style.color = "#00ff66";
         message.textContent = "ACCESS GRANTED // ALL BOTANICAL DATA RESTORED.";
