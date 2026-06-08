@@ -37,7 +37,7 @@
 
     .terminal {
       width: 100%;
-      max-width: 820px;
+      max-width: 850px;
       padding: 28px;
       background: #000900;
       border: 2px solid #00ff66;
@@ -69,11 +69,12 @@
       letter-spacing: 3px;
     }
 
-    .inputGrid {
+    .wordRow {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr auto auto;
       gap: 10px;
-      margin-top: 18px;
+      align-items: center;
+      margin-top: 10px;
     }
 
     input {
@@ -91,26 +92,79 @@
       box-shadow: 0 0 12px rgba(0, 255, 100, 0.7);
     }
 
+    input.correct {
+      background: #002b10;
+      border-color: #00ff66;
+      color: #baffc9;
+    }
+
+    input.wrong {
+      background: #260000;
+      border-color: #ff4444;
+      color: #ff9999;
+    }
+
     button {
-      margin-top: 18px;
-      padding: 14px 20px;
+      padding: 12px 16px;
       background: #003b16;
       color: #00ff66;
       border: 1px solid #00ff66;
       font-family: "Courier New", monospace;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
     }
 
     button:hover {
       background: #005c22;
     }
 
+    button:disabled {
+      background: #00200c;
+      color: #5aff91;
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    .status {
+      min-width: 90px;
+      font-size: 14px;
+    }
+
+    .status.correctStatus {
+      color: #00ff66;
+    }
+
+    .status.wrongStatus {
+      color: #ff4444;
+    }
+
     #terminalMessage {
-      margin-top: 16px;
+      margin-top: 20px;
       color: #ff4444;
       min-height: 24px;
+    }
+
+    #continueArea {
+      display: none;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #00aa44;
+    }
+
+    .continueButton {
+      display: inline-block;
+      padding: 14px 20px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      text-decoration: none;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    .continueButton:hover {
+      background: #005c22;
     }
 
     .cursor {
@@ -128,7 +182,7 @@
       51%, 100% { opacity: 0; }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
       .terminal {
         padding: 20px;
       }
@@ -139,6 +193,16 @@
 
       .corruptWords {
         font-size: 16px;
+      }
+
+      .wordRow {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .status {
+        min-width: auto;
       }
     }
   </style>
@@ -159,56 +223,127 @@ Last known user: DR. A. VOSS
 Restore botanical keywords to continue.</div>
 
     <div class="corruptWords">
-      B_LL_D_NNA<br>
-      D_G_T_L_S<br>
-      _L__ND_R<br>
-      T_X_S
+      WORD 1: B_LL_D_NNA<br>
+      WORD 2: D_G_T_L_S<br>
+      WORD 3: _L__ND_R<br>
+      WORD 4: T_X_S
     </div>
 
     <div class="text">Enter restored keywords:</div>
 
-    <div class="inputGrid">
+    <div class="wordRow">
       <input id="word1" type="text" placeholder="WORD 1">
-      <input id="word2" type="text" placeholder="WORD 2">
-      <input id="word3" type="text" placeholder="WORD 3">
-      <input id="word4" type="text" placeholder="WORD 4">
+      <button id="button1" onclick="checkSingleWord(1)">CHECK</button>
+      <span id="status1" class="status"></span>
     </div>
 
-    <button onclick="checkBotanicalPuzzle()">RESTORE FILE</button>
+    <div class="wordRow">
+      <input id="word2" type="text" placeholder="WORD 2">
+      <button id="button2" onclick="checkSingleWord(2)">CHECK</button>
+      <span id="status2" class="status"></span>
+    </div>
+
+    <div class="wordRow">
+      <input id="word3" type="text" placeholder="WORD 3">
+      <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
+      <span id="status3" class="status"></span>
+    </div>
+
+    <div class="wordRow">
+      <input id="word4" type="text" placeholder="WORD 4">
+      <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
+      <span id="status4" class="status"></span>
+    </div>
 
     <div id="terminalMessage"></div>
+
+    <div id="continueArea">
+      <div class="text">ALL KEYWORDS RESTORED.
+FILE READY FOR RECOVERY.</div>
+
+      <a class="continueButton" href="recovered.html">
+        OPEN RESTORED FILE
+      </a>
+    </div>
   </main>
 
   <script>
+    const answers = {
+      1: "BELLADONNA",
+      2: "DIGITALIS",
+      3: "OLEANDER",
+      4: "TAXUS"
+    };
+
+    const solved = {
+      1: false,
+      2: false,
+      3: false,
+      4: false
+    };
+
     function cleanInput(value) {
       return value.trim().toUpperCase().replace(/\s+/g, "");
     }
 
-    function checkBotanicalPuzzle() {
-      const word1 = cleanInput(document.getElementById("word1").value);
-      const word2 = cleanInput(document.getElementById("word2").value);
-      const word3 = cleanInput(document.getElementById("word3").value);
-      const word4 = cleanInput(document.getElementById("word4").value);
-
+    function checkSingleWord(number) {
+      const input = document.getElementById("word" + number);
+      const button = document.getElementById("button" + number);
+      const status = document.getElementById("status" + number);
       const message = document.getElementById("terminalMessage");
 
-      if (
-        word1 === "BELLADONNA" &&
-        word2 === "DIGITALIS" &&
-        word3 === "OLEANDER" &&
-        word4 === "TAXUS"
-      ) {
-        message.style.color = "#00ff66";
-        message.textContent = "ACCESS GRANTED // FILE RESTORED";
+      const value = cleanInput(input.value);
 
-        setTimeout(function() {
-          window.location.href = "recovered.html";
-        }, 1200);
+      if (value === answers[number]) {
+        solved[number] = true;
+
+        input.classList.remove("wrong");
+        input.classList.add("correct");
+        input.disabled = true;
+
+        button.disabled = true;
+        button.textContent = "LOCKED";
+
+        status.textContent = "CORRECT";
+        status.className = "status correctStatus";
+
+        message.style.color = "#00ff66";
+        message.textContent = "KEYWORD " + number + " RESTORED.";
+
+        checkIfComplete();
       } else {
+        input.classList.remove("correct");
+        input.classList.add("wrong");
+
+        status.textContent = "ERROR";
+        status.className = "status wrongStatus";
+
         message.style.color = "#ff4444";
-        message.textContent = "ACCESS DENIED // BOTANICAL MATCH FAILED";
+        message.textContent = "KEYWORD " + number + " REJECTED // BOTANICAL MATCH FAILED.";
       }
     }
+
+    function checkIfComplete() {
+      if (solved[1] && solved[2] && solved[3] && solved[4]) {
+        const message = document.getElementById("terminalMessage");
+        message.style.color = "#00ff66";
+        message.textContent = "ACCESS GRANTED // ALL BOTANICAL DATA RESTORED.";
+
+        document.getElementById("continueArea").style.display = "block";
+        document.getElementById("continueArea").scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        const active = document.activeElement;
+
+        if (active && active.id && active.id.startsWith("word")) {
+          const number = active.id.replace("word", "");
+          checkSingleWord(number);
+        }
+      }
+    });
   </script>
 
 </body>
