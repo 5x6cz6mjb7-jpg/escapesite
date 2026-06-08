@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixel Herb Stack</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #14142b;
+      color: #ffffff;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      image-rendering: pixelated;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.04) 50%, transparent 50%),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 50%, transparent 50%);
+      background-size: 4px 4px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .machine {
+      width: 100%;
+      max-width: 880px;
+      background: #24244a;
+      border: 6px solid #f4d35e;
+      box-shadow:
+        0 0 0 6px #000000,
+        12px 12px 0 #000000;
+      padding: 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      color: #f4d35e;
+      text-shadow: 3px 3px 0 #000;
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #a8dadc;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .gameLayout {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .gamePanel {
+      text-align: center;
+    }
+
+    canvas {
+      background: #0b0b18;
+      border: 4px solid #ffffff;
+      box-shadow: 8px 8px 0 #000;
+      image-rendering: pixelated;
+      max-width: 100%;
+    }
+
+    .sidePanel {
+      background: #101029;
+      border: 4px solid #ffffff;
+      box-shadow: 8px 8px 0 #000;
+      padding: 16px;
+      box-sizing: border-box;
+      min-height: 480px;
+    }
+
+    .panelTitle {
+      color: #f4d35e;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .wordBox {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 16px 0 20px 0;
+    }
+
+    .letterBox {
+      height: 38px;
+      background: #2d2d5f;
+      border: 3px solid #ffffff;
+      color: #2d2d5f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .letterBox.unlocked {
+      background: #06d6a0;
+      color: #000;
+    }
+
+    .stats {
+      line-height: 1.8;
+      color: #ffffff;
+      margin-bottom: 18px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #ef476f;
+      color: #ffffff;
+      border: 3px solid #ffffff;
+      box-shadow: 4px 4px 0 #000;
+      font-family: "Courier New", monospace;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #ff5c8a;
+    }
+
+    #winBox {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      background: #06d6a0;
+      color: #000;
+      border: 4px solid #ffffff;
+      box-shadow: 5px 5px 0 #000;
+      line-height: 1.6;
+      font-weight: bold;
+    }
+
+    #gameOver {
+      display: none;
+      color: #ff6b6b;
+      margin-top: 14px;
+      font-weight: bold;
+    }
+
+    .controls {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #a8dadc;
+    }
+
+    .mobileControls {
+      display: none;
+      margin-top: 18px;
+      grid-template-columns: repeat(3, 70px);
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .mobileControls button {
+      width: 70px;
+      height: 54px;
+      padding: 0;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .wideButton {
+      grid-column: span 3;
+      width: 226px !important;
+    }
+
+    .backLink {
+      display: inline-block;
+      margin-top: 20px;
+      color: #f4d35e;
+      text-decoration: none;
+      border-bottom: 2px solid #f4d35e;
+      font-weight: bold;
+    }
+
+    .hint {
+      color: #a8dadc;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .gameLayout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidePanel {
+        min-height: auto;
+      }
+
+      .mobileControls {
+        display: grid;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="machine">
+    <h1>PIXEL HERB STACK // 1994</h1>
+
+    <div class="subtitle">
+      Complete horizontal rows to recover letters.<br>
+      Restore the botanical password.
+    </div>
+
+    <div class="gameLayout">
+      <section class="gamePanel">
+        <canvas id="game" width="300" height="600"></canvas>
+
+        <div class="mobileControls">
+          <button onclick="movePiece(-1)">◀</button>
+          <button onclick="rotatePiece()">⟳</button>
+          <button onclick="movePiece(1)">▶</button>
+          <button class="wideButton" onclick="dropPiece()">DROP</button>
+        </div>
+      </section>
+
+      <aside class="sidePanel">
+        <div class="panelTitle">BOTANICAL PASSWORD</div>
+
+        <div class="wordBox" id="wordBox"></div>
+
+        <div class="stats">
+          ROWS CLEARED: <span id="rowsCleared">0</span><br>
+          LETTERS FOUND: <span id="lettersFound">0</span> / 10
+        </div>
+
+        <button onclick="startGame()">START / RESTART</button>
+
+        <div id="gameOver">
+          STACK OVERFLOW // RESTART REQUIRED
+        </div>
+
+        <div id="winBox">
+          ACCESS GRANTED<br><br>
+          PASSWORD RESTORED:<br>
+          ROZENBOTTEL<br><br>
+          Use this word when the archive asks for the floral specimen.
+        </div>
+
+        <div class="controls">
+          CONTROLS:<br>
+          ← / → = move<br>
+          ↑ = rotate<br>
+          ↓ = faster<br>
+          space = drop
+        </div>
+
+        <div class="hint">
+          Every completed row reveals the next letter.  
+          The system stores only full botanical sequences.
+        </div>
+
+        <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const cols = 10;
+    const rows = 20;
+    const blockSize = 30;
+
+    const targetWord = "ROZENBOTTEL";
+    const targetLetters = targetWord.split("");
+
+    let board;
+    let currentPiece;
+    let currentX;
+    let currentY;
+    let gameLoop;
+    let gameRunning = false;
+    let rowsCleared = 0;
+    let lettersFound = 0;
+
+    const pieces = [
+      {
+        shape: [
+          [1, 1, 1, 1]
+        ],
+        color: "#06d6a0"
+      },
+      {
+        shape: [
+          [1, 1],
+          [1, 1]
+        ],
+        color: "#f4d35e"
+      },
+      {
+        shape: [
+          [0, 1, 0],
+          [1, 1, 1]
+        ],
+        color: "#ef476f"
+      },
+      {
+        shape: [
+          [1, 0, 0],
+          [1, 1, 1]
+        ],
+        color: "#118ab2"
+      },
+      {
+        shape: [
+          [0, 0, 1],
+          [1, 1, 1]
+        ],
+        color: "#ffd166"
+      },
+      {
+        shape: [
+          [0, 1, 1],
+          [1, 1, 0]
+        ],
+        color: "#8ac926"
+      },
+      {
+        shape: [
+          [1, 1, 0],
+          [0, 1, 1]
+        ],
+        color: "#ff595e"
+      }
+    ];
+
+    function createWordBoxes() {
+      const wordBox = document.getElementById("wordBox");
+      wordBox.innerHTML = "";
+
+      targetLetters.forEach(function(letter, index) {
+        const box = document.createElement("div");
+        box.className = "letterBox";
+        box.id = "letter-" + index;
+        box.textContent = letter;
+        wordBox.appendChild(box);
+      });
+    }
+
+    function startGame() {
+      board = createBoard();
+      rowsCleared = 0;
+      lettersFound = 0;
+      gameRunning = true;
+
+      document.getElementById("rowsCleared").textContent = rowsCleared;
+      document.getElementById("lettersFound").textContent = lettersFound;
+      document.getElementById("winBox").style.display = "none";
+      document.getElementById("gameOver").style.display = "none";
+
+      createWordBoxes();
+      spawnPiece();
+
+      clearInterval(gameLoop);
+      gameLoop = setInterval(updateGame, 550);
+
+      drawGame();
+    }
+
+    function createBoard() {
+      const newBoard = [];
+
+      for (let y = 0; y < rows; y++) {
+        newBoard[y] = [];
+        for (let x = 0; x < cols; x++) {
+          newBoard[y][x] = null;
+        }
+      }
+
+      return newBoard;
+    }
+
+    function spawnPiece() {
+      const randomPiece = pieces[Math.floor(Math.random() * pieces.length)];
+
+      currentPiece = {
+        shape: randomPiece.shape.map(row => row.slice()),
+        color: randomPiece.color
+      };
+
+      currentX = Math.floor(cols / 2) - Math.ceil(currentPiece.shape[0].length / 2);
+      currentY = 0;
+
+      if (collides(currentPiece.shape, currentX, currentY)) {
+        endGame();
+      }
+    }
+
+    function updateGame() {
+      if (!gameRunning) {
+        return;
+      }
+
+      if (!collides(currentPiece.shape, currentX, currentY + 1)) {
+        currentY++;
+      } else {
+        lockPiece();
+        clearRows();
+        spawnPiece();
+      }
+
+      drawGame();
+    }
+
+    function drawGame() {
+      ctx.fillStyle = "#0b0b18";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      drawGrid();
+      drawBoard();
+      drawPiece();
+    }
+
+    function drawGrid() {
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= cols; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * blockSize, 0);
+        ctx.lineTo(x * blockSize, canvas.height);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= rows; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * blockSize);
+        ctx.lineTo(canvas.width, y * blockSize);
+        ctx.stroke();
+      }
+    }
+
+    function drawBoard() {
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          if (board[y][x]) {
+            drawBlock(x, y, board[y][x]);
+          }
+        }
+      }
+    }
+
+    function drawPiece() {
+      if (!currentPiece) {
+        return;
+      }
+
+      currentPiece.shape.forEach(function(row, y) {
+        row.forEach(function(cell, x) {
+          if (cell) {
+            drawBlock(currentX + x, currentY + y, currentPiece.color);
+          }
+        });
+      });
+    }
+
+    function drawBlock(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      ctx.fillRect(x * blockSize + 3, y * blockSize + 3, blockSize - 6, 5);
+
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
+      ctx.fillRect(x * blockSize + 3, y * blockSize + blockSize - 8, blockSize - 6, 5);
+
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
+    }
+
+    function collides(shape, offsetX, offsetY) {
+      for (let y = 0; y < shape.length; y++) {
+        for (let x = 0; x < shape[y].length; x++) {
+          if (shape[y][x]) {
+            const newX = offsetX + x;
+            const newY = offsetY + y;
+
+            if (newX < 0 || newX >= cols || newY >= rows) {
+              return true;
+            }
+
+            if (newY >= 0 && board[newY][newX]) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
+    }
+
+    function lockPiece() {
+      currentPiece.shape.forEach(function(row, y) {
+        row.forEach(function(cell, x) {
+          if (cell) {
+            const boardX = currentX + x;
+            const boardY = currentY + y;
+
+            if (boardY >= 0) {
+              board[boardY][boardX] = currentPiece.color;
+            }
+          }
+        });
+      });
+    }
+
+    function clearRows() {
+      let clearedThisTurn = 0;
+
+      for (let y = rows - 1; y >= 0; y--) {
+        const full = board[y].every(function(cell) {
+          return cell !== null;
+        });
+
+        if (full) {
+          board.splice(y, 1);
+          board.unshift(new Array(cols).fill(null));
+          clearedThisTurn++;
+          y++;
+        }
+      }
+
+      if (clearedThisTurn > 0) {
+        for (let i = 0; i < clearedThisTurn; i++) {
+          revealNextLetter();
+        }
+
+        rowsCleared += clearedThisTurn;
+        document.getElementById("rowsCleared").textContent = rowsCleared;
+      }
+    }
+
+    function revealNextLetter() {
+      if (lettersFound >= targetLetters.length) {
+        return;
+      }
+
+      const box = document.getElementById("letter-" + lettersFound);
+      box.classList.add("unlocked");
+
+      lettersFound++;
+      document.getElementById("lettersFound").textContent = lettersFound;
+
+      if (lettersFound >= targetLetters.length) {
+        winGame();
+      }
+    }
+
+    function movePiece(direction) {
+      if (!gameRunning) {
+        return;
+      }
+
+      if (!collides(currentPiece.shape, currentX + direction, currentY)) {
+        currentX += direction;
+        drawGame();
+      }
+    }
+
+    function rotatePiece() {
+      if (!gameRunning) {
+        return;
+      }
+
+      const rotated = rotateMatrix(currentPiece.shape);
+
+      if (!collides(rotated, currentX, currentY)) {
+        currentPiece.shape = rotated;
+        drawGame();
+      }
+    }
+
+    function rotateMatrix(matrix) {
+      const result = [];
+
+      for (let x = 0; x < matrix[0].length; x++) {
+        result[x] = [];
+        for (let y = matrix.length - 1; y >= 0; y--) {
+          result[x].push(matrix[y][x]);
+        }
+      }
+
+      return result;
+    }
+
+    function dropPiece() {
+      if (!gameRunning) {
+        return;
+      }
+
+      while (!collides(currentPiece.shape, currentX, currentY + 1)) {
+        currentY++;
+      }
+
+      updateGame();
+    }
+
+    function endGame() {
+      clearInterval(gameLoop);
+      gameRunning = false;
+      document.getElementById("gameOver").style.display = "block";
+    }
+
+    function winGame() {
+      clearInterval(gameLoop);
+      gameRunning = false;
+      document.getElementById("winBox").style.display = "block";
+      document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        movePiece(-1);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        movePiece(1);
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        rotatePiece();
+      }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        updateGame();
+      }
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        dropPiece();
+      }
+    });
+
+    createWordBoxes();
+    startGame();
+  </script>
+
+</body>
+</html>
