@@ -44,7 +44,7 @@
 
     .screen {
       width: 100%;
-      max-width: 820px;
+      max-width: 760px;
       padding: 28px;
       border: 2px solid #5f0000;
       background: rgba(5, 5, 5, 0.92);
@@ -102,26 +102,7 @@
       box-shadow: inset 0 0 18px rgba(120, 0, 0, 0.5);
     }
 
-    #lockedMessage {
-      color: #bdbdbd;
-      line-height: 1.5;
-    }
-
-    #videoArea {
-      display: none;
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 1px solid #5f0000;
-    }
-
-    #videoArea h2 {
-      color: #ff3333;
-      letter-spacing: 2px;
-      margin-bottom: 18px;
-      font-size: 22px;
-    }
-
-    .classifiedButton {
+    .button {
       display: inline-block;
       padding: 18px 26px;
       background: #5f0000;
@@ -136,164 +117,8 @@
       font-family: "Courier New", monospace;
     }
 
-    .classifiedButton:hover {
+    .button:hover {
       background: #8b0000;
-    }
-
-    #videoPlayerArea {
-      display: none;
-      margin-top: 25px;
-    }
-
-    .videoBox {
-      width: 100%;
-      max-width: 640px;
-      margin: 0 auto;
-      background: #000;
-      border: 1px solid #5f0000;
-      box-shadow: 0 0 25px rgba(150, 0, 0, 0.5);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .videoWrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-    }
-
-    .videoWrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #000;
-    }
-
-    #terminalArea {
-      display: none;
-      margin-top: 30px;
-      padding: 24px;
-      background: #001100;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 30px rgba(0, 255, 100, 0.35);
-      color: #00ff66;
-      text-align: left;
-      position: relative;
-    }
-
-    #terminalArea::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 255, 100, 0.08),
-          rgba(0, 255, 100, 0.08) 1px,
-          transparent 1px,
-          transparent 5px
-        );
-      pointer-events: none;
-    }
-
-    .terminalContent {
-      position: relative;
-      z-index: 2;
-    }
-
-    .terminalTitle {
-      color: #00ff66;
-      font-size: 22px;
-      margin-bottom: 18px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
-    }
-
-    .terminalText {
-      line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    .corruptWords {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #00aa44;
-      background: rgba(0, 20, 0, 0.8);
-      color: #8dffb0;
-      line-height: 1.8;
-      font-size: 20px;
-      letter-spacing: 2px;
-    }
-
-    .inputGrid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .inputGrid input {
-      background: #000;
-      color: #00ff66;
-      border: 1px solid #00aa44;
-      padding: 12px;
-      font-family: "Courier New", monospace;
-      font-size: 18px;
-      text-transform: uppercase;
-      outline: none;
-    }
-
-    .inputGrid input:focus {
-      box-shadow: 0 0 12px rgba(0, 255, 100, 0.7);
-    }
-
-    .terminalButton {
-      margin-top: 18px;
-      padding: 14px 20px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-size: 16px;
-      cursor: pointer;
-      letter-spacing: 2px;
-    }
-
-    .terminalButton:hover {
-      background: #005c22;
-    }
-
-    #terminalMessage {
-      margin-top: 16px;
-      color: #ff4444;
-      min-height: 24px;
-    }
-
-    #recoveredFile {
-      display: none;
-      margin-top: 25px;
-      padding: 18px;
-      border: 1px solid #00ff66;
-      background: rgba(0, 30, 0, 0.9);
-      color: #baffc9;
-      line-height: 1.6;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 18px;
-      background: #00ff66;
-      animation: blink 1s infinite;
-      vertical-align: middle;
-      margin-left: 4px;
-    }
-
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
     }
 
     #startOverlay {
@@ -322,21 +147,17 @@
       background: #8b0000;
     }
 
+    #unlockedArea {
+      display: none;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #5f0000;
+    }
+
     .warning {
       color: #777;
       font-size: 13px;
       margin-top: 18px;
-    }
-
-    .videoNote {
-      color: #999;
-      font-size: 14px;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-
-    .fallbackLink {
-      color: #ff5555;
     }
 
     @media (max-width: 500px) {
@@ -356,17 +177,9 @@
         font-size: 30px;
       }
 
-      .classifiedButton {
+      .button {
         font-size: 15px;
         padding: 16px 20px;
-      }
-
-      .terminalTitle {
-        font-size: 18px;
-      }
-
-      .corruptWords {
-        font-size: 16px;
       }
     }
   </style>
@@ -392,7 +205,7 @@
       <div class="countdown-title">TRANSMISSION UNLOCKS IN</div>
       <div id="countdown">00:00:05</div>
 
-      <p id="lockedMessage">
+      <p>
         The system is locked.<br>
         A message is waiting.
       </p>
@@ -402,100 +215,9 @@
       </p>
     </section>
 
-    <section id="videoArea">
+    <section id="unlockedArea">
       <h2>TRANSMISSION UNLOCKED</h2>
-
-      <button class="classifiedButton" onclick="loadVideo()">
-        LOAD CLASSIFIED VIDEO
-      </button>
-
-      <div id="videoPlayerArea">
-        <div class="videoBox">
-          <div class="videoWrapper">
-            <iframe
-              id="videoFrame"
-              src=""
-              title="Classified transmission"
-              allow="autoplay; fullscreen"
-              allowfullscreen>
-            </iframe>
-          </div>
-        </div>
-
-        <button class="classifiedButton" onclick="openTerminal()">
-          OPEN DATA RECOVERY TERMINAL
-        </button>
-      </div>
-
-      <p class="videoNote">
-        Als het filmpje niet in de site laadt, gebruik dan de noodlink:<br>
-        <a
-          class="fallbackLink"
-          href="https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=f14e62b3-cd3c-4ee1-9e23-040c757d771b&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create"
-          target="_blank"
-          rel="noopener noreferrer">
-          open video in nieuw tabblad
-        </a>
-      </p>
-    </section>
-
-    <section id="terminalArea">
-      <div class="terminalContent">
-        <div class="terminalTitle">
-          UNIVERSITY BIOLOGY ARCHIVE // TERMINAL 03<span class="cursor"></span>
-        </div>
-
-        <div class="terminalText">Recovered file: KRANE_PERSONAL_GARDEN.LOG
-Status: CORRUPTED
-Archive source: Department of Biology
-Last known user: DR. A. VOSS
-
-Restore botanical keywords to continue.</div>
-
-        <div class="corruptWords">
-          B_LL_D_NNA<br>
-          D_G_T_L_S<br>
-          _L__ND_R<br>
-          T_X_S
-        </div>
-
-        <div class="terminalText">Enter restored keywords:</div>
-
-        <div class="inputGrid">
-          <input id="word1" type="text" placeholder="WORD 1">
-          <input id="word2" type="text" placeholder="WORD 2">
-          <input id="word3" type="text" placeholder="WORD 3">
-          <input id="word4" type="text" placeholder="WORD 4">
-        </div>
-
-        <button class="terminalButton" onclick="checkBotanicalPuzzle()">
-          RESTORE FILE
-        </button>
-
-        <div id="terminalMessage"></div>
-
-        <div id="recoveredFile">
-          <strong>ACCESS GRANTED</strong><br><br>
-
-          Recovered file fragment:<br><br>
-
-          Jason Krane is dead.<br>
-          He has been dead for over a year.<br><br>
-
-          The messages were not sent by him.<br>
-          They were staged.<br><br>
-
-          The sender is Dr. A. Voss.<br>
-          Former biology lecturer.<br>
-          Botanical specialist.<br>
-          Krane's hidden lover.<br><br>
-
-          She does not want to kill Bond.<br>
-          She wants M and Q to suffer first.<br><br>
-
-          Find the diary.
-        </div>
-      </div>
+      <a class="button" href="video.html">OPEN CLASSIFIED VIDEO</a>
     </section>
   </main>
 
@@ -504,9 +226,6 @@ Restore botanical keywords to continue.</div>
     let remainingSeconds = countdownSeconds;
     let countdownInterval;
     let unlocked = false;
-    let videoLoaded = false;
-
-    const videoEmbedLink = "https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=f14e62b3-cd3c-4ee1-9e23-040c757d771b&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create";
 
     function openTransmission() {
       document.getElementById("startOverlay").style.display = "none";
@@ -529,7 +248,7 @@ Restore botanical keywords to continue.</div>
         remainingSeconds = 0;
         updateCountdownDisplay();
         clearInterval(countdownInterval);
-        unlockVideoButton();
+        unlockTransmission();
         return;
       }
 
@@ -547,7 +266,7 @@ Restore botanical keywords to continue.</div>
         String(seconds).padStart(2, "0");
     }
 
-    function unlockVideoButton() {
+    function unlockTransmission() {
       if (unlocked) {
         return;
       }
@@ -559,53 +278,7 @@ Restore botanical keywords to continue.</div>
       music.currentTime = 0;
 
       document.getElementById("lockedArea").style.display = "none";
-      document.getElementById("videoArea").style.display = "block";
-    }
-
-    function loadVideo() {
-      if (videoLoaded) {
-        return;
-      }
-
-      videoLoaded = true;
-
-      document.getElementById("videoPlayerArea").style.display = "block";
-      document.getElementById("videoFrame").src = videoEmbedLink;
-    }
-
-    function openTerminal() {
-      document.getElementById("terminalArea").style.display = "block";
-      document.getElementById("terminalArea").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function cleanInput(value) {
-      return value.trim().toUpperCase().replace(/\s+/g, "");
-    }
-
-    function checkBotanicalPuzzle() {
-      const word1 = cleanInput(document.getElementById("word1").value);
-      const word2 = cleanInput(document.getElementById("word2").value);
-      const word3 = cleanInput(document.getElementById("word3").value);
-      const word4 = cleanInput(document.getElementById("word4").value);
-
-      const message = document.getElementById("terminalMessage");
-      const recoveredFile = document.getElementById("recoveredFile");
-
-      if (
-        word1 === "BELLADONNA" &&
-        word2 === "DIGITALIS" &&
-        word3 === "OLEANDER" &&
-        word4 === "TAXUS"
-      ) {
-        message.style.color = "#00ff66";
-        message.textContent = "ACCESS GRANTED // FILE RESTORED";
-        recoveredFile.style.display = "block";
-        recoveredFile.scrollIntoView({ behavior: "smooth" });
-      } else {
-        message.style.color = "#ff4444";
-        message.textContent = "ACCESS DENIED // BOTANICAL MATCH FAILED";
-        recoveredFile.style.display = "none";
-      }
+      document.getElementById("unlockedArea").style.display = "block";
     }
   </script>
 
