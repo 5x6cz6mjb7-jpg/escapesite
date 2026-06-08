@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Recovery Terminal</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #001100;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.08),
+          rgba(0, 255, 100, 0.08) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 820px;
+      padding: 28px;
+      background: #000900;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      position: relative;
+      z-index: 2;
+      box-sizing: border-box;
+    }
+
+    .title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+    }
+
+    .text {
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .corruptWords {
+      margin: 22px 0;
+      padding: 16px;
+      border: 1px solid #00aa44;
+      background: rgba(0, 20, 0, 0.9);
+      color: #8dffb0;
+      line-height: 1.8;
+      font-size: 22px;
+      letter-spacing: 3px;
+    }
+
+    .inputGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    input {
+      background: #000;
+      color: #00ff66;
+      border: 1px solid #00aa44;
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      font-size: 18px;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    input:focus {
+      box-shadow: 0 0 12px rgba(0, 255, 100, 0.7);
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 14px 20px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
+
+    button:hover {
+      background: #005c22;
+    }
+
+    #terminalMessage {
+      margin-top: 16px;
+      color: #ff4444;
+      min-height: 24px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 18px;
+      background: #00ff66;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @media (max-width: 500px) {
+      .terminal {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .corruptWords {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="terminal">
+    <div class="title">
+      UNIVERSITY BIOLOGY ARCHIVE // TERMINAL 03<span class="cursor"></span>
+    </div>
+
+    <div class="text">Recovered file: KRANE_PERSONAL_GARDEN.LOG
+Status: CORRUPTED
+Archive source: Department of Biology
+Last known user: DR. A. VOSS
+
+Restore botanical keywords to continue.</div>
+
+    <div class="corruptWords">
+      B_LL_D_NNA<br>
+      D_G_T_L_S<br>
+      _L__ND_R<br>
+      T_X_S
+    </div>
+
+    <div class="text">Enter restored keywords:</div>
+
+    <div class="inputGrid">
+      <input id="word1" type="text" placeholder="WORD 1">
+      <input id="word2" type="text" placeholder="WORD 2">
+      <input id="word3" type="text" placeholder="WORD 3">
+      <input id="word4" type="text" placeholder="WORD 4">
+    </div>
+
+    <button onclick="checkBotanicalPuzzle()">RESTORE FILE</button>
+
+    <div id="terminalMessage"></div>
+  </main>
+
+  <script>
+    function cleanInput(value) {
+      return value.trim().toUpperCase().replace(/\s+/g, "");
+    }
+
+    function checkBotanicalPuzzle() {
+      const word1 = cleanInput(document.getElementById("word1").value);
+      const word2 = cleanInput(document.getElementById("word2").value);
+      const word3 = cleanInput(document.getElementById("word3").value);
+      const word4 = cleanInput(document.getElementById("word4").value);
+
+      const message = document.getElementById("terminalMessage");
+
+      if (
+        word1 === "BELLADONNA" &&
+        word2 === "DIGITALIS" &&
+        word3 === "OLEANDER" &&
+        word4 === "TAXUS"
+      ) {
+        message.style.color = "#00ff66";
+        message.textContent = "ACCESS GRANTED // FILE RESTORED";
+
+        setTimeout(function() {
+          window.location.href = "recovered.html";
+        }, 1200);
+      } else {
+        message.style.color = "#ff4444";
+        message.textContent = "ACCESS DENIED // BOTANICAL MATCH FAILED";
+      }
+    }
+  </script>
+
+</body>
+</html>
