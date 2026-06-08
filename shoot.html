@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Botanical Lab // Seed Protocol</title>
+  <title>MI6 Botanical Lab // Hologram Range</title>
 
   <style>
     body {
@@ -153,7 +153,7 @@
     #glitchStatus {
       display: none;
       margin-top: 16px;
-      color: #fff4a3;
+      color: #7fffd4;
       font-weight: bold;
       animation: blinkStatus 0.3s infinite;
     }
@@ -213,15 +213,15 @@
       background:
         repeating-linear-gradient(
           90deg,
-          rgba(255,255,255,0.04),
-          rgba(255,255,255,0.04) 2px,
+          rgba(0,255,255,0.05),
+          rgba(0,255,255,0.05) 2px,
           transparent 2px,
-          transparent 8px
+          transparent 7px
         ),
         repeating-linear-gradient(
           0deg,
-          rgba(255,220,0,0.08),
-          rgba(255,220,0,0.08) 3px,
+          rgba(0,255,180,0.07),
+          rgba(0,255,180,0.07) 3px,
           transparent 3px,
           transparent 11px
         );
@@ -229,33 +229,33 @@
     }
 
     .glitchOverlay::before {
-      content: "LAB AUTHORIZATION RESTORED";
+      content: "HOLOGRAM AUTHORIZATION RESTORED";
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #fff4a3;
-      background: rgba(10,20,0,0.92);
-      border: 2px solid #ffee66;
+      color: #aaffff;
+      background: rgba(0, 12, 14, 0.92);
+      border: 2px solid #66ffee;
       padding: 18px 24px;
       text-align: center;
       letter-spacing: 2px;
       font-size: 26px;
-      text-shadow: 0 0 10px rgba(255,230,120,0.8);
-      box-shadow: 0 0 24px rgba(255,230,120,0.35);
+      text-shadow: 0 0 10px rgba(100,255,240,0.85);
+      box-shadow: 0 0 24px rgba(100,255,240,0.35);
       animation: textSkew 0.18s infinite;
     }
 
     @keyframes glitchFlash {
       0% { opacity: 0.35; filter: hue-rotate(0deg); }
-      50% { opacity: 0.8; filter: hue-rotate(40deg); }
+      50% { opacity: 0.82; filter: hue-rotate(28deg); }
       100% { opacity: 0.45; filter: hue-rotate(0deg); }
     }
 
     @keyframes textSkew {
       0% { transform: translate(-50%, -50%) skewX(0deg); }
-      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
-      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
+      25% { transform: translate(-49.6%, -50.2%) skewX(3deg); }
+      50% { transform: translate(-50.4%, -49.7%) skewX(-4deg); }
       75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
       100% { transform: translate(-50%, -50%) skewX(0deg); }
     }
@@ -296,11 +296,12 @@
   <div class="glitchOverlay" id="glitchOverlay"></div>
 
   <main class="terminal">
-    <h1>MI6 BOTANICAL LAB // SEED PROTOCOL</h1>
+    <h1>MI6 BOTANICAL LAB // HOLOGRAM RANGE</h1>
 
     <div class="subtitle">First-person lab simulation recovered.
-Move through the larger laboratory.
-Fire compressed seed rounds at the pixel decoy targets.
+Move through the laboratory.
+Destroy hologram targets marked with M and Q.
+Fire venom from the cobra launcher.
 Hit 10 targets to unlock the command code.</div>
 
     <div class="layout">
@@ -314,7 +315,7 @@ Hit 10 targets to unlock the command code.</div>
           <button onclick="moveLeft()">◀</button>
           <button onclick="moveBackward()">▼</button>
           <button onclick="moveRight()">▶</button>
-          <button class="shootWide" onclick="shoot()">SHOOT SEED</button>
+          <button class="shootWide" onclick="shoot()">SPIT VENOM</button>
         </div>
       </section>
 
@@ -329,21 +330,21 @@ Hit 10 targets to unlock the command code.</div>
         </div>
 
         <button onclick="startGame()">START / RESTART LAB</button>
-        <button onclick="shoot()">SHOOT SEED ROUND</button>
+        <button onclick="shoot()">SPIT VENOM</button>
 
         <div id="message">Simulation standby.</div>
 
         <div id="glitchStatus">
-          ARCHIVE INSTABILITY // LAB AUTHORIZATION SYNCING...
+          HOLOGRAM GRID UNSTABLE // RECONSTRUCTING ACCESS...
         </div>
 
         <div id="winBox">
-          <strong>ACCESS GRANTED // LAB CLEARED</strong><br><br>
+          <strong>ACCESS GRANTED // RANGE CLEARED</strong><br><br>
 
           Recovered command fragment:<br><br>
 
-          The old MI6 lab was not built for training.
-          It was built to hide an authorization code behind decoy targets.<br><br>
+          The hologram range was linked to an old MI6 authorization layer.<br>
+          The marked targets concealed an access code.<br><br>
 
           UNLOCK CODE:<br>
           <strong>EYESONLY</strong><br><br>
@@ -359,12 +360,12 @@ Hit 10 targets to unlock the command code.</div>
           D / → = turn right<br>
           Q = strafe left<br>
           E = strafe right<br>
-          SPACE = shoot seed
+          SPACE = spit venom
         </div>
 
         <div class="warning">
-          Targets are pixel decoys placed only on open lab floor.
-          The player uses a botanical seed blaster.
+          Targets are holograms only. No human figures are used.
+          Weapon system: Cobra Venom Launcher.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -385,11 +386,6 @@ Hit 10 targets to unlock the command code.</div>
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
 
-    /*
-      1 = wall
-      0 = open floor
-      2 = possible target spawn point
-    */
     const map = [
       "11111111111111111111",
       "10000000000001000001",
@@ -432,11 +428,16 @@ Hit 10 targets to unlock the command code.</div>
     let keys = {};
     let gameRunning = false;
     let shotFlash = 0;
-    let seedTrail = 0;
+    let venomTrail = 0;
     let lastFrame = 0;
     let rayDistances = [];
+    let animationId = null;
 
     function startGame() {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+
       player = {
         x: 1.5,
         y: 1.5,
@@ -446,8 +447,9 @@ Hit 10 targets to unlock the command code.</div>
       hits = 0;
       shots = 0;
       shotFlash = 0;
-      seedTrail = 0;
+      venomTrail = 0;
       gameRunning = true;
+      lastFrame = 0;
 
       targets = createTargetsFromMap();
 
@@ -455,10 +457,10 @@ Hit 10 targets to unlock the command code.</div>
       winBoxEl.style.display = "none";
       glitchStatusEl.style.display = "none";
 
-      messageEl.textContent = "Large lab active. Find all decoy targets.";
+      messageEl.textContent = "Hologram range active. Locate all M and Q targets.";
       updateHud();
 
-      requestAnimationFrame(gameLoop);
+      animationId = requestAnimationFrame(gameLoop);
     }
 
     function createTargetsFromMap() {
@@ -467,10 +469,7 @@ Hit 10 targets to unlock the command code.</div>
       for (let y = 0; y < map.length; y++) {
         for (let x = 0; x < map[y].length; x++) {
           if (map[y][x] === "2") {
-            spawnPoints.push({
-              x: x + 0.5,
-              y: y + 0.5
-            });
+            spawnPoints.push({ x: x + 0.5, y: y + 0.5 });
           }
         }
       }
@@ -498,19 +497,20 @@ Hit 10 targets to unlock the command code.</div>
 
       shuffleArray(spawnPoints);
 
-      const newTargets = [];
-      const targetCount = hitGoal;
+      const labels = ["M", "Q", "M", "Q", "M", "Q", "M", "Q", "M", "Q"];
+      const result = [];
 
-      for (let i = 0; i < targetCount && i < spawnPoints.length; i++) {
-        newTargets.push({
+      for (let i = 0; i < hitGoal && i < spawnPoints.length; i++) {
+        result.push({
           x: spawnPoints[i].x,
           y: spawnPoints[i].y,
-          type: i % 2 === 0 ? "male" : "female",
-          alive: true
+          label: labels[i],
+          alive: true,
+          phase: Math.random() * Math.PI * 2
         });
       }
 
-      return newTargets;
+      return result;
     }
 
     function shuffleArray(array) {
@@ -523,16 +523,17 @@ Hit 10 targets to unlock the command code.</div>
     }
 
     function gameLoop(timestamp) {
-      if (!gameRunning) {
-        drawScene();
-        return;
+      if (!lastFrame) {
+        lastFrame = timestamp;
       }
 
-      lastFrame = timestamp;
-      updatePlayer();
-      drawScene();
-
-      requestAnimationFrame(gameLoop);
+      if (gameRunning) {
+        updatePlayer();
+        drawScene();
+        animationId = requestAnimationFrame(gameLoop);
+      } else {
+        drawScene();
+      }
     }
 
     function updatePlayer() {
@@ -564,9 +565,15 @@ Hit 10 targets to unlock the command code.</div>
         shotFlash--;
       }
 
-      if (seedTrail > 0) {
-        seedTrail--;
+      if (venomTrail > 0) {
+        venomTrail--;
       }
+
+      targets.forEach(function(target) {
+        if (target.alive) {
+          target.phase += 0.06;
+        }
+      });
 
       updateHud();
     }
@@ -617,11 +624,11 @@ Hit 10 targets to unlock the command code.</div>
       drawTargets(w, h);
       drawLabOverlay(w, h);
       drawCrosshair(w, h);
-      drawSeedBlaster(w, h);
+      drawCobraBlaster(w, h);
       drawMiniMap();
 
       if (shotFlash > 0) {
-        ctx.fillStyle = "rgba(255, 240, 150, 0.20)";
+        ctx.fillStyle = "rgba(120, 255, 180, 0.16)";
         ctx.fillRect(0, 0, w, h);
       }
     }
@@ -682,8 +689,8 @@ Hit 10 targets to unlock the command code.</div>
         }
 
         if (ray.hitMarker) {
-          ctx.fillStyle = "rgba(180,255,200,0.12)";
-          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.15);
+          ctx.fillStyle = "rgba(100,255,240,0.10)";
+          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.18);
         }
       }
     }
@@ -758,106 +765,96 @@ Hit 10 targets to unlock the command code.</div>
 
       visibleTargets.forEach(function(item) {
         const screenX = (0.5 + item.angle / fov) * w;
-        const size = Math.min(170, h / item.distance * 0.50);
-        const screenY = h / 2 + size * 0.20;
+        const size = Math.min(160, h / item.distance * 0.46);
+        const screenY = h / 2 + size * 0.18 + Math.sin(item.target.phase) * 4;
 
         const rayIndex = Math.floor((screenX / w) * numRays);
         const wallDistance = rayDistances[rayIndex] || maxDistance;
 
         if (item.distance < wallDistance + 0.25) {
-          drawPixelDecoy(screenX, screenY, size, item.target.type);
+          drawHologramTarget(screenX, screenY, size, item.target.label, item.target.phase);
         }
       });
     }
 
-    function drawPixelDecoy(x, y, size, type) {
+    function drawHologramTarget(x, y, size, label, phase) {
       const s = size / 100;
 
       ctx.save();
       ctx.translate(x, y);
-      ctx.imageSmoothingEnabled = false;
 
-      const outline = "#eaffee";
-      const dark = "#050505";
-      const visor = "#00ff66";
-      const red = "#ff4444";
-      const suit = type === "female" ? "#102010" : "#071707";
+      const cyan = "#6affff";
+      const mint = "#78ffd6";
+      const glow = "rgba(100,255,240,0.45)";
 
-      ctx.fillStyle = dark;
-      ctx.strokeStyle = outline;
+      ctx.shadowBlur = 12 * s;
+      ctx.shadowColor = glow;
+      ctx.strokeStyle = cyan;
+      ctx.fillStyle = "rgba(80,255,240,0.08)";
       ctx.lineWidth = Math.max(2, 3 * s);
 
-      // Shadow
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.fillRect(-36 * s, 34 * s, 72 * s, 12 * s);
+      // pedestal
+      ctx.fillStyle = "rgba(70,255,220,0.08)";
+      ctx.strokeRect(-24 * s, 22 * s, 48 * s, 12 * s);
+      ctx.fillRect(-24 * s, 22 * s, 48 * s, 12 * s);
 
-      // Legs
-      ctx.fillStyle = suit;
-      ctx.fillRect(-22 * s, 0, 16 * s, 42 * s);
-      ctx.fillRect(6 * s, 0, 16 * s, 42 * s);
-      ctx.strokeRect(-22 * s, 0, 16 * s, 42 * s);
-      ctx.strokeRect(6 * s, 0, 16 * s, 42 * s);
+      // lower beam
+      ctx.strokeStyle = mint;
+      ctx.beginPath();
+      ctx.moveTo(0, 22 * s);
+      ctx.lineTo(0, -20 * s);
+      ctx.stroke();
 
-      // Torso
-      ctx.fillStyle = suit;
-      ctx.fillRect(-30 * s, -52 * s, 60 * s, 56 * s);
-      ctx.strokeRect(-30 * s, -52 * s, 60 * s, 56 * s);
+      // ring 1
+      ctx.strokeStyle = cyan;
+      ctx.beginPath();
+      ctx.ellipse(0, -12 * s, 26 * s, 8 * s, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
-      // Shoulders
-      ctx.fillStyle = "#001f0b";
-      ctx.fillRect(-42 * s, -46 * s, 14 * s, 38 * s);
-      ctx.fillRect(28 * s, -46 * s, 14 * s, 38 * s);
-      ctx.strokeRect(-42 * s, -46 * s, 14 * s, 38 * s);
-      ctx.strokeRect(28 * s, -46 * s, 14 * s, 38 * s);
+      // ring 2
+      ctx.beginPath();
+      ctx.ellipse(0, -40 * s, 34 * s, 10 * s, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
-      // Head / helmet
-      ctx.fillStyle = dark;
-      ctx.fillRect(-22 * s, -88 * s, 44 * s, 34 * s);
-      ctx.strokeRect(-22 * s, -88 * s, 44 * s, 34 * s);
+      // ring 3 moving
+      ctx.beginPath();
+      ctx.ellipse(0, -62 * s + Math.sin(phase) * 4 * s, 20 * s, 7 * s, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
-      // Visor
-      ctx.fillStyle = visor;
-      ctx.fillRect(-14 * s, -78 * s, 28 * s, 8 * s);
+      // diamond projection
+      ctx.beginPath();
+      ctx.moveTo(0, -78 * s);
+      ctx.lineTo(24 * s, -48 * s);
+      ctx.lineTo(0, -18 * s);
+      ctx.lineTo(-24 * s, -48 * s);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = "rgba(90,255,250,0.12)";
+      ctx.fill();
 
-      // Target label plate
-      ctx.fillStyle = "#300000";
-      ctx.fillRect(-18 * s, -35 * s, 36 * s, 20 * s);
-      ctx.strokeStyle = red;
-      ctx.strokeRect(-18 * s, -35 * s, 36 * s, 20 * s);
+      // vertical lines
+      ctx.beginPath();
+      ctx.moveTo(0, -78 * s);
+      ctx.lineTo(0, -18 * s);
+      ctx.moveTo(-24 * s, -48 * s);
+      ctx.lineTo(24 * s, -48 * s);
+      ctx.stroke();
 
-      ctx.fillStyle = red;
-      ctx.font = Math.max(12, 20 * s) + "px Courier New";
+      // side flicker lines
+      ctx.strokeStyle = "rgba(120,255,250,0.7)";
+      ctx.beginPath();
+      ctx.moveTo(-14 * s, -70 * s);
+      ctx.lineTo(-34 * s, -82 * s);
+      ctx.moveTo(14 * s, -70 * s);
+      ctx.lineTo(34 * s, -82 * s);
+      ctx.stroke();
+
+      // label
+      ctx.fillStyle = "#d8ffff";
+      ctx.font = Math.max(14, 26 * s) + "px Courier New";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(type === "female" ? "V" : "M", 0, -25 * s);
-
-      // Female silhouette marker: triangular coat
-      if (type === "female") {
-        ctx.strokeStyle = outline;
-        ctx.fillStyle = "#0b1f0b";
-        ctx.beginPath();
-        ctx.moveTo(-28 * s, 2 * s);
-        ctx.lineTo(28 * s, 2 * s);
-        ctx.lineTo(42 * s, 34 * s);
-        ctx.lineTo(-42 * s, 34 * s);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        ctx.fillStyle = "#eaffee";
-        ctx.fillRect(22 * s, -84 * s, 8 * s, 22 * s);
-      }
-
-      // Male silhouette marker: blocky armor shoulders
-      if (type === "male") {
-        ctx.strokeStyle = outline;
-        ctx.strokeRect(-36 * s, -50 * s, 72 * s, 12 * s);
-      }
-
-      // Pixel highlights
-      ctx.fillStyle = "rgba(255,255,255,0.25)";
-      ctx.fillRect(-25 * s, -49 * s, 50 * s, 5 * s);
-      ctx.fillRect(-18 * s, -85 * s, 36 * s, 4 * s);
+      ctx.fillText(label, 0, -48 * s);
 
       ctx.restore();
     }
@@ -866,8 +863,8 @@ Hit 10 targets to unlock the command code.</div>
       ctx.fillStyle = "rgba(0,255,100,0.18)";
       ctx.font = "14px Courier New";
       ctx.textAlign = "left";
-      ctx.fillText("BOTANICAL LAB // RAYCAST ACTIVE", 14, 24);
-      ctx.fillText("DECOY TARGETS ONLY", 14, 44);
+      ctx.fillText("BOTANICAL LAB // HOLOGRAM GRID ACTIVE", 14, 24);
+      ctx.fillText("AUTHORIZED TARGETS: M / Q", 14, 44);
     }
 
     function drawCrosshair(w, h) {
@@ -888,79 +885,103 @@ Hit 10 targets to unlock the command code.</div>
       ctx.lineTo(cx, cy + 28);
       ctx.stroke();
 
-      ctx.strokeStyle = "#00ff66";
+      ctx.strokeStyle = "#66ffee";
       ctx.beginPath();
       ctx.arc(cx, cy, 6, 0, Math.PI * 2);
       ctx.stroke();
 
-      if (seedTrail > 0) {
-        ctx.fillStyle = "rgba(255, 230, 100, 0.9)";
+      if (venomTrail > 0) {
+        ctx.fillStyle = "rgba(90, 255, 160, 0.95)";
         ctx.beginPath();
-        ctx.arc(cx, cy - 45 + seedTrail * 4, 5, 0, Math.PI * 2);
+        ctx.arc(cx, cy - 45 + venomTrail * 4, 5, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    function drawSeedBlaster(w, h) {
+    function drawCobraBlaster(w, h) {
       const baseX = w / 2;
-      const baseY = h - 28;
+      const baseY = h - 10;
 
-      // Main 80s botanical device body
-      ctx.fillStyle = "#061606";
-      ctx.fillRect(baseX - 88, h - 112, 176, 76);
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.lineWidth = 3;
-      ctx.strokeRect(baseX - 88, h - 112, 176, 76);
-
-      // Barrel
-      ctx.fillStyle = "#003b16";
-      ctx.fillRect(baseX - 24, h - 172, 48, 74);
-      ctx.strokeStyle = "#baffc9";
-      ctx.strokeRect(baseX - 24, h - 172, 48, 74);
-
-      // Muzzle
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(baseX - 34, h - 188, 68, 22);
-      ctx.strokeStyle = "#00ff66";
-      ctx.strokeRect(baseX - 34, h - 188, 68, 22);
-
-      // Seed chamber
-      ctx.fillStyle = "#5b3300";
+      // neck
+      ctx.fillStyle = "#0b2d0f";
       ctx.beginPath();
-      ctx.arc(baseX, h - 75, 26, 0, Math.PI * 2);
+      ctx.moveTo(baseX - 36, h);
+      ctx.quadraticCurveTo(baseX - 34, h - 110, baseX - 6, h - 150);
+      ctx.lineTo(baseX + 6, h - 150);
+      ctx.quadraticCurveTo(baseX + 34, h - 110, baseX + 36, h);
+      ctx.closePath();
       ctx.fill();
 
-      ctx.strokeStyle = "#fff4a3";
+      // hood
+      ctx.fillStyle = "#143d18";
+      ctx.beginPath();
+      ctx.moveTo(baseX, h - 200);
+      ctx.quadraticCurveTo(baseX - 76, h - 170, baseX - 54, h - 112);
+      ctx.quadraticCurveTo(baseX - 22, h - 126, baseX, h - 132);
+      ctx.quadraticCurveTo(baseX + 22, h - 126, baseX + 54, h - 112);
+      ctx.quadraticCurveTo(baseX + 76, h - 170, baseX, h - 200);
+      ctx.closePath();
+      ctx.fill();
+
+      // head
+      ctx.fillStyle = "#1d4f22";
+      ctx.beginPath();
+      ctx.moveTo(baseX - 28, h - 170);
+      ctx.quadraticCurveTo(baseX, h - 205, baseX + 28, h - 170);
+      ctx.quadraticCurveTo(baseX + 24, h - 140, baseX, h - 132);
+      ctx.quadraticCurveTo(baseX - 24, h - 140, baseX - 28, h - 170);
+      ctx.closePath();
+      ctx.fill();
+
+      // mouth opening
+      ctx.fillStyle = "#020202";
+      ctx.beginPath();
+      ctx.moveTo(baseX - 18, h - 150);
+      ctx.lineTo(baseX + 18, h - 150);
+      ctx.lineTo(baseX + 8, h - 130);
+      ctx.lineTo(baseX - 8, h - 130);
+      ctx.closePath();
+      ctx.fill();
+
+      // fangs
+      ctx.fillStyle = "#f7fff9";
+      ctx.fillRect(baseX - 10, h - 148, 4, 12);
+      ctx.fillRect(baseX + 6, h - 148, 4, 12);
+
+      // eyes
+      ctx.fillStyle = "#66ffee";
+      ctx.fillRect(baseX - 15, h - 170, 6, 6);
+      ctx.fillRect(baseX + 9, h - 170, 6, 6);
+
+      // scale tech lines
+      ctx.strokeStyle = "#66ffee";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(baseX - 46, h - 136);
+      ctx.lineTo(baseX - 18, h - 146);
+      ctx.moveTo(baseX + 46, h - 136);
+      ctx.lineTo(baseX + 18, h - 146);
+      ctx.moveTo(baseX - 10, h - 112);
+      ctx.lineTo(baseX - 10, h - 24);
+      ctx.moveTo(baseX + 10, h - 112);
+      ctx.lineTo(baseX + 10, h - 24);
       ctx.stroke();
 
-      // Yellow seed lights
-      ctx.fillStyle = "#ffee66";
-      for (let i = 0; i < 5; i++) {
-        ctx.fillRect(baseX - 54 + i * 27, h - 54, 12, 8);
-      }
+      // venom canister
+      ctx.fillStyle = "#0a1d0d";
+      ctx.fillRect(baseX - 74, h - 102, 44, 54);
+      ctx.strokeStyle = "#78ffd6";
+      ctx.strokeRect(baseX - 74, h - 102, 44, 54);
 
-      // Side leaves / biotech casing
-      ctx.fillStyle = "#0f7a2d";
-      ctx.beginPath();
-      ctx.moveTo(baseX - 88, h - 80);
-      ctx.quadraticCurveTo(baseX - 145, h - 135, baseX - 168, h - 54);
-      ctx.quadraticCurveTo(baseX - 118, h - 72, baseX - 88, h - 60);
-      ctx.closePath();
-      ctx.fill();
+      ctx.fillStyle = "#66ff99";
+      ctx.fillRect(baseX - 68, h - 94, 32, 12);
+      ctx.fillRect(baseX - 68, h - 76, 32, 12);
 
-      ctx.beginPath();
-      ctx.moveTo(baseX + 88, h - 80);
-      ctx.quadraticCurveTo(baseX + 145, h - 135, baseX + 168, h - 54);
-      ctx.quadraticCurveTo(baseX + 118, h - 72, baseX + 88, h - 60);
-      ctx.closePath();
-      ctx.fill();
-
-      // Label
-      ctx.fillStyle = "#00ff66";
+      // label
+      ctx.fillStyle = "#78ffd6";
       ctx.font = "13px Courier New";
       ctx.textAlign = "center";
-      ctx.fillText("SEED-BLASTER 86", baseX, baseY);
+      ctx.fillText("COBRA VX-86", baseX, baseY - 6);
     }
 
     function drawMiniMap() {
@@ -985,7 +1006,7 @@ Hit 10 targets to unlock the command code.</div>
 
       targets.forEach(function(target) {
         if (target.alive) {
-          ctx.fillStyle = "#ff4444";
+          ctx.fillStyle = "#6affff";
           ctx.fillRect(offsetX + target.x * scale - 2, offsetY + target.y * scale - 2, 4, 4);
         }
       });
@@ -1003,7 +1024,7 @@ Hit 10 targets to unlock the command code.</div>
 
       shots++;
       shotFlash = 4;
-      seedTrail = 8;
+      venomTrail = 8;
 
       let bestTarget = null;
       let bestScore = 999;
@@ -1039,9 +1060,9 @@ Hit 10 targets to unlock the command code.</div>
       if (bestTarget) {
         bestTarget.alive = false;
         hits++;
-        messageEl.textContent = "Pixel decoy tagged with compressed seed round.";
+        messageEl.textContent = "Hologram target " + bestTarget.label + " destabilized.";
       } else {
-        messageEl.textContent = "Seed round fired. No target tagged.";
+        messageEl.textContent = "Venom discharged. No hologram hit.";
       }
 
       if (hits >= hitGoal) {
@@ -1060,7 +1081,7 @@ Hit 10 targets to unlock the command code.</div>
         glitchOverlayEl.style.display = "none";
         winBoxEl.style.display = "block";
         winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Lab authorization restored.";
+        messageEl.textContent = "Hologram authorization restored.";
       }, glitchDuration);
     }
 
