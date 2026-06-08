@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Botanical Range // Seed Protocol</title>
+  <title>MI6 Botanical Lab // Seed Protocol</title>
 
   <style>
     body {
@@ -26,8 +26,8 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,100,0.06),
-          rgba(0,255,100,0.06) 1px,
+          rgba(0, 255, 100, 0.06),
+          rgba(0, 255, 100, 0.06) 1px,
           transparent 1px,
           transparent 5px
         );
@@ -37,10 +37,10 @@
 
     .terminal {
       width: 100%;
-      max-width: 1080px;
+      max-width: 1100px;
       background: #000900;
       border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0,255,100,0.35);
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
       padding: 24px;
       box-sizing: border-box;
       position: relative;
@@ -51,8 +51,8 @@
       margin: 0 0 10px 0;
       text-align: center;
       color: #00ff66;
-      font-size: 28px;
-      text-shadow: 0 0 8px rgba(0,255,100,0.8);
+      font-size: 26px;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
       letter-spacing: 2px;
     }
 
@@ -66,61 +66,50 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 280px;
+      grid-template-columns: 1fr 285px;
       gap: 20px;
       align-items: start;
     }
 
     .gameWrap {
       position: relative;
+      text-align: center;
     }
 
     canvas {
       width: 100%;
-      max-width: 760px;
+      max-width: 780px;
       aspect-ratio: 4 / 3;
       background: #000;
       border: 2px solid #00ff66;
-      box-shadow: inset 0 0 28px rgba(0,255,100,0.14);
+      box-shadow: inset 0 0 28px rgba(0, 255, 100, 0.14);
       display: block;
+      margin: 0 auto;
+      image-rendering: pixelated;
     }
 
     .panel {
-      background: rgba(0,20,0,0.9);
+      background: rgba(0, 20, 0, 0.9);
       border: 1px solid #00aa44;
       padding: 16px;
       box-sizing: border-box;
       color: #baffc9;
-      min-height: 570px;
+      min-height: 585px;
     }
 
     .panelTitle {
       color: #00ff66;
       font-weight: bold;
       margin-bottom: 12px;
-      text-shadow: 0 0 6px rgba(0,255,100,0.7);
+      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
     }
 
     .statBox {
       margin-bottom: 12px;
       padding: 10px;
       border: 1px dashed #00aa44;
-      background: rgba(0,40,0,0.35);
+      background: rgba(0, 40, 0, 0.35);
       line-height: 1.7;
-    }
-
-    .controls {
-      margin-top: 18px;
-      line-height: 1.8;
-      color: #8dffb0;
-      font-size: 14px;
-    }
-
-    .warning {
-      margin-top: 16px;
-      color: #ff5555;
-      line-height: 1.5;
-      font-size: 13px;
     }
 
     button {
@@ -140,25 +129,18 @@
       background: #005c22;
     }
 
-    .mobileControls {
-      display: none;
-      grid-template-columns: repeat(3, 70px);
-      gap: 8px;
-      justify-content: center;
+    .controls {
+      margin-top: 18px;
+      line-height: 1.8;
+      color: #8dffb0;
+      font-size: 14px;
+    }
+
+    .warning {
       margin-top: 16px;
-    }
-
-    .mobileControls button {
-      width: 70px;
-      height: 52px;
-      margin-top: 0;
-      padding: 0;
-      font-size: 18px;
-    }
-
-    .shootWide {
-      grid-column: span 3;
-      width: 226px !important;
+      color: #ff5555;
+      line-height: 1.5;
+      font-size: 13px;
     }
 
     #message {
@@ -168,18 +150,10 @@
       line-height: 1.5;
     }
 
-    #gameOver {
-      display: none;
-      margin-top: 16px;
-      color: #ff5555;
-      font-weight: bold;
-      line-height: 1.6;
-    }
-
     #glitchStatus {
       display: none;
       margin-top: 16px;
-      color: #baffc9;
+      color: #fff4a3;
       font-weight: bold;
       animation: blinkStatus 0.3s infinite;
     }
@@ -194,10 +168,31 @@
       margin-top: 16px;
       padding: 16px;
       border: 1px solid #00ff66;
-      background: rgba(0,35,0,0.95);
-      box-shadow: 0 0 18px rgba(0,255,100,0.45);
+      background: rgba(0, 35, 0, 0.95);
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
       line-height: 1.7;
       color: #baffc9;
+    }
+
+    .mobileControls {
+      display: none;
+      grid-template-columns: repeat(3, 72px);
+      gap: 8px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .mobileControls button {
+      width: 72px;
+      height: 52px;
+      margin-top: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+
+    .shootWide {
+      grid-column: span 3;
+      width: 232px !important;
     }
 
     .backLink {
@@ -218,15 +213,15 @@
       background:
         repeating-linear-gradient(
           90deg,
-          rgba(255,255,255,0.03),
-          rgba(255,255,255,0.03) 2px,
+          rgba(255,255,255,0.04),
+          rgba(255,255,255,0.04) 2px,
           transparent 2px,
           transparent 8px
         ),
         repeating-linear-gradient(
           0deg,
-          rgba(255,200,0,0.08),
-          rgba(255,200,0,0.08) 3px,
+          rgba(255,220,0,0.08),
+          rgba(255,220,0,0.08) 3px,
           transparent 3px,
           transparent 11px
         );
@@ -234,7 +229,7 @@
     }
 
     .glitchOverlay::before {
-      content: "SUNFLOWER SEED AUTHORIZATION RESTORED";
+      content: "LAB AUTHORIZATION RESTORED";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -281,7 +276,7 @@
 
     @media (max-width: 600px) {
       h1 {
-        font-size: 22px;
+        font-size: 21px;
       }
 
       .terminal {
@@ -295,62 +290,60 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="glitchOverlay" id="glitchOverlay"></div>
 
   <main class="terminal">
-    <h1>BOTANICAL RANGE // SEED PROTOCOL</h1>
+    <h1>MI6 BOTANICAL LAB // SEED PROTOCOL</h1>
 
-    <div class="subtitle">Old MI6 simulation recovered.
-Move through the corridor in first-person view.
-Fire sunflower seeds with your botanical launcher.
-Hit 10 targets to unlock the code.</div>
+    <div class="subtitle">First-person lab simulation recovered.
+Move through the laboratory.
+Fire sunflower seeds at the decoy targets.
+Hit 10 targets to unlock the command code.</div>
 
     <div class="layout">
       <section class="gameWrap">
-        <canvas id="game" width="760" height="570"></canvas>
+        <canvas id="game" width="780" height="585"></canvas>
 
         <div class="mobileControls">
-          <button onclick="pressMove('up')">▲</button>
-          <button onclick="shoot()">✹</button>
-          <button onclick="pressMove('down')">▼</button>
-          <button onclick="pressMove('left')">◀</button>
-          <button onclick="pressMove('right')">▶</button>
+          <button onclick="turnLeft()">↶</button>
+          <button onclick="moveForward()">▲</button>
+          <button onclick="turnRight()">↷</button>
+          <button onclick="moveLeft()">◀</button>
+          <button onclick="moveBackward()">▼</button>
+          <button onclick="moveRight()">▶</button>
           <button class="shootWide" onclick="shoot()">SHOOT SEED</button>
         </div>
       </section>
 
       <aside class="panel">
-        <div class="panelTitle">SIMULATION STATUS</div>
+        <div class="panelTitle">LAB SIMULATION STATUS</div>
 
         <div class="statBox">
           HITS: <span id="hits">0</span> / 10<br>
           SHOTS: <span id="shots">0</span><br>
-          POSITION: <span id="position">L2 / D0</span><br>
-          ACTIVE TARGETS: <span id="targetCount">0</span>
+          TARGETS LEFT: <span id="targetsLeft">10</span><br>
+          POSITION: <span id="position">0 / 0</span>
         </div>
 
-        <button onclick="startGame()">START / RESTART SIMULATION</button>
+        <button onclick="startGame()">START / RESTART LAB</button>
+        <button onclick="shoot()">SHOOT SUNFLOWER SEED</button>
 
         <div id="message">Simulation standby.</div>
 
-        <div id="gameOver">
-          SIMULATION FAILED // TOO MANY TARGETS BREACHED<br>
-          Restart training.
-        </div>
-
         <div id="glitchStatus">
-          ARCHIVE INSTABILITY // FLORAL AUTHORIZATION SYNCING...
+          ARCHIVE INSTABILITY // LAB AUTHORIZATION SYNCING...
         </div>
 
         <div id="winBox">
-          <strong>ACCESS GRANTED // TRAINING COMPLETE</strong><br><br>
+          <strong>ACCESS GRANTED // LAB CLEARED</strong><br><br>
 
           Recovered command fragment:<br><br>
 
-          The initials were part of an old MI6 access layer.<br>
-          The botanical launcher was a disguise protocol.<br><br>
+          The old MI6 lab was not built for training.
+          It was built to hide an authorization code behind decoy targets.<br><br>
 
           UNLOCK CODE:<br>
           <strong>EYESONLY</strong><br><br>
@@ -360,15 +353,18 @@ Hit 10 targets to unlock the code.</div>
 
         <div class="controls">
           CONTROLS:<br>
-          W / ↑ = forward<br>
-          S / ↓ = backward<br>
-          A / ← = move left<br>
-          D / → = move right<br>
-          SPACE = shoot sunflower seed
+          W / ↑ = walk forward<br>
+          S / ↓ = walk backward<br>
+          A / ← = turn left<br>
+          D / → = turn right<br>
+          Q = strafe left<br>
+          E = strafe right<br>
+          SPACE = shoot seed
         </div>
 
         <div class="warning">
-          WARNING: Targets include male and female decoy silhouettes.
+          Targets are pixel decoys. They are not real people.
+          The player fires sunflower seeds from a botanical launcher.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -382,344 +378,433 @@ Hit 10 targets to unlock the code.</div>
 
     const hitsEl = document.getElementById("hits");
     const shotsEl = document.getElementById("shots");
+    const targetsLeftEl = document.getElementById("targetsLeft");
     const positionEl = document.getElementById("position");
-    const targetCountEl = document.getElementById("targetCount");
     const messageEl = document.getElementById("message");
-    const gameOverEl = document.getElementById("gameOver");
     const glitchStatusEl = document.getElementById("glitchStatus");
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
 
-    const laneX = [0.18, 0.5, 0.82];
-    const maxDepth = 5;
+    const map = [
+      "111111111111",
+      "100000000001",
+      "101111011101",
+      "100001010001",
+      "111101010111",
+      "100001000001",
+      "101111111101",
+      "100000000001",
+      "101110111101",
+      "100010000001",
+      "100000111001",
+      "111111111111"
+    ];
+
+    const mapWidth = map[0].length;
+    const mapHeight = map.length;
+
+    const fov = Math.PI / 3;
+    const numRays = 156;
+    const maxDistance = 20;
+    const wallSize = 1;
+    const moveSpeed = 0.08;
+    const turnSpeed = 0.055;
     const hitGoal = 10;
     const glitchDuration = 4200;
 
-    let playerLane = 1;
-    let playerDepth = 0;
-    let hits = 0;
-    let shots = 0;
+    let player;
+    let targets;
+    let hits;
+    let shots;
+    let keys = {};
     let gameRunning = false;
-    let loopId = null;
-    let spawnTimer = 0;
     let shotFlash = 0;
-    let targets = [];
-    let targetIdCounter = 0;
+    let seedTrail = 0;
+    let lastFrame = 0;
+    let rayDistances = [];
 
     function startGame() {
-      playerLane = 1;
-      playerDepth = 0;
+      player = {
+        x: 1.6,
+        y: 1.6,
+        angle: 0
+      };
+
+      targets = [
+        { x: 9.5, y: 1.5, type: "male", alive: true },
+        { x: 5.5, y: 3.5, type: "female", alive: true },
+        { x: 10.2, y: 3.5, type: "male", alive: true },
+        { x: 1.7, y: 5.5, type: "female", alive: true },
+        { x: 6.5, y: 5.5, type: "male", alive: true },
+        { x: 10.3, y: 5.6, type: "female", alive: true },
+        { x: 2.5, y: 7.5, type: "male", alive: true },
+        { x: 8.5, y: 7.5, type: "female", alive: true },
+        { x: 1.7, y: 10.2, type: "female", alive: true },
+        { x: 9.5, y: 10.5, type: "male", alive: true }
+      ];
+
       hits = 0;
       shots = 0;
-      targets = [];
-      targetIdCounter = 0;
-      spawnTimer = 0;
       shotFlash = 0;
+      seedTrail = 0;
       gameRunning = true;
 
-      document.body.classList.remove("winGlitch");
       glitchOverlayEl.style.display = "none";
       winBoxEl.style.display = "none";
-      gameOverEl.style.display = "none";
       glitchStatusEl.style.display = "none";
 
-      hitsEl.textContent = hits;
-      shotsEl.textContent = shots;
+      messageEl.textContent = "Lab active. Find and tag all decoy targets.";
       updateHud();
 
-      messageEl.textContent = "Simulation active. Search corridor for targets.";
-      spawnTarget();
-      spawnTarget();
+      requestAnimationFrame(gameLoop);
+    }
 
-      if (loopId) {
-        cancelAnimationFrame(loopId);
+    function gameLoop(timestamp) {
+      const delta = timestamp - lastFrame;
+      lastFrame = timestamp;
+
+      if (gameRunning) {
+        updatePlayer();
       }
-      gameLoop();
+
+      drawScene();
+
+      if (gameRunning) {
+        requestAnimationFrame(gameLoop);
+      }
     }
 
-    function updateHud() {
-      positionEl.textContent = "L" + (playerLane + 1) + " / D" + playerDepth;
-      targetCountEl.textContent = targets.length;
-      hitsEl.textContent = hits;
-      shotsEl.textContent = shots;
-    }
+    function updatePlayer() {
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+        player.angle -= turnSpeed;
+      }
 
-    function spawnTarget() {
-      if (!gameRunning) return;
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+        player.angle += turnSpeed;
+      }
 
-      if (targets.length >= 5) return;
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
+        movePlayer(Math.cos(player.angle) * moveSpeed, Math.sin(player.angle) * moveSpeed);
+      }
 
-      let lane = Math.floor(Math.random() * 3);
-      let depth = 2 + Math.floor(Math.random() * (maxDepth - 1));
-      let type = Math.random() < 0.5 ? "male" : "female";
+      if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
+        movePlayer(-Math.cos(player.angle) * moveSpeed, -Math.sin(player.angle) * moveSpeed);
+      }
 
-      let occupied = targets.some(function(t) {
-        return t.lane === lane && t.depth === depth;
-      });
+      if (keys["q"] || keys["Q"]) {
+        movePlayer(Math.cos(player.angle - Math.PI / 2) * moveSpeed, Math.sin(player.angle - Math.PI / 2) * moveSpeed);
+      }
 
-      if (occupied) return;
-
-      targets.push({
-        id: targetIdCounter++,
-        lane: lane,
-        depth: depth,
-        type: type,
-        bob: Math.random() * Math.PI * 2
-      });
-
-      updateHud();
-    }
-
-    function gameLoop() {
-      update();
-      draw();
-      loopId = requestAnimationFrame(gameLoop);
-    }
-
-    function update() {
-      if (!gameRunning) return;
-
-      spawnTimer++;
-      if (spawnTimer > 90) {
-        spawnTarget();
-        spawnTimer = 0;
+      if (keys["e"] || keys["E"]) {
+        movePlayer(Math.cos(player.angle + Math.PI / 2) * moveSpeed, Math.sin(player.angle + Math.PI / 2) * moveSpeed);
       }
 
       if (shotFlash > 0) {
         shotFlash--;
       }
 
-      targets.forEach(function(target) {
-        target.bob += 0.04;
-      });
+      if (seedTrail > 0) {
+        seedTrail--;
+      }
 
-      if (targets.length > 7) {
-        loseGame();
+      updateHud();
+    }
+
+    function movePlayer(dx, dy) {
+      const newX = player.x + dx;
+      const newY = player.y + dy;
+
+      if (!isWall(newX, player.y)) {
+        player.x = newX;
+      }
+
+      if (!isWall(player.x, newY)) {
+        player.y = newY;
       }
     }
 
-    function draw() {
+    function isWall(x, y) {
+      const mapX = Math.floor(x);
+      const mapY = Math.floor(y);
+
+      if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight) {
+        return true;
+      }
+
+      return map[mapY][mapX] === "1";
+    }
+
+    function drawScene() {
       const w = canvas.width;
       const h = canvas.height;
 
       ctx.clearRect(0, 0, w, h);
 
-      drawBackground(w, h);
-      drawCorridor(w, h);
+      drawCeilingAndFloor(w, h);
+      castWalls(w, h);
       drawTargets(w, h);
-      drawCrosshair(w, h);
       drawLauncher(w, h);
-      drawHudText(w, h);
+      drawCrosshair(w, h);
+      drawMiniMap();
 
       if (shotFlash > 0) {
-        ctx.fillStyle = "rgba(255, 245, 180, 0.20)";
+        ctx.fillStyle = "rgba(255, 240, 150, 0.22)";
         ctx.fillRect(0, 0, w, h);
       }
     }
 
-    function drawBackground(w, h) {
-      const sky = ctx.createLinearGradient(0, 0, 0, h * 0.55);
-      sky.addColorStop(0, "#081108");
-      sky.addColorStop(1, "#132413");
-      ctx.fillStyle = sky;
-      ctx.fillRect(0, 0, w, h * 0.55);
+    function drawCeilingAndFloor(w, h) {
+      const ceiling = ctx.createLinearGradient(0, 0, 0, h / 2);
+      ceiling.addColorStop(0, "#001100");
+      ceiling.addColorStop(1, "#071807");
 
-      const floor = ctx.createLinearGradient(0, h * 0.45, 0, h);
-      floor.addColorStop(0, "#050505");
+      ctx.fillStyle = ceiling;
+      ctx.fillRect(0, 0, w, h / 2);
+
+      const floor = ctx.createLinearGradient(0, h / 2, 0, h);
+      floor.addColorStop(0, "#081108");
       floor.addColorStop(1, "#000000");
+
       ctx.fillStyle = floor;
-      ctx.fillRect(0, h * 0.45, w, h * 0.55);
+      ctx.fillRect(0, h / 2, w, h / 2);
+
+      ctx.strokeStyle = "rgba(0,255,100,0.08)";
+      for (let y = h / 2; y < h; y += 18) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
     }
 
-    function drawCorridor(w, h) {
-      const horizonY = h * 0.32;
-      const floorTopY = h * 0.52;
-      const leftBase = 80;
-      const rightBase = w - 80;
-      const vanishingX = w / 2;
+    function castWalls(w, h) {
+      rayDistances = [];
 
-      ctx.strokeStyle = "rgba(0,255,100,0.35)";
-      ctx.lineWidth = 2;
+      for (let i = 0; i < numRays; i++) {
+        const rayAngle = player.angle - fov / 2 + (i / numRays) * fov;
+        const ray = castRay(rayAngle);
 
-      for (let i = 0; i <= 8; i++) {
-        const y = floorTopY + i * 28;
-        const p = (y - floorTopY) / (h - floorTopY + 1);
-        const leftX = vanishingX + (leftBase - vanishingX) * p;
-        const rightX = vanishingX + (rightBase - vanishingX) * p;
+        const correctedDistance = ray.distance * Math.cos(rayAngle - player.angle);
+        rayDistances[i] = correctedDistance;
 
-        ctx.beginPath();
-        ctx.moveTo(leftX, y);
-        ctx.lineTo(rightX, y);
-        ctx.stroke();
+        const wallHeight = Math.min(h, h / correctedDistance);
+        const x = (i / numRays) * w;
+        const stripWidth = Math.ceil(w / numRays) + 1;
+        const y = h / 2 - wallHeight / 2;
+
+        let brightness = Math.max(40, 210 - correctedDistance * 35);
+        let green = Math.floor(brightness);
+
+        if (ray.side === "x") {
+          green = Math.floor(green * 0.75);
+        }
+
+        ctx.fillStyle = "rgb(0," + green + ",70)";
+        ctx.fillRect(x, y, stripWidth, wallHeight);
+
+        ctx.fillStyle = "rgba(0,0,0,0.22)";
+        ctx.fillRect(x, y + wallHeight - 8, stripWidth, 8);
+
+        if (i % 8 === 0) {
+          ctx.fillStyle = "rgba(255,255,255,0.06)";
+          ctx.fillRect(x, y, 2, wallHeight);
+        }
+      }
+    }
+
+    function castRay(angle) {
+      let distance = 0;
+      let hit = false;
+      let hitX = player.x;
+      let hitY = player.y;
+      let lastMapX = Math.floor(player.x);
+      let lastMapY = Math.floor(player.y);
+      let side = "x";
+
+      while (!hit && distance < maxDistance) {
+        distance += 0.02;
+        hitX = player.x + Math.cos(angle) * distance;
+        hitY = player.y + Math.sin(angle) * distance;
+
+        const mapX = Math.floor(hitX);
+        const mapY = Math.floor(hitY);
+
+        if (mapX !== lastMapX) {
+          side = "x";
+        }
+
+        if (mapY !== lastMapY) {
+          side = "y";
+        }
+
+        lastMapX = mapX;
+        lastMapY = mapY;
+
+        if (isWall(hitX, hitY)) {
+          hit = true;
+        }
       }
 
-      for (let i = 0; i <= 6; i++) {
-        const t = i / 6;
-        const floorX = leftBase + (rightBase - leftBase) * t;
-
-        ctx.beginPath();
-        ctx.moveTo(vanishingX, horizonY);
-        ctx.lineTo(floorX, h);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = "rgba(0,255,100,0.45)";
-      ctx.beginPath();
-      ctx.moveTo(vanishingX, horizonY);
-      ctx.lineTo(leftBase, h);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(vanishingX, horizonY);
-      ctx.lineTo(rightBase, h);
-      ctx.stroke();
+      return {
+        distance: distance,
+        side: side
+      };
     }
 
     function drawTargets(w, h) {
-      const sorted = targets.slice().sort(function(a, b) {
-        return b.depth - a.depth;
-      });
+      const visibleTargets = targets
+        .filter(function(target) {
+          return target.alive;
+        })
+        .map(function(target) {
+          const dx = target.x - player.x;
+          const dy = target.y - player.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          let angleToTarget = Math.atan2(dy, dx) - player.angle;
 
-      sorted.forEach(function(target) {
-        drawTarget(target, w, h);
+          angleToTarget = normalizeAngle(angleToTarget);
+
+          return {
+            target: target,
+            distance: distance,
+            angle: angleToTarget
+          };
+        })
+        .filter(function(item) {
+          return Math.abs(item.angle) < fov / 1.7 && item.distance > 0.25;
+        })
+        .sort(function(a, b) {
+          return b.distance - a.distance;
+        });
+
+      visibleTargets.forEach(function(item) {
+        const screenX = (0.5 + item.angle / fov) * w;
+        const size = Math.min(150, h / item.distance * 0.48);
+        const screenY = h / 2 + size * 0.18;
+
+        const rayIndex = Math.floor((screenX / w) * numRays);
+        const wallDistance = rayDistances[rayIndex] || maxDistance;
+
+        if (item.distance < wallDistance + 0.2) {
+          drawPixelPerson(screenX, screenY, size, item.target.type);
+        }
       });
     }
 
-    function drawTarget(target, w, h) {
-      const relativeDepth = target.depth - playerDepth;
-      if (relativeDepth < 0 || relativeDepth > maxDepth) return;
-
-      const scaleMap = [0, 1.2, 0.95, 0.72, 0.55, 0.42];
-      const yMap = [0, 430, 370, 325, 285, 250];
-
-      const scale = scaleMap[relativeDepth];
-      const baseY = yMap[relativeDepth] + Math.sin(target.bob) * 3;
-
-      const centerX = w * laneX[target.lane];
-      const bodyH = 120 * scale;
-      const bodyW = 34 * scale;
-      const headR = 18 * scale;
-
-      if (!scale) return;
+    function drawPixelPerson(x, y, size, type) {
+      const s = size / 100;
 
       ctx.save();
-      ctx.translate(centerX, baseY);
+      ctx.translate(x, y);
 
-      ctx.fillStyle = "#0b0b0b";
+      ctx.fillStyle = "#060606";
       ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = Math.max(1, 2 * scale);
+      ctx.lineWidth = Math.max(1, 2 * s);
 
-      // head
-      ctx.beginPath();
-      ctx.arc(0, -bodyH * 0.72, headR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
+      // Head
+      ctx.fillRect(-13 * s, -78 * s, 26 * s, 26 * s);
+      ctx.strokeRect(-13 * s, -78 * s, 26 * s, 26 * s);
 
-      // torso
-      ctx.fillRect(-bodyW / 2, -bodyH * 0.55, bodyW, bodyH * 0.52);
-      ctx.strokeRect(-bodyW / 2, -bodyH * 0.55, bodyW, bodyH * 0.52);
+      // Body
+      ctx.fillRect(-18 * s, -50 * s, 36 * s, 48 * s);
+      ctx.strokeRect(-18 * s, -50 * s, 36 * s, 48 * s);
 
-      // arms
-      ctx.beginPath();
-      ctx.moveTo(-bodyW / 2, -bodyH * 0.43);
-      ctx.lineTo(-bodyW * 1.2, -bodyH * 0.18);
-      ctx.moveTo(bodyW / 2, -bodyH * 0.43);
-      ctx.lineTo(bodyW * 1.2, -bodyH * 0.18);
-      ctx.stroke();
+      // Arms
+      ctx.fillRect(-34 * s, -44 * s, 14 * s, 36 * s);
+      ctx.fillRect(20 * s, -44 * s, 14 * s, 36 * s);
+      ctx.strokeRect(-34 * s, -44 * s, 14 * s, 36 * s);
+      ctx.strokeRect(20 * s, -44 * s, 14 * s, 36 * s);
 
-      // legs
-      ctx.beginPath();
-      ctx.moveTo(-bodyW / 4, -bodyH * 0.03);
-      ctx.lineTo(-bodyW * 0.85, bodyH * 0.38);
-      ctx.moveTo(bodyW / 4, -bodyH * 0.03);
-      ctx.lineTo(bodyW * 0.85, bodyH * 0.38);
-      ctx.stroke();
+      // Legs
+      ctx.fillRect(-16 * s, -1 * s, 13 * s, 38 * s);
+      ctx.fillRect(3 * s, -1 * s, 13 * s, 38 * s);
+      ctx.strokeRect(-16 * s, -1 * s, 13 * s, 38 * s);
+      ctx.strokeRect(3 * s, -1 * s, 13 * s, 38 * s);
 
-      // female marker: skirt and ponytail-ish marker
-      if (target.type === "female") {
-        ctx.beginPath();
-        ctx.moveTo(-bodyW / 2, -bodyH * 0.05);
-        ctx.lineTo(bodyW / 2, -bodyH * 0.05);
-        ctx.lineTo(bodyW * 0.9, bodyH * 0.18);
-        ctx.lineTo(-bodyW * 0.9, bodyH * 0.18);
-        ctx.closePath();
+      if (type === "female") {
         ctx.fillStyle = "#111111";
+        ctx.beginPath();
+        ctx.moveTo(-22 * s, -6 * s);
+        ctx.lineTo(22 * s, -6 * s);
+        ctx.lineTo(32 * s, 25 * s);
+        ctx.lineTo(-32 * s, 25 * s);
+        ctx.closePath();
         ctx.fill();
         ctx.stroke();
 
-        ctx.beginPath();
-        ctx.moveTo(headR * 0.5, -bodyH * 0.86);
-        ctx.lineTo(headR * 1.3, -bodyH * 0.74);
-        ctx.stroke();
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(13 * s, -74 * s, 8 * s, 24 * s);
       }
 
-      // male marker: square shoulders
-      if (target.type === "male") {
-        ctx.strokeRect(-bodyW * 0.7, -bodyH * 0.52, bodyW * 1.4, bodyH * 0.08);
+      if (type === "male") {
+        ctx.strokeRect(-24 * s, -48 * s, 48 * s, 10 * s);
       }
 
-      // glowing label
       ctx.fillStyle = "#ff4444";
-      ctx.font = `${Math.max(10, 18 * scale)}px Courier New`;
+      ctx.font = Math.max(10, 18 * s) + "px Courier New";
       ctx.textAlign = "center";
-      ctx.fillText(target.type === "male" ? "M" : "V", 0, -bodyH * 0.22);
+      ctx.fillText(type === "female" ? "V" : "M", 0, -22 * s);
 
       ctx.restore();
     }
 
     function drawCrosshair(w, h) {
       const cx = w / 2;
-      const cy = h / 2 + 10;
+      const cy = h / 2;
 
-      ctx.strokeStyle = "rgba(0,255,100,0.9)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
       ctx.lineWidth = 2;
 
       ctx.beginPath();
-      ctx.moveTo(cx - 24, cy);
+      ctx.moveTo(cx - 28, cy);
       ctx.lineTo(cx - 8, cy);
       ctx.moveTo(cx + 8, cy);
-      ctx.lineTo(cx + 24, cy);
-      ctx.moveTo(cx, cy - 24);
+      ctx.lineTo(cx + 28, cy);
+      ctx.moveTo(cx, cy - 28);
       ctx.lineTo(cx, cy - 8);
       ctx.moveTo(cx, cy + 8);
-      ctx.lineTo(cx, cy + 24);
+      ctx.lineTo(cx, cy + 28);
       ctx.stroke();
 
+      ctx.strokeStyle = "#00ff66";
       ctx.beginPath();
-      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
       ctx.stroke();
+
+      if (seedTrail > 0) {
+        ctx.fillStyle = "rgba(255, 230, 100, 0.85)";
+        ctx.beginPath();
+        ctx.arc(cx, cy - 45 + seedTrail * 4, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     function drawLauncher(w, h) {
       const baseY = h - 70;
 
-      // left plant
       ctx.fillStyle = "#2c8b3d";
       ctx.beginPath();
       ctx.moveTo(w * 0.22, h);
-      ctx.quadraticCurveTo(w * 0.18, h - 80, w * 0.28, baseY);
-      ctx.quadraticCurveTo(w * 0.34, h - 30, w * 0.31, h);
+      ctx.quadraticCurveTo(w * 0.18, h - 85, w * 0.30, baseY);
+      ctx.quadraticCurveTo(w * 0.36, h - 25, w * 0.32, h);
       ctx.closePath();
       ctx.fill();
 
-      // right plant
       ctx.beginPath();
       ctx.moveTo(w * 0.78, h);
-      ctx.quadraticCurveTo(w * 0.82, h - 80, w * 0.72, baseY);
-      ctx.quadraticCurveTo(w * 0.66, h - 30, w * 0.69, h);
+      ctx.quadraticCurveTo(w * 0.82, h - 85, w * 0.70, baseY);
+      ctx.quadraticCurveTo(w * 0.64, h - 25, w * 0.68, h);
       ctx.closePath();
       ctx.fill();
 
-      // center launcher stem
       ctx.fillStyle = "#3da64d";
-      ctx.fillRect(w / 2 - 10, h - 120, 20, 70);
+      ctx.fillRect(w / 2 - 11, h - 120, 22, 72);
 
-      // flower head
       ctx.fillStyle = "#ffdf4d";
-      for (let i = 0; i < 10; i++) {
-        const angle = (Math.PI * 2 / 10) * i;
-        const px = w / 2 + Math.cos(angle) * 22;
-        const py = h - 118 + Math.sin(angle) * 22;
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 / 12) * i;
+        const px = w / 2 + Math.cos(angle) * 23;
+        const py = h - 122 + Math.sin(angle) * 23;
         ctx.beginPath();
         ctx.arc(px, py, 9, 0, Math.PI * 2);
         ctx.fill();
@@ -727,90 +812,100 @@ Hit 10 targets to unlock the code.</div>
 
       ctx.fillStyle = "#5b3300";
       ctx.beginPath();
-      ctx.arc(w / 2, h - 118, 16, 0, Math.PI * 2);
+      ctx.arc(w / 2, h - 122, 17, 0, Math.PI * 2);
       ctx.fill();
 
-      // seed chamber
       ctx.strokeStyle = "#baffc9";
       ctx.lineWidth = 2;
-      ctx.strokeRect(w / 2 - 18, h - 55, 36, 22);
+      ctx.strokeRect(w / 2 - 20, h - 55, 40, 23);
     }
 
-    function drawHudText(w, h) {
-      ctx.fillStyle = "rgba(0,255,100,0.7)";
-      ctx.font = "14px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText("SEED RANGE // POV ACTIVE", 14, 24);
-    }
+    function drawMiniMap() {
+      const scale = 7;
+      const offsetX = 12;
+      const offsetY = 36;
 
-    function pressMove(direction) {
-      if (!gameRunning) return;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+      ctx.fillRect(offsetX - 4, offsetY - 4, mapWidth * scale + 8, mapHeight * scale + 8);
 
-      if (direction === "left") {
-        playerLane = Math.max(0, playerLane - 1);
+      for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+          if (map[y][x] === "1") {
+            ctx.fillStyle = "#00aa44";
+          } else {
+            ctx.fillStyle = "#001600";
+          }
+
+          ctx.fillRect(offsetX + x * scale, offsetY + y * scale, scale - 1, scale - 1);
+        }
       }
 
-      if (direction === "right") {
-        playerLane = Math.min(2, playerLane + 1);
-      }
+      targets.forEach(function(target) {
+        if (target.alive) {
+          ctx.fillStyle = "#ff4444";
+          ctx.fillRect(offsetX + target.x * scale - 2, offsetY + target.y * scale - 2, 4, 4);
+        }
+      });
 
-      if (direction === "up") {
-        playerDepth = Math.min(maxDepth - 1, playerDepth + 1);
-      }
-
-      if (direction === "down") {
-        playerDepth = Math.max(0, playerDepth - 1);
-      }
-
-      messageEl.textContent = "Position changed. Scan for targets.";
-      updateHud();
+      ctx.fillStyle = "#ffff66";
+      ctx.beginPath();
+      ctx.arc(offsetX + player.x * scale, offsetY + player.y * scale, 3, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     function shoot() {
-      if (!gameRunning) return;
+      if (!gameRunning) {
+        return;
+      }
 
       shots++;
       shotFlash = 4;
+      seedTrail = 8;
 
-      let hitIndex = -1;
-      let bestDepth = 999;
+      let bestTarget = null;
+      let bestScore = 999;
 
-      targets.forEach(function(target, index) {
-        if (target.lane === playerLane && target.depth >= playerDepth) {
-          const relativeDepth = target.depth - playerDepth;
-          if (relativeDepth < bestDepth) {
-            bestDepth = relativeDepth;
-            hitIndex = index;
+      targets.forEach(function(target) {
+        if (!target.alive) {
+          return;
+        }
+
+        const dx = target.x - player.x;
+        const dy = target.y - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        let angleToTarget = Math.atan2(dy, dx) - player.angle;
+
+        angleToTarget = normalizeAngle(angleToTarget);
+
+        const aimTolerance = 0.10 + Math.min(0.12, 0.25 / distance);
+
+        if (Math.abs(angleToTarget) < aimTolerance) {
+          const ray = castRay(Math.atan2(dy, dx));
+
+          if (distance < ray.distance + 0.15) {
+            const score = Math.abs(angleToTarget) + distance * 0.02;
+
+            if (score < bestScore) {
+              bestScore = score;
+              bestTarget = target;
+            }
           }
         }
       });
 
-      if (hitIndex !== -1 && bestDepth <= 3) {
+      if (bestTarget) {
+        bestTarget.alive = false;
         hits++;
-        targets.splice(hitIndex, 1);
-        messageEl.textContent = "Target hit. Sunflower seed impact confirmed.";
-        spawnTarget();
-
-        if (hits >= hitGoal) {
-          hitsEl.textContent = hits;
-          shotsEl.textContent = shots;
-          updateHud();
-          winGame();
-          return;
-        }
+        messageEl.textContent = "Decoy target tagged with sunflower seed.";
       } else {
-        messageEl.textContent = "Shot fired. No confirmed impact.";
+        messageEl.textContent = "Seed fired. No target tagged.";
       }
 
-      hitsEl.textContent = hits;
-      shotsEl.textContent = shots;
-      updateHud();
-    }
+      if (hits >= hitGoal) {
+        winGame();
+      }
 
-    function loseGame() {
-      gameRunning = false;
-      gameOverEl.style.display = "block";
-      messageEl.textContent = "Simulation collapsed. Too many targets active.";
+      updateHud();
     }
 
     function winGame() {
@@ -822,35 +917,72 @@ Hit 10 targets to unlock the code.</div>
         glitchOverlayEl.style.display = "none";
         winBoxEl.style.display = "block";
         winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Authorization restored.";
+        messageEl.textContent = "Lab authorization restored.";
       }, glitchDuration);
     }
 
+    function updateHud() {
+      hitsEl.textContent = hits;
+      shotsEl.textContent = shots;
+      targetsLeftEl.textContent = targets.filter(function(target) {
+        return target.alive;
+      }).length;
+      positionEl.textContent = player.x.toFixed(1) + " / " + player.y.toFixed(1);
+    }
+
+    function normalizeAngle(angle) {
+      while (angle < -Math.PI) {
+        angle += Math.PI * 2;
+      }
+
+      while (angle > Math.PI) {
+        angle -= Math.PI * 2;
+      }
+
+      return angle;
+    }
+
+    function moveForward() {
+      movePlayer(Math.cos(player.angle) * 0.25, Math.sin(player.angle) * 0.25);
+      updateHud();
+    }
+
+    function moveBackward() {
+      movePlayer(-Math.cos(player.angle) * 0.25, -Math.sin(player.angle) * 0.25);
+      updateHud();
+    }
+
+    function moveLeft() {
+      movePlayer(Math.cos(player.angle - Math.PI / 2) * 0.25, Math.sin(player.angle - Math.PI / 2) * 0.25);
+      updateHud();
+    }
+
+    function moveRight() {
+      movePlayer(Math.cos(player.angle + Math.PI / 2) * 0.25, Math.sin(player.angle + Math.PI / 2) * 0.25);
+      updateHud();
+    }
+
+    function turnLeft() {
+      player.angle -= 0.25;
+      updateHud();
+    }
+
+    function turnRight() {
+      player.angle += 0.25;
+      updateHud();
+    }
+
     document.addEventListener("keydown", function(event) {
-      if (event.key === "a" || event.key === "A" || event.key === "ArrowLeft") {
-        event.preventDefault();
-        pressMove("left");
-      }
-
-      if (event.key === "d" || event.key === "D" || event.key === "ArrowRight") {
-        event.preventDefault();
-        pressMove("right");
-      }
-
-      if (event.key === "w" || event.key === "W" || event.key === "ArrowUp") {
-        event.preventDefault();
-        pressMove("up");
-      }
-
-      if (event.key === "s" || event.key === "S" || event.key === "ArrowDown") {
-        event.preventDefault();
-        pressMove("down");
-      }
+      keys[event.key] = true;
 
       if (event.code === "Space") {
         event.preventDefault();
         shoot();
       }
+    });
+
+    document.addEventListener("keyup", function(event) {
+      keys[event.key] = false;
     });
 
     canvas.addEventListener("click", function() {
