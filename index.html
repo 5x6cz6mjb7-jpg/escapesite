@@ -121,7 +121,7 @@
 
     .videoFrame {
       width: 100%;
-      max-width: 360px;
+      max-width: 520px;
       margin: 0 auto;
       background: #000;
       border: 1px solid #5f0000;
@@ -201,7 +201,7 @@
       }
 
       .videoFrame {
-        max-width: 300px;
+        max-width: 320px;
       }
     }
   </style>
@@ -246,7 +246,7 @@
             id="firstVideo"
             src=""
             title="Jason Krane transmission"
-            allow="autoplay; encrypted-media; picture-in-picture"
+            allow="autoplay; fullscreen"
             allowfullscreen>
           </iframe>
         </div>
@@ -263,6 +263,8 @@
     let remainingSeconds = countdownSeconds;
     let countdownInterval;
     let videoStarted = false;
+
+    const oneDriveVideoLink = "https://proceon-my.sharepoint.com/:v:/g/personal/j_vanmaarseveen_proceon_nl/IQCzYk7xPM3hTp4jBAx1fXcbAWetAI7GLYzhW29wu23t8Sw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=tLe75U";
 
     function openTransmission() {
       document.getElementById("startOverlay").style.display = "none";
@@ -317,8 +319,7 @@
       document.getElementById("lockedArea").style.display = "none";
       document.getElementById("videoArea").style.display = "block";
 
-      document.getElementById("firstVideo").src =
-        "https://www.youtube-nocookie.com/embed/ZlXw0NQaTBs?autoplay=1&playsinline=1&controls=1&modestbranding=1&rel=0";
+      document.getElementById("firstVideo").src = oneDriveVideoLink;
     }
   </script>
 
