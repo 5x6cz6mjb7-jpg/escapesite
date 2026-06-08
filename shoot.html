@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Botanical Lab // Hologram Range</title>
+  <title>MI6 Botanical Lab // Dummy Range</title>
 
   <style>
     body {
@@ -153,7 +153,7 @@
     #glitchStatus {
       display: none;
       margin-top: 16px;
-      color: #7fffd4;
+      color: #fff4a3;
       font-weight: bold;
       animation: blinkStatus 0.3s infinite;
     }
@@ -213,15 +213,15 @@
       background:
         repeating-linear-gradient(
           90deg,
-          rgba(0,255,255,0.05),
-          rgba(0,255,255,0.05) 2px,
+          rgba(255,255,255,0.04),
+          rgba(255,255,255,0.04) 2px,
           transparent 2px,
-          transparent 7px
+          transparent 8px
         ),
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,180,0.07),
-          rgba(0,255,180,0.07) 3px,
+          rgba(255,220,0,0.08),
+          rgba(255,220,0,0.08) 3px,
           transparent 3px,
           transparent 11px
         );
@@ -229,33 +229,33 @@
     }
 
     .glitchOverlay::before {
-      content: "HOLOGRAM AUTHORIZATION RESTORED";
+      content: "DUMMY RANGE AUTHORIZATION RESTORED";
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #aaffff;
-      background: rgba(0, 12, 14, 0.92);
-      border: 2px solid #66ffee;
+      color: #fff4a3;
+      background: rgba(10,20,0,0.92);
+      border: 2px solid #ffee66;
       padding: 18px 24px;
       text-align: center;
       letter-spacing: 2px;
       font-size: 26px;
-      text-shadow: 0 0 10px rgba(100,255,240,0.85);
-      box-shadow: 0 0 24px rgba(100,255,240,0.35);
+      text-shadow: 0 0 10px rgba(255,230,120,0.8);
+      box-shadow: 0 0 24px rgba(255,230,120,0.35);
       animation: textSkew 0.18s infinite;
     }
 
     @keyframes glitchFlash {
       0% { opacity: 0.35; filter: hue-rotate(0deg); }
-      50% { opacity: 0.82; filter: hue-rotate(28deg); }
+      50% { opacity: 0.8; filter: hue-rotate(40deg); }
       100% { opacity: 0.45; filter: hue-rotate(0deg); }
     }
 
     @keyframes textSkew {
       0% { transform: translate(-50%, -50%) skewX(0deg); }
-      25% { transform: translate(-49.6%, -50.2%) skewX(3deg); }
-      50% { transform: translate(-50.4%, -49.7%) skewX(-4deg); }
+      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
+      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
       75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
       100% { transform: translate(-50%, -50%) skewX(0deg); }
     }
@@ -296,13 +296,12 @@
   <div class="glitchOverlay" id="glitchOverlay"></div>
 
   <main class="terminal">
-    <h1>MI6 BOTANICAL LAB // HOLOGRAM RANGE</h1>
+    <h1>MI6 BOTANICAL LAB // DUMMY RANGE</h1>
 
     <div class="subtitle">First-person lab simulation recovered.
-Move through the laboratory.
-Destroy hologram targets marked with M and Q.
-Fire venom from the cobra launcher.
-Hit 10 targets to unlock the command code.</div>
+Moving training dummy targets are active.
+Fire cobra venom at dummies marked M and Q.
+Hit 10 moving dummies to unlock the command code.</div>
 
     <div class="layout">
       <section class="gameWrap">
@@ -325,7 +324,7 @@ Hit 10 targets to unlock the command code.</div>
         <div class="statBox">
           HITS: <span id="hits">0</span> / 10<br>
           SHOTS: <span id="shots">0</span><br>
-          TARGETS LEFT: <span id="targetsLeft">10</span><br>
+          DUMMIES LEFT: <span id="targetsLeft">10</span><br>
           POSITION: <span id="position">0 / 0</span>
         </div>
 
@@ -335,15 +334,15 @@ Hit 10 targets to unlock the command code.</div>
         <div id="message">Simulation standby.</div>
 
         <div id="glitchStatus">
-          HOLOGRAM GRID UNSTABLE // RECONSTRUCTING ACCESS...
+          DUMMY RANGE UNSTABLE // RESTORING ACCESS...
         </div>
 
         <div id="winBox">
-          <strong>ACCESS GRANTED // RANGE CLEARED</strong><br><br>
+          <strong>ACCESS GRANTED // DUMMY RANGE CLEARED</strong><br><br>
 
           Recovered command fragment:<br><br>
 
-          The hologram range was linked to an old MI6 authorization layer.<br>
+          The moving dummy range was connected to an old MI6 authorization layer.<br>
           The marked targets concealed an access code.<br><br>
 
           UNLOCK CODE:<br>
@@ -364,7 +363,7 @@ Hit 10 targets to unlock the command code.</div>
         </div>
 
         <div class="warning">
-          Targets are holograms only. No human figures are used.
+          Targets are moving training dummies only.
           Weapon system: Cobra Venom Launcher.
         </div>
 
@@ -386,6 +385,11 @@ Hit 10 targets to unlock the command code.</div>
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
 
+    /*
+      1 = wall
+      0 = open floor
+      2 = possible dummy spawn point
+    */
     const map = [
       "11111111111111111111",
       "10000000000001000001",
@@ -418,6 +422,9 @@ Hit 10 targets to unlock the command code.</div>
     const hitGoal = 10;
     const glitchDuration = 4200;
 
+    const dummySpeed = 0.018;
+    const dummyRadius = 0.23;
+
     let mapWidth = map[0].length;
     let mapHeight = map.length;
 
@@ -429,7 +436,6 @@ Hit 10 targets to unlock the command code.</div>
     let gameRunning = false;
     let shotFlash = 0;
     let venomTrail = 0;
-    let lastFrame = 0;
     let rayDistances = [];
     let animationId = null;
 
@@ -449,7 +455,6 @@ Hit 10 targets to unlock the command code.</div>
       shotFlash = 0;
       venomTrail = 0;
       gameRunning = true;
-      lastFrame = 0;
 
       targets = createTargetsFromMap();
 
@@ -457,7 +462,7 @@ Hit 10 targets to unlock the command code.</div>
       winBoxEl.style.display = "none";
       glitchStatusEl.style.display = "none";
 
-      messageEl.textContent = "Hologram range active. Locate all M and Q targets.";
+      messageEl.textContent = "Moving dummy range active. Locate all M and Q targets.";
       updateHud();
 
       animationId = requestAnimationFrame(gameLoop);
@@ -490,7 +495,7 @@ Hit 10 targets to unlock the command code.</div>
       ];
 
       extraOpenSpaces.forEach(function(point) {
-        if (!isWall(point.x, point.y)) {
+        if (isOpenForDummy(point.x, point.y)) {
           spawnPoints.push(point);
         }
       });
@@ -501,12 +506,16 @@ Hit 10 targets to unlock the command code.</div>
       const result = [];
 
       for (let i = 0; i < hitGoal && i < spawnPoints.length; i++) {
+        const direction = Math.random() * Math.PI * 2;
+
         result.push({
           x: spawnPoints[i].x,
           y: spawnPoints[i].y,
           label: labels[i],
           alive: true,
-          phase: Math.random() * Math.PI * 2
+          angle: direction,
+          phase: Math.random() * Math.PI * 2,
+          turnTimer: 40 + Math.floor(Math.random() * 100)
         });
       }
 
@@ -522,13 +531,10 @@ Hit 10 targets to unlock the command code.</div>
       }
     }
 
-    function gameLoop(timestamp) {
-      if (!lastFrame) {
-        lastFrame = timestamp;
-      }
-
+    function gameLoop() {
       if (gameRunning) {
         updatePlayer();
+        updateDummies();
         drawScene();
         animationId = requestAnimationFrame(gameLoop);
       } else {
@@ -569,13 +575,62 @@ Hit 10 targets to unlock the command code.</div>
         venomTrail--;
       }
 
-      targets.forEach(function(target) {
-        if (target.alive) {
-          target.phase += 0.06;
+      updateHud();
+    }
+
+    function updateDummies() {
+      targets.forEach(function(dummy) {
+        if (!dummy.alive) {
+          return;
+        }
+
+        dummy.phase += 0.07;
+        dummy.turnTimer--;
+
+        if (dummy.turnTimer <= 0) {
+          chooseNewDummyDirection(dummy);
+        }
+
+        const nextX = dummy.x + Math.cos(dummy.angle) * dummySpeed;
+        const nextY = dummy.y + Math.sin(dummy.angle) * dummySpeed;
+
+        if (isOpenForDummy(nextX, nextY)) {
+          dummy.x = nextX;
+          dummy.y = nextY;
+        } else {
+          chooseNewDummyDirection(dummy);
         }
       });
+    }
 
-      updateHud();
+    function chooseNewDummyDirection(dummy) {
+      const possibleAngles = [
+        0,
+        Math.PI / 2,
+        Math.PI,
+        Math.PI * 1.5,
+        Math.PI / 4,
+        Math.PI * 0.75,
+        Math.PI * 1.25,
+        Math.PI * 1.75
+      ];
+
+      shuffleArray(possibleAngles);
+
+      for (let i = 0; i < possibleAngles.length; i++) {
+        const angle = possibleAngles[i];
+        const testX = dummy.x + Math.cos(angle) * 0.45;
+        const testY = dummy.y + Math.sin(angle) * 0.45;
+
+        if (isOpenForDummy(testX, testY)) {
+          dummy.angle = angle;
+          dummy.turnTimer = 45 + Math.floor(Math.random() * 120);
+          return;
+        }
+      }
+
+      dummy.angle += Math.PI;
+      dummy.turnTimer = 60;
     }
 
     function movePlayer(dx, dy) {
@@ -611,6 +666,15 @@ Hit 10 targets to unlock the command code.</div>
       }
 
       return map[mapY][mapX] === "1";
+    }
+
+    function isOpenForDummy(x, y) {
+      return (
+        !isWall(x + dummyRadius, y) &&
+        !isWall(x - dummyRadius, y) &&
+        !isWall(x, y + dummyRadius) &&
+        !isWall(x, y - dummyRadius)
+      );
     }
 
     function drawScene() {
@@ -689,8 +753,8 @@ Hit 10 targets to unlock the command code.</div>
         }
 
         if (ray.hitMarker) {
-          ctx.fillStyle = "rgba(100,255,240,0.10)";
-          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.18);
+          ctx.fillStyle = "rgba(180,255,200,0.12)";
+          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.15);
         }
       }
     }
@@ -765,96 +829,122 @@ Hit 10 targets to unlock the command code.</div>
 
       visibleTargets.forEach(function(item) {
         const screenX = (0.5 + item.angle / fov) * w;
-        const size = Math.min(160, h / item.distance * 0.46);
-        const screenY = h / 2 + size * 0.18 + Math.sin(item.target.phase) * 4;
+        const size = Math.min(170, h / item.distance * 0.50);
+        const screenY = h / 2 + size * 0.20 + Math.sin(item.target.phase) * 4;
 
         const rayIndex = Math.floor((screenX / w) * numRays);
         const wallDistance = rayDistances[rayIndex] || maxDistance;
 
         if (item.distance < wallDistance + 0.25) {
-          drawHologramTarget(screenX, screenY, size, item.target.label, item.target.phase);
+          drawTrainingDummy(screenX, screenY, size, item.target.label, item.target.phase);
         }
       });
     }
 
-    function drawHologramTarget(x, y, size, label, phase) {
+    function drawTrainingDummy(x, y, size, label, phase) {
       const s = size / 100;
 
       ctx.save();
       ctx.translate(x, y);
+      ctx.imageSmoothingEnabled = false;
 
-      const cyan = "#6affff";
-      const mint = "#78ffd6";
-      const glow = "rgba(100,255,240,0.45)";
+      const sway = Math.sin(phase) * 3 * s;
 
-      ctx.shadowBlur = 12 * s;
-      ctx.shadowColor = glow;
-      ctx.strokeStyle = cyan;
-      ctx.fillStyle = "rgba(80,255,240,0.08)";
+      ctx.translate(sway, 0);
+
+      // shadow
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.fillRect(-38 * s, 38 * s, 76 * s, 11 * s);
+
+      // base rail
+      ctx.fillStyle = "#050505";
+      ctx.strokeStyle = "#00ff66";
+      ctx.lineWidth = Math.max(1, 2 * s);
+      ctx.fillRect(-34 * s, 28 * s, 68 * s, 12 * s);
+      ctx.strokeRect(-34 * s, 28 * s, 68 * s, 12 * s);
+
+      // pole
+      ctx.fillStyle = "#001f0b";
+      ctx.strokeStyle = "#baffc9";
+      ctx.fillRect(-5 * s, -18 * s, 10 * s, 46 * s);
+      ctx.strokeRect(-5 * s, -18 * s, 10 * s, 46 * s);
+
+      // torso plate
+      ctx.fillStyle = "#071707";
+      ctx.strokeStyle = "#eaffee";
       ctx.lineWidth = Math.max(2, 3 * s);
+      ctx.fillRect(-34 * s, -58 * s, 68 * s, 54 * s);
+      ctx.strokeRect(-34 * s, -58 * s, 68 * s, 54 * s);
 
-      // pedestal
-      ctx.fillStyle = "rgba(70,255,220,0.08)";
-      ctx.strokeRect(-24 * s, 22 * s, 48 * s, 12 * s);
-      ctx.fillRect(-24 * s, 22 * s, 48 * s, 12 * s);
-
-      // lower beam
-      ctx.strokeStyle = mint;
+      // angled shoulders
+      ctx.fillStyle = "#0e2812";
       ctx.beginPath();
-      ctx.moveTo(0, 22 * s);
-      ctx.lineTo(0, -20 * s);
-      ctx.stroke();
-
-      // ring 1
-      ctx.strokeStyle = cyan;
-      ctx.beginPath();
-      ctx.ellipse(0, -12 * s, 26 * s, 8 * s, 0, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // ring 2
-      ctx.beginPath();
-      ctx.ellipse(0, -40 * s, 34 * s, 10 * s, 0, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // ring 3 moving
-      ctx.beginPath();
-      ctx.ellipse(0, -62 * s + Math.sin(phase) * 4 * s, 20 * s, 7 * s, 0, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // diamond projection
-      ctx.beginPath();
-      ctx.moveTo(0, -78 * s);
-      ctx.lineTo(24 * s, -48 * s);
-      ctx.lineTo(0, -18 * s);
-      ctx.lineTo(-24 * s, -48 * s);
+      ctx.moveTo(-42 * s, -52 * s);
+      ctx.lineTo(-34 * s, -58 * s);
+      ctx.lineTo(-34 * s, -4 * s);
+      ctx.lineTo(-48 * s, -12 * s);
       ctx.closePath();
-      ctx.stroke();
-      ctx.fillStyle = "rgba(90,255,250,0.12)";
       ctx.fill();
-
-      // vertical lines
-      ctx.beginPath();
-      ctx.moveTo(0, -78 * s);
-      ctx.lineTo(0, -18 * s);
-      ctx.moveTo(-24 * s, -48 * s);
-      ctx.lineTo(24 * s, -48 * s);
       ctx.stroke();
 
-      // side flicker lines
-      ctx.strokeStyle = "rgba(120,255,250,0.7)";
       ctx.beginPath();
-      ctx.moveTo(-14 * s, -70 * s);
-      ctx.lineTo(-34 * s, -82 * s);
-      ctx.moveTo(14 * s, -70 * s);
-      ctx.lineTo(34 * s, -82 * s);
+      ctx.moveTo(42 * s, -52 * s);
+      ctx.lineTo(34 * s, -58 * s);
+      ctx.lineTo(34 * s, -4 * s);
+      ctx.lineTo(48 * s, -12 * s);
+      ctx.closePath();
+      ctx.fill();
       ctx.stroke();
 
-      // label
-      ctx.fillStyle = "#d8ffff";
-      ctx.font = Math.max(14, 26 * s) + "px Courier New";
+      // head block
+      ctx.fillStyle = "#050505";
+      ctx.strokeStyle = "#eaffee";
+      ctx.fillRect(-22 * s, -92 * s, 44 * s, 30 * s);
+      ctx.strokeRect(-22 * s, -92 * s, 44 * s, 30 * s);
+
+      // visor
+      ctx.fillStyle = "#00ff66";
+      ctx.fillRect(-14 * s, -82 * s, 28 * s, 7 * s);
+
+      // target circle
+      ctx.strokeStyle = "#ff4444";
+      ctx.lineWidth = Math.max(2, 3 * s);
+      ctx.beginPath();
+      ctx.arc(0, -31 * s, 19 * s, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(-24 * s, -31 * s);
+      ctx.lineTo(24 * s, -31 * s);
+      ctx.moveTo(0, -55 * s);
+      ctx.lineTo(0, -7 * s);
+      ctx.stroke();
+
+      // label panel
+      ctx.fillStyle = "#300000";
+      ctx.fillRect(-17 * s, -42 * s, 34 * s, 22 * s);
+      ctx.strokeStyle = "#ff4444";
+      ctx.strokeRect(-17 * s, -42 * s, 34 * s, 22 * s);
+
+      ctx.fillStyle = "#ff5555";
+      ctx.font = Math.max(13, 22 * s) + "px Courier New";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(label, 0, -48 * s);
+      ctx.fillText(label, 0, -30 * s);
+
+      // small lights
+      ctx.fillStyle = "#ffee66";
+      ctx.fillRect(-27 * s, -52 * s, 7 * s, 7 * s);
+      ctx.fillRect(20 * s, -52 * s, 7 * s, 7 * s);
+
+      // rails wheels
+      ctx.fillStyle = "#111111";
+      ctx.strokeStyle = "#baffc9";
+      ctx.beginPath();
+      ctx.arc(-22 * s, 42 * s, 6 * s, 0, Math.PI * 2);
+      ctx.arc(22 * s, 42 * s, 6 * s, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
 
       ctx.restore();
     }
@@ -863,7 +953,7 @@ Hit 10 targets to unlock the command code.</div>
       ctx.fillStyle = "rgba(0,255,100,0.18)";
       ctx.font = "14px Courier New";
       ctx.textAlign = "left";
-      ctx.fillText("BOTANICAL LAB // HOLOGRAM GRID ACTIVE", 14, 24);
+      ctx.fillText("BOTANICAL LAB // MOVING DUMMY GRID", 14, 24);
       ctx.fillText("AUTHORIZED TARGETS: M / Q", 14, 44);
     }
 
@@ -885,7 +975,7 @@ Hit 10 targets to unlock the command code.</div>
       ctx.lineTo(cx, cy + 28);
       ctx.stroke();
 
-      ctx.strokeStyle = "#66ffee";
+      ctx.strokeStyle = "#00ff66";
       ctx.beginPath();
       ctx.arc(cx, cy, 6, 0, Math.PI * 2);
       ctx.stroke();
@@ -1006,7 +1096,7 @@ Hit 10 targets to unlock the command code.</div>
 
       targets.forEach(function(target) {
         if (target.alive) {
-          ctx.fillStyle = "#6affff";
+          ctx.fillStyle = "#ff4444";
           ctx.fillRect(offsetX + target.x * scale - 2, offsetY + target.y * scale - 2, 4, 4);
         }
       });
@@ -1060,9 +1150,9 @@ Hit 10 targets to unlock the command code.</div>
       if (bestTarget) {
         bestTarget.alive = false;
         hits++;
-        messageEl.textContent = "Hologram target " + bestTarget.label + " destabilized.";
+        messageEl.textContent = "Moving dummy " + bestTarget.label + " disabled by cobra venom.";
       } else {
-        messageEl.textContent = "Venom discharged. No hologram hit.";
+        messageEl.textContent = "Venom discharged. No dummy hit.";
       }
 
       if (hits >= hitGoal) {
@@ -1081,7 +1171,7 @@ Hit 10 targets to unlock the command code.</div>
         glitchOverlayEl.style.display = "none";
         winBoxEl.style.display = "block";
         winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Hologram authorization restored.";
+        messageEl.textContent = "Dummy range authorization restored.";
       }, glitchDuration);
     }
 
