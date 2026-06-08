@@ -76,6 +76,43 @@
       100% { opacity: 0.35; }
     }
 
+    .botanicalBloom {
+      display: none;
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 80;
+    }
+
+    .botanicalBloom.active {
+      display: block;
+    }
+
+    .plantEmoji {
+      position: absolute;
+      top: -60px;
+      font-size: 34px;
+      animation-name: fallAndSpin;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      text-shadow: 0 0 12px rgba(0, 255, 100, 0.8);
+    }
+
+    @keyframes fallAndSpin {
+      0% {
+        transform: translateY(-80px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     .terminal {
       width: 100%;
       max-width: 760px;
@@ -93,6 +130,13 @@
       animation: terminalGlitch 0.12s infinite;
       border-color: #ff4444;
       box-shadow: 0 0 40px rgba(255, 0, 0, 0.7);
+    }
+
+    .terminal.bloomMode {
+      border-color: #baffc9;
+      box-shadow:
+        0 0 35px rgba(0, 255, 100, 0.55),
+        0 0 70px rgba(255, 255, 255, 0.2);
     }
 
     @keyframes terminalGlitch {
@@ -146,6 +190,10 @@
 
     .redPlant {
       color: #ff5555;
+    }
+
+    .wallText {
+      color: #ffaa00;
     }
 
     button {
@@ -255,18 +303,24 @@
       .mobileControls {
         display: grid;
       }
+
+      .plantEmoji {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+  <div class="botanicalBloom" id="botanicalBloom"></div>
+
   <main class="terminal" id="terminal">
     <h1>BOTANICAL CONTAINMENT PROTOCOL</h1>
 
     <div class="subtitle">
       Collect 25 safe botanical samples.<br>
-      Avoid red toxic specimens. Restore the hidden data fragment.
+      Avoid red toxic specimens and containment barriers.
     </div>
 
     <canvas id="game" width="400" height="400"></canvas>
@@ -277,13 +331,14 @@
 
     <div class="legend">
       <span class="whitePlant">WHITE SPECIMEN = SAFE</span><br>
-      <span class="redPlant">RED SPECIMEN = TOXIC // RESET PROTOCOL</span>
+      <span class="redPlant">RED SPECIMEN = TOXIC // RESET PROTOCOL</span><br>
+      <span class="wallText">ORANGE BARRIER = CONTAINMENT WALL</span>
     </div>
 
     <button onclick="startGame()">START / RESTART</button>
 
     <div id="gameOver">
-      CONTAINMENT FAILED // TOXIC SAMPLE COLLECTED OR COLLISION DETECTED<br>
+      CONTAINMENT FAILED // TOXIC SAMPLE, WALL IMPACT OR COLLISION DETECTED<br>
       Restart protocol.
     </div>
 
@@ -330,6 +385,15 @@
     const maxToxicPlants = 4;
     const crashDuration = 5000;
 
+    const center = Math.floor(tileCount / 2);
+    const walls = [
+      { x: center, y: center },
+      { x: center - 1, y: center },
+      { x: center + 1, y: center },
+      { x: center, y: center - 1 },
+      { x: center, y: center + 1 }
+    ];
+
     let snake;
     let safePlant;
     let toxicPlants;
@@ -344,9 +408,12 @@
     function startGame() {
       document.body.classList.remove("crash");
       document.getElementById("terminal").classList.remove("glitch");
+      document.getElementById("terminal").classList.remove("bloomMode");
+      document.getElementById("botanicalBloom").classList.remove("active");
+      document.getElementById("botanicalBloom").innerHTML = "";
 
       snake = [
-        { x: 10, y: 10 }
+        { x: 4, y: 4 }
       ];
 
       dx = 1;
@@ -385,7 +452,8 @@
         head.x >= tileCount ||
         head.y < 0 ||
         head.y >= tileCount ||
-        hitsSelf(head)
+        hitsSelf(head) ||
+        hitsWall(head)
       ) {
         endGame();
         return;
@@ -421,6 +489,7 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       drawGrid();
+      drawWalls();
       drawSnake();
       drawSafePlant();
       drawToxicPlants();
@@ -441,6 +510,19 @@
         ctx.lineTo(canvas.width, i * gridSize);
         ctx.stroke();
       }
+    }
+
+    function drawWalls() {
+      ctx.fillStyle = "#ffaa00";
+
+      walls.forEach(function(wall) {
+        ctx.fillRect(
+          wall.x * gridSize + 2,
+          wall.y * gridSize + 2,
+          gridSize - 4,
+          gridSize - 4
+        );
+      });
     }
 
     function drawSnake() {
@@ -517,13 +599,15 @@
         return part.x === position.x && part.y === position.y;
       });
 
+      const onWall = hitsWall(position);
+
       const onSafePlant = safePlant && safePlant.x === position.x && safePlant.y === position.y;
 
       const onToxicPlant = toxicPlants && toxicPlants.some(function(plant) {
         return plant.x === position.x && plant.y === position.y;
       });
 
-      return onSnake || onSafePlant || onToxicPlant;
+      return onSnake || onWall || onSafePlant || onToxicPlant;
     }
 
     function ensureToxicPlantCount() {
@@ -550,6 +634,12 @@
       });
     }
 
+    function hitsWall(position) {
+      return walls.some(function(wall) {
+        return wall.x === position.x && wall.y === position.y;
+      });
+    }
+
     function endGame() {
       clearInterval(gameLoop);
       gameRunning = false;
@@ -568,10 +658,36 @@
       setTimeout(function() {
         document.body.classList.remove("crash");
         document.getElementById("terminal").classList.remove("glitch");
+        document.getElementById("terminal").classList.add("bloomMode");
+
+        startBotanicalBloom();
 
         document.getElementById("winBox").style.display = "block";
         document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
       }, crashDuration);
+    }
+
+    function startBotanicalBloom() {
+      const bloomLayer = document.getElementById("botanicalBloom");
+      const symbols = ["🌿", "🌱", "🍃", "🌸", "🌺", "🌼", "☘️", "🌾", "🪴"];
+      const amount = 34;
+
+      bloomLayer.innerHTML = "";
+
+      for (let i = 0; i < amount; i++) {
+        const plant = document.createElement("div");
+        plant.className = "plantEmoji";
+        plant.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+        plant.style.left = Math.floor(Math.random() * 100) + "vw";
+        plant.style.animationDuration = (5 + Math.random() * 6) + "s";
+        plant.style.animationDelay = (Math.random() * 4) + "s";
+        plant.style.fontSize = (24 + Math.random() * 26) + "px";
+
+        bloomLayer.appendChild(plant);
+      }
+
+      bloomLayer.classList.add("active");
     }
 
     function setDirection(newDx, newDy) {
