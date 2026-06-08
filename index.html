@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -188,7 +187,7 @@
       <div class="hashtag">#Jasonisalife</div>
 
       <div class="countdown-title">TRANSMISSION UNLOCKS IN</div>
-      <div id="countdown">--:--:--:--</div>
+      <div id="countdown">00:00:30</div>
 
       <p id="lockedMessage">
         The system is locked.<br>
@@ -216,9 +215,9 @@
   </main>
 
   <script>
-      const unlockDate = new Date(Date.now() + 5 * 60 * 1000);
-    */
-
+    const countdownSeconds = 30;
+    let remainingSeconds = countdownSeconds;
+    let countdownInterval;
     let videoStarted = false;
 
     function openTransmission() {
@@ -230,27 +229,31 @@
       music.play().catch(function() {
         console.log("Music could not start automatically.");
       });
+
+      updateCountdownDisplay();
+      countdownInterval = setInterval(updateCountdown, 1000);
     }
 
     function updateCountdown() {
-      const now = new Date();
-      const difference = unlockDate - now;
+      remainingSeconds--;
 
-      if (difference <= 0) {
-        document.getElementById("countdown").textContent = "00:00:00:00";
+      if (remainingSeconds <= 0) {
+        remainingSeconds = 0;
+        updateCountdownDisplay();
+        clearInterval(countdownInterval);
         unlockVideo();
         return;
       }
 
-      const totalSeconds = Math.floor(difference / 1000);
+      updateCountdownDisplay();
+    }
 
-      const days = Math.floor(totalSeconds / 86400);
-      const hours = Math.floor((totalSeconds % 86400) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
+    function updateCountdownDisplay() {
+      const hours = Math.floor(remainingSeconds / 3600);
+      const minutes = Math.floor((remainingSeconds % 3600) / 60);
+      const seconds = remainingSeconds % 60;
 
       document.getElementById("countdown").textContent =
-        String(days).padStart(2, "0") + ":" +
         String(hours).padStart(2, "0") + ":" +
         String(minutes).padStart(2, "0") + ":" +
         String(seconds).padStart(2, "0");
@@ -273,11 +276,7 @@
       document.getElementById("firstVideo").src =
         "https://www.youtube-nocookie.com/embed/ZlXw0NQaTBs?autoplay=1&playsinline=1";
     }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
   </script>
 
 </body>
 </html>
-```
