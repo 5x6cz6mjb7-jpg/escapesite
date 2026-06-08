@@ -176,14 +176,14 @@
     <h1>BOTANICAL CONTAINMENT PROTOCOL</h1>
 
     <div class="subtitle">
-      Collect 5 botanical samples.<br>
+      Collect 25 botanical samples.<br>
       Avoid collision. Restore the hidden data fragment.
     </div>
 
     <canvas id="game" width="400" height="400"></canvas>
 
     <div class="score">
-      SAMPLES: <span id="score">0</span> / 5
+      SAMPLES: <span id="score">0</span> / 25
     </div>
 
     <button onclick="startGame()">START / RESTART</button>
@@ -227,7 +227,7 @@
 
     const gridSize = 20;
     const tileCount = canvas.width / gridSize;
-    const targetScore = 5;
+    const targetScore = 25;
 
     let snake;
     let food;
