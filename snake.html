@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Botanical Snake Protocol</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #001100;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.08),
+          rgba(0, 255, 100, 0.08) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 760px;
+      padding: 28px;
+      background: #000900;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      position: relative;
+      z-index: 2;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+    }
+
+    .subtitle {
+      color: #8dffb0;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    canvas {
+      background: #000;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 20px rgba(0, 255, 100, 0.4);
+      max-width: 100%;
+      touch-action: none;
+    }
+
+    .info {
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    .score {
+      font-size: 22px;
+      margin: 14px 0;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 12px 18px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      background: #005c22;
+    }
+
+    #winBox {
+      display: none;
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid #00ff66;
+      background: rgba(0, 30, 0, 0.9);
+      color: #baffc9;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    #gameOver {
+      display: none;
+      color: #ff5555;
+      margin-top: 15px;
+    }
+
+    .mobileControls {
+      display: none;
+      margin-top: 18px;
+      grid-template-columns: 60px 60px 60px;
+      grid-template-rows: 60px 60px 60px;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .mobileControls button {
+      margin: 0;
+      padding: 0;
+      font-size: 24px;
+    }
+
+    .up {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .right {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .down {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .backLink {
+      display: inline-block;
+      margin-top: 20px;
+      color: #00ff66;
+      text-decoration: none;
+      border-bottom: 1px solid #00ff66;
+    }
+
+    @media (max-width: 600px) {
+      .terminal {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 19px;
+      }
+
+      .mobileControls {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="terminal">
+    <h1>BOTANICAL CONTAINMENT PROTOCOL</h1>
+
+    <div class="subtitle">
+      Collect 5 botanical samples.<br>
+      Avoid collision. Restore the hidden data fragment.
+    </div>
+
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <div class="score">
+      SAMPLES: <span id="score">0</span> / 5
+    </div>
+
+    <button onclick="startGame()">START / RESTART</button>
+
+    <div id="gameOver">
+      CONTAINMENT FAILED // SAMPLE LOST
+    </div>
+
+    <div class="mobileControls">
+      <button class="up" onclick="setDirection(0, -1)">▲</button>
+      <button class="left" onclick="setDirection(-1, 0)">◀</button>
+      <button class="right" onclick="setDirection(1, 0)">▶</button>
+      <button class="down" onclick="setDirection(0, 1)">▼</button>
+    </div>
+
+    <div class="info">
+      Gebruik de pijltjestoetsen op computer.<br>
+      Gebruik de knoppen op telefoon of tablet.
+    </div>
+
+    <div id="winBox">
+      <strong>ACCESS GRANTED // SAMPLE SEQUENCE RESTORED</strong><br><br>
+
+      Recovered botanical fragment:<br><br>
+
+      The plant samples were not random.<br>
+      They were selected by someone with academic knowledge.<br><br>
+
+      UNLOCK WORD:<br>
+      <strong>NIGHTSHADE</strong><br><br>
+
+      Use this word when the archive asks for the missing specimen.
+    </div>
+
+    <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const gridSize = 20;
+    const tileCount = canvas.width / gridSize;
+    const targetScore = 5;
+
+    let snake;
+    let food;
+    let dx;
+    let dy;
+    let nextDx;
+    let nextDy;
+    let score;
+    let gameLoop;
+    let gameRunning = false;
+
+    function startGame() {
+      snake = [
+        { x: 10, y: 10 }
+      ];
+
+      dx = 1;
+      dy = 0;
+      nextDx = 1;
+      nextDy = 0;
+      score = 0;
+      gameRunning = true;
+
+      document.getElementById("score").textContent = score;
+      document.getElementById("winBox").style.display = "none";
+      document.getElementById("gameOver").style.display = "none";
+
+      placeFood();
+
+      clearInterval(gameLoop);
+      gameLoop = setInterval(updateGame, 130);
+    }
+
+    function updateGame() {
+      dx = nextDx;
+      dy = nextDy;
+
+      const head = {
+        x: snake[0].x + dx,
+        y: snake[0].y + dy
+      };
+
+      if (
+        head.x < 0 ||
+        head.x >= tileCount ||
+        head.y < 0 ||
+        head.y >= tileCount ||
+        hitsSelf(head)
+      ) {
+        endGame();
+        return;
+      }
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        document.getElementById("score").textContent = score;
+
+        if (score >= targetScore) {
+          winGame();
+          return;
+        }
+
+        placeFood();
+      } else {
+        snake.pop();
+      }
+
+      drawGame();
+    }
+
+    function drawGame() {
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      drawGrid();
+
+      ctx.fillStyle = "#00ff66";
+      snake.forEach(function(part) {
+        ctx.fillRect(
+          part.x * gridSize + 2,
+          part.y * gridSize + 2,
+          gridSize - 4,
+          gridSize - 4
+        );
+      });
+
+      ctx.fillStyle = "#ff5555";
+      ctx.beginPath();
+      ctx.arc(
+        food.x * gridSize + gridSize / 2,
+        food.y * gridSize + gridSize / 2,
+        gridSize / 2 - 3,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.fillStyle = "#000000";
+      ctx.font = "14px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("✚", food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2);
+    }
+
+    function drawGrid() {
+      ctx.strokeStyle = "rgba(0, 255, 100, 0.12)";
+      ctx.lineWidth = 1;
+
+      for (let i = 0; i <= tileCount; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, canvas.height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(canvas.width, i * gridSize);
+        ctx.stroke();
+      }
+    }
+
+    function placeFood() {
+      food = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount)
+      };
+
+      while (snake.some(function(part) {
+        return part.x === food.x && part.y === food.y;
+      })) {
+        food = {
+          x: Math.floor(Math.random() * tileCount),
+          y: Math.floor(Math.random() * tileCount)
+        };
+      }
+
+      drawGame();
+    }
+
+    function hitsSelf(head) {
+      return snake.some(function(part) {
+        return part.x === head.x && part.y === head.y;
+      });
+    }
+
+    function endGame() {
+      clearInterval(gameLoop);
+      gameRunning = false;
+      document.getElementById("gameOver").style.display = "block";
+    }
+
+    function winGame() {
+      clearInterval(gameLoop);
+      gameRunning = false;
+      drawGame();
+      document.getElementById("winBox").style.display = "block";
+      document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function setDirection(newDx, newDy) {
+      if (!gameRunning) {
+        return;
+      }
+
+      if (newDx === -dx && newDy === -dy) {
+        return;
+      }
+
+      nextDx = newDx;
+      nextDy = newDy;
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setDirection(0, -1);
+      }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setDirection(0, 1);
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setDirection(-1, 0);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setDirection(1, 0);
+      }
+    });
+
+    startGame();
+  </script>
+
+</body>
+</html>
