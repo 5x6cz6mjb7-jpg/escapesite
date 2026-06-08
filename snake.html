@@ -133,6 +133,21 @@
       margin: 14px 0;
     }
 
+    .legend {
+      margin-top: 12px;
+      color: #baffc9;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .whitePlant {
+      color: #ffffff;
+    }
+
+    .redPlant {
+      color: #ff5555;
+    }
+
     button {
       margin-top: 12px;
       padding: 12px 18px;
@@ -164,6 +179,7 @@
       display: none;
       color: #ff5555;
       margin-top: 15px;
+      line-height: 1.5;
     }
 
     #crashText {
@@ -249,20 +265,26 @@
     <h1>BOTANICAL CONTAINMENT PROTOCOL</h1>
 
     <div class="subtitle">
-      Collect 25 botanical samples.<br>
-      Avoid collision. Restore the hidden data fragment.
+      Collect 25 safe botanical samples.<br>
+      Avoid red toxic specimens. Restore the hidden data fragment.
     </div>
 
     <canvas id="game" width="400" height="400"></canvas>
 
     <div class="score">
-      SAMPLES: <span id="score">0</span> / 25
+      SAFE SAMPLES: <span id="score">0</span> / 25
+    </div>
+
+    <div class="legend">
+      <span class="whitePlant">WHITE SPECIMEN = SAFE</span><br>
+      <span class="redPlant">RED SPECIMEN = TOXIC // RESET PROTOCOL</span>
     </div>
 
     <button onclick="startGame()">START / RESTART</button>
 
     <div id="gameOver">
-      CONTAINMENT FAILED // SAMPLE LOST
+      CONTAINMENT FAILED // TOXIC SAMPLE COLLECTED OR COLLISION DETECTED<br>
+      Restart protocol.
     </div>
 
     <div id="crashText">
@@ -305,9 +327,12 @@
     const gridSize = 20;
     const tileCount = canvas.width / gridSize;
     const targetScore = 25;
+    const maxToxicPlants = 4;
+    const crashDuration = 5000;
 
     let snake;
-    let food;
+    let safePlant;
+    let toxicPlants;
     let dx;
     let dy;
     let nextDx;
@@ -329,6 +354,7 @@
       nextDx = 1;
       nextDy = 0;
       score = 0;
+      toxicPlants = [];
       gameRunning = true;
 
       document.getElementById("score").textContent = score;
@@ -336,10 +362,13 @@
       document.getElementById("gameOver").style.display = "none";
       document.getElementById("crashText").style.display = "none";
 
-      placeFood();
+      safePlant = createPlant();
+      ensureToxicPlantCount();
 
       clearInterval(gameLoop);
       gameLoop = setInterval(updateGame, 130);
+
+      drawGame();
     }
 
     function updateGame() {
@@ -364,7 +393,7 @@
 
       snake.unshift(head);
 
-      if (head.x === food.x && head.y === food.y) {
+      if (head.x === safePlant.x && head.y === safePlant.y) {
         score++;
         document.getElementById("score").textContent = score;
 
@@ -373,9 +402,15 @@
           return;
         }
 
-        placeFood();
+        safePlant = createPlant();
+        ensureToxicPlantCount();
       } else {
         snake.pop();
+      }
+
+      if (hitsToxicPlant(head)) {
+        endGame();
+        return;
       }
 
       drawGame();
@@ -386,33 +421,9 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       drawGrid();
-
-      ctx.fillStyle = "#00ff66";
-      snake.forEach(function(part) {
-        ctx.fillRect(
-          part.x * gridSize + 2,
-          part.y * gridSize + 2,
-          gridSize - 4,
-          gridSize - 4
-        );
-      });
-
-      ctx.fillStyle = "#ff5555";
-      ctx.beginPath();
-      ctx.arc(
-        food.x * gridSize + gridSize / 2,
-        food.y * gridSize + gridSize / 2,
-        gridSize / 2 - 3,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-
-      ctx.fillStyle = "#000000";
-      ctx.font = "14px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("✚", food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2);
+      drawSnake();
+      drawSafePlant();
+      drawToxicPlants();
     }
 
     function drawGrid() {
@@ -432,27 +443,110 @@
       }
     }
 
-    function placeFood() {
-      food = {
-        x: Math.floor(Math.random() * tileCount),
-        y: Math.floor(Math.random() * tileCount)
-      };
+    function drawSnake() {
+      ctx.fillStyle = "#00ff66";
 
-      while (snake.some(function(part) {
-        return part.x === food.x && part.y === food.y;
-      })) {
-        food = {
+      snake.forEach(function(part) {
+        ctx.fillRect(
+          part.x * gridSize + 2,
+          part.y * gridSize + 2,
+          gridSize - 4,
+          gridSize - 4
+        );
+      });
+    }
+
+    function drawSafePlant() {
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(
+        safePlant.x * gridSize + gridSize / 2,
+        safePlant.y * gridSize + gridSize / 2,
+        gridSize / 2 - 3,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.fillStyle = "#003b16";
+      ctx.font = "14px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("✚", safePlant.x * gridSize + gridSize / 2, safePlant.y * gridSize + gridSize / 2);
+    }
+
+    function drawToxicPlants() {
+      toxicPlants.forEach(function(plant) {
+        ctx.fillStyle = "#ff3333";
+        ctx.beginPath();
+        ctx.arc(
+          plant.x * gridSize + gridSize / 2,
+          plant.y * gridSize + gridSize / 2,
+          gridSize / 2 - 3,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+
+        ctx.fillStyle = "#000000";
+        ctx.font = "14px Courier New";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("☠", plant.x * gridSize + gridSize / 2, plant.y * gridSize + gridSize / 2);
+      });
+    }
+
+    function createPlant() {
+      let plant;
+      let safeSpotFound = false;
+
+      while (!safeSpotFound) {
+        plant = {
           x: Math.floor(Math.random() * tileCount),
           y: Math.floor(Math.random() * tileCount)
         };
+
+        safeSpotFound = !isOccupied(plant);
       }
 
-      drawGame();
+      return plant;
+    }
+
+    function isOccupied(position) {
+      const onSnake = snake.some(function(part) {
+        return part.x === position.x && part.y === position.y;
+      });
+
+      const onSafePlant = safePlant && safePlant.x === position.x && safePlant.y === position.y;
+
+      const onToxicPlant = toxicPlants && toxicPlants.some(function(plant) {
+        return plant.x === position.x && plant.y === position.y;
+      });
+
+      return onSnake || onSafePlant || onToxicPlant;
+    }
+
+    function ensureToxicPlantCount() {
+      const desiredCount = Math.min(1 + Math.floor(score / 6), maxToxicPlants);
+
+      while (toxicPlants.length < desiredCount) {
+        toxicPlants.push(createPlant());
+      }
+
+      while (toxicPlants.length > desiredCount) {
+        toxicPlants.pop();
+      }
     }
 
     function hitsSelf(head) {
       return snake.some(function(part) {
         return part.x === head.x && part.y === head.y;
+      });
+    }
+
+    function hitsToxicPlant(head) {
+      return toxicPlants.some(function(plant) {
+        return plant.x === head.x && plant.y === head.y;
       });
     }
 
@@ -477,7 +571,7 @@
 
         document.getElementById("winBox").style.display = "block";
         document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
-      }, 2500);
+      }, crashDuration);
     }
 
     function setDirection(newDx, newDy) {
