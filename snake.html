@@ -35,6 +35,47 @@
       z-index: 1;
     }
 
+    body.crash {
+      animation: screenShake 0.08s infinite;
+      background: #120000;
+    }
+
+    body.crash::after {
+      content: "SYSTEM INSTABILITY DETECTED";
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 0, 0, 0.18);
+      color: #ff4444;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 34px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-shadow: 0 0 12px rgba(255, 0, 0, 0.9);
+      z-index: 99;
+      pointer-events: none;
+      animation: crashFlash 0.18s infinite;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    @keyframes screenShake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 3px); }
+      40% { transform: translate(5px, -4px); }
+      60% { transform: translate(-3px, -2px); }
+      80% { transform: translate(4px, 3px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes crashFlash {
+      0% { opacity: 0.25; }
+      50% { opacity: 0.85; }
+      100% { opacity: 0.35; }
+    }
+
     .terminal {
       width: 100%;
       max-width: 760px;
@@ -46,6 +87,20 @@
       z-index: 2;
       box-sizing: border-box;
       text-align: center;
+    }
+
+    .terminal.glitch {
+      animation: terminalGlitch 0.12s infinite;
+      border-color: #ff4444;
+      box-shadow: 0 0 40px rgba(255, 0, 0, 0.7);
+    }
+
+    @keyframes terminalGlitch {
+      0% { transform: skew(0deg); filter: hue-rotate(0deg); }
+      25% { transform: skew(2deg) translateX(-3px); filter: hue-rotate(60deg); }
+      50% { transform: skew(-2deg) translateX(3px); filter: hue-rotate(120deg); }
+      75% { transform: skew(1deg) translateY(-2px); filter: hue-rotate(240deg); }
+      100% { transform: skew(0deg); filter: hue-rotate(0deg); }
     }
 
     h1 {
@@ -111,6 +166,20 @@
       margin-top: 15px;
     }
 
+    #crashText {
+      display: none;
+      color: #ff5555;
+      margin-top: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      animation: textBlink 0.25s infinite;
+    }
+
+    @keyframes textBlink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
     .mobileControls {
       display: none;
       margin-top: 18px;
@@ -163,6 +232,10 @@
         font-size: 19px;
       }
 
+      body.crash::after {
+        font-size: 22px;
+      }
+
       .mobileControls {
         display: grid;
       }
@@ -172,7 +245,7 @@
 
 <body>
 
-  <main class="terminal">
+  <main class="terminal" id="terminal">
     <h1>BOTANICAL CONTAINMENT PROTOCOL</h1>
 
     <div class="subtitle">
@@ -190,6 +263,10 @@
 
     <div id="gameOver">
       CONTAINMENT FAILED // SAMPLE LOST
+    </div>
+
+    <div id="crashText">
+      WARNING // ARCHIVE BREACH DETECTED
     </div>
 
     <div class="mobileControls">
@@ -240,6 +317,9 @@
     let gameRunning = false;
 
     function startGame() {
+      document.body.classList.remove("crash");
+      document.getElementById("terminal").classList.remove("glitch");
+
       snake = [
         { x: 10, y: 10 }
       ];
@@ -254,6 +334,7 @@
       document.getElementById("score").textContent = score;
       document.getElementById("winBox").style.display = "none";
       document.getElementById("gameOver").style.display = "none";
+      document.getElementById("crashText").style.display = "none";
 
       placeFood();
 
@@ -385,8 +466,18 @@
       clearInterval(gameLoop);
       gameRunning = false;
       drawGame();
-      document.getElementById("winBox").style.display = "block";
-      document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+
+      document.getElementById("crashText").style.display = "block";
+      document.body.classList.add("crash");
+      document.getElementById("terminal").classList.add("glitch");
+
+      setTimeout(function() {
+        document.body.classList.remove("crash");
+        document.getElementById("terminal").classList.remove("glitch");
+
+        document.getElementById("winBox").style.display = "block";
+        document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+      }, 2500);
     }
 
     function setDirection(newDx, newDy) {
