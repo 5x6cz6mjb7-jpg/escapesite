@@ -98,7 +98,7 @@
       color: #baffc9;
       line-height: 1.6;
       box-sizing: border-box;
-      min-height: 190px;
+      min-height: 200px;
     }
 
     .protocolTitle {
@@ -139,7 +139,7 @@
 
     .wordRow {
       display: grid;
-      grid-template-columns: 210px 1fr auto auto;
+      grid-template-columns: 230px 1fr auto auto;
       gap: 10px;
       align-items: center;
       margin-top: 10px;
@@ -299,7 +299,7 @@
 
   <main class="terminal">
     <div class="title">
-      MI6 BOTANICAL ARCHIVE // ACCESS TERMINAL<span class="cursor"></span>
+      MI6 BOTANICAL ARCHIVE // MINIGAME ACCESS TERMINAL<span class="cursor"></span>
     </div>
 
     <div class="text">Recovered file: KRANE_PERSONAL_GARDEN.LOG
@@ -307,28 +307,25 @@ Status: LOCKED
 Archive source: Department of Biology
 Last known user: DR. A. VOSS
 
-Multiple archive fragments are missing.
-Recover all botanical and operational codes to restore the file.</div>
+The local archive has been wiped.
+All remaining fragments are locked inside external simulations.
+Complete each protocol and enter the recovered codes below.</div>
 
     <div class="warningText">
-      WARNING: Three fragments are no longer stored in this terminal.
-      External simulations must be completed to recover them.
+      WARNING: No local keyword recovery available.
+      External protocols are required.
     </div>
 
     <div class="archiveBox">
-      WORD 1: B_LL_D_NNA<br>
-      WORD 2: D_G_T_L_S<br>
-      WORD 3: _L__ND_R<br>
-      WORD 4: T_X_S<br>
-      WORD 5: EXTERNAL CONTAINMENT PROTOCOL REQUIRED<br>
-      WORD 6: EXTERNAL PIXEL STACK PROTOCOL REQUIRED<br>
-      WORD 7: EXTERNAL TARGET RANGE PROTOCOL REQUIRED
+      FRAGMENT 1: BOTANICAL CONTAINMENT PROTOCOL REQUIRED<br>
+      FRAGMENT 2: BOTANICAL PIXEL STACK PROTOCOL REQUIRED<br>
+      FRAGMENT 3: MI6 DUMMY RANGE PROTOCOL REQUIRED
     </div>
 
     <div class="protocolGrid">
       <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL A // CONTAINMENT</div>
-        Snake-based botanical containment simulation.<br>
+        <div class="protocolTitle">PROTOCOL A // SNAKE</div>
+        Botanical containment simulation.<br>
         Collect safe samples. Avoid toxic specimens and barriers.
         <div class="protocolStatus">OUTPUT: SPECIMEN WORD</div>
         <a class="protocolButton" href="snake.html">
@@ -338,82 +335,54 @@ Recover all botanical and operational codes to restore the file.</div>
 
       <div class="protocolBox">
         <div class="protocolTitle">PROTOCOL B // PIXEL STACK</div>
-        1987 botanical memory stack.<br>
+        Botanical memory stack simulation.<br>
         Complete rows to recover scrambled archive letters.
-        <div class="protocolStatus">OUTPUT: SCRAMBLED SPECIMEN</div>
+        <div class="protocolStatus">OUTPUT: SCRAMBLED SPECIMEN WORD</div>
         <a class="protocolButton" href="tetris.html">
           OPEN PIXEL STACK
         </a>
       </div>
 
       <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL C // TARGET RANGE</div>
-        Old MI6 authorization training simulation.<br>
-        Hit Q and M authorization targets.
+        <div class="protocolTitle">PROTOCOL C // DUMMY RANGE</div>
+        Old MI6 lab training simulation.<br>
+        Locate and disable moving dummy targets.
         <div class="protocolStatus">OUTPUT: COMMAND CODE</div>
         <a class="protocolButton" href="shoot.html">
-          OPEN TARGET RANGE
+          OPEN DUMMY RANGE
         </a>
       </div>
     </div>
 
     <section class="inputSection">
-      <div class="text">Enter restored archive keywords:</div>
+      <div class="text">Enter recovered minigame codes:</div>
 
       <div class="wordRow">
-        <div class="wordLabel">WORD 1 // LOCAL</div>
-        <input id="word1" type="text" placeholder="WORD 1">
+        <div class="wordLabel">FRAGMENT 1 // SNAKE</div>
+        <input id="word1" type="text" placeholder="CODE FROM SNAKE">
         <button id="button1" onclick="checkSingleWord(1)">CHECK</button>
         <span id="status1" class="status"></span>
       </div>
 
       <div class="wordRow">
-        <div class="wordLabel">WORD 2 // LOCAL</div>
-        <input id="word2" type="text" placeholder="WORD 2">
+        <div class="wordLabel">FRAGMENT 2 // PIXEL STACK</div>
+        <input id="word2" type="text" placeholder="CODE FROM TETRIS">
         <button id="button2" onclick="checkSingleWord(2)">CHECK</button>
         <span id="status2" class="status"></span>
       </div>
 
       <div class="wordRow">
-        <div class="wordLabel">WORD 3 // LOCAL</div>
-        <input id="word3" type="text" placeholder="WORD 3">
+        <div class="wordLabel">FRAGMENT 3 // DUMMY RANGE</div>
+        <input id="word3" type="text" placeholder="CODE FROM RANGE">
         <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
         <span id="status3" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">WORD 4 // LOCAL</div>
-        <input id="word4" type="text" placeholder="WORD 4">
-        <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
-        <span id="status4" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">WORD 5 // SNAKE</div>
-        <input id="word5" type="text" placeholder="WORD 5">
-        <button id="button5" onclick="checkSingleWord(5)">CHECK</button>
-        <span id="status5" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">WORD 6 // PIXEL STACK</div>
-        <input id="word6" type="text" placeholder="WORD 6">
-        <button id="button6" onclick="checkSingleWord(6)">CHECK</button>
-        <span id="status6" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">WORD 7 // TARGET RANGE</div>
-        <input id="word7" type="text" placeholder="WORD 7">
-        <button id="button7" onclick="checkSingleWord(7)">CHECK</button>
-        <span id="status7" class="status"></span>
       </div>
 
       <div id="terminalMessage"></div>
     </section>
 
     <div id="continueArea">
-      <div class="text">ALL ARCHIVE FRAGMENTS RESTORED.
+      <div class="text">ALL MINIGAME FRAGMENTS RESTORED.
 FILE READY FOR RECOVERY.</div>
 
       <a class="continueButton" href="recovered.html">
@@ -424,23 +393,15 @@ FILE READY FOR RECOVERY.</div>
 
   <script>
     const answers = {
-      1: "BELLADONNA",
-      2: "DIGITALIS",
-      3: "OLEANDER",
-      4: "TAXUS",
-      5: "NIGHTSHADE",
-      6: "ROZENBOTTEL",
-      7: "EYESONLY"
+      1: "NIGHTSHADE",
+      2: "ROZENBOTTEL",
+      3: "EYESONLY"
     };
 
     const solved = {
       1: false,
       2: false,
-      3: false,
-      4: false,
-      5: false,
-      6: false,
-      7: false
+      3: false
     };
 
     function cleanInput(value) {
@@ -480,23 +441,15 @@ FILE READY FOR RECOVERY.</div>
         status.className = "status wrongStatus";
 
         message.style.color = "#ff4444";
-        message.textContent = "FRAGMENT " + number + " REJECTED // ARCHIVE MATCH FAILED.";
+        message.textContent = "FRAGMENT " + number + " REJECTED // CODE MATCH FAILED.";
       }
     }
 
     function checkIfComplete() {
-      if (
-        solved[1] &&
-        solved[2] &&
-        solved[3] &&
-        solved[4] &&
-        solved[5] &&
-        solved[6] &&
-        solved[7]
-      ) {
+      if (solved[1] && solved[2] && solved[3]) {
         const message = document.getElementById("terminalMessage");
         message.style.color = "#00ff66";
-        message.textContent = "ACCESS GRANTED // ALL ARCHIVE DATA RESTORED.";
+        message.textContent = "ACCESS GRANTED // ALL MINIGAME DATA RESTORED.";
 
         document.getElementById("continueArea").style.display = "block";
         document.getElementById("continueArea").scrollIntoView({ behavior: "smooth" });
