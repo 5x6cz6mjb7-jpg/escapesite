@@ -45,6 +45,91 @@
       z-index: 1;
     }
 
+    body.archiveGlitch {
+      overflow: hidden;
+    }
+
+    body.archiveGlitch .glitchOverlay {
+      display: block;
+    }
+
+    .glitchOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 98;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.10) 0px,
+          rgba(0, 255, 100, 0.10) 2px,
+          transparent 2px,
+          transparent 6px
+        );
+      animation: overlayFlicker 0.12s infinite;
+    }
+
+    .glitchOverlay::before {
+      content: "ARCHIVE DEFRAGMENTATION IN PROGRESS";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #baffc9;
+      background: rgba(0, 20, 0, 0.92);
+      border: 2px solid #00ff66;
+      padding: 18px 24px;
+      font-size: 28px;
+      letter-spacing: 3px;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(0, 255, 100, 0.9);
+      box-shadow: 0 0 25px rgba(0, 255, 100, 0.45);
+      animation: textJump 0.18s infinite;
+    }
+
+    .glitchOverlay::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0px,
+          transparent 22px,
+          rgba(0, 255, 100, 0.20) 22px,
+          rgba(0, 255, 100, 0.20) 30px,
+          transparent 30px,
+          transparent 54px,
+          rgba(255, 255, 255, 0.08) 54px,
+          rgba(255, 255, 255, 0.08) 60px
+        );
+      mix-blend-mode: screen;
+      animation: scanShift 0.20s infinite;
+    }
+
+    @keyframes overlayFlicker {
+      0% { opacity: 0.35; }
+      50% { opacity: 0.85; }
+      100% { opacity: 0.4; }
+    }
+
+    @keyframes textJump {
+      0% { transform: translate(-50%, -50%); }
+      25% { transform: translate(-49.5%, -50.4%); }
+      50% { transform: translate(-50.6%, -49.7%); }
+      75% { transform: translate(-49.8%, -50.3%); }
+      100% { transform: translate(-50%, -50%); }
+    }
+
+    @keyframes scanShift {
+      0% { transform: translateY(0) translateX(0); opacity: 0.45; }
+      25% { transform: translateY(-8px) translateX(4px); opacity: 0.7; }
+      50% { transform: translateY(6px) translateX(-3px); opacity: 0.5; }
+      75% { transform: translateY(-4px) translateX(2px); opacity: 0.8; }
+      100% { transform: translateY(0) translateX(0); opacity: 0.45; }
+    }
+
     .terminal {
       width: 100%;
       max-width: 920px;
@@ -55,6 +140,38 @@
       box-sizing: border-box;
       position: relative;
       z-index: 2;
+    }
+
+    .terminal.glitchMode {
+      animation: terminalCorrupt 0.16s infinite;
+      filter: contrast(1.15) brightness(1.05);
+    }
+
+    @keyframes terminalCorrupt {
+      0% {
+        clip-path: inset(0 0 0 0);
+        transform: translateX(0);
+      }
+      20% {
+        clip-path: inset(4% 0 78% 0);
+        transform: translateX(-4px);
+      }
+      40% {
+        clip-path: inset(38% 0 42% 0);
+        transform: translateX(6px);
+      }
+      60% {
+        clip-path: inset(62% 0 18% 0);
+        transform: translateX(-3px);
+      }
+      80% {
+        clip-path: inset(16% 0 60% 0);
+        transform: translateX(5px);
+      }
+      100% {
+        clip-path: inset(0 0 0 0);
+        transform: translateX(0);
+      }
     }
 
     h1 {
@@ -120,13 +237,15 @@
       height: 42px;
       background: #001600;
       border: 1px solid #00aa44;
-      color: #003b16;
+      color: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 23px;
       font-weight: bold;
       box-shadow: inset 0 0 12px rgba(0, 255, 100, 0.08);
+      text-shadow: none;
+      user-select: none;
     }
 
     .letterBox.unlocked {
@@ -205,6 +324,20 @@
       margin-top: 14px;
       font-weight: bold;
       line-height: 1.5;
+    }
+
+    #glitchStatus {
+      display: none;
+      color: #baffc9;
+      margin-top: 14px;
+      font-weight: bold;
+      line-height: 1.5;
+      animation: statusBlink 0.35s infinite;
+    }
+
+    @keyframes statusBlink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.25; }
     }
 
     .controls {
@@ -286,13 +419,20 @@
       .terminal {
         padding: 20px;
       }
+
+      .glitchOverlay::before {
+        font-size: 18px;
+        width: 85%;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="terminal">
+  <div class="glitchOverlay" id="glitchOverlay"></div>
+
+  <main class="terminal" id="terminal">
     <h1>BOTANICAL STACK ARCHIVE // 1987<span class="cursor"></span></h1>
 
     <div class="subtitle">Memory blocks are corrupted.
@@ -319,7 +459,7 @@ Recovered letters are scrambled.</div>
         <div class="stats">
           ROWS CLEARED: <span id="rowsCleared">0</span><br>
           ROWS UNTIL NEXT LETTER: <span id="rowsUntilLetter">2</span><br>
-          LETTERS FOUND: <span id="lettersFound">0</span> / 10
+          LETTERS FOUND: <span id="lettersFound">0</span> / 11
         </div>
 
         <div class="progressBox">
@@ -331,6 +471,10 @@ Recovered letters are scrambled.</div>
 
         <div id="gameOver">
           STACK OVERFLOW // ARCHIVE RESET REQUIRED
+        </div>
+
+        <div id="glitchStatus">
+          DEFRAGMENTING ARCHIVE MEMORY...
         </div>
 
         <div id="winBox">
@@ -367,14 +511,11 @@ Recovered letters are scrambled.</div>
 
     const targetWord = "ROZENBOTTEL";
 
-    /*
-      Dit is dezelfde set letters als ROZENBOTTEL,
-      maar bewust niet in de juiste volgorde.
-      De speler moet het woord zelf reconstrueren.
-    */
-    const scrambledLetters = ["B", "O", "T", "E", "R", "Z", "L", "O", "N", "E"];
+    // Zelfde letters als ROZENBOTTEL, maar expres niet op volgorde:
+    const scrambledLetters = ["B", "O", "T", "E", "R", "Z", "L", "O", "N", "E", "T"];
 
     const rowsNeededPerLetter = 2;
+    const glitchDuration = 4000;
 
     let board;
     let currentPiece;
@@ -445,12 +586,17 @@ Recovered letters are scrambled.</div>
         const box = document.createElement("div");
         box.className = "letterBox";
         box.id = "letter-" + index;
-        box.textContent = letter;
+        box.dataset.letter = letter;
+        box.textContent = "";
         wordBox.appendChild(box);
       });
     }
 
     function startGame() {
+      document.body.classList.remove("archiveGlitch");
+      document.getElementById("terminal").classList.remove("glitchMode");
+      document.getElementById("glitchStatus").style.display = "none";
+
       board = createBoard();
       rowsCleared = 0;
       lettersFound = 0;
@@ -670,6 +816,7 @@ Recovered letters are scrambled.</div>
       }
 
       const box = document.getElementById("letter-" + lettersFound);
+      box.textContent = box.dataset.letter;
       box.classList.add("unlocked");
 
       lettersFound++;
@@ -739,9 +886,18 @@ Recovered letters are scrambled.</div>
       clearInterval(gameLoop);
       gameRunning = false;
 
-      document.getElementById("finalLetters").textContent = scrambledLetters.join(" ");
-      document.getElementById("winBox").style.display = "block";
-      document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("glitchStatus").style.display = "block";
+      document.body.classList.add("archiveGlitch");
+      document.getElementById("terminal").classList.add("glitchMode");
+
+      setTimeout(function() {
+        document.body.classList.remove("archiveGlitch");
+        document.getElementById("terminal").classList.remove("glitchMode");
+
+        document.getElementById("finalLetters").textContent = scrambledLetters.join(" ");
+        document.getElementById("winBox").style.display = "block";
+        document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
+      }, glitchDuration);
     }
 
     document.addEventListener("keydown", function(event) {
