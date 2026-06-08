@@ -2,14 +2,14 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Pixel Herb Stack</title>
+  <title>Botanical Pixel Stack</title>
 
   <style>
     body {
       margin: 0;
       min-height: 100vh;
-      background: #14142b;
-      color: #ffffff;
+      background: #001100;
+      color: #00ff66;
       font-family: "Courier New", monospace;
       display: flex;
       justify-content: center;
@@ -17,7 +17,6 @@
       overflow: auto;
       padding: 20px;
       box-sizing: border-box;
-      image-rendering: pixelated;
     }
 
     body::before {
@@ -25,46 +24,59 @@
       position: fixed;
       inset: 0;
       background:
-        linear-gradient(rgba(255,255,255,0.04) 50%, transparent 50%),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 50%, transparent 50%);
-      background-size: 4px 4px;
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.08),
+          rgba(0, 255, 100, 0.08) 1px,
+          transparent 1px,
+          transparent 5px
+        );
       pointer-events: none;
       z-index: 1;
     }
 
-    .machine {
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.65) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal {
       width: 100%;
-      max-width: 880px;
-      background: #24244a;
-      border: 6px solid #f4d35e;
-      box-shadow:
-        0 0 0 6px #000000,
-        12px 12px 0 #000000;
-      padding: 24px;
+      max-width: 920px;
+      background: #000900;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      padding: 28px;
       box-sizing: border-box;
       position: relative;
       z-index: 2;
     }
 
     h1 {
-      margin: 0 0 8px 0;
-      color: #f4d35e;
-      text-shadow: 3px 3px 0 #000;
-      font-size: 28px;
+      margin: 0 0 10px 0;
+      color: #00ff66;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+      font-size: 26px;
       letter-spacing: 2px;
       text-align: center;
     }
 
     .subtitle {
       text-align: center;
-      color: #a8dadc;
+      color: #8dffb0;
       margin-bottom: 22px;
       line-height: 1.5;
+      white-space: pre-line;
     }
 
     .gameLayout {
       display: grid;
-      grid-template-columns: 1fr 260px;
+      grid-template-columns: 1fr 290px;
       gap: 24px;
       align-items: start;
     }
@@ -74,102 +86,132 @@
     }
 
     canvas {
-      background: #0b0b18;
-      border: 4px solid #ffffff;
-      box-shadow: 8px 8px 0 #000;
+      background: #000000;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 22px rgba(0, 255, 100, 0.45);
       image-rendering: pixelated;
       max-width: 100%;
     }
 
     .sidePanel {
-      background: #101029;
-      border: 4px solid #ffffff;
-      box-shadow: 8px 8px 0 #000;
+      background: rgba(0, 20, 0, 0.9);
+      border: 1px solid #00aa44;
       padding: 16px;
       box-sizing: border-box;
-      min-height: 480px;
+      min-height: 560px;
     }
 
     .panelTitle {
-      color: #f4d35e;
-      text-shadow: 2px 2px 0 #000;
+      color: #00ff66;
+      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
       margin-bottom: 12px;
       font-weight: bold;
+      letter-spacing: 1px;
     }
 
     .wordBox {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
+      gap: 7px;
       margin: 16px 0 20px 0;
     }
 
     .letterBox {
-      height: 38px;
-      background: #2d2d5f;
-      border: 3px solid #ffffff;
-      color: #2d2d5f;
+      height: 42px;
+      background: #001600;
+      border: 1px solid #00aa44;
+      color: #003b16;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 23px;
       font-weight: bold;
-      box-shadow: 4px 4px 0 #000;
+      box-shadow: inset 0 0 12px rgba(0, 255, 100, 0.08);
     }
 
     .letterBox.unlocked {
-      background: #06d6a0;
-      color: #000;
+      background: #003b16;
+      color: #baffc9;
+      border-color: #00ff66;
+      box-shadow:
+        0 0 12px rgba(0, 255, 100, 0.55),
+        inset 0 0 10px rgba(0, 255, 100, 0.25);
+      animation: letterPulse 0.7s ease-in-out;
+    }
+
+    @keyframes letterPulse {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.18);
+        filter: brightness(1.8);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
     }
 
     .stats {
       line-height: 1.8;
-      color: #ffffff;
+      color: #baffc9;
       margin-bottom: 18px;
+    }
+
+    .progressBox {
+      margin: 14px 0;
+      padding: 12px;
+      border: 1px dashed #00aa44;
+      color: #8dffb0;
+      line-height: 1.6;
+      background: rgba(0, 40, 0, 0.45);
     }
 
     button {
       width: 100%;
       padding: 12px;
       margin-top: 10px;
-      background: #ef476f;
-      color: #ffffff;
-      border: 3px solid #ffffff;
-      box-shadow: 4px 4px 0 #000;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
       font-family: "Courier New", monospace;
       font-weight: bold;
       cursor: pointer;
       font-size: 15px;
+      letter-spacing: 1px;
     }
 
     button:hover {
-      background: #ff5c8a;
+      background: #005c22;
     }
 
     #winBox {
       display: none;
       margin-top: 18px;
       padding: 14px;
-      background: #06d6a0;
-      color: #000;
-      border: 4px solid #ffffff;
-      box-shadow: 5px 5px 0 #000;
+      background: rgba(0, 35, 0, 0.95);
+      color: #baffc9;
+      border: 1px solid #00ff66;
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
       line-height: 1.6;
       font-weight: bold;
     }
 
     #gameOver {
       display: none;
-      color: #ff6b6b;
+      color: #ff5555;
       margin-top: 14px;
       font-weight: bold;
+      line-height: 1.5;
     }
 
     .controls {
       margin-top: 16px;
       font-size: 14px;
       line-height: 1.6;
-      color: #a8dadc;
+      color: #8dffb0;
     }
 
     .mobileControls {
@@ -196,20 +238,35 @@
     .backLink {
       display: inline-block;
       margin-top: 20px;
-      color: #f4d35e;
+      color: #00ff66;
       text-decoration: none;
-      border-bottom: 2px solid #f4d35e;
+      border-bottom: 1px solid #00ff66;
       font-weight: bold;
     }
 
-    .hint {
-      color: #a8dadc;
-      font-size: 13px;
-      line-height: 1.5;
+    .warning {
+      color: #ff5555;
       margin-top: 14px;
+      line-height: 1.5;
+      font-size: 13px;
     }
 
-    @media (max-width: 760px) {
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 18px;
+      background: #00ff66;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    @media (max-width: 780px) {
       .gameLayout {
         grid-template-columns: 1fr;
       }
@@ -223,7 +280,11 @@
       }
 
       h1 {
-        font-size: 22px;
+        font-size: 21px;
+      }
+
+      .terminal {
+        padding: 20px;
       }
     }
   </style>
@@ -231,13 +292,12 @@
 
 <body>
 
-  <main class="machine">
-    <h1>PIXEL HERB STACK // 1994</h1>
+  <main class="terminal">
+    <h1>BOTANICAL STACK ARCHIVE // 1987<span class="cursor"></span></h1>
 
-    <div class="subtitle">
-      Complete horizontal rows to recover letters.<br>
-      Restore the botanical password.
-    </div>
+    <div class="subtitle">Memory blocks are corrupted.
+Clear 2 full rows to recover 1 botanical letter.
+Recovered letters are scrambled.</div>
 
     <div class="gameLayout">
       <section class="gamePanel">
@@ -252,26 +312,32 @@
       </section>
 
       <aside class="sidePanel">
-        <div class="panelTitle">BOTANICAL PASSWORD</div>
+        <div class="panelTitle">SCRAMBLED BOTANICAL LETTERS</div>
 
         <div class="wordBox" id="wordBox"></div>
 
         <div class="stats">
           ROWS CLEARED: <span id="rowsCleared">0</span><br>
+          ROWS UNTIL NEXT LETTER: <span id="rowsUntilLetter">2</span><br>
           LETTERS FOUND: <span id="lettersFound">0</span> / 10
+        </div>
+
+        <div class="progressBox">
+          Every 2 completed rows releases 1 encrypted letter.<br>
+          The order has been damaged by archive corruption.
         </div>
 
         <button onclick="startGame()">START / RESTART</button>
 
         <div id="gameOver">
-          STACK OVERFLOW // RESTART REQUIRED
+          STACK OVERFLOW // ARCHIVE RESET REQUIRED
         </div>
 
         <div id="winBox">
           ACCESS GRANTED<br><br>
-          PASSWORD RESTORED:<br>
-          ROZENBOTTEL<br><br>
-          Use this word when the archive asks for the floral specimen.
+          ALL LETTERS RECOVERED:<br>
+          <span id="finalLetters"></span><br><br>
+          Reconstruct the botanical specimen and enter it in the terminal.
         </div>
 
         <div class="controls">
@@ -282,9 +348,8 @@
           space = drop
         </div>
 
-        <div class="hint">
-          Every completed row reveals the next letter.  
-          The system stores only full botanical sequences.
+        <div class="warning">
+          WARNING: Botanical archive contains unstable growth patterns.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -301,7 +366,15 @@
     const blockSize = 30;
 
     const targetWord = "ROZENBOTTEL";
-    const targetLetters = targetWord.split("");
+
+    /*
+      Dit is dezelfde set letters als ROZENBOTTEL,
+      maar bewust niet in de juiste volgorde.
+      De speler moet het woord zelf reconstrueren.
+    */
+    const scrambledLetters = ["B", "O", "T", "E", "R", "Z", "L", "O", "N", "E"];
+
+    const rowsNeededPerLetter = 2;
 
     let board;
     let currentPiece;
@@ -311,55 +384,56 @@
     let gameRunning = false;
     let rowsCleared = 0;
     let lettersFound = 0;
+    let rowsSinceLastLetter = 0;
 
     const pieces = [
       {
         shape: [
           [1, 1, 1, 1]
         ],
-        color: "#06d6a0"
+        color: "#00ff66"
       },
       {
         shape: [
           [1, 1],
           [1, 1]
         ],
-        color: "#f4d35e"
+        color: "#8dffb0"
       },
       {
         shape: [
           [0, 1, 0],
           [1, 1, 1]
         ],
-        color: "#ef476f"
+        color: "#00cc55"
       },
       {
         shape: [
           [1, 0, 0],
           [1, 1, 1]
         ],
-        color: "#118ab2"
+        color: "#009944"
       },
       {
         shape: [
           [0, 0, 1],
           [1, 1, 1]
         ],
-        color: "#ffd166"
+        color: "#66ff99"
       },
       {
         shape: [
           [0, 1, 1],
           [1, 1, 0]
         ],
-        color: "#8ac926"
+        color: "#33dd77"
       },
       {
         shape: [
           [1, 1, 0],
           [0, 1, 1]
         ],
-        color: "#ff595e"
+        color: "#00aa44"
       }
     ];
 
@@ -367,7 +441,7 @@
       const wordBox = document.getElementById("wordBox");
       wordBox.innerHTML = "";
 
-      targetLetters.forEach(function(letter, index) {
+      scrambledLetters.forEach(function(letter, index) {
         const box = document.createElement("div");
         box.className = "letterBox";
         box.id = "letter-" + index;
@@ -380,18 +454,21 @@
       board = createBoard();
       rowsCleared = 0;
       lettersFound = 0;
+      rowsSinceLastLetter = 0;
       gameRunning = true;
 
       document.getElementById("rowsCleared").textContent = rowsCleared;
       document.getElementById("lettersFound").textContent = lettersFound;
+      document.getElementById("rowsUntilLetter").textContent = rowsNeededPerLetter;
       document.getElementById("winBox").style.display = "none";
       document.getElementById("gameOver").style.display = "none";
+      document.getElementById("finalLetters").textContent = "";
 
       createWordBoxes();
       spawnPiece();
 
       clearInterval(gameLoop);
-      gameLoop = setInterval(updateGame, 550);
+      gameLoop = setInterval(updateGame, 520);
 
       drawGame();
     }
@@ -413,7 +490,9 @@
       const randomPiece = pieces[Math.floor(Math.random() * pieces.length)];
 
       currentPiece = {
-        shape: randomPiece.shape.map(row => row.slice()),
+        shape: randomPiece.shape.map(function(row) {
+          return row.slice();
+        }),
         color: randomPiece.color
       };
 
@@ -442,7 +521,7 @@
     }
 
     function drawGame() {
-      ctx.fillStyle = "#0b0b18";
+      ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       drawGrid();
@@ -451,7 +530,7 @@
     }
 
     function drawGrid() {
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.strokeStyle = "rgba(0, 255, 100, 0.12)";
       ctx.lineWidth = 1;
 
       for (let x = 0; x <= cols; x++) {
@@ -495,17 +574,17 @@
 
     function drawBlock(x, y, color) {
       ctx.fillStyle = color;
-      ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+      ctx.fillRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
 
-      ctx.fillStyle = "rgba(255,255,255,0.35)";
-      ctx.fillRect(x * blockSize + 3, y * blockSize + 3, blockSize - 6, 5);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
+      ctx.fillRect(x * blockSize + 4, y * blockSize + 4, blockSize - 8, 5);
 
-      ctx.fillStyle = "rgba(0,0,0,0.35)";
-      ctx.fillRect(x * blockSize + 3, y * blockSize + blockSize - 8, blockSize - 6, 5);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+      ctx.fillRect(x * blockSize + 4, y * blockSize + blockSize - 8, blockSize - 8, 5);
 
-      ctx.strokeStyle = "#000";
+      ctx.strokeStyle = "#001100";
       ctx.lineWidth = 2;
-      ctx.strokeRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
+      ctx.strokeRect(x * blockSize + 2, y * blockSize + 2, blockSize - 4, blockSize - 4);
     }
 
     function collides(shape, offsetX, offsetY) {
@@ -561,17 +640,32 @@
       }
 
       if (clearedThisTurn > 0) {
-        for (let i = 0; i < clearedThisTurn; i++) {
+        rowsCleared += clearedThisTurn;
+        rowsSinceLastLetter += clearedThisTurn;
+
+        document.getElementById("rowsCleared").textContent = rowsCleared;
+
+        while (rowsSinceLastLetter >= rowsNeededPerLetter && lettersFound < scrambledLetters.length) {
+          rowsSinceLastLetter -= rowsNeededPerLetter;
           revealNextLetter();
         }
 
-        rowsCleared += clearedThisTurn;
-        document.getElementById("rowsCleared").textContent = rowsCleared;
+        updateRowsUntilLetter();
       }
     }
 
+    function updateRowsUntilLetter() {
+      if (lettersFound >= scrambledLetters.length) {
+        document.getElementById("rowsUntilLetter").textContent = 0;
+        return;
+      }
+
+      const remaining = rowsNeededPerLetter - rowsSinceLastLetter;
+      document.getElementById("rowsUntilLetter").textContent = remaining;
+    }
+
     function revealNextLetter() {
-      if (lettersFound >= targetLetters.length) {
+      if (lettersFound >= scrambledLetters.length) {
         return;
       }
 
@@ -581,7 +675,7 @@
       lettersFound++;
       document.getElementById("lettersFound").textContent = lettersFound;
 
-      if (lettersFound >= targetLetters.length) {
+      if (lettersFound >= scrambledLetters.length) {
         winGame();
       }
     }
@@ -644,6 +738,8 @@
     function winGame() {
       clearInterval(gameLoop);
       gameRunning = false;
+
+      document.getElementById("finalLetters").textContent = scrambledLetters.join(" ");
       document.getElementById("winBox").style.display = "block";
       document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
     }
