@@ -110,6 +110,8 @@
     #videoArea {
       display: none;
       margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #5f0000;
     }
 
     #videoArea h2 {
@@ -119,30 +121,21 @@
       font-size: 22px;
     }
 
-    .videoFrame {
-      width: 100%;
-      max-width: 520px;
-      margin: 0 auto;
-      background: #000;
-      border: 1px solid #5f0000;
-      box-shadow: 0 0 25px rgba(150, 0, 0, 0.5);
-      overflow: hidden;
-      border-radius: 8px;
+    .classifiedButton {
+      display: inline-block;
+      padding: 18px 26px;
+      background: #5f0000;
+      color: white;
+      text-decoration: none;
+      border: 1px solid #8b0000;
+      box-shadow: 0 0 25px rgba(150, 0, 0, 0.7);
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-top: 15px;
     }
 
-    .videoWrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 9 / 16;
-      background: #000;
-    }
-
-    .videoWrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
+    .classifiedButton:hover {
+      background: #8b0000;
     }
 
     #startOverlay {
@@ -178,9 +171,10 @@
     }
 
     .videoNote {
-      color: #777;
-      font-size: 12px;
-      margin-top: 12px;
+      color: #999;
+      font-size: 14px;
+      margin-top: 18px;
+      line-height: 1.5;
     }
 
     @media (max-width: 500px) {
@@ -200,8 +194,9 @@
         font-size: 30px;
       }
 
-      .videoFrame {
-        max-width: 320px;
+      .classifiedButton {
+        font-size: 15px;
+        padding: 16px 20px;
       }
     }
   </style>
@@ -240,20 +235,18 @@
     <section id="videoArea">
       <h2>TRANSMISSION UNLOCKED</h2>
 
-      <div class="videoFrame">
-        <div class="videoWrapper">
-          <iframe
-            id="firstVideo"
-            src=""
-            title="Jason Krane transmission"
-            allow="autoplay; fullscreen"
-            allowfullscreen>
-          </iframe>
-        </div>
-      </div>
+      <a
+        class="classifiedButton"
+        href="https://proceon-my.sharepoint.com/:v:/g/personal/j_vanmaarseveen_proceon_nl/IQCzYk7xPM3hTp4jBAx1fXcbAWetAI7GLYzhW29wu23t8Sw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=tLe75U"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        OPEN CLASSIFIED VIDEO
+      </a>
 
       <p class="videoNote">
-        Classified video file loaded.
+        The file could not be embedded securely.<br>
+        Open the classified transmission in a separate window.
       </p>
     </section>
   </main>
@@ -262,9 +255,7 @@
     const countdownSeconds = 30;
     let remainingSeconds = countdownSeconds;
     let countdownInterval;
-    let videoStarted = false;
-
-    const oneDriveVideoLink = "https://proceon-my.sharepoint.com/:v:/g/personal/j_vanmaarseveen_proceon_nl/IQCzYk7xPM3hTp4jBAx1fXcbAWetAI7GLYzhW29wu23t8Sw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=tLe75U";
+    let unlocked = false;
 
     function openTransmission() {
       document.getElementById("startOverlay").style.display = "none";
@@ -287,7 +278,7 @@
         remainingSeconds = 0;
         updateCountdownDisplay();
         clearInterval(countdownInterval);
-        unlockVideo();
+        unlockVideoButton();
         return;
       }
 
@@ -305,12 +296,12 @@
         String(seconds).padStart(2, "0");
     }
 
-    function unlockVideo() {
-      if (videoStarted) {
+    function unlockVideoButton() {
+      if (unlocked) {
         return;
       }
 
-      videoStarted = true;
+      unlocked = true;
 
       const music = document.getElementById("music");
       music.pause();
@@ -318,8 +309,6 @@
 
       document.getElementById("lockedArea").style.display = "none";
       document.getElementById("videoArea").style.display = "block";
-
-      document.getElementById("firstVideo").src = oneDriveVideoLink;
     }
   </script>
 
