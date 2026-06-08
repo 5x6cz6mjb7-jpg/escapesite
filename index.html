@@ -14,7 +14,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      overflow: auto;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     body::before {
@@ -41,15 +43,16 @@
     }
 
     .screen {
-      width: 90%;
+      width: 100%;
       max-width: 760px;
-      padding: 35px;
+      padding: 28px;
       border: 2px solid #5f0000;
       background: rgba(5, 5, 5, 0.9);
       box-shadow: 0 0 40px rgba(150, 0, 0, 0.65);
       text-align: center;
       position: relative;
       z-index: 2;
+      box-sizing: border-box;
     }
 
     .label {
@@ -61,7 +64,7 @@
 
     h1 {
       color: #d60000;
-      font-size: 46px;
+      font-size: 42px;
       margin: 10px 0;
       text-shadow: 0 0 12px rgba(255, 0, 0, 0.8);
       animation: glitch 1.8s infinite;
@@ -90,7 +93,7 @@
     }
 
     #countdown {
-      font-size: 42px;
+      font-size: 38px;
       color: #f2f2f2;
       padding: 18px;
       border: 1px solid #5f0000;
@@ -113,23 +116,30 @@
       color: #ff3333;
       letter-spacing: 2px;
       margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .videoFrame {
+      width: 100%;
+      max-width: 360px;
+      margin: 0 auto;
+      background: #000;
+      border: 1px solid #5f0000;
+      box-shadow: 0 0 25px rgba(150, 0, 0, 0.5);
+      overflow: hidden;
+      border-radius: 8px;
     }
 
     .videoWrapper {
       position: relative;
       width: 100%;
-      padding-bottom: 177.78%;
-      height: 0;
-      overflow: hidden;
-      border: 1px solid #5f0000;
-      box-shadow: 0 0 25px rgba(150, 0, 0, 0.5);
+      aspect-ratio: 9 / 16;
       background: #000;
     }
 
     .videoWrapper iframe {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       border: 0;
@@ -165,6 +175,34 @@
       color: #777;
       font-size: 13px;
       margin-top: 18px;
+    }
+
+    .videoNote {
+      color: #777;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 500px) {
+      .screen {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .hashtag {
+        font-size: 20px;
+      }
+
+      #countdown {
+        font-size: 30px;
+      }
+
+      .videoFrame {
+        max-width: 300px;
+      }
     }
   </style>
 </head>
@@ -202,15 +240,21 @@
     <section id="videoArea">
       <h2>TRANSMISSION UNLOCKED</h2>
 
-      <div class="videoWrapper">
-        <iframe
-          id="firstVideo"
-          src=""
-          title="Jason Krane transmission"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen>
-        </iframe>
+      <div class="videoFrame">
+        <div class="videoWrapper">
+          <iframe
+            id="firstVideo"
+            src=""
+            title="Jason Krane transmission"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
+
+      <p class="videoNote">
+        Classified video file loaded.
+      </p>
     </section>
   </main>
 
@@ -274,7 +318,7 @@
       document.getElementById("videoArea").style.display = "block";
 
       document.getElementById("firstVideo").src =
-        "https://www.youtube-nocookie.com/embed/ZlXw0NQaTBs?autoplay=1&playsinline=1";
+        "https://www.youtube-nocookie.com/embed/ZlXw0NQaTBs?autoplay=1&playsinline=1&controls=1&modestbranding=1&rel=0";
     }
   </script>
 
