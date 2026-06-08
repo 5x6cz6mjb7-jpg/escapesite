@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Data Recovery Terminal</title>
+  <title>Mission Terminal</title>
 
   <style>
     body {
@@ -35,9 +35,18 @@
       z-index: 1;
     }
 
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.65) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
     .terminal {
       width: 100%;
-      max-width: 920px;
+      max-width: 980px;
       padding: 28px;
       background: #000900;
       border: 2px solid #00ff66;
@@ -51,6 +60,7 @@
       font-size: 24px;
       margin-bottom: 20px;
       text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+      letter-spacing: 1px;
     }
 
     .text {
@@ -58,20 +68,25 @@
       white-space: pre-line;
     }
 
-    .corruptWords {
+    .warningText {
+      color: #ff5555;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .archiveBox {
       margin: 22px 0;
       padding: 16px;
       border: 1px solid #00aa44;
       background: rgba(0, 20, 0, 0.9);
       color: #8dffb0;
       line-height: 1.8;
-      font-size: 22px;
-      letter-spacing: 3px;
+      font-size: 18px;
     }
 
     .protocolGrid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin: 22px 0;
     }
@@ -83,6 +98,7 @@
       color: #baffc9;
       line-height: 1.6;
       box-sizing: border-box;
+      min-height: 190px;
     }
 
     .protocolTitle {
@@ -92,16 +108,22 @@
       text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
     }
 
+    .protocolStatus {
+      margin-top: 10px;
+      color: #ffaa00;
+      font-size: 14px;
+    }
+
     .protocolButton {
       display: inline-block;
       margin-top: 12px;
-      padding: 12px 16px;
+      padding: 12px 14px;
       background: #003b16;
       color: #00ff66;
       border: 1px solid #00ff66;
       text-decoration: none;
       font-family: "Courier New", monospace;
-      font-size: 15px;
+      font-size: 14px;
       letter-spacing: 1px;
     }
 
@@ -109,12 +131,23 @@
       background: #005c22;
     }
 
+    .inputSection {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid #00aa44;
+    }
+
     .wordRow {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 210px 1fr auto auto;
       gap: 10px;
       align-items: center;
       margin-top: 10px;
+    }
+
+    .wordLabel {
+      color: #8dffb0;
+      font-size: 15px;
     }
 
     input {
@@ -123,9 +156,13 @@
       border: 1px solid #00aa44;
       padding: 12px;
       font-family: "Courier New", monospace;
-      font-size: 18px;
+      font-size: 17px;
       text-transform: uppercase;
       outline: none;
+    }
+
+    input::placeholder {
+      color: #006b2a;
     }
 
     input:focus {
@@ -183,17 +220,21 @@
       margin-top: 20px;
       color: #ff4444;
       min-height: 24px;
+      line-height: 1.5;
     }
 
     #continueArea {
       display: none;
       margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid #00aa44;
+      padding: 18px;
+      border: 1px solid #00ff66;
+      background: rgba(0, 35, 0, 0.9);
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.35);
     }
 
     .continueButton {
       display: inline-block;
+      margin-top: 14px;
       padding: 14px 20px;
       background: #003b16;
       color: #00ff66;
@@ -222,19 +263,7 @@
       51%, 100% { opacity: 0; }
     }
 
-    @media (max-width: 700px) {
-      .terminal {
-        padding: 20px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .corruptWords {
-        font-size: 16px;
-      }
-
+    @media (max-width: 900px) {
       .protocolGrid {
         grid-template-columns: 1fr;
       }
@@ -249,6 +278,20 @@
         min-width: auto;
       }
     }
+
+    @media (max-width: 600px) {
+      .terminal {
+        padding: 20px;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .archiveBox {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 
@@ -256,89 +299,121 @@
 
   <main class="terminal">
     <div class="title">
-      UNIVERSITY BIOLOGY ARCHIVE // TERMINAL 03<span class="cursor"></span>
+      MI6 BOTANICAL ARCHIVE // ACCESS TERMINAL<span class="cursor"></span>
     </div>
 
     <div class="text">Recovered file: KRANE_PERSONAL_GARDEN.LOG
-Status: CORRUPTED
+Status: LOCKED
 Archive source: Department of Biology
 Last known user: DR. A. VOSS
 
-Restore botanical keywords to continue.</div>
+Multiple archive fragments are missing.
+Recover all botanical and operational codes to restore the file.</div>
 
-    <div class="corruptWords">
+    <div class="warningText">
+      WARNING: Three fragments are no longer stored in this terminal.
+      External simulations must be completed to recover them.
+    </div>
+
+    <div class="archiveBox">
       WORD 1: B_LL_D_NNA<br>
       WORD 2: D_G_T_L_S<br>
       WORD 3: _L__ND_R<br>
       WORD 4: T_X_S<br>
-      WORD 5: EXTERNAL PROTOCOL REQUIRED<br>
-      WORD 6: EXTERNAL PROTOCOL REQUIRED
+      WORD 5: EXTERNAL CONTAINMENT PROTOCOL REQUIRED<br>
+      WORD 6: EXTERNAL PIXEL STACK PROTOCOL REQUIRED<br>
+      WORD 7: EXTERNAL TARGET RANGE PROTOCOL REQUIRED
     </div>
 
     <div class="protocolGrid">
       <div class="protocolBox">
         <div class="protocolTitle">PROTOCOL A // CONTAINMENT</div>
-        SPECIMEN 5 NOT FOUND IN LOCAL ARCHIVE.<br>
-        Run containment protocol to recover missing specimen.
-        <br>
+        Snake-based botanical containment simulation.<br>
+        Collect safe samples. Avoid toxic specimens and barriers.
+        <div class="protocolStatus">OUTPUT: SPECIMEN WORD</div>
         <a class="protocolButton" href="snake.html">
-          OPEN BOTANICAL CONTAINMENT PROTOCOL
+          OPEN SNAKE PROTOCOL
         </a>
       </div>
 
       <div class="protocolBox">
         <div class="protocolTitle">PROTOCOL B // PIXEL STACK</div>
-        SPECIMEN 6 LOCKED IN EXTERNAL MEMORY.<br>
-        Complete the pixel herb stack to recover missing specimen.
-        <br>
+        1987 botanical memory stack.<br>
+        Complete rows to recover scrambled archive letters.
+        <div class="protocolStatus">OUTPUT: SCRAMBLED SPECIMEN</div>
         <a class="protocolButton" href="tetris.html">
-          OPEN PIXEL HERB STACK
+          OPEN PIXEL STACK
+        </a>
+      </div>
+
+      <div class="protocolBox">
+        <div class="protocolTitle">PROTOCOL C // TARGET RANGE</div>
+        Old MI6 authorization training simulation.<br>
+        Hit Q and M authorization targets.
+        <div class="protocolStatus">OUTPUT: COMMAND CODE</div>
+        <a class="protocolButton" href="shoot.html">
+          OPEN TARGET RANGE
         </a>
       </div>
     </div>
 
-    <div class="text">Enter restored keywords:</div>
+    <section class="inputSection">
+      <div class="text">Enter restored archive keywords:</div>
 
-    <div class="wordRow">
-      <input id="word1" type="text" placeholder="WORD 1">
-      <button id="button1" onclick="checkSingleWord(1)">CHECK</button>
-      <span id="status1" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 1 // LOCAL</div>
+        <input id="word1" type="text" placeholder="WORD 1">
+        <button id="button1" onclick="checkSingleWord(1)">CHECK</button>
+        <span id="status1" class="status"></span>
+      </div>
 
-    <div class="wordRow">
-      <input id="word2" type="text" placeholder="WORD 2">
-      <button id="button2" onclick="checkSingleWord(2)">CHECK</button>
-      <span id="status2" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 2 // LOCAL</div>
+        <input id="word2" type="text" placeholder="WORD 2">
+        <button id="button2" onclick="checkSingleWord(2)">CHECK</button>
+        <span id="status2" class="status"></span>
+      </div>
 
-    <div class="wordRow">
-      <input id="word3" type="text" placeholder="WORD 3">
-      <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
-      <span id="status3" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 3 // LOCAL</div>
+        <input id="word3" type="text" placeholder="WORD 3">
+        <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
+        <span id="status3" class="status"></span>
+      </div>
 
-    <div class="wordRow">
-      <input id="word4" type="text" placeholder="WORD 4">
-      <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
-      <span id="status4" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 4 // LOCAL</div>
+        <input id="word4" type="text" placeholder="WORD 4">
+        <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
+        <span id="status4" class="status"></span>
+      </div>
 
-    <div class="wordRow">
-      <input id="word5" type="text" placeholder="WORD 5">
-      <button id="button5" onclick="checkSingleWord(5)">CHECK</button>
-      <span id="status5" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 5 // SNAKE</div>
+        <input id="word5" type="text" placeholder="WORD 5">
+        <button id="button5" onclick="checkSingleWord(5)">CHECK</button>
+        <span id="status5" class="status"></span>
+      </div>
 
-    <div class="wordRow">
-      <input id="word6" type="text" placeholder="WORD 6">
-      <button id="button6" onclick="checkSingleWord(6)">CHECK</button>
-      <span id="status6" class="status"></span>
-    </div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 6 // PIXEL STACK</div>
+        <input id="word6" type="text" placeholder="WORD 6">
+        <button id="button6" onclick="checkSingleWord(6)">CHECK</button>
+        <span id="status6" class="status"></span>
+      </div>
 
-    <div id="terminalMessage"></div>
+      <div class="wordRow">
+        <div class="wordLabel">WORD 7 // TARGET RANGE</div>
+        <input id="word7" type="text" placeholder="WORD 7">
+        <button id="button7" onclick="checkSingleWord(7)">CHECK</button>
+        <span id="status7" class="status"></span>
+      </div>
+
+      <div id="terminalMessage"></div>
+    </section>
 
     <div id="continueArea">
-      <div class="text">ALL KEYWORDS RESTORED.
+      <div class="text">ALL ARCHIVE FRAGMENTS RESTORED.
 FILE READY FOR RECOVERY.</div>
 
       <a class="continueButton" href="recovered.html">
@@ -354,7 +429,8 @@ FILE READY FOR RECOVERY.</div>
       3: "OLEANDER",
       4: "TAXUS",
       5: "NIGHTSHADE",
-      6: "ROZENBOTTEL"
+      6: "ROZENBOTTEL",
+      7: "EYESONLY"
     };
 
     const solved = {
@@ -363,7 +439,8 @@ FILE READY FOR RECOVERY.</div>
       3: false,
       4: false,
       5: false,
-      6: false
+      6: false,
+      7: false
     };
 
     function cleanInput(value) {
@@ -392,7 +469,7 @@ FILE READY FOR RECOVERY.</div>
         status.className = "status correctStatus";
 
         message.style.color = "#00ff66";
-        message.textContent = "KEYWORD " + number + " RESTORED.";
+        message.textContent = "FRAGMENT " + number + " RESTORED.";
 
         checkIfComplete();
       } else {
@@ -403,7 +480,7 @@ FILE READY FOR RECOVERY.</div>
         status.className = "status wrongStatus";
 
         message.style.color = "#ff4444";
-        message.textContent = "KEYWORD " + number + " REJECTED // BOTANICAL MATCH FAILED.";
+        message.textContent = "FRAGMENT " + number + " REJECTED // ARCHIVE MATCH FAILED.";
       }
     }
 
@@ -414,11 +491,12 @@ FILE READY FOR RECOVERY.</div>
         solved[3] &&
         solved[4] &&
         solved[5] &&
-        solved[6]
+        solved[6] &&
+        solved[7]
       ) {
         const message = document.getElementById("terminalMessage");
         message.style.color = "#00ff66";
-        message.textContent = "ACCESS GRANTED // ALL BOTANICAL DATA RESTORED.";
+        message.textContent = "ACCESS GRANTED // ALL ARCHIVE DATA RESTORED.";
 
         document.getElementById("continueArea").style.display = "block";
         document.getElementById("continueArea").scrollIntoView({ behavior: "smooth" });
