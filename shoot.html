@@ -37,7 +37,7 @@
 
     .terminal {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1120px;
       background: #000900;
       border: 2px solid #00ff66;
       box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
@@ -78,7 +78,7 @@
 
     canvas {
       width: 100%;
-      max-width: 780px;
+      max-width: 800px;
       aspect-ratio: 4 / 3;
       background: #000;
       border: 2px solid #00ff66;
@@ -94,7 +94,7 @@
       padding: 16px;
       box-sizing: border-box;
       color: #baffc9;
-      min-height: 585px;
+      min-height: 600px;
     }
 
     .panelTitle {
@@ -299,13 +299,13 @@
     <h1>MI6 BOTANICAL LAB // SEED PROTOCOL</h1>
 
     <div class="subtitle">First-person lab simulation recovered.
-Move through the laboratory.
-Fire sunflower seeds at the decoy targets.
+Move through the larger laboratory.
+Fire compressed seed rounds at the pixel decoy targets.
 Hit 10 targets to unlock the command code.</div>
 
     <div class="layout">
       <section class="gameWrap">
-        <canvas id="game" width="780" height="585"></canvas>
+        <canvas id="game" width="800" height="600"></canvas>
 
         <div class="mobileControls">
           <button onclick="turnLeft()">↶</button>
@@ -329,7 +329,7 @@ Hit 10 targets to unlock the command code.</div>
         </div>
 
         <button onclick="startGame()">START / RESTART LAB</button>
-        <button onclick="shoot()">SHOOT SUNFLOWER SEED</button>
+        <button onclick="shoot()">SHOOT SEED ROUND</button>
 
         <div id="message">Simulation standby.</div>
 
@@ -363,8 +363,8 @@ Hit 10 targets to unlock the command code.</div>
         </div>
 
         <div class="warning">
-          Targets are pixel decoys. They are not real people.
-          The player fires sunflower seeds from a botanical launcher.
+          Targets are pixel decoys placed only on open lab floor.
+          The player uses a botanical seed blaster.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -385,32 +385,45 @@ Hit 10 targets to unlock the command code.</div>
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
 
+    /*
+      1 = wall
+      0 = open floor
+      2 = possible target spawn point
+    */
     const map = [
-      "111111111111",
-      "100000000001",
-      "101111011101",
-      "100001010001",
-      "111101010111",
-      "100001000001",
-      "101111111101",
-      "100000000001",
-      "101110111101",
-      "100010000001",
-      "100000111001",
-      "111111111111"
+      "11111111111111111111",
+      "10000000000001000001",
+      "10201111111001011101",
+      "10001000001000010001",
+      "11101011101011110101",
+      "10001010000010000101",
+      "10111010111110110101",
+      "10000010000000100101",
+      "10111111101111100101",
+      "10000000001000000101",
+      "10111101111011110101",
+      "10000101000010000101",
+      "11110101011110111101",
+      "10000100010000000001",
+      "10111111010111111011",
+      "10000000010000000001",
+      "10111101111101111101",
+      "10200001000001000021",
+      "10011111011111011101",
+      "10000000000000000001",
+      "11111111111111111111"
     ];
 
-    const mapWidth = map[0].length;
-    const mapHeight = map.length;
-
     const fov = Math.PI / 3;
-    const numRays = 156;
-    const maxDistance = 20;
-    const wallSize = 1;
-    const moveSpeed = 0.08;
-    const turnSpeed = 0.055;
+    const numRays = 200;
+    const maxDistance = 30;
+    const moveSpeed = 0.075;
+    const turnSpeed = 0.052;
     const hitGoal = 10;
     const glitchDuration = 4200;
+
+    let mapWidth = map[0].length;
+    let mapHeight = map.length;
 
     let player;
     let targets;
@@ -425,23 +438,10 @@ Hit 10 targets to unlock the command code.</div>
 
     function startGame() {
       player = {
-        x: 1.6,
-        y: 1.6,
+        x: 1.5,
+        y: 1.5,
         angle: 0
       };
-
-      targets = [
-        { x: 9.5, y: 1.5, type: "male", alive: true },
-        { x: 5.5, y: 3.5, type: "female", alive: true },
-        { x: 10.2, y: 3.5, type: "male", alive: true },
-        { x: 1.7, y: 5.5, type: "female", alive: true },
-        { x: 6.5, y: 5.5, type: "male", alive: true },
-        { x: 10.3, y: 5.6, type: "female", alive: true },
-        { x: 2.5, y: 7.5, type: "male", alive: true },
-        { x: 8.5, y: 7.5, type: "female", alive: true },
-        { x: 1.7, y: 10.2, type: "female", alive: true },
-        { x: 9.5, y: 10.5, type: "male", alive: true }
-      ];
 
       hits = 0;
       shots = 0;
@@ -449,29 +449,90 @@ Hit 10 targets to unlock the command code.</div>
       seedTrail = 0;
       gameRunning = true;
 
+      targets = createTargetsFromMap();
+
       glitchOverlayEl.style.display = "none";
       winBoxEl.style.display = "none";
       glitchStatusEl.style.display = "none";
 
-      messageEl.textContent = "Lab active. Find and tag all decoy targets.";
+      messageEl.textContent = "Large lab active. Find all decoy targets.";
       updateHud();
 
       requestAnimationFrame(gameLoop);
     }
 
-    function gameLoop(timestamp) {
-      const delta = timestamp - lastFrame;
-      lastFrame = timestamp;
+    function createTargetsFromMap() {
+      const spawnPoints = [];
 
-      if (gameRunning) {
-        updatePlayer();
+      for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+          if (map[y][x] === "2") {
+            spawnPoints.push({
+              x: x + 0.5,
+              y: y + 0.5
+            });
+          }
+        }
       }
 
+      const extraOpenSpaces = [
+        { x: 8.5, y: 1.5 },
+        { x: 15.5, y: 1.5 },
+        { x: 5.5, y: 3.5 },
+        { x: 13.5, y: 3.5 },
+        { x: 1.5, y: 7.5 },
+        { x: 10.5, y: 7.5 },
+        { x: 16.5, y: 9.5 },
+        { x: 5.5, y: 11.5 },
+        { x: 13.5, y: 13.5 },
+        { x: 8.5, y: 15.5 },
+        { x: 17.5, y: 15.5 },
+        { x: 3.5, y: 19.5 }
+      ];
+
+      extraOpenSpaces.forEach(function(point) {
+        if (!isWall(point.x, point.y)) {
+          spawnPoints.push(point);
+        }
+      });
+
+      shuffleArray(spawnPoints);
+
+      const newTargets = [];
+      const targetCount = hitGoal;
+
+      for (let i = 0; i < targetCount && i < spawnPoints.length; i++) {
+        newTargets.push({
+          x: spawnPoints[i].x,
+          y: spawnPoints[i].y,
+          type: i % 2 === 0 ? "male" : "female",
+          alive: true
+        });
+      }
+
+      return newTargets;
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    function gameLoop(timestamp) {
+      if (!gameRunning) {
+        drawScene();
+        return;
+      }
+
+      lastFrame = timestamp;
+      updatePlayer();
       drawScene();
 
-      if (gameRunning) {
-        requestAnimationFrame(gameLoop);
-      }
+      requestAnimationFrame(gameLoop);
     }
 
     function updatePlayer() {
@@ -511,14 +572,25 @@ Hit 10 targets to unlock the command code.</div>
     }
 
     function movePlayer(dx, dy) {
+      const radius = 0.20;
       const newX = player.x + dx;
       const newY = player.y + dy;
 
-      if (!isWall(newX, player.y)) {
+      if (
+        !isWall(newX + radius, player.y) &&
+        !isWall(newX - radius, player.y) &&
+        !isWall(newX, player.y + radius) &&
+        !isWall(newX, player.y - radius)
+      ) {
         player.x = newX;
       }
 
-      if (!isWall(player.x, newY)) {
+      if (
+        !isWall(player.x + radius, newY) &&
+        !isWall(player.x - radius, newY) &&
+        !isWall(player.x, newY + radius) &&
+        !isWall(player.x, newY - radius)
+      ) {
         player.y = newY;
       }
     }
@@ -543,12 +615,13 @@ Hit 10 targets to unlock the command code.</div>
       drawCeilingAndFloor(w, h);
       castWalls(w, h);
       drawTargets(w, h);
-      drawLauncher(w, h);
+      drawLabOverlay(w, h);
       drawCrosshair(w, h);
+      drawSeedBlaster(w, h);
       drawMiniMap();
 
       if (shotFlash > 0) {
-        ctx.fillStyle = "rgba(255, 240, 150, 0.22)";
+        ctx.fillStyle = "rgba(255, 240, 150, 0.20)";
         ctx.fillRect(0, 0, w, h);
       }
     }
@@ -557,18 +630,16 @@ Hit 10 targets to unlock the command code.</div>
       const ceiling = ctx.createLinearGradient(0, 0, 0, h / 2);
       ceiling.addColorStop(0, "#001100");
       ceiling.addColorStop(1, "#071807");
-
       ctx.fillStyle = ceiling;
       ctx.fillRect(0, 0, w, h / 2);
 
       const floor = ctx.createLinearGradient(0, h / 2, 0, h);
-      floor.addColorStop(0, "#081108");
+      floor.addColorStop(0, "#061206");
       floor.addColorStop(1, "#000000");
-
       ctx.fillStyle = floor;
       ctx.fillRect(0, h / 2, w, h / 2);
 
-      ctx.strokeStyle = "rgba(0,255,100,0.08)";
+      ctx.strokeStyle = "rgba(0,255,100,0.07)";
       for (let y = h / 2; y < h; y += 18) {
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -592,22 +663,27 @@ Hit 10 targets to unlock the command code.</div>
         const stripWidth = Math.ceil(w / numRays) + 1;
         const y = h / 2 - wallHeight / 2;
 
-        let brightness = Math.max(40, 210 - correctedDistance * 35);
+        let brightness = Math.max(35, 220 - correctedDistance * 30);
         let green = Math.floor(brightness);
 
         if (ray.side === "x") {
-          green = Math.floor(green * 0.75);
+          green = Math.floor(green * 0.72);
         }
 
-        ctx.fillStyle = "rgb(0," + green + ",70)";
+        ctx.fillStyle = "rgb(0," + green + ",62)";
         ctx.fillRect(x, y, stripWidth, wallHeight);
 
         ctx.fillStyle = "rgba(0,0,0,0.22)";
-        ctx.fillRect(x, y + wallHeight - 8, stripWidth, 8);
+        ctx.fillRect(x, y + wallHeight - 9, stripWidth, 9);
 
-        if (i % 8 === 0) {
-          ctx.fillStyle = "rgba(255,255,255,0.06)";
+        if (i % 10 === 0) {
+          ctx.fillStyle = "rgba(255,255,255,0.055)";
           ctx.fillRect(x, y, 2, wallHeight);
+        }
+
+        if (ray.hitMarker) {
+          ctx.fillStyle = "rgba(180,255,200,0.12)";
+          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.15);
         }
       }
     }
@@ -620,9 +696,10 @@ Hit 10 targets to unlock the command code.</div>
       let lastMapX = Math.floor(player.x);
       let lastMapY = Math.floor(player.y);
       let side = "x";
+      let hitMarker = false;
 
       while (!hit && distance < maxDistance) {
-        distance += 0.02;
+        distance += 0.025;
         hitX = player.x + Math.cos(angle) * distance;
         hitY = player.y + Math.sin(angle) * distance;
 
@@ -642,12 +719,14 @@ Hit 10 targets to unlock the command code.</div>
 
         if (isWall(hitX, hitY)) {
           hit = true;
+          hitMarker = (mapX + mapY) % 5 === 0;
         }
       }
 
       return {
         distance: distance,
-        side: side
+        side: side,
+        hitMarker: hitMarker
       };
     }
 
@@ -671,7 +750,7 @@ Hit 10 targets to unlock the command code.</div>
           };
         })
         .filter(function(item) {
-          return Math.abs(item.angle) < fov / 1.7 && item.distance > 0.25;
+          return Math.abs(item.angle) < fov / 1.65 && item.distance > 0.35;
         })
         .sort(function(a, b) {
           return b.distance - a.distance;
@@ -679,73 +758,116 @@ Hit 10 targets to unlock the command code.</div>
 
       visibleTargets.forEach(function(item) {
         const screenX = (0.5 + item.angle / fov) * w;
-        const size = Math.min(150, h / item.distance * 0.48);
-        const screenY = h / 2 + size * 0.18;
+        const size = Math.min(170, h / item.distance * 0.50);
+        const screenY = h / 2 + size * 0.20;
 
         const rayIndex = Math.floor((screenX / w) * numRays);
         const wallDistance = rayDistances[rayIndex] || maxDistance;
 
-        if (item.distance < wallDistance + 0.2) {
-          drawPixelPerson(screenX, screenY, size, item.target.type);
+        if (item.distance < wallDistance + 0.25) {
+          drawPixelDecoy(screenX, screenY, size, item.target.type);
         }
       });
     }
 
-    function drawPixelPerson(x, y, size, type) {
+    function drawPixelDecoy(x, y, size, type) {
       const s = size / 100;
 
       ctx.save();
       ctx.translate(x, y);
+      ctx.imageSmoothingEnabled = false;
 
-      ctx.fillStyle = "#060606";
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = Math.max(1, 2 * s);
+      const outline = "#eaffee";
+      const dark = "#050505";
+      const visor = "#00ff66";
+      const red = "#ff4444";
+      const suit = type === "female" ? "#102010" : "#071707";
 
-      // Head
-      ctx.fillRect(-13 * s, -78 * s, 26 * s, 26 * s);
-      ctx.strokeRect(-13 * s, -78 * s, 26 * s, 26 * s);
+      ctx.fillStyle = dark;
+      ctx.strokeStyle = outline;
+      ctx.lineWidth = Math.max(2, 3 * s);
 
-      // Body
-      ctx.fillRect(-18 * s, -50 * s, 36 * s, 48 * s);
-      ctx.strokeRect(-18 * s, -50 * s, 36 * s, 48 * s);
-
-      // Arms
-      ctx.fillRect(-34 * s, -44 * s, 14 * s, 36 * s);
-      ctx.fillRect(20 * s, -44 * s, 14 * s, 36 * s);
-      ctx.strokeRect(-34 * s, -44 * s, 14 * s, 36 * s);
-      ctx.strokeRect(20 * s, -44 * s, 14 * s, 36 * s);
+      // Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.fillRect(-36 * s, 34 * s, 72 * s, 12 * s);
 
       // Legs
-      ctx.fillRect(-16 * s, -1 * s, 13 * s, 38 * s);
-      ctx.fillRect(3 * s, -1 * s, 13 * s, 38 * s);
-      ctx.strokeRect(-16 * s, -1 * s, 13 * s, 38 * s);
-      ctx.strokeRect(3 * s, -1 * s, 13 * s, 38 * s);
+      ctx.fillStyle = suit;
+      ctx.fillRect(-22 * s, 0, 16 * s, 42 * s);
+      ctx.fillRect(6 * s, 0, 16 * s, 42 * s);
+      ctx.strokeRect(-22 * s, 0, 16 * s, 42 * s);
+      ctx.strokeRect(6 * s, 0, 16 * s, 42 * s);
 
+      // Torso
+      ctx.fillStyle = suit;
+      ctx.fillRect(-30 * s, -52 * s, 60 * s, 56 * s);
+      ctx.strokeRect(-30 * s, -52 * s, 60 * s, 56 * s);
+
+      // Shoulders
+      ctx.fillStyle = "#001f0b";
+      ctx.fillRect(-42 * s, -46 * s, 14 * s, 38 * s);
+      ctx.fillRect(28 * s, -46 * s, 14 * s, 38 * s);
+      ctx.strokeRect(-42 * s, -46 * s, 14 * s, 38 * s);
+      ctx.strokeRect(28 * s, -46 * s, 14 * s, 38 * s);
+
+      // Head / helmet
+      ctx.fillStyle = dark;
+      ctx.fillRect(-22 * s, -88 * s, 44 * s, 34 * s);
+      ctx.strokeRect(-22 * s, -88 * s, 44 * s, 34 * s);
+
+      // Visor
+      ctx.fillStyle = visor;
+      ctx.fillRect(-14 * s, -78 * s, 28 * s, 8 * s);
+
+      // Target label plate
+      ctx.fillStyle = "#300000";
+      ctx.fillRect(-18 * s, -35 * s, 36 * s, 20 * s);
+      ctx.strokeStyle = red;
+      ctx.strokeRect(-18 * s, -35 * s, 36 * s, 20 * s);
+
+      ctx.fillStyle = red;
+      ctx.font = Math.max(12, 20 * s) + "px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(type === "female" ? "V" : "M", 0, -25 * s);
+
+      // Female silhouette marker: triangular coat
       if (type === "female") {
-        ctx.fillStyle = "#111111";
+        ctx.strokeStyle = outline;
+        ctx.fillStyle = "#0b1f0b";
         ctx.beginPath();
-        ctx.moveTo(-22 * s, -6 * s);
-        ctx.lineTo(22 * s, -6 * s);
-        ctx.lineTo(32 * s, 25 * s);
-        ctx.lineTo(-32 * s, 25 * s);
+        ctx.moveTo(-28 * s, 2 * s);
+        ctx.lineTo(28 * s, 2 * s);
+        ctx.lineTo(42 * s, 34 * s);
+        ctx.lineTo(-42 * s, 34 * s);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(13 * s, -74 * s, 8 * s, 24 * s);
+        ctx.fillStyle = "#eaffee";
+        ctx.fillRect(22 * s, -84 * s, 8 * s, 22 * s);
       }
 
+      // Male silhouette marker: blocky armor shoulders
       if (type === "male") {
-        ctx.strokeRect(-24 * s, -48 * s, 48 * s, 10 * s);
+        ctx.strokeStyle = outline;
+        ctx.strokeRect(-36 * s, -50 * s, 72 * s, 12 * s);
       }
 
-      ctx.fillStyle = "#ff4444";
-      ctx.font = Math.max(10, 18 * s) + "px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText(type === "female" ? "V" : "M", 0, -22 * s);
+      // Pixel highlights
+      ctx.fillStyle = "rgba(255,255,255,0.25)";
+      ctx.fillRect(-25 * s, -49 * s, 50 * s, 5 * s);
+      ctx.fillRect(-18 * s, -85 * s, 36 * s, 4 * s);
 
       ctx.restore();
+    }
+
+    function drawLabOverlay(w, h) {
+      ctx.fillStyle = "rgba(0,255,100,0.18)";
+      ctx.font = "14px Courier New";
+      ctx.textAlign = "left";
+      ctx.fillText("BOTANICAL LAB // RAYCAST ACTIVE", 14, 24);
+      ctx.fillText("DECOY TARGETS ONLY", 14, 44);
     }
 
     function drawCrosshair(w, h) {
@@ -772,60 +894,81 @@ Hit 10 targets to unlock the command code.</div>
       ctx.stroke();
 
       if (seedTrail > 0) {
-        ctx.fillStyle = "rgba(255, 230, 100, 0.85)";
+        ctx.fillStyle = "rgba(255, 230, 100, 0.9)";
         ctx.beginPath();
         ctx.arc(cx, cy - 45 + seedTrail * 4, 5, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    function drawLauncher(w, h) {
-      const baseY = h - 70;
+    function drawSeedBlaster(w, h) {
+      const baseX = w / 2;
+      const baseY = h - 28;
 
-      ctx.fillStyle = "#2c8b3d";
-      ctx.beginPath();
-      ctx.moveTo(w * 0.22, h);
-      ctx.quadraticCurveTo(w * 0.18, h - 85, w * 0.30, baseY);
-      ctx.quadraticCurveTo(w * 0.36, h - 25, w * 0.32, h);
-      ctx.closePath();
-      ctx.fill();
+      // Main 80s botanical device body
+      ctx.fillStyle = "#061606";
+      ctx.fillRect(baseX - 88, h - 112, 176, 76);
 
-      ctx.beginPath();
-      ctx.moveTo(w * 0.78, h);
-      ctx.quadraticCurveTo(w * 0.82, h - 85, w * 0.70, baseY);
-      ctx.quadraticCurveTo(w * 0.64, h - 25, w * 0.68, h);
-      ctx.closePath();
-      ctx.fill();
+      ctx.strokeStyle = "#00ff66";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(baseX - 88, h - 112, 176, 76);
 
-      ctx.fillStyle = "#3da64d";
-      ctx.fillRect(w / 2 - 11, h - 120, 22, 72);
+      // Barrel
+      ctx.fillStyle = "#003b16";
+      ctx.fillRect(baseX - 24, h - 172, 48, 74);
+      ctx.strokeStyle = "#baffc9";
+      ctx.strokeRect(baseX - 24, h - 172, 48, 74);
 
-      ctx.fillStyle = "#ffdf4d";
-      for (let i = 0; i < 12; i++) {
-        const angle = (Math.PI * 2 / 12) * i;
-        const px = w / 2 + Math.cos(angle) * 23;
-        const py = h - 122 + Math.sin(angle) * 23;
-        ctx.beginPath();
-        ctx.arc(px, py, 9, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      // Muzzle
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(baseX - 34, h - 188, 68, 22);
+      ctx.strokeStyle = "#00ff66";
+      ctx.strokeRect(baseX - 34, h - 188, 68, 22);
 
+      // Seed chamber
       ctx.fillStyle = "#5b3300";
       ctx.beginPath();
-      ctx.arc(w / 2, h - 122, 17, 0, Math.PI * 2);
+      ctx.arc(baseX, h - 75, 26, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = "#baffc9";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(w / 2 - 20, h - 55, 40, 23);
+      ctx.strokeStyle = "#fff4a3";
+      ctx.stroke();
+
+      // Yellow seed lights
+      ctx.fillStyle = "#ffee66";
+      for (let i = 0; i < 5; i++) {
+        ctx.fillRect(baseX - 54 + i * 27, h - 54, 12, 8);
+      }
+
+      // Side leaves / biotech casing
+      ctx.fillStyle = "#0f7a2d";
+      ctx.beginPath();
+      ctx.moveTo(baseX - 88, h - 80);
+      ctx.quadraticCurveTo(baseX - 145, h - 135, baseX - 168, h - 54);
+      ctx.quadraticCurveTo(baseX - 118, h - 72, baseX - 88, h - 60);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(baseX + 88, h - 80);
+      ctx.quadraticCurveTo(baseX + 145, h - 135, baseX + 168, h - 54);
+      ctx.quadraticCurveTo(baseX + 118, h - 72, baseX + 88, h - 60);
+      ctx.closePath();
+      ctx.fill();
+
+      // Label
+      ctx.fillStyle = "#00ff66";
+      ctx.font = "13px Courier New";
+      ctx.textAlign = "center";
+      ctx.fillText("SEED-BLASTER 86", baseX, baseY);
     }
 
     function drawMiniMap() {
-      const scale = 7;
+      const scale = 5;
       const offsetX = 12;
-      const offsetY = 36;
+      const offsetY = 58;
 
-      ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.58)";
       ctx.fillRect(offsetX - 4, offsetY - 4, mapWidth * scale + 8, mapHeight * scale + 8);
 
       for (let y = 0; y < mapHeight; y++) {
@@ -847,7 +990,7 @@ Hit 10 targets to unlock the command code.</div>
         }
       });
 
-      ctx.fillStyle = "#ffff66";
+      ctx.fillStyle = "#ffee66";
       ctx.beginPath();
       ctx.arc(offsetX + player.x * scale, offsetY + player.y * scale, 3, 0, Math.PI * 2);
       ctx.fill();
@@ -877,13 +1020,13 @@ Hit 10 targets to unlock the command code.</div>
 
         angleToTarget = normalizeAngle(angleToTarget);
 
-        const aimTolerance = 0.10 + Math.min(0.12, 0.25 / distance);
+        const aimTolerance = 0.105 + Math.min(0.12, 0.28 / distance);
 
         if (Math.abs(angleToTarget) < aimTolerance) {
           const ray = castRay(Math.atan2(dy, dx));
 
-          if (distance < ray.distance + 0.15) {
-            const score = Math.abs(angleToTarget) + distance * 0.02;
+          if (distance < ray.distance + 0.18) {
+            const score = Math.abs(angleToTarget) + distance * 0.018;
 
             if (score < bestScore) {
               bestScore = score;
@@ -896,9 +1039,9 @@ Hit 10 targets to unlock the command code.</div>
       if (bestTarget) {
         bestTarget.alive = false;
         hits++;
-        messageEl.textContent = "Decoy target tagged with sunflower seed.";
+        messageEl.textContent = "Pixel decoy tagged with compressed seed round.";
       } else {
-        messageEl.textContent = "Seed fired. No target tagged.";
+        messageEl.textContent = "Seed round fired. No target tagged.";
       }
 
       if (hits >= hitGoal) {
