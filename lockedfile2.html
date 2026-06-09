@@ -2,16 +2,15 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Thorne Private Archive</title>
+  <title>Thorne Archive Folder</title>
 
   <style>
     :root {
       --green: #00ff66;
       --green2: #00aa44;
       --dark: #001100;
-      --black: #020602;
-      --panel: #061806;
       --text: #caffd7;
+      --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
       --blue: #7dfcff;
@@ -26,10 +25,10 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #133013 0%, #030803 58%, #000 100%);
+        radial-gradient(circle at center, #163016 0%, #030803 60%, #000 100%);
       color: var(--green);
       font-family: "Courier New", monospace;
-      padding: 18px;
+      padding: 16px;
       overflow-x: hidden;
     }
 
@@ -41,12 +40,13 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 102, 0.055),
-          rgba(0, 255, 102, 0.055) 1px,
+          rgba(0,255,102,0.055),
+          rgba(0,255,102,0.055) 1px,
           transparent 1px,
           transparent 4px
         );
-      z-index: 20;
+      z-index: 80;
+      animation: scanMove 7s linear infinite;
     }
 
     body::after {
@@ -55,42 +55,58 @@
       inset: -20%;
       pointer-events: none;
       background:
-        radial-gradient(circle at 30% 30%, rgba(0,255,102,0.18), transparent 28%),
-        radial-gradient(circle at 70% 60%, rgba(0,255,102,0.10), transparent 32%);
-      animation: greenWaas 9s ease-in-out infinite alternate;
+        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.22), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(0,255,102,0.12), transparent 32%);
       mix-blend-mode: screen;
-      z-index: 19;
+      z-index: 70;
+      animation: greenWaas 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(12px); }
     }
 
     @keyframes greenWaas {
-      0% {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
-      }
-
-      100% {
-        transform: translate(3%, 2%) scale(1.06);
-        opacity: 0.72;
-      }
+      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
+      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
     }
 
     .screen {
       width: 100%;
-      max-width: 1180px;
+      max-width: 1240px;
       margin: 0 auto;
-      min-height: calc(100vh - 36px);
+      min-height: calc(100vh - 32px);
       border: 5px solid #132313;
       border-radius: 18px;
       background:
         radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
         linear-gradient(180deg, #061906 0%, #010801 100%);
       box-shadow:
-        inset 0 0 80px rgba(0,0,0,0.8),
-        inset 0 0 30px rgba(0,255,102,0.12),
-        0 0 35px rgba(0,0,0,0.8);
-      padding: 14px;
+        inset 0 0 80px rgba(0,0,0,0.82),
+        inset 0 0 30px rgba(0,255,102,0.13),
+        0 0 35px rgba(0,0,0,0.82);
+      padding: 12px;
       position: relative;
       overflow: hidden;
+    }
+
+    .screen::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: -150px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.11), transparent);
+      animation: sweep 6.5s linear infinite;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    @keyframes sweep {
+      0% { top: -150px; }
+      100% { top: 100%; }
     }
 
     .topBar {
@@ -98,7 +114,7 @@
       background:
         linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
       border: 2px solid #d8ffe6;
-      color: #eaffef;
+      color: var(--white);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -110,21 +126,19 @@
 
     .mainLayout {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 14px;
-      padding-top: 14px;
+      grid-template-columns: 270px 1fr;
+      gap: 12px;
+      padding-top: 12px;
       position: relative;
       z-index: 3;
     }
 
-    .sidePanel,
-    .mainPanel,
-    .unlockedPanel {
+    .window {
       border: 2px solid #d8ffe6;
-      background: rgba(0, 10, 0, 0.82);
+      background: rgba(0, 10, 0, 0.84);
       box-shadow:
-        4px 4px 0 rgba(0,0,0,0.68),
-        0 0 18px rgba(0,255,102,0.12);
+        4px 4px 0 rgba(0,0,0,0.7),
+        0 0 18px rgba(0,255,102,0.13);
     }
 
     .windowTitle {
@@ -132,7 +146,7 @@
       background:
         linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
       border-bottom: 2px solid #d8ffe6;
-      color: #eaffef;
+      color: var(--white);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -154,7 +168,7 @@
     }
 
     .content {
-      padding: 14px;
+      padding: 12px;
     }
 
     h1 {
@@ -167,7 +181,7 @@
     h2 {
       margin: 0 0 10px;
       color: var(--green);
-      font-size: 17px;
+      font-size: 16px;
       letter-spacing: 1px;
     }
 
@@ -181,21 +195,26 @@
       border: 1px dashed rgba(0,255,102,0.35);
       background: rgba(0,255,102,0.045);
       padding: 10px;
-      margin-bottom: 12px;
       color: #9dffbd;
       font-size: 12px;
       line-height: 1.55;
       white-space: pre-line;
     }
 
-    .fileIconBig {
-      width: 90px;
+    .folderIcon {
+      width: 92px;
       height: 76px;
-      margin: 8px auto 14px;
+      margin: 10px auto 14px;
       position: relative;
+      animation: folderBreathe 3.2s ease-in-out infinite;
     }
 
-    .fileIconBig .tab {
+    @keyframes folderBreathe {
+      0%, 100% { transform: translateY(0); filter: brightness(1); }
+      50% { transform: translateY(-2px); filter: brightness(1.2); }
+    }
+
+    .folderIcon .tab {
       position: absolute;
       left: 8px;
       top: 4px;
@@ -207,7 +226,7 @@
       border-right: 3px solid #073b19;
     }
 
-    .fileIconBig .back {
+    .folderIcon .back {
       position: absolute;
       left: 0;
       top: 19px;
@@ -217,7 +236,7 @@
       border: 3px solid #d8ffe6;
     }
 
-    .fileIconBig .front {
+    .folderIcon .front {
       position: absolute;
       left: 4px;
       top: 31px;
@@ -254,52 +273,30 @@
       border-radius: 12px 12px 0 0;
     }
 
-    .lockSection {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+    .folderTree {
       margin-top: 12px;
+      display: grid;
+      gap: 6px;
     }
 
-    .lockBox {
-      border: 1px solid rgba(0,255,102,0.35);
-      background: rgba(0,0,0,0.35);
-      padding: 12px;
-      min-height: 178px;
+    .treeItem {
+      border: 1px solid rgba(0,255,102,0.2);
+      background: rgba(0,0,0,0.25);
+      padding: 7px;
+      font-size: 12px;
+      color: var(--text);
     }
 
-    .lockBox h3 {
-      margin: 0 0 8px;
+    .treeItem.active {
       color: var(--yellow);
-      font-size: 13px;
+      border-color: rgba(255,238,102,0.55);
+      background: rgba(255,238,102,0.06);
     }
 
-    .lockBox label {
-      display: block;
-      color: #eaffef;
-      font-size: 11px;
-      margin-bottom: 5px;
-    }
-
-    .lockBox input {
-      width: 100%;
-      background: #000;
-      color: var(--green);
-      border: 2px solid var(--green2);
-      padding: 10px;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .lockBox input:focus {
-      border-color: var(--yellow);
-    }
-
+    .backLink,
     button,
-    .gameLink,
-    .backLink {
-      color: #eaffef;
+    .gameLink {
+      color: var(--white);
       background:
         linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
       border-top: 2px solid #d8ffe6;
@@ -313,13 +310,198 @@
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
-      margin-top: 9px;
     }
 
     button:hover,
-    .gameLink:hover,
-    .backLink:hover {
+    .backLink:hover,
+    .gameLink:hover {
       filter: brightness(1.18);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 12px;
+    }
+
+    .fileGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .fileButton {
+      min-height: 116px;
+      background: rgba(0,0,0,0.28);
+      border: 1px dotted rgba(0,255,102,0.35);
+      color: var(--text);
+      padding: 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    .fileButton::before {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 44px;
+      margin: 0 auto 8px;
+      background: #d8ffe6;
+      border: 2px solid #001100;
+      box-shadow:
+        0 0 0 2px #d8ffe6,
+        0 0 9px rgba(0,255,102,0.22);
+    }
+
+    .fileButton::after {
+      content: "";
+      position: absolute;
+      top: 34px;
+      left: calc(50% - 11px);
+      width: 22px;
+      height: 2px;
+      background: #001100;
+      box-shadow:
+        0 6px 0 #001100,
+        0 12px 0 #001100;
+    }
+
+    .fileButton:hover {
+      background: rgba(0,255,102,0.1);
+      color: var(--yellow);
+    }
+
+    .fileButton.pulse {
+      animation: filePulse 2.3s ease-in-out infinite;
+    }
+
+    @keyframes filePulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(0,255,102,0); }
+      50% { box-shadow: 0 0 18px rgba(0,255,102,0.25); }
+    }
+
+    .viewer {
+      margin-top: 12px;
+      min-height: 260px;
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.34);
+      padding: 12px;
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 13px;
+      white-space: pre-line;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewer h3 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 15px;
+    }
+
+    .viewer .hand {
+      color: var(--purple);
+      font-style: italic;
+    }
+
+    .waveform {
+      display: flex;
+      align-items: end;
+      gap: 4px;
+      height: 92px;
+      margin: 12px 0;
+      border: 1px solid rgba(0,255,102,0.25);
+      padding: 8px;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .waveform span {
+      flex: 1;
+      background: var(--green);
+      min-height: 8px;
+      animation: waveMove 1.2s ease-in-out infinite alternate;
+      box-shadow: 0 0 8px rgba(0,255,102,0.38);
+    }
+
+    .waveform span:nth-child(2n) { animation-delay: 0.2s; }
+    .waveform span:nth-child(3n) { animation-delay: 0.4s; }
+    .waveform span:nth-child(4n) { animation-delay: 0.6s; }
+
+    @keyframes waveMove {
+      from { height: 15%; opacity: 0.55; }
+      to { height: 90%; opacity: 1; }
+    }
+
+    .labBars {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .barRow {
+      display: grid;
+      grid-template-columns: 92px 1fr 40px;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .barTrack {
+      height: 12px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .barFill {
+      height: 100%;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,255,102,0.9),
+          rgba(0,255,102,0.9) 5px,
+          rgba(255,238,102,0.9) 5px,
+          rgba(255,238,102,0.9) 8px
+        );
+      animation: barFlicker 2s ease-in-out infinite;
+    }
+
+    @keyframes barFlicker {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.35); }
+    }
+
+    .miniPuzzle {
+      border: 1px solid rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.05);
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .miniPuzzle h3 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 14px;
+    }
+
+    .miniPuzzle input,
+    .lockBox input {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid var(--green2);
+      padding: 10px;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      outline: none;
+      margin-top: 6px;
+    }
+
+    .miniPuzzle input:focus,
+    .lockBox input:focus {
+      border-color: var(--yellow);
     }
 
     .status {
@@ -333,47 +515,79 @@
       color: var(--yellow);
     }
 
+    .lockPanel {
+      display: none;
+      margin-top: 12px;
+      animation: unlockAppear 0.5s ease-out;
+    }
+
+    @keyframes unlockAppear {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lockSection {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .lockBox {
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.35);
+      padding: 11px;
+      min-height: 170px;
+    }
+
+    .lockBox h3 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 13px;
+    }
+
     .gameLink {
       background:
         linear-gradient(180deg, #786a10 0%, #3c3408 100%);
       color: var(--yellow);
+      margin-top: 9px;
     }
 
     .unlockedPanel {
       display: none;
-      margin-top: 14px;
+      margin-top: 12px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .unlockedContent {
+      padding: 14px;
     }
 
     .researchGrid {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 14px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
       margin-top: 12px;
     }
 
-    .researchCard {
+    .card {
       border: 1px solid rgba(0,255,102,0.33);
       background: rgba(0,0,0,0.32);
       padding: 12px;
       min-height: 120px;
     }
 
-    .researchCard h3 {
+    .card h3 {
       margin: 0 0 8px;
       color: var(--yellow);
       font-size: 14px;
     }
 
-    .researchCard p,
-    .researchCard li {
+    .card p,
+    .card li {
       font-size: 13px;
       color: var(--text);
       line-height: 1.55;
-    }
-
-    .researchCard ul {
-      margin: 0;
-      padding-left: 18px;
     }
 
     .specimenTable {
@@ -396,124 +610,21 @@
       background: rgba(0,255,102,0.08);
     }
 
-    .analysisBars {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
+    .redacted {
+      background: rgba(255,255,255,0.85);
+      color: transparent;
+      padding: 0 4px;
+      user-select: none;
     }
 
-    .barRow {
-      display: grid;
-      grid-template-columns: 90px 1fr 42px;
-      gap: 8px;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text);
+    .glitchText {
+      animation: glitchText 0.2s infinite;
     }
 
-    .barTrack {
-      height: 12px;
-      border: 1px solid rgba(0,255,102,0.35);
-      background: rgba(0,0,0,0.5);
-      overflow: hidden;
-    }
-
-    .barFill {
-      height: 100%;
-      background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(0,255,102,0.9),
-          rgba(0,255,102,0.9) 5px,
-          rgba(255,238,102,0.9) 5px,
-          rgba(255,238,102,0.9) 8px
-        );
-    }
-
-    .photoFrame {
-      border: 1px solid rgba(0,255,102,0.35);
-      background:
-        radial-gradient(circle at center, rgba(0,255,102,0.15), transparent 55%),
-        rgba(0,0,0,0.4);
-      height: 160px;
-      position: relative;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-
-    .plantStem {
-      position: absolute;
-      left: 50%;
-      bottom: 18px;
-      width: 5px;
-      height: 90px;
-      background: var(--green);
-      transform: translateX(-50%);
-      box-shadow: 0 0 10px rgba(0,255,102,0.5);
-    }
-
-    .leaf {
-      position: absolute;
-      width: 42px;
-      height: 18px;
-      background: #1fcf63;
-      border: 1px solid #d8ffe6;
-      border-radius: 70% 15% 70% 15%;
-      box-shadow: 0 0 8px rgba(0,255,102,0.4);
-    }
-
-    .leaf.one {
-      left: calc(50% - 44px);
-      bottom: 78px;
-      transform: rotate(-28deg);
-    }
-
-    .leaf.two {
-      left: calc(50% + 5px);
-      bottom: 100px;
-      transform: rotate(28deg) scaleX(-1);
-    }
-
-    .flower {
-      position: absolute;
-      left: 50%;
-      bottom: 108px;
-      width: 44px;
-      height: 44px;
-      transform: translateX(-50%);
-    }
-
-    .petal {
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      background: #8cffaa;
-      border: 1px solid #d8ffe6;
-      border-radius: 50%;
-      box-shadow: 0 0 9px rgba(0,255,102,0.45);
-    }
-
-    .petal.p1 { left: 11px; top: 0; }
-    .petal.p2 { left: 0; top: 12px; }
-    .petal.p3 { left: 22px; top: 12px; }
-    .petal.p4 { left: 6px; top: 25px; }
-    .petal.p5 { left: 18px; top: 25px; }
-
-    .petalCenter {
-      position: absolute;
-      left: 15px;
-      top: 16px;
-      width: 14px;
-      height: 14px;
-      background: var(--yellow);
-      border-radius: 50%;
-      border: 1px solid #001100;
-    }
-
-    .handwriting {
-      color: var(--purple);
-      font-style: italic;
-      letter-spacing: 0.5px;
+    @keyframes glitchText {
+      0% { transform: translateX(0); opacity: 1; }
+      50% { transform: translateX(2px); opacity: 0.72; }
+      100% { transform: translateX(-1px); opacity: 0.95; }
     }
 
     .glitchOverlay {
@@ -529,7 +640,7 @@
           transparent 7px
         ),
         rgba(0,0,0,0.86);
-      z-index: 100;
+      z-index: 200;
       align-items: center;
       justify-content: center;
       color: var(--yellow);
@@ -545,13 +656,42 @@
       100% { opacity: 0.95; transform: translateX(-3px); }
     }
 
-    @media (max-width: 880px) {
-      .mainLayout {
+    body.file1 .screen {
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.1), transparent 60%),
+        linear-gradient(180deg, #061906 0%, #010801 100%);
+    }
+
+    body.file2 .screen {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,238,102,0.07), transparent 28%),
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
+        linear-gradient(180deg, #071907 0%, #010801 100%);
+    }
+
+    body.file3 .screen {
+      background:
+        radial-gradient(circle at 70% 20%, rgba(212,140,255,0.08), transparent 30%),
+        radial-gradient(circle at center, rgba(0,255,102,0.07), transparent 60%),
+        linear-gradient(180deg, #090f09 0%, #010801 100%);
+    }
+
+    body.file4 .screen {
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.08), transparent 45%),
+        radial-gradient(circle at center, rgba(0,255,102,0.06), transparent 68%),
+        linear-gradient(180deg, #110606 0%, #010801 100%);
+    }
+
+    @media (max-width: 980px) {
+      .mainLayout,
+      .workspace,
+      .researchGrid {
         grid-template-columns: 1fr;
       }
 
       .lockSection,
-      .researchGrid {
+      .fileGrid {
         grid-template-columns: 1fr;
       }
 
@@ -575,14 +715,14 @@
   <main class="screen">
     <div class="topBar">
       <span id="topLeft">THORNE PRIVATE ARCHIVE</span>
-      <span>BOTANICAL CHEMISTRY NODE</span>
+      <span id="topMiddle">BOTANICAL CHEMISTRY NODE</span>
       <span id="topRight">USER: DR. N. THORNE</span>
     </div>
 
     <section class="mainLayout">
-      <aside class="sidePanel">
+      <aside class="window">
         <div class="windowTitle">
-          <span>Folder Properties</span>
+          <span>Folder Tree</span>
           <div class="windowButtons">
             <span class="winButton"></span>
             <span class="winButton"></span>
@@ -591,7 +731,7 @@
         </div>
 
         <div class="content">
-          <div class="fileIconBig">
+          <div class="folderIcon">
             <span class="tab"></span>
             <span class="back"></span>
             <span class="front"></span>
@@ -600,11 +740,15 @@
 
           <div class="metaBox" id="folderMeta"></div>
 
-          <a class="backLink" href="terminal.html">RETURN TO DESKTOP</a>
+          <div class="folderTree" id="folderTree"></div>
+
+          <div style="margin-top: 12px;">
+            <a class="backLink" href="terminal.html">RETURN TO DESKTOP</a>
+          </div>
         </div>
       </aside>
 
-      <section class="mainPanel">
+      <section class="window">
         <div class="windowTitle">
           <span id="windowTitle">Locked Archive</span>
           <div class="windowButtons">
@@ -617,42 +761,69 @@
         <div class="content">
           <h1 id="fileTitle">LOCKED FILE</h1>
           <h2 id="fileSubtitle">PRIVATE RESEARCH ARCHIVE</h2>
-
           <p id="fileIntro"></p>
 
-          <div class="metaBox" id="labPreview"></div>
+          <div class="workspace">
+            <section>
+              <div class="metaBox" id="taskBox"></div>
 
-          <section class="lockSection">
-            <div class="lockBox">
-              <h3>LOCK 01 // PASSWORD A</h3>
-              <label for="passwordA">Enter password A</label>
-              <input id="passwordA" type="text" autocomplete="off">
-              <button onclick="checkPasswordA()">CHECK</button>
-              <div class="status" id="statusA">Awaiting input.</div>
-            </div>
+              <div class="fileGrid" id="fileGrid"></div>
 
-            <div class="lockBox">
-              <h3>LOCK 02 // PASSWORD B</h3>
-              <label for="passwordB">Enter password B</label>
-              <input id="passwordB" type="text" autocomplete="off">
-              <button onclick="checkPasswordB()">CHECK</button>
-              <div class="status" id="statusB">Awaiting input.</div>
-            </div>
+              <div class="viewer" id="viewer">
+                <h3>NO FILE SELECTED</h3>
+                Click the files in this folder. The local puzzle answer is hidden across the opened documents.
+              </div>
+            </section>
 
-            <div class="lockBox">
-              <h3>LOCK 03 // PROTOCOL CODE</h3>
-              <label for="gameCode">Recovered game code</label>
-              <input id="gameCode" type="text" autocomplete="off">
-              <button onclick="checkGameCode()">CHECK</button>
-              <a class="gameLink" id="gameLink" href="#">OPEN REQUIRED PROTOCOL</a>
-              <div class="status" id="statusGame">Protocol incomplete.</div>
-            </div>
-          </section>
+            <aside>
+              <div class="miniPuzzle">
+                <h3>LOCAL FOLDER PUZZLE</h3>
+                <p id="puzzleText"></p>
+                <input id="localPuzzleInput" type="text" autocomplete="off" placeholder="enter local answer">
+                <button onclick="checkLocalPuzzle()">CHECK LOCAL ANSWER</button>
+                <div class="status" id="localPuzzleStatus">Locked.</div>
+              </div>
+
+              <div class="lockPanel" id="lockPanel">
+                <div class="metaBox">
+                  Local folder puzzle accepted.
+                  Archive locks are now available.
+                </div>
+
+                <section class="lockSection">
+                  <div class="lockBox">
+                    <h3>LOCK 01</h3>
+                    <label>PASSWORD A</label>
+                    <input id="passwordA" type="text" autocomplete="off">
+                    <button onclick="checkPasswordA()">CHECK</button>
+                    <div class="status" id="statusA">Awaiting input.</div>
+                  </div>
+
+                  <div class="lockBox">
+                    <h3>LOCK 02</h3>
+                    <label>PASSWORD B</label>
+                    <input id="passwordB" type="text" autocomplete="off">
+                    <button onclick="checkPasswordB()">CHECK</button>
+                    <div class="status" id="statusB">Awaiting input.</div>
+                  </div>
+
+                  <div class="lockBox">
+                    <h3>LOCK 03</h3>
+                    <label>GAME CODE</label>
+                    <input id="gameCode" type="text" autocomplete="off">
+                    <button onclick="checkGameCode()">CHECK</button>
+                    <a class="gameLink" id="gameLink" href="#">OPEN PROTOCOL</a>
+                    <div class="status" id="statusGame">Protocol incomplete.</div>
+                  </div>
+                </section>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
     </section>
 
-    <section class="unlockedPanel" id="unlockedPanel">
+    <section class="window unlockedPanel" id="unlockedPanel">
       <div class="windowTitle">
         <span id="unlockedTitle">Recovered File</span>
         <div class="windowButtons">
@@ -662,18 +833,20 @@
         </div>
       </div>
 
-      <div class="content" id="unlockedContent"></div>
+      <div class="unlockedContent" id="unlockedContent"></div>
     </section>
   </main>
 
   <script>
     const pageName = window.location.pathname.split("/").pop().toLowerCase();
 
-    const files = {
+    const fileData = {
       "lockedfile1.html": {
+        bodyClass: "file1",
+        solvedKey: "thorneFile1Solved",
         title: "LOCKED FILE 1",
-        subtitle: "VOICEPRINT IRREGULARITY REPORT",
-        archiveType: "Recovered Transmission Cache",
+        subtitle: "AUDIO CACHE // FALSE SIGNAL",
+        archiveType: "Transmission Folder",
         owner: "Dr. Nessa Thorne",
         source: "Private workstation / audio fragments",
         passwordA: "KRANE",
@@ -681,73 +854,102 @@
         gameCode: "NIGHTSHADE",
         gameName: "SNAKE PROTOCOL",
         gameUrl: "snake.html",
+        localAnswer: "GHOST",
+        puzzleText:
+          "Open the three recovered files. Find the word Nessa uses for Jason when the signal is alive, but the man is not.",
         intro:
-          "This folder does not look like an official agency file. It is a private analysis cache created by Dr. Nessa Thorne after the first Jason Krane transmission appeared.",
-        preview:
-`Preview:
-- Voice sample: Jason Krane
-- Match confidence: unstable
-- Botanical tag attached: NIGHTSHADE
-- Personal note detected
-- Archive owner: Dr. N. Thorne`,
-        unlockedTitle: "RECOVERED FILE 1 // TRANSMISSION ANALYSIS",
-        unlockedHtml: `
-          <h1>TRANSMISSION ANALYSIS</h1>
-          <h2>Private audio study by Dr. Nessa Thorne</h2>
+          "This folder is built like an audio workstation cache. It contains waveform notes, transmission fragments and one personal annotation.",
+        task:
+`Folder task:
+1. Open every file in this folder.
+2. Find the word that describes the fake Jason signal.
+3. Enter that word as the local folder answer.
+4. Then use the two passwords and the minigame code.`,
+        tree: ["THORNE_DESKTOP", "AUDIO_CACHE", "FALSE_SIGNAL", "JASON_KRANE"],
+        files: [
+          {
+            id: "voice",
+            name: "voiceprint_scan.log",
+            pulse: true,
+            html:
+`<h3>voiceprint_scan.log</h3>
+Voiceprint comparison: JASON KRANE
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Recovered Observation</h3>
-              <p>The voice in the first transmission resembles Jason Krane, but the rhythm is wrong. The pauses are too deliberate. The breathing pattern appears edited.</p>
-              <p class="handwriting">Personal annotation: “They will hear what they want to hear. A ghost is easier to follow than a woman.”</p>
-            </div>
+Tone match: 78%
+Breathing pattern: 41%
+Static layer: 91%
+Emotional authenticity: 12%
 
-            <div class="researchCard">
-              <h3>Signal Pattern</h3>
-              <div class="analysisBars">
-                <div class="barRow"><span>Voice tone</span><div class="barTrack"><div class="barFill" style="width: 78%;"></div></div><span>78%</span></div>
-                <div class="barRow"><span>Breath</span><div class="barTrack"><div class="barFill" style="width: 41%;"></div></div><span>41%</span></div>
-                <div class="barRow"><span>Static</span><div class="barTrack"><div class="barFill" style="width: 91%;"></div></div><span>91%</span></div>
-                <div class="barRow"><span>Truth</span><div class="barTrack"><div class="barFill" style="width: 12%;"></div></div><span>12%</span></div>
-              </div>
-            </div>
-          </div>
+<div class="waveform">
+  <span style="height:20%"></span><span style="height:72%"></span><span style="height:38%"></span><span style="height:88%"></span><span style="height:29%"></span><span style="height:65%"></span><span style="height:46%"></span><span style="height:91%"></span><span style="height:34%"></span><span style="height:76%"></span>
+</div>
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Attached Botanical Marker</h3>
-              <table class="specimenTable">
-                <tr><th>Specimen</th><th>Label</th><th>Archive Note</th></tr>
-                <tr><td>Atropa motif</td><td>Nightshade</td><td>Used as symbolic marker only</td></tr>
-                <tr><td>Garden audio tag</td><td>Krane</td><td>Appears manually inserted</td></tr>
-                <tr><td>Sender trace</td><td>Private node</td><td>Not an agency server</td></tr>
-              </table>
-            </div>
+Conclusion:
+The voice resembles Krane, but the signal behaves like a constructed echo.`
+          },
+          {
+            id: "static",
+            name: "static_layer.wav",
+            pulse: false,
+            html:
+`<h3>static_layer.wav</h3>
+Recovered text hidden under static:
 
-            <div class="researchCard">
-              <h3>Specimen Sketch</h3>
-              <div class="photoFrame">
-                <div class="plantStem"></div>
-                <div class="leaf one"></div>
-                <div class="leaf two"></div>
-                <div class="flower">
-                  <div class="petal p1"></div>
-                  <div class="petal p2"></div>
-                  <div class="petal p3"></div>
-                  <div class="petal p4"></div>
-                  <div class="petal p5"></div>
-                  <div class="petalCenter"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `
+"...they follow the voice..."
+"...they think grief has a sound..."
+"...a ghost is easier to command than a living man..."
+
+The word GHOST appears in three corrupted audio markers.`
+          },
+          {
+            id: "note",
+            name: "garden_note.txt",
+            pulse: false,
+            html:
+`<h3>garden_note.txt</h3>
+<span class="hand">The garden remembers what the dead cannot say.</span>
+
+<span class="hand">If they want Jason alive, I will give them Jason alive.</span>
+
+<span class="hand">Not a man. Not a body. A ghost in the wire.</span>`
+          }
+        ],
+        unlockedTitle: "RECOVERED FILE 1 // AUDIO ANALYSIS",
+        unlockedHtml:
+`<h1>TRANSMISSION ANALYSIS</h1>
+<h2>The first Jason signal is not clean</h2>
+
+<div class="researchGrid">
+  <div class="card">
+    <h3>Recovered Observation</h3>
+    <p>The transmission resembles Jason Krane, but it has been assembled from older voice material. The pauses are too controlled. The static is too deliberate.</p>
+    <p class="hand">“They will hear what they need to hear. A ghost is easier to follow than a woman.”</p>
+  </div>
+
+  <div class="card">
+    <h3>Signal Pattern</h3>
+    <div class="labBars">
+      <div class="barRow"><span>Voice</span><div class="barTrack"><div class="barFill" style="width:78%"></div></div><span>78%</span></div>
+      <div class="barRow"><span>Breath</span><div class="barTrack"><div class="barFill" style="width:41%"></div></div><span>41%</span></div>
+      <div class="barRow"><span>Static</span><div class="barTrack"><div class="barFill" style="width:91%"></div></div><span>91%</span></div>
+      <div class="barRow"><span>Truth</span><div class="barTrack"><div class="barFill" style="width:12%"></div></div><span>12%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Fragment Stored</h3>
+  <p>Context fragment recovered: <strong>FALSE SIGNAL</strong></p>
+  <p>This fragment will help make sense of the final archive.</p>
+</div>`
       },
 
       "lockedfile2.html": {
+        bodyClass: "file2",
+        solvedKey: "thorneFile2Solved",
         title: "LOCKED FILE 2",
-        subtitle: "ST. BRIGID'S UNIVERSITY LAB NOTES",
-        archiveType: "Botanical Chemistry Notebook",
+        subtitle: "ST. BRIGID'S LAB // BOTANICAL CHEMISTRY",
+        archiveType: "Research Folder",
         owner: "Dr. Nessa Thorne",
         source: "St. Brigid's University, Dublin",
         passwordA: "THORNE",
@@ -755,66 +957,109 @@
         gameCode: "ROZENBOTTEL",
         gameName: "PIXEL STACK PROTOCOL",
         gameUrl: "tetris.html",
+        localAnswer: "CRANESBILL",
+        puzzleText:
+          "Open the research files. Find the flower nickname connected to Nessa's password memory. Enter only the second word.",
         intro:
-          "This folder contains copied university research notes from Nessa Thorne’s former department. The file structure suggests she continued using old academic templates after leaving the university.",
-        preview:
-`Preview:
-- Former lecturer: Dr. Nessa Thorne
-- Department: Botanical Chemistry
-- University: St. Brigid's University, Dublin
-- Research area: plant-derived compounds
-- Access status: removed, then restored manually`,
-        unlockedTitle: "RECOVERED FILE 2 // UNIVERSITY RESEARCH CACHE",
-        unlockedHtml: `
-          <h1>ST. BRIGID'S UNIVERSITY CACHE</h1>
-          <h2>Department of Botanical Chemistry</h2>
+          "This folder looks like a copied university lab directory. Some files are scientific, some are emotional, and some should clearly have been deleted.",
+        task:
+`Folder task:
+1. Open the staff record, specimen table and compound scan.
+2. Look for the flower linked to Nessa's memory.
+3. Enter the second word of that flower name.
+4. Then unlock the folder with passwords and the game code.`,
+        tree: ["THORNE_DESKTOP", "ST_BRIGIDS_CACHE", "SPECIMENS", "MEMORY_PLANTS"],
+        files: [
+          {
+            id: "staff",
+            name: "staff_record.dat",
+            pulse: false,
+            html:
+`<h3>staff_record.dat</h3>
+Name:
+Dr. Nessa Thorne
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Recovered Staff Record</h3>
-              <p><strong>Name:</strong> Dr. Nessa Thorne</p>
-              <p><strong>Former role:</strong> Lecturer in Botanical Chemistry</p>
-              <p><strong>Research focus:</strong> plant-derived compounds, symbolic botany, historical plant folklore, and chemical classification of botanical samples.</p>
-              <p><strong>Status:</strong> access revoked after departure. Local copies remained on private workstation.</p>
-            </div>
+Former role:
+Lecturer in Botanical Chemistry
 
-            <div class="researchCard">
-              <h3>Lab Notebook Fragment</h3>
-              <p class="handwriting">“Every plant has two names: the one written in the book, and the one whispered by people who are afraid of it.”</p>
-              <p class="handwriting">“Jason understood the garden before the others understood the mission.”</p>
-            </div>
-          </div>
+Institution:
+St. Brigid's University, Dublin
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Recovered Research Results</h3>
-              <table class="specimenTable">
-                <tr><th>Sample</th><th>Common Name</th><th>Thorne Classification</th></tr>
-                <tr><td>SB-17</td><td>Bloody Cranesbill</td><td>Memory anchor</td></tr>
-                <tr><td>SB-22</td><td>Rosehip</td><td>Archive key marker</td></tr>
-                <tr><td>SB-31</td><td>Nightshade</td><td>Warning symbol</td></tr>
-                <tr><td>SB-44</td><td>Blackthorn</td><td>Personal reference</td></tr>
-              </table>
-            </div>
+Research focus:
+Plant-derived compounds, symbolic botany, historic plant folklore.
 
-            <div class="researchCard">
-              <h3>Compound Family Scan</h3>
-              <p>No usable formulae recovered. Only symbolic chemical group labels remain.</p>
-              <div class="analysisBars">
-                <div class="barRow"><span>Alkaloid</span><div class="barTrack"><div class="barFill" style="width: 84%;"></div></div><span>84%</span></div>
-                <div class="barRow"><span>Tannin</span><div class="barTrack"><div class="barFill" style="width: 63%;"></div></div><span>63%</span></div>
-                <div class="barRow"><span>Pigment</span><div class="barTrack"><div class="barFill" style="width: 72%;"></div></div><span>72%</span></div>
-                <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width: 99%;"></div></div><span>99%</span></div>
-              </div>
-            </div>
-          </div>
-        `
+Status:
+Access revoked after departure.
+Local copies retained on private workstation.`
+          },
+          {
+            id: "specimen",
+            name: "specimen_table.xls",
+            pulse: true,
+            html:
+`<h3>specimen_table.xls</h3>
+<table class="specimenTable">
+  <tr><th>Sample</th><th>Common name</th><th>Thorne label</th></tr>
+  <tr><td>SB-17</td><td>Bloody Cranesbill</td><td>Password memory</td></tr>
+  <tr><td>SB-22</td><td>Rosehip</td><td>Archive key marker</td></tr>
+  <tr><td>SB-31</td><td>Nightshade</td><td>Warning symbol</td></tr>
+  <tr><td>SB-44</td><td>Blackthorn</td><td>Name echo</td></tr>
+</table>
+
+Instruction note:
+Use only the second word from SB-17.`
+          },
+          {
+            id: "compound",
+            name: "compound_scan.img",
+            pulse: false,
+            html:
+`<h3>compound_scan.img</h3>
+No usable formulae recovered. Symbolic chemical families only.
+
+<div class="labBars">
+  <div class="barRow"><span>Alkaloid</span><div class="barTrack"><div class="barFill" style="width:84%"></div></div><span>84%</span></div>
+  <div class="barRow"><span>Tannin</span><div class="barTrack"><div class="barFill" style="width:63%"></div></div><span>63%</span></div>
+  <div class="barRow"><span>Pigment</span><div class="barTrack"><div class="barFill" style="width:72%"></div></div><span>72%</span></div>
+  <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width:99%"></div></div><span>99%</span></div>
+</div>
+
+<span class="hand">Every plant has a name in Latin and a name people are afraid to say.</span>`
+          }
+        ],
+        unlockedTitle: "RECOVERED FILE 2 // UNIVERSITY CACHE",
+        unlockedHtml:
+`<h1>ST. BRIGID'S UNIVERSITY CACHE</h1>
+<h2>Nessa Thorne's research did not end when she left</h2>
+
+<div class="researchGrid">
+  <div class="card">
+    <h3>Recovered Staff Record</h3>
+    <p><strong>Name:</strong> Dr. Nessa Thorne</p>
+    <p><strong>Former role:</strong> Lecturer at St. Brigid's University, Dublin</p>
+    <p><strong>Specialism:</strong> botanical chemistry, plant-derived compounds and symbolic plant classification.</p>
+  </div>
+
+  <div class="card">
+    <h3>Lab Notebook Fragment</h3>
+    <p class="hand">“Jason understood the garden before the others understood the mission.”</p>
+    <p class="hand">“They called it evidence. I called it a grave marker.”</p>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Fragment Stored</h3>
+  <p>Context fragment recovered: <strong>NESSA THORNE / ST. BRIGID'S</strong></p>
+  <p>This fragment will help make sense of the final archive.</p>
+</div>`
       },
 
       "lockedfile3.html": {
+        bodyClass: "file3",
+        solvedKey: "thorneFile3Solved",
         title: "LOCKED FILE 3",
-        subtitle: "PRIVATE CORRESPONDENCE TRACE",
-        archiveType: "Personal Relationship Archive",
+        subtitle: "PERSONAL TRACE // DELETED CORRESPONDENCE",
+        archiveType: "Private Folder",
         owner: "Dr. Nessa Thorne",
         source: "Deleted mail fragments / private notes",
         passwordA: "LOVER",
@@ -822,65 +1067,98 @@
         gameCode: "EYESONLY",
         gameName: "TOP-DOWN LAB PROTOCOL",
         gameUrl: "shoot.html",
+        localAnswer: "DIARY",
+        puzzleText:
+          "Open the deleted personal files. What physical object is Nessa still trying to find?",
         intro:
-          "This folder is not scientific. It is personal. The recovered fragments suggest Jason Krane and Nessa Thorne were connected long before the fake transmissions began.",
-        preview:
-`Preview:
-- Sender fragment: N. Thorne
-- Recipient fragment: J. Krane
-- Relationship status: hidden
-- Emotional marker: unresolved
-- Archive warning: personal material`,
+          "This folder is less scientific and more personal. It contains fragments of deleted mail, damaged images and notes Nessa tried to erase.",
+        task:
+`Folder task:
+1. Open all deleted correspondence files.
+2. Find what Nessa says is still missing.
+3. Enter that object as the local answer.
+4. Then unlock the folder with passwords and the game code.`,
+        tree: ["THORNE_DESKTOP", "PRIVATE_TRACE", "DELETED_MAIL", "JASON"],
+        files: [
+          {
+            id: "mail",
+            name: "deleted_mail_1.eml",
+            pulse: true,
+            html:
+`<h3>deleted_mail_1.eml</h3>
+FROM: N. Thorne
+TO: J. Krane
+STATUS: deleted / recovered
+
+<span class="hand">They only saw the agent. I saw the man who came back from every mission carrying more silence than victory.</span>
+
+<span class="hand">If they erase you, I will make your ghost impossible to ignore.</span>`
+          },
+          {
+            id: "photo",
+            name: "photo_index.db",
+            pulse: false,
+            html:
+`<h3>photo_index.db</h3>
+Recovered image index:
+
+IMG_0421: greenhouse corridor
+IMG_0430: lecture hall, St. Brigid's
+IMG_0444: Jason outside east gate
+IMG_0499: black notebook, missing
+
+Note:
+The black notebook is tagged repeatedly as "diary".`
+          },
+          {
+            id: "unsent",
+            name: "unsent_note.txt",
+            pulse: false,
+            html:
+`<h3>unsent_note.txt</h3>
+<span class="hand">The diary is still out there.</span>
+
+<span class="hand">If they find it before I do, they will know Jason was already gone.</span>
+
+<span class="hand">If I find it first, I decide what truth survives.</span>`
+          }
+        ],
         unlockedTitle: "RECOVERED FILE 3 // PERSONAL TRACE",
-        unlockedHtml: `
-          <h1>PRIVATE CORRESPONDENCE TRACE</h1>
-          <h2>The hidden link between Nessa Thorne and Jason Krane</h2>
+        unlockedHtml:
+`<h1>PRIVATE CORRESPONDENCE TRACE</h1>
+<h2>The hidden link between Nessa Thorne and Jason Krane</h2>
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Recovered Message Fragment</h3>
-              <p class="handwriting">“They only saw the agent. I saw the man who came back from every mission carrying more silence than victory.”</p>
-              <p class="handwriting">“If they erase him, I will make his ghost impossible to ignore.”</p>
-            </div>
+<div class="researchGrid">
+  <div class="card">
+    <h3>Recovered Message Fragment</h3>
+    <p class="hand">“They only saw the agent. I saw the man.”</p>
+    <p class="hand">“If they erase him, I will make his ghost impossible to ignore.”</p>
+  </div>
 
-            <div class="researchCard">
-              <h3>Relationship Index</h3>
-              <table class="specimenTable">
-                <tr><th>Record</th><th>Status</th><th>Note</th></tr>
-                <tr><td>University meeting</td><td>confirmed</td><td>guest lecture incident</td></tr>
-                <tr><td>Private correspondence</td><td>fragmented</td><td>deleted repeatedly</td></tr>
-                <tr><td>Mission overlap</td><td>classified</td><td>Jason concealed contact</td></tr>
-                <tr><td>Final message</td><td>missing</td><td>manually removed</td></tr>
-              </table>
-            </div>
-          </div>
+  <div class="card">
+    <h3>Relationship Index</h3>
+    <table class="specimenTable">
+      <tr><th>Record</th><th>Status</th><th>Note</th></tr>
+      <tr><td>University meeting</td><td>confirmed</td><td>guest lecture incident</td></tr>
+      <tr><td>Private correspondence</td><td>fragmented</td><td>deleted repeatedly</td></tr>
+      <tr><td>Final notebook</td><td>missing</td><td>referred to as diary</td></tr>
+    </table>
+  </div>
+</div>
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Emotional Pattern Analysis</h3>
-              <p>This file does not behave like a formal archive. The folder names were changed multiple times. Some labels are scientific. Others are personal.</p>
-              <div class="analysisBars">
-                <div class="barRow"><span>Control</span><div class="barTrack"><div class="barFill" style="width: 35%;"></div></div><span>35%</span></div>
-                <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width: 96%;"></div></div><span>96%</span></div>
-                <div class="barRow"><span>Anger</span><div class="barTrack"><div class="barFill" style="width: 88%;"></div></div><span>88%</span></div>
-                <div class="barRow"><span>Jason</span><div class="barTrack"><div class="barFill" style="width: 100%;"></div></div><span>100%</span></div>
-              </div>
-            </div>
-
-            <div class="researchCard">
-              <h3>Deleted Annotation</h3>
-              <p class="handwriting">“The garden remembers what the dead cannot say.”</p>
-              <p class="handwriting">“M and Q called it containment. I called it abandonment.”</p>
-              <p>This appears to be the first recovered text that directly connects the staged transmissions to revenge.</p>
-            </div>
-          </div>
-        `
+<div class="card">
+  <h3>Fragment Stored</h3>
+  <p>Context fragment recovered: <strong>HIDDEN LOVER / MISSING DIARY</strong></p>
+  <p>This fragment will help make sense of the final archive.</p>
+</div>`
       },
 
       "lockedfile4.html": {
+        bodyClass: "file4",
+        solvedKey: "thorneFile4Solved",
         title: "LOCKED FILE 4",
-        subtitle: "FINAL THORNE ARCHIVE",
-        archiveType: "Identity-Sensitive Final File",
+        subtitle: "FINAL ARCHIVE // CONTEXT REQUIRED",
+        archiveType: "Identity-Sensitive Folder",
         owner: "Dr. Nessa Thorne",
         source: "Private workstation / sealed archive",
         passwordA: "DEAD",
@@ -888,68 +1166,156 @@
         gameCode: "GOLDENEYE",
         gameName: "MEMORY PROTOCOL",
         gameUrl: "memory.html",
+        localAnswer: "TRUTH",
+        puzzleText:
+          "Open the redacted files. The answer is what Nessa says people follow only when grief stops being useful.",
         intro:
-          "This is the final sealed archive on Nessa Thorne’s workstation. It is marked as identity-sensitive and appears to contain the truth behind the Jason Krane transmissions.",
-        preview:
-`Preview:
-- Jason Krane status: concealed
-- Sender identity: sealed
-- Archive purpose: confession / revenge chain
-- Botanical key: Bloody Cranesbill
-- Final warning: open only after full recovery`,
-        unlockedTitle: "RECOVERED FILE 4 // FINAL REVEAL",
-        unlockedHtml: `
-          <h1>FINAL REVEAL</h1>
-          <h2>The Jason Krane transmissions were staged</h2>
+          "This is the final archive, but much of it is context-locked. If the earlier folders have not been solved, the content will remain fragmented and unclear.",
+        task:
+`Folder task:
+1. Open all redacted files.
+2. Find Nessa's final word.
+3. Enter the local folder answer.
+4. Unlock the folder.
+5. If File 1, 2 and 3 are not solved yet, the final reveal will remain partially redacted.`,
+        tree: ["THORNE_DESKTOP", "FINAL_ARCHIVE", "REDACTED", "CONTEXT_REQUIRED"],
+        files: [
+          {
+            id: "status",
+            name: "jason_status.redacted",
+            pulse: true,
+            html:
+`<h3>jason_status.redacted</h3>
+JASON KRANE STATUS:
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Recovered Truth</h3>
-              <p>Jason Krane is dead.</p>
-              <p>He has been dead for over a year.</p>
-              <p>The messages were not sent by him. They were constructed, edited, and staged from old recordings and private fragments.</p>
+<span class="redacted">DECEASED</span>
+<span class="redacted">DECEASED</span>
+<span class="redacted">DECEASED</span>
+
+Visible fragment:
+"...they wanted a signal, not a body..."
+
+Context missing:
+FALSE SIGNAL
+ST. BRIGID'S
+MISSING DIARY`
+          },
+          {
+            id: "confession",
+            name: "final_confession.lock",
+            pulse: false,
+            html:
+`<h3>final_confession.lock</h3>
+<span class="hand">They followed the ghost because guilt was easier to command than truth.</span>
+
+<span class="hand">But grief rots. Truth remains.</span>
+
+Local answer candidate:
+TRUTH`
+          },
+          {
+            id: "diary",
+            name: "diary_location.tmp",
+            pulse: false,
+            html:
+`<h3>diary_location.tmp</h3>
+Physical diary:
+Not on workstation.
+
+Last known chain:
+box -> plant marker -> handwritten index -> final hiding place
+
+Warning:
+Without the previous files, this instruction is incomplete.`
+          }
+        ],
+        unlockedTitle: "RECOVERED FILE 4 // FINAL ARCHIVE",
+        getUnlockedHtml: function() {
+          const has1 = localStorage.getItem("thorneFile1Solved") === "yes";
+          const has2 = localStorage.getItem("thorneFile2Solved") === "yes";
+          const has3 = localStorage.getItem("thorneFile3Solved") === "yes";
+          const complete = has1 && has2 && has3;
+
+          if (!complete) {
+            return `
+              <h1 class="glitchText">FINAL ARCHIVE OPENED</h1>
+              <h2>Context fragments missing</h2>
+
+              <div class="card">
+                <h3>Recovered Text</h3>
+                <p>Jason Krane is <span class="redacted">████████</span>.</p>
+                <p>The messages were <span class="redacted">████████████</span>.</p>
+                <p>The sender is <span class="redacted">██████████████████</span>.</p>
+                <p>Relationship marker: <span class="redacted">██████</span>.</p>
+              </div>
+
+              <div class="card">
+                <h3>Missing Context</h3>
+                <p>This file is open, but not understandable yet.</p>
+                <p>Solve File 1, File 2 and File 3 first to restore the final reveal.</p>
+              </div>
+
+              <div class="card">
+                <h3>Recovered Warning</h3>
+                <p class="hand">“Truth without context is just another weapon.”</p>
+              </div>
+            `;
+          }
+
+          return `
+            <h1>FINAL REVEAL</h1>
+            <h2>The Jason Krane transmissions were staged</h2>
+
+            <div class="researchGrid">
+              <div class="card">
+                <h3>Recovered Truth</h3>
+                <p>Jason Krane is dead.</p>
+                <p>He has been dead for over a year.</p>
+                <p>The messages were not sent by him. They were constructed, edited and staged from old recordings and private fragments.</p>
+              </div>
+
+              <div class="card">
+                <h3>Sender Identity</h3>
+                <p><strong>Sender:</strong> Dr. Nessa Thorne</p>
+                <p><strong>Former role:</strong> Lecturer at St. Brigid's University, Dublin</p>
+                <p><strong>Specialism:</strong> botanical chemistry and plant-derived compounds</p>
+                <p><strong>Connection:</strong> Jason Krane's hidden lover</p>
+              </div>
             </div>
 
-            <div class="researchCard">
-              <h3>Sender Identity</h3>
-              <p><strong>Sender:</strong> Dr. Nessa Thorne</p>
-              <p><strong>Former role:</strong> Lecturer at St. Brigid's University, Dublin</p>
-              <p><strong>Specialism:</strong> Botanical chemistry and plant-derived compounds</p>
-              <p><strong>Connection:</strong> Jason Krane's hidden lover</p>
-            </div>
-          </div>
+            <div class="researchGrid">
+              <div class="card">
+                <h3>Confession Fragment</h3>
+                <p class="hand">“They buried Jason in silence. So I gave him a voice.”</p>
+                <p class="hand">“They followed the ghost because guilt was easier to command than truth.”</p>
+                <p class="hand">“If M and Q want their agent back, they can start by admitting what they left behind.”</p>
+              </div>
 
-          <div class="researchGrid">
-            <div class="researchCard">
-              <h3>Confession Fragment</h3>
-              <p class="handwriting">“They buried Jason in silence. So I gave him a voice.”</p>
-              <p class="handwriting">“They followed the ghost because guilt is easier to command than truth.”</p>
-              <p class="handwriting">“If M and Q want their agent back, they can start by admitting what they left behind.”</p>
+              <div class="card">
+                <h3>Final Botanical Marker</h3>
+                <table class="specimenTable">
+                  <tr><th>Plant</th><th>Common Name</th><th>Meaning</th></tr>
+                  <tr><td>Geranium sanguineum</td><td>Bloody Cranesbill</td><td>Nessa's password memory</td></tr>
+                  <tr><td>Nightshade</td><td>Warning symbol</td><td>False Jason transmission</td></tr>
+                  <tr><td>Rosehip</td><td>Recovered key</td><td>University archive link</td></tr>
+                  <tr><td>Thorne</td><td>Name marker</td><td>Revenge signature</td></tr>
+                </table>
+              </div>
             </div>
 
-            <div class="researchCard">
-              <h3>Final Botanical Marker</h3>
-              <table class="specimenTable">
-                <tr><th>Plant</th><th>Common Name</th><th>Meaning in Archive</th></tr>
-                <tr><td>Geranium sanguineum</td><td>Bloody Cranesbill</td><td>Nessa's password memory</td></tr>
-                <tr><td>Nightshade</td><td>Warning symbol</td><td>False Jason transmission</td></tr>
-                <tr><td>Rosehip</td><td>Recovered key</td><td>University archive link</td></tr>
-                <tr><td>Thorne</td><td>Name marker</td><td>Revenge signature</td></tr>
-              </table>
+            <div class="card">
+              <h3>Final Instruction</h3>
+              <p>The workstation has revealed the truth, but Nessa Thorne’s physical diary remains missing.</p>
+              <p><strong>Find the diary.</strong></p>
             </div>
-          </div>
-
-          <div class="researchCard">
-            <h3>Final Instruction</h3>
-            <p>The workstation has revealed the truth, but Nessa Thorne’s physical diary remains missing.</p>
-            <p><strong>Find the diary.</strong></p>
-          </div>
-        `
+          `;
+        }
       }
     };
 
-    const currentFile = files[pageName] || files["lockedfile1.html"];
+    const currentFile = fileData[pageName] || fileData["lockedfile1.html"];
 
+    let localSolved = false;
     let lockA = false;
     let lockB = false;
     let lockGame = false;
@@ -963,12 +1329,15 @@
         .replaceAll("_", "");
     }
 
-    function loadFile() {
+    function loadPage() {
+      document.body.classList.add(currentFile.bodyClass);
+
       document.title = currentFile.title + " // Thorne Archive";
       document.getElementById("fileTitle").textContent = currentFile.title;
       document.getElementById("fileSubtitle").textContent = currentFile.subtitle;
       document.getElementById("fileIntro").textContent = currentFile.intro;
-      document.getElementById("labPreview").textContent = currentFile.preview;
+      document.getElementById("taskBox").textContent = currentFile.task;
+      document.getElementById("puzzleText").textContent = currentFile.puzzleText;
       document.getElementById("windowTitle").textContent = currentFile.archiveType;
       document.getElementById("unlockedTitle").textContent = currentFile.unlockedTitle;
       document.getElementById("gameLink").href = currentFile.gameUrl;
@@ -989,6 +1358,51 @@ ${currentFile.source}
 
 Status:
 Encrypted`;
+
+      const folderTree = document.getElementById("folderTree");
+      folderTree.innerHTML = "";
+      currentFile.tree.forEach(function(item, index) {
+        const div = document.createElement("div");
+        div.className = "treeItem" + (index === currentFile.tree.length - 1 ? " active" : "");
+        div.textContent = "▸ " + item;
+        folderTree.appendChild(div);
+      });
+
+      const fileGrid = document.getElementById("fileGrid");
+      fileGrid.innerHTML = "";
+      currentFile.files.forEach(function(file) {
+        const button = document.createElement("button");
+        button.className = "fileButton" + (file.pulse ? " pulse" : "");
+        button.textContent = file.name;
+        button.onclick = function() {
+          openFolderFile(file.id);
+        };
+        fileGrid.appendChild(button);
+      });
+    }
+
+    function openFolderFile(id) {
+      const file = currentFile.files.find(function(item) {
+        return item.id === id;
+      });
+
+      document.getElementById("viewer").innerHTML = file.html;
+    }
+
+    function checkLocalPuzzle() {
+      const input = normalize(document.getElementById("localPuzzleInput").value);
+      const answer = normalize(currentFile.localAnswer);
+      const status = document.getElementById("localPuzzleStatus");
+
+      if (input === answer) {
+        localSolved = true;
+        status.textContent = "Local puzzle accepted. Archive locks available.";
+        status.classList.add("ok");
+        document.getElementById("lockPanel").style.display = "block";
+      } else {
+        status.textContent = "Incorrect local answer. Open more files.";
+        status.classList.remove("ok");
+      }
     }
 
     function checkPasswordA() {
@@ -1037,14 +1451,23 @@ Encrypted`;
     }
 
     function tryUnlock() {
-      if (lockA && lockB && lockGame) {
+      if (localSolved && lockA && lockB && lockGame) {
         const overlay = document.getElementById("glitchOverlay");
         overlay.style.display = "flex";
 
         setTimeout(function() {
           overlay.style.display = "none";
-          document.getElementById("unlockedContent").innerHTML = currentFile.unlockedHtml;
+
+          let html = "";
+          if (typeof currentFile.getUnlockedHtml === "function") {
+            html = currentFile.getUnlockedHtml();
+          } else {
+            html = currentFile.unlockedHtml;
+          }
+
+          document.getElementById("unlockedContent").innerHTML = html;
           document.getElementById("unlockedPanel").style.display = "block";
+          localStorage.setItem(currentFile.solvedKey, "yes");
           document.getElementById("unlockedPanel").scrollIntoView({ behavior: "smooth" });
         }, 1300);
       }
@@ -1052,13 +1475,17 @@ Encrypted`;
 
     document.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        checkPasswordA();
-        checkPasswordB();
-        checkGameCode();
+        if (!localSolved) {
+          checkLocalPuzzle();
+        } else {
+          checkPasswordA();
+          checkPasswordB();
+          checkGameCode();
+        }
       }
     });
 
-    loadFile();
+    loadPage();
   </script>
 </body>
 </html>
