@@ -287,7 +287,7 @@
 
     <div class="subtitle">Top-down laboratory simulation recovered.
 Explore 8 connected rooms.
-Collect all hidden letters and defeat all M/Q security enemies.
+Collect all hidden letters and defeat all M/Q security dummies.
 Recover the command word.</div>
 
     <div class="layout">
@@ -300,7 +300,7 @@ Recover the command word.</div>
           <button onclick="pressMove('down')">▼</button>
           <button onclick="pressMove('left')">◀</button>
           <button onclick="pressMove('right')">▶</button>
-          <button class="shootWide" onclick="shoot()">SPIT VENOM</button>
+          <button class="shootWide" onclick="shoot()">FIRE</button>
         </div>
       </section>
 
@@ -316,7 +316,7 @@ Recover the command word.</div>
         </div>
 
         <button onclick="startGame()">START / RESTART LAB</button>
-        <button onclick="shoot()">SPIT VENOM</button>
+        <button onclick="shoot()">FIRE BIO-DART</button>
 
         <div id="message">Simulation standby.</div>
 
@@ -342,7 +342,7 @@ Recover the command word.</div>
           S / ↓ = move down<br>
           A / ← = move left<br>
           D / → = move right<br>
-          SPACE = spit venom<br><br>
+          SPACE = fire bio-dart<br><br>
           Walk through open doors to enter other rooms.
         </div>
 
@@ -369,8 +369,8 @@ Recover the command word.</div>
     const COLS = 20;
     const ROWS = 15;
 
-    const playerSize = 22;
-    const enemySize = 24;
+    const playerSize = 24;
+    const enemySize = 26;
     const projectileSize = 8;
 
     const targetWord = "EYESONLY";
@@ -384,6 +384,7 @@ Recover the command word.</div>
     let gameRunning = false;
     let collectedLetters = [];
     let invulnerableTimer = 0;
+    let frameCount = 0;
 
     const rooms = {
       "0,1": {
@@ -513,6 +514,7 @@ Recover the command word.</div>
       collectedLetters = [];
       projectiles = [];
       invulnerableTimer = 0;
+      frameCount = 0;
       gameRunning = true;
 
       Object.keys(rooms).forEach(function(key) {
@@ -527,6 +529,7 @@ Recover the command word.</div>
           enemy.vx = Math.random() < 0.5 ? 1 : -1;
           enemy.vy = Math.random() < 0.5 ? 1 : -1;
           enemy.hitTimer = 0;
+          enemy.walkFrame = 0;
         });
       });
 
@@ -536,7 +539,9 @@ Recover the command word.</div>
         dx: 0,
         dy: -1,
         health: 5,
-        hurtTimer: 0
+        hurtTimer: 0,
+        walkFrame: 0,
+        moving: false
       };
 
       glitchOverlayEl.style.display = "none";
@@ -554,6 +559,8 @@ Recover the command word.</div>
         return;
       }
 
+      frameCount++;
+
       updatePlayer();
       updateEnemies();
       updateProjectiles();
@@ -570,32 +577,42 @@ Recover the command word.</div>
       let moveY = 0;
       const speed = 2.4;
 
+      player.moving = false;
+
       if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
         moveY -= speed;
         player.dx = 0;
         player.dy = -1;
+        player.moving = true;
       }
 
       if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
         moveY += speed;
         player.dx = 0;
         player.dy = 1;
+        player.moving = true;
       }
 
       if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
         moveX -= speed;
         player.dx = -1;
         player.dy = 0;
+        player.moving = true;
       }
 
       if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
         moveX += speed;
         player.dx = 1;
         player.dy = 0;
+        player.moving = true;
       }
 
       moveEntity(player, moveX, 0, playerSize);
       moveEntity(player, 0, moveY, playerSize);
+
+      if (player.moving) {
+        player.walkFrame++;
+      }
 
       handleRoomTransition();
 
@@ -725,6 +742,8 @@ Recover the command word.</div>
           return;
         }
 
+        enemy.walkFrame++;
+
         if (enemy.hitTimer > 0) {
           enemy.hitTimer--;
         }
@@ -822,8 +841,8 @@ Recover the command word.</div>
       }
 
       projectiles.push({
-        x: player.x,
-        y: player.y,
+        x: player.x + player.dx * 16,
+        y: player.y + player.dy * 16,
         dx: player.dx,
         dy: player.dy,
         speed: 6,
@@ -907,11 +926,15 @@ Recover the command word.</div>
         for (let x = 0; x < COLS; x++) {
           ctx.fillStyle = (x + y) % 2 === 0 ? "#001600" : "#001000";
           ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+
+          ctx.strokeStyle = "rgba(0,255,100,0.05)";
+          ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
         }
       }
 
       drawWallsAndDoors(room);
       drawBlocks(room);
+      drawLabDetails();
     }
 
     function drawWallsAndDoors(room) {
@@ -961,6 +984,21 @@ Recover the command word.</div>
       });
     }
 
+    function drawLabDetails() {
+      // Kleine pixel-labdetails voor sfeer.
+      ctx.fillStyle = "#00240d";
+      ctx.fillRect(2 * TILE, 2 * TILE, 22, 22);
+      ctx.fillRect(17 * TILE, 12 * TILE, 22, 22);
+
+      ctx.strokeStyle = "#00aa44";
+      ctx.strokeRect(2 * TILE, 2 * TILE, 22, 22);
+      ctx.strokeRect(17 * TILE, 12 * TILE, 22, 22);
+
+      ctx.fillStyle = "#66ff99";
+      ctx.fillRect(2 * TILE + 7, 2 * TILE + 6, 8, 10);
+      ctx.fillRect(17 * TILE + 7, 12 * TILE + 6, 8, 10);
+    }
+
     function drawLetters() {
       const room = rooms[currentRoom];
       const letter = room.letter;
@@ -995,27 +1033,68 @@ Recover the command word.</div>
           return;
         }
 
-        ctx.save();
-        ctx.translate(enemy.px, enemy.py);
-
-        ctx.fillStyle = "#111111";
-        ctx.fillRect(-14, -14, 28, 28);
-
-        ctx.strokeStyle = "#ff5555";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(-14, -14, 28, 28);
-
-        ctx.fillStyle = "#ff5555";
-        ctx.font = "bold 20px Courier New";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(enemy.label, 0, 1);
-
-        ctx.fillStyle = "#00ff66";
-        ctx.fillRect(-10, -22, 20, 4);
-
-        ctx.restore();
+        drawSecurityDummy(enemy);
       });
+    }
+
+    function drawSecurityDummy(enemy) {
+      const x = enemy.px;
+      const y = enemy.py;
+      const walk = Math.sin(enemy.walkFrame * 0.25) * 2;
+
+      ctx.save();
+      ctx.translate(x, y);
+
+      // Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.45)";
+      ctx.fillRect(-14, 15, 28, 7);
+
+      // Legs
+      ctx.fillStyle = "#080808";
+      ctx.fillRect(-10, 4 + walk, 7, 13);
+      ctx.fillRect(3, 4 - walk, 7, 13);
+
+      ctx.strokeStyle = "#ff5555";
+      ctx.strokeRect(-10, 4 + walk, 7, 13);
+      ctx.strokeRect(3, 4 - walk, 7, 13);
+
+      // Body
+      ctx.fillStyle = "#111111";
+      ctx.fillRect(-13, -13, 26, 24);
+
+      ctx.strokeStyle = "#ff5555";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-13, -13, 26, 24);
+
+      // Head
+      ctx.fillStyle = "#050505";
+      ctx.fillRect(-9, -27, 18, 15);
+      ctx.strokeStyle = "#ffeeee";
+      ctx.strokeRect(-9, -27, 18, 15);
+
+      // Visor
+      ctx.fillStyle = "#ff5555";
+      ctx.fillRect(-6, -22, 12, 4);
+
+      // Arms
+      ctx.fillStyle = "#0b0b0b";
+      ctx.fillRect(-18, -9, 5, 17);
+      ctx.fillRect(13, -9, 5, 17);
+      ctx.strokeStyle = "#ff5555";
+      ctx.strokeRect(-18, -9, 5, 17);
+      ctx.strokeRect(13, -9, 5, 17);
+
+      // Chest label
+      ctx.fillStyle = "#300000";
+      ctx.fillRect(-8, -7, 16, 14);
+
+      ctx.fillStyle = "#ff5555";
+      ctx.font = "bold 14px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(enemy.label, 0, 1);
+
+      ctx.restore();
     }
 
     function drawProjectiles() {
@@ -1031,6 +1110,8 @@ Recover the command word.</div>
     }
 
     function drawPlayer() {
+      const walk = player.moving ? Math.sin(player.walkFrame * 0.25) * 2 : 0;
+
       ctx.save();
       ctx.translate(player.x, player.y);
 
@@ -1038,16 +1119,83 @@ Recover the command word.</div>
         ctx.globalAlpha = 0.45;
       }
 
-      ctx.fillStyle = "#00ff66";
-      ctx.fillRect(-11, -11, 22, 22);
+      // Shadow
+      ctx.fillStyle = "rgba(0,0,0,0.45)";
+      ctx.fillRect(-13, 15, 26, 7);
 
+      // Legs
+      ctx.fillStyle = "#001f0b";
+      ctx.fillRect(-9, 4 + walk, 7, 13);
+      ctx.fillRect(2, 4 - walk, 7, 13);
+
+      ctx.strokeStyle = "#00ff66";
+      ctx.strokeRect(-9, 4 + walk, 7, 13);
+      ctx.strokeRect(2, 4 - walk, 7, 13);
+
+      // Body / coat
+      ctx.fillStyle = "#003b16";
+      ctx.fillRect(-12, -13, 24, 25);
+
+      ctx.strokeStyle = "#baffc9";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-12, -13, 24, 25);
+
+      // Arms
+      ctx.fillStyle = "#00280f";
+      ctx.fillRect(-17, -9, 5, 17);
+      ctx.fillRect(12, -9, 5, 17);
+
+      ctx.strokeStyle = "#00ff66";
+      ctx.strokeRect(-17, -9, 5, 17);
+      ctx.strokeRect(12, -9, 5, 17);
+
+      // Head
+      ctx.fillStyle = "#d7b07a";
+      ctx.fillRect(-8, -28, 16, 15);
+
+      ctx.strokeStyle = "#001100";
+      ctx.strokeRect(-8, -28, 16, 15);
+
+      // Hair / top
+      ctx.fillStyle = "#1a0f05";
+      ctx.fillRect(-8, -30, 16, 5);
+
+      // Eyes / visor depending on direction
       ctx.fillStyle = "#001100";
-      ctx.fillRect(-6, -6, 12, 12);
 
+      if (player.dy === -1) {
+        ctx.fillRect(-5, -24, 10, 2);
+      } else if (player.dy === 1) {
+        ctx.fillRect(-5, -22, 3, 3);
+        ctx.fillRect(2, -22, 3, 3);
+      } else if (player.dx === -1) {
+        ctx.fillRect(-6, -22, 4, 3);
+      } else if (player.dx === 1) {
+        ctx.fillRect(2, -22, 4, 3);
+      }
+
+      // Direction marker / small bio blaster
       ctx.fillStyle = "#ffee66";
-      ctx.beginPath();
-      ctx.arc(player.dx * 14, player.dy * 14, 5, 0, Math.PI * 2);
-      ctx.fill();
+
+      if (player.dy === -1) {
+        ctx.fillRect(-3, -38, 6, 10);
+      }
+
+      if (player.dy === 1) {
+        ctx.fillRect(-3, 12, 6, 10);
+      }
+
+      if (player.dx === -1) {
+        ctx.fillRect(-25, -5, 10, 6);
+      }
+
+      if (player.dx === 1) {
+        ctx.fillRect(15, -5, 10, 6);
+      }
+
+      // Chest detail
+      ctx.fillStyle = "#00ff66";
+      ctx.fillRect(-4, -6, 8, 4);
 
       ctx.restore();
     }
@@ -1084,6 +1232,10 @@ Recover the command word.</div>
     }
 
     function pressMove(direction) {
+      if (!gameRunning) {
+        return;
+      }
+
       if (direction === "up") {
         player.y -= 24;
         player.dx = 0;
@@ -1107,6 +1259,9 @@ Recover the command word.</div>
         player.dx = 1;
         player.dy = 0;
       }
+
+      player.moving = true;
+      player.walkFrame++;
 
       if (collidesWithWalls(player.x, player.y, playerSize)) {
         if (direction === "up") player.y += 24;
