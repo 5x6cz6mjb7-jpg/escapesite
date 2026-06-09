@@ -1,1 +1,639 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Thorne Botany Folder</title>
 
+  <style>
+    :root {
+      --green: #00ff66;
+      --green2: #00aa44;
+      --text: #caffd7;
+      --white: #eaffef;
+      --yellow: #ffee66;
+      --red: #ff5555;
+      --purple: #d48cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, #173517 0%, #030803 62%, #000 100%);
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      padding: 18px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,255,102,0.055),
+          rgba(0,255,102,0.055) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      animation: scanMove 7s linear infinite;
+      z-index: 20;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.24), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(212,140,255,0.10), transparent 32%);
+      mix-blend-mode: screen;
+      animation: glowMove 8s ease-in-out infinite alternate;
+      z-index: 19;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(12px); }
+    }
+
+    @keyframes glowMove {
+      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
+      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
+    }
+
+    .screen {
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: calc(100vh - 36px);
+      border: 5px solid #132313;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 60%),
+        linear-gradient(180deg, #061906 0%, #010801 100%);
+      box-shadow:
+        inset 0 0 80px rgba(0,0,0,0.82),
+        inset 0 0 30px rgba(0,255,102,0.13),
+        0 0 35px rgba(0,0,0,0.82);
+      padding: 14px;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: -150px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.11), transparent);
+      animation: sweep 6.5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+      0% { top: -150px; }
+      100% { top: 100%; }
+    }
+
+    .topBar {
+      height: 34px;
+      background: linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
+      border: 2px solid #d8ffe6;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 14px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .window {
+      border: 2px solid #d8ffe6;
+      background: rgba(0, 10, 0, 0.84);
+      box-shadow:
+        4px 4px 0 rgba(0,0,0,0.7),
+        0 0 18px rgba(0,255,102,0.13);
+    }
+
+    .windowTitle {
+      min-height: 30px;
+      background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
+      border-bottom: 2px solid #d8ffe6;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    h1 {
+      color: var(--yellow);
+      font-size: 25px;
+      margin: 0 0 8px;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      color: var(--green);
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .plantBox {
+      height: 150px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.15), transparent 60%),
+        rgba(0,0,0,0.38);
+      position: relative;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .stem {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      width: 5px;
+      height: 90px;
+      background: var(--green);
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(0,255,102,0.5);
+      animation: sway 3s ease-in-out infinite;
+      transform-origin: bottom;
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: translateX(-50%) rotate(-2deg); }
+      50% { transform: translateX(-50%) rotate(3deg); }
+    }
+
+    .leaf {
+      position: absolute;
+      width: 42px;
+      height: 18px;
+      background: #1fcf63;
+      border: 1px solid #d8ffe6;
+      border-radius: 70% 15% 70% 15%;
+      box-shadow: 0 0 8px rgba(0,255,102,0.4);
+    }
+
+    .leaf.one {
+      left: calc(50% - 44px);
+      bottom: 76px;
+      transform: rotate(-28deg);
+    }
+
+    .leaf.two {
+      left: calc(50% + 5px);
+      bottom: 98px;
+      transform: rotate(28deg) scaleX(-1);
+    }
+
+    .flower {
+      position: absolute;
+      left: 50%;
+      bottom: 105px;
+      width: 44px;
+      height: 44px;
+      transform: translateX(-50%);
+      animation: flowerPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes flowerPulse {
+      0%, 100% { filter: brightness(1); transform: translateX(-50%) scale(1); }
+      50% { filter: brightness(1.3); transform: translateX(-50%) scale(1.06); }
+    }
+
+    .petal {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: #8cffaa;
+      border: 1px solid #d8ffe6;
+      border-radius: 50%;
+      box-shadow: 0 0 9px rgba(0,255,102,0.45);
+    }
+
+    .p1 { left: 11px; top: 0; }
+    .p2 { left: 0; top: 12px; }
+    .p3 { left: 22px; top: 12px; }
+    .p4 { left: 6px; top: 25px; }
+    .p5 { left: 18px; top: 25px; }
+
+    .center {
+      position: absolute;
+      left: 15px;
+      top: 16px;
+      width: 14px;
+      height: 14px;
+      background: var(--yellow);
+      border-radius: 50%;
+      border: 1px solid #001100;
+    }
+
+    .fileGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .fileButton {
+      background: rgba(0,0,0,0.35);
+      border: 1px dotted rgba(0,255,102,0.35);
+      color: var(--text);
+      padding: 12px;
+      min-height: 88px;
+      font-family: "Courier New", monospace;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .fileButton:hover {
+      background: rgba(0,255,102,0.10);
+      color: var(--yellow);
+    }
+
+    .fileButton.pulse {
+      animation: filePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes filePulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(0,255,102,0); }
+      50% { box-shadow: 0 0 18px rgba(0,255,102,0.25); }
+    }
+
+    .viewer {
+      margin-top: 14px;
+      min-height: 270px;
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.34);
+      padding: 12px;
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    .viewer h3 {
+      color: var(--yellow);
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid rgba(0,255,102,0.26);
+      padding: 6px;
+      text-align: left;
+      color: var(--text);
+    }
+
+    th {
+      color: var(--yellow);
+      background: rgba(0,255,102,0.08);
+    }
+
+    label {
+      display: block;
+      color: var(--white);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    input {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid var(--green2);
+      padding: 11px;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      outline: none;
+      margin-top: 6px;
+    }
+
+    input:focus {
+      border-color: var(--yellow);
+    }
+
+    button, .backLink, .gameLink {
+      color: var(--white);
+      background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      border-top: 2px solid #d8ffe6;
+      border-left: 2px solid #d8ffe6;
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      padding: 10px 13px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .gameLink {
+      background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
+      color: var(--yellow);
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--red);
+    }
+
+    .status.ok {
+      color: var(--yellow);
+    }
+
+    .recoveredEnvironment {
+      display: none;
+      margin-top: 14px;
+      border: 2px solid var(--yellow);
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.09), transparent 62%),
+        rgba(0,0,0,0.42);
+      padding: 14px;
+      color: var(--text);
+      animation: reveal 0.5s ease-out;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .codeFragment {
+      font-size: 22px;
+      color: var(--yellow);
+      letter-spacing: 2px;
+      margin-top: 10px;
+      border: 1px dashed var(--yellow);
+      padding: 12px;
+      background: rgba(255,238,102,0.06);
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .layout, .fileGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .topBar {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="screen">
+    <div class="topBar">
+      <span>THORNE OS // BOTANY DIRECTORY</span>
+      <span>SPECIMEN MEMORY ARCHIVE</span>
+      <span>USER: DR. N. THORNE</span>
+    </div>
+
+    <section class="layout">
+      <section class="window">
+        <div class="windowTitle">Botany Folder</div>
+        <div class="content">
+          <h1>BOTANY</h1>
+          <h2>Specimen index and plant memory archive</h2>
+
+          <div class="plantBox">
+            <div class="stem"></div>
+            <div class="leaf one"></div>
+            <div class="leaf two"></div>
+            <div class="flower">
+              <div class="petal p1"></div>
+              <div class="petal p2"></div>
+              <div class="petal p3"></div>
+              <div class="petal p4"></div>
+              <div class="petal p5"></div>
+              <div class="center"></div>
+            </div>
+          </div>
+
+          <p>
+            This folder contains Nessa Thorne's botanical archive.
+            The real puzzle is physical. Use the items from the box to find two answers.
+            The third code comes from the required game.
+          </p>
+
+          <div class="fileGrid">
+            <button class="fileButton pulse" onclick="openFile('specimen')">specimen_index.xls</button>
+            <button class="fileButton" onclick="openFile('flower')">favourite_flower.note</button>
+            <button class="fileButton" onclick="openFile('memory')">memory_plants.db</button>
+            <button class="fileButton" onclick="openFile('jason')">krane_marker.tmp</button>
+          </div>
+
+          <div class="viewer" id="viewer">
+            <h3>No file selected</h3>
+            Click a botanical file to inspect Nessa's plant archive.
+          </div>
+
+          <div class="recoveredEnvironment" id="recoveredEnvironment">
+            <h2>RECOVERED BOTANY ENVIRONMENT</h2>
+            <p>
+              The specimen archive opens into a deeper botanical index.
+              Nessa links her favourite flower, Jason Krane and the private directory through one repeated image:
+              the garden.
+            </p>
+
+            <p>
+              Recovered note:
+              “A garden is not peaceful because nothing dies there.
+              It is peaceful because everything dead returns as something else.”
+            </p>
+
+            <div class="codeFragment">
+              PRIVATE CODE PART 2: GARDEN
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="window">
+        <div class="windowTitle">Folder Access Checks</div>
+        <div class="content">
+          <h2>Botany Verification</h2>
+
+          <p>
+            Enter both physical puzzle answers and the recovered game code.
+            All three must be correct before the recovered environment opens.
+          </p>
+
+          <label for="answerA">Physical answer A</label>
+          <input id="answerA" type="text" autocomplete="off" placeholder="enter answer A">
+
+          <label for="answerB">Physical answer B</label>
+          <input id="answerB" type="text" autocomplete="off" placeholder="enter answer B">
+
+          <label for="gameCode">Game protocol code</label>
+          <input id="gameCode" type="text" autocomplete="off" placeholder="enter game code">
+
+          <button onclick="checkAll()">VERIFY ALL THREE</button>
+
+          <a class="gameLink" href="snake.html">OPEN BOTANY GAME</a>
+
+          <div class="status" id="status">Awaiting all three checks.</div>
+
+          <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const correctAnswerA = "GERANIUM";
+    const correctAnswerB = "CRANESBILL";
+    const correctGameCode = "NIGHTSHADE";
+
+    const files = {
+      specimen:
+`<h3>specimen_index.xls</h3>
+<table>
+  <tr><th>Sample</th><th>Common Name</th><th>Thorne Label</th></tr>
+  <tr><td>SB-17</td><td>Bloody Cranesbill</td><td>Password memory</td></tr>
+  <tr><td>SB-22</td><td>Rosehip</td><td>Archive key marker</td></tr>
+  <tr><td>SB-31</td><td>Nightshade</td><td>Warning symbol</td></tr>
+  <tr><td>SB-44</td><td>Blackthorn</td><td>Name echo</td></tr>
+</table>`,
+
+      flower:
+`<h3>favourite_flower.note</h3>
+Favourite flower:
+Geranium sanguineum
+
+Common name:
+Bloody Cranesbill
+
+Reason:
+"Beautiful name. Terrible omen. Perfect memory."
+
+- N. Thorne`,
+
+      memory:
+`<h3>memory_plants.db</h3>
+Plants linked to memory:
+
+Bloody Cranesbill:
+password memory
+
+Rosehip:
+archive marker
+
+Nightshade:
+false transmission symbol
+
+Blackthorn:
+surname echo
+
+Jason:
+not a plant.
+Still indexed.`,
+
+      jason:
+`<h3>krane_marker.tmp</h3>
+Jason Krane appears repeatedly in the botanical archive.
+
+Not as an agent.
+Not as a target.
+
+As a memory.`
+    };
+
+    function normalize(value) {
+      return value
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "")
+        .trim();
+    }
+
+    function openFile(id) {
+      document.getElementById("viewer").innerHTML = files[id];
+    }
+
+    function unlockRecoveredEnvironment() {
+      localStorage.setItem("botanySolved", "yes");
+      document.getElementById("status").textContent = "All checks accepted. Botany recovered environment unlocked.";
+      document.getElementById("status").classList.add("ok");
+      document.getElementById("recoveredEnvironment").style.display = "block";
+    }
+
+    function checkAll() {
+      const answerA = normalize(document.getElementById("answerA").value);
+      const answerB = normalize(document.getElementById("answerB").value);
+      const gameCode = normalize(document.getElementById("gameCode").value);
+      const status = document.getElementById("status");
+
+      if (
+        answerA === normalize(correctAnswerA) &&
+        answerB === normalize(correctAnswerB) &&
+        gameCode === normalize(correctGameCode)
+      ) {
+        unlockRecoveredEnvironment();
+      } else {
+        status.textContent = "One or more checks are incorrect.";
+        status.classList.remove("ok");
+        document.getElementById("recoveredEnvironment").style.display = "none";
+      }
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkAll();
+      }
+    });
+
+    if (localStorage.getItem("botanySolved") === "yes") {
+      unlockRecoveredEnvironment();
+    }
+  </script>
+</body>
+</html>
