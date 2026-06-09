@@ -1,1 +1,506 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Thorne Private Folder</title>
 
+  <style>
+    :root {
+      --green: #00ff66;
+      --green2: #00aa44;
+      --text: #caffd7;
+      --white: #eaffef;
+      --yellow: #ffee66;
+      --red: #ff5555;
+      --purple: #d48cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, #301616 0%, #030803 62%, #000 100%);
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      padding: 18px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,255,102,0.055),
+          rgba(0,255,102,0.055) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      animation: scanMove 7s linear infinite;
+      z-index: 20;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,85,85,0.14), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(0,255,102,0.12), transparent 32%);
+      mix-blend-mode: screen;
+      animation: glowMove 8s ease-in-out infinite alternate;
+      z-index: 19;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(12px); }
+    }
+
+    @keyframes glowMove {
+      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
+      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
+    }
+
+    .screen {
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: calc(100vh - 36px);
+      border: 5px solid #231313;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.08), transparent 45%),
+        radial-gradient(circle at center, rgba(0,255,102,0.06), transparent 68%),
+        linear-gradient(180deg, #110606 0%, #010801 100%);
+      box-shadow:
+        inset 0 0 80px rgba(0,0,0,0.82),
+        inset 0 0 30px rgba(255,85,85,0.12),
+        0 0 35px rgba(0,0,0,0.82);
+      padding: 14px;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .topBar {
+      height: 34px;
+      background: linear-gradient(180deg, #8c2f2f 0%, #3d0b0b 100%);
+      border: 2px solid #ffd8d8;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    .window {
+      border: 2px solid #ffd8d8;
+      background: rgba(10, 0, 0, 0.84);
+      box-shadow:
+        4px 4px 0 rgba(0,0,0,0.7),
+        0 0 18px rgba(255,85,85,0.13);
+    }
+
+    .windowTitle {
+      min-height: 30px;
+      background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
+      border-bottom: 2px solid #ffd8d8;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    h1 {
+      color: var(--yellow);
+      font-size: 25px;
+      margin: 0 0 10px;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      color: var(--green);
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .gate {
+      max-width: 620px;
+      margin: 70px auto;
+    }
+
+    .progressBox {
+      border: 1px dashed var(--yellow);
+      background: rgba(255,238,102,0.06);
+      padding: 12px;
+      margin: 14px 0;
+      color: var(--yellow);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      color: var(--white);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    input {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid #aa3333;
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      outline: none;
+      margin-top: 8px;
+    }
+
+    input:focus {
+      border-color: var(--yellow);
+    }
+
+    button, .backLink, .gameLink {
+      color: var(--white);
+      background: linear-gradient(180deg, #9f3d3d 0%, #561515 100%);
+      border-top: 2px solid #ffd8d8;
+      border-left: 2px solid #ffd8d8;
+      border-right: 2px solid #2b0505;
+      border-bottom: 2px solid #2b0505;
+      padding: 10px 13px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .gameLink {
+      background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
+      color: var(--yellow);
+    }
+
+    .status {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--red);
+    }
+
+    .status.ok {
+      color: var(--yellow);
+    }
+
+    .privateContent {
+      display: none;
+    }
+
+    .fileGrid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .fileButton {
+      background: rgba(0,0,0,0.35);
+      border: 1px dotted rgba(255,216,216,0.35);
+      color: var(--text);
+      padding: 12px;
+      min-height: 95px;
+      font-family: "Courier New", monospace;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .fileButton:hover {
+      background: rgba(255,85,85,0.10);
+      color: var(--yellow);
+    }
+
+    .viewer {
+      margin-top: 14px;
+      min-height: 300px;
+      border: 1px solid rgba(255,216,216,0.32);
+      background: rgba(0,0,0,0.34);
+      padding: 12px;
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 13px;
+      white-space: pre-line;
+    }
+
+    .viewer h3 {
+      color: var(--yellow);
+      margin-top: 0;
+    }
+
+    .hand {
+      color: var(--purple);
+      font-style: italic;
+    }
+
+    .finalBox {
+      border: 1px dashed var(--yellow);
+      background: rgba(255,238,102,0.06);
+      color: var(--yellow);
+      padding: 12px;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .fileGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .gate {
+        margin: 30px auto;
+      }
+
+      .topBar {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="screen">
+    <div class="topBar">
+      <span>THORNE OS // PRIVATE DIRECTORY</span>
+      <span>ACCESS RESTRICTED</span>
+      <span>USER: DR. N. THORNE</span>
+    </div>
+
+    <section class="window gate" id="gate">
+      <div class="windowTitle">Private Folder Password</div>
+      <div class="content">
+        <h1>PRIVATE</h1>
+        <h2>Restricted personal archive</h2>
+
+        <p>
+          This folder requires the private access code.
+          The code is assembled from the recovered Chemistry and Botany environments.
+        </p>
+
+        <div class="progressBox" id="progressBox">
+          Checking recovered code fragments...
+        </div>
+
+        <label for="passwordInput">Private folder password</label>
+        <input id="passwordInput" type="password" autocomplete="off" placeholder="enter private folder password">
+
+        <button onclick="checkPassword()">OPEN PRIVATE FOLDER</button>
+
+        <div class="status" id="status">Awaiting access code.</div>
+
+        <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
+      </div>
+    </section>
+
+    <section class="privateContent" id="privateContent">
+      <section class="window">
+        <div class="windowTitle">Private Folder Opened</div>
+        <div class="content">
+          <h1>PRIVATE ARCHIVE</h1>
+          <h2>Personal files of Dr. Nessa Thorne</h2>
+
+          <p>
+            The private folder is now open.
+            The files are personal, damaged and partially deleted.
+            They connect Nessa Thorne to Jason Krane.
+          </p>
+
+          <div class="fileGrid">
+            <button class="fileButton" onclick="openFile('mail')">unsent_mail_to_jason.eml</button>
+            <button class="fileButton" onclick="openFile('photo')">photo_index.db</button>
+            <button class="fileButton" onclick="openFile('diary')">diary_reference.tmp</button>
+            <button class="fileButton" onclick="openFile('transmission')">fake_transmission_notes.txt</button>
+            <button class="fileButton" onclick="openFile('final')">final_instruction.lock</button>
+            <a class="gameLink" href="memory.html">OPEN MEMORY PROTOCOL</a>
+          </div>
+
+          <div class="viewer" id="viewer">
+            <h3>No file selected</h3>
+            Open Nessa's private files.
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const privatePassword = "THORNEGARDEN";
+
+    const files = {
+      mail:
+`<h3>unsent_mail_to_jason.eml</h3>
+FROM: N. Thorne
+TO: J. Krane
+STATUS: unsent / recovered
+
+<span class="hand">They only saw the agent.
+I saw the man who came back from every mission carrying more silence than victory.</span>
+
+<span class="hand">If they erase you, I will make your ghost impossible to ignore.</span>`,
+
+      photo:
+`<h3>photo_index.db</h3>
+Recovered image index:
+
+IMG_0421: greenhouse corridor
+IMG_0430: lecture hall, St. Brigid's
+IMG_0444: Jason outside east gate
+IMG_0499: black notebook, missing
+
+Note:
+The black notebook is tagged repeatedly as "diary".`,
+
+      diary:
+`<h3>diary_reference.tmp</h3>
+<span class="hand">The diary is still out there.</span>
+
+<span class="hand">If they find it before I do, they will know Jason was already gone.</span>
+
+<span class="hand">If I find it first, I decide what truth survives.</span>`,
+
+      transmission:
+`<h3>fake_transmission_notes.txt</h3>
+Voice sample source:
+Old Krane recordings.
+
+Transmission purpose:
+Create the impression that Jason Krane is alive.
+
+Visible note:
+"They will follow him because they failed him."
+
+Sender:
+N. Thorne`,
+
+      final:
+`<h3>final_instruction.lock</h3>
+Jason Krane is dead.
+
+The messages were staged.
+
+The sender is Dr. Nessa Thorne.
+
+She was not trying to bring Jason back.
+She was trying to make everyone follow his ghost.
+
+<div class="finalBox">
+FINAL INSTRUCTION:
+
+The workstation has revealed the truth,
+but Nessa Thorne's physical diary remains missing.
+
+Find the diary.
+</div>`
+    };
+
+    function normalize(value) {
+      return value
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "")
+        .trim();
+    }
+
+    function updateProgressBox() {
+      const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
+      const botanySolved = localStorage.getItem("botanySolved") === "yes";
+      const box = document.getElementById("progressBox");
+
+      if (chemistrySolved && botanySolved) {
+        box.innerHTML =
+          "Recovered code fragments:<br><br>" +
+          "Chemistry environment: <strong>THORNE</strong><br>" +
+          "Botany environment: <strong>GARDEN</strong><br><br>" +
+          "Combine both fragments to open this folder.";
+      } else if (chemistrySolved && !botanySolved) {
+        box.innerHTML =
+          "Recovered code fragments:<br><br>" +
+          "Chemistry environment: <strong>THORNE</strong><br>" +
+          "Botany environment: missing<br><br>" +
+          "Open the Botany folder and complete both physical answers plus the game code.";
+      } else if (!chemistrySolved && botanySolved) {
+        box.innerHTML =
+          "Recovered code fragments:<br><br>" +
+          "Chemistry environment: missing<br>" +
+          "Botany environment: <strong>GARDEN</strong><br><br>" +
+          "Open the Chemistry folder and complete both physical answers plus the game code.";
+      } else {
+        box.innerHTML =
+          "No private code fragments recovered yet.<br><br>" +
+          "Complete Chemistry and Botany first.<br><br>" +
+          "Each folder requires:<br>" +
+          "1. Physical answer A<br>" +
+          "2. Physical answer B<br>" +
+          "3. Game protocol code";
+      }
+    }
+
+    function checkPassword() {
+      const input = normalize(document.getElementById("passwordInput").value);
+      const status = document.getElementById("status");
+
+      if (input === normalize(privatePassword)) {
+        localStorage.setItem("privateOpened", "yes");
+        openPrivate();
+      } else {
+        status.textContent = "Incorrect private folder password.";
+        status.classList.remove("ok");
+      }
+    }
+
+    function openPrivate() {
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("privateContent").style.display = "block";
+    }
+
+    function openFile(id) {
+      document.getElementById("viewer").innerHTML = files[id];
+    }
+
+    document.getElementById("passwordInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkPassword();
+      }
+    });
+
+    updateProgressBox();
+
+    if (localStorage.getItem("privateOpened") === "yes") {
+      openPrivate();
+    }
+  </script>
+</body>
+</html>
