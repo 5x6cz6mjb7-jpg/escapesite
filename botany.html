@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Thorne Botany Folder</title>
+  <meta charset="UTF-8" />
+  <title>Thorne Botanical Archive</title>
 
   <style>
     :root {
       --green: #00ff66;
       --green2: #00aa44;
+      --dark: #020802;
       --text: #caffd7;
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
-      --purple: #d48cff;
+      --leaf: #7dff9a;
+      --leaf2: #2ac15b;
     }
 
     * {
@@ -23,10 +25,11 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #173517 0%, #030803 62%, #000 100%);
+        radial-gradient(circle at center, #173217 0%, #041004 58%, #000 100%);
       color: var(--green);
       font-family: "Courier New", monospace;
       padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -37,13 +40,13 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,102,0.055),
-          rgba(0,255,102,0.055) 1px,
+          rgba(0,255,102,0.05),
+          rgba(0,255,102,0.05) 1px,
           transparent 1px,
           transparent 4px
         );
-      animation: scanMove 7s linear infinite;
       z-index: 20;
+      animation: scanMove 7s linear infinite;
     }
 
     body::after {
@@ -52,8 +55,8 @@
       inset: -20%;
       pointer-events: none;
       background:
-        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.24), transparent 28%),
-        radial-gradient(circle at 75% 64%, rgba(212,140,255,0.10), transparent 32%);
+        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.16), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(255,238,102,0.08), transparent 32%);
       mix-blend-mode: screen;
       animation: glowMove 8s ease-in-out infinite alternate;
       z-index: 19;
@@ -65,19 +68,25 @@
     }
 
     @keyframes glowMove {
-      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
-      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
     }
 
     .screen {
-      max-width: 1180px;
+      max-width: 1220px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
       border: 5px solid #132313;
       border-radius: 18px;
       background:
-        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 60%),
-        linear-gradient(180deg, #061906 0%, #010801 100%);
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
+        linear-gradient(180deg, #071b07 0%, #010801 100%);
       box-shadow:
         inset 0 0 80px rgba(0,0,0,0.82),
         inset 0 0 30px rgba(0,255,102,0.13),
@@ -95,7 +104,7 @@
       right: -20%;
       top: -150px;
       height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.11), transparent);
+      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.10), transparent);
       animation: sweep 6.5s linear infinite;
       pointer-events: none;
     }
@@ -122,7 +131,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 360px;
+      grid-template-columns: 1fr 380px;
       gap: 14px;
       position: relative;
       z-index: 3;
@@ -143,6 +152,7 @@
       color: var(--white);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 8px;
       font-size: 12px;
       font-weight: bold;
@@ -168,175 +178,352 @@
     p {
       color: var(--text);
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.45;
     }
 
-    .plantBox {
-      height: 150px;
-      border: 1px solid rgba(0,255,102,0.35);
-      background:
-        radial-gradient(circle at center, rgba(0,255,102,0.15), transparent 60%),
-        rgba(0,0,0,0.38);
-      position: relative;
+    .simpleIntro {
+      border: 1px dashed rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.06);
+      padding: 10px;
       margin-bottom: 14px;
+      color: var(--yellow);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .gardenGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .gardenMachine {
+      border: 2px solid rgba(0,255,102,0.45);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 60%),
+        rgba(0,0,0,0.34);
+      min-height: 180px;
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
       overflow: hidden;
+      color: var(--text);
+      font-family: "Courier New", monospace;
+      text-align: left;
+      transition: 0.15s;
     }
 
-    .stem {
+    .gardenMachine:hover {
+      border-color: var(--yellow);
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.12), transparent 60%),
+        rgba(0,0,0,0.38);
+      transform: translateY(-2px);
+    }
+
+    .gardenMachine.active {
+      border-color: var(--yellow);
+      box-shadow: 0 0 20px rgba(255,238,102,0.20);
+    }
+
+    .gardenMachine.seen .seenBadge {
+      display: block;
+    }
+
+    .gardenMachine.scanning {
+      animation: scanFlash 0.45s ease-out;
+    }
+
+    @keyframes scanFlash {
+      0% {
+        filter: brightness(2);
+        transform: scale(1.02);
+      }
+      100% {
+        filter: brightness(1);
+        transform: scale(1);
+      }
+    }
+
+    .clickLabel {
       position: absolute;
-      left: 50%;
-      bottom: 18px;
-      width: 5px;
-      height: 90px;
-      background: var(--green);
-      transform: translateX(-50%);
-      box-shadow: 0 0 10px rgba(0,255,102,0.5);
-      animation: sway 3s ease-in-out infinite;
-      transform-origin: bottom;
+      right: 8px;
+      top: 8px;
+      color: var(--yellow);
+      font-size: 11px;
+      animation: blink 1.2s infinite;
     }
 
-    @keyframes sway {
-      0%, 100% { transform: translateX(-50%) rotate(-2deg); }
-      50% { transform: translateX(-50%) rotate(3deg); }
-    }
-
-    .leaf {
+    .seenBadge {
+      display: none;
       position: absolute;
-      width: 42px;
-      height: 18px;
-      background: #1fcf63;
-      border: 1px solid #d8ffe6;
-      border-radius: 70% 15% 70% 15%;
-      box-shadow: 0 0 8px rgba(0,255,102,0.4);
+      right: 8px;
+      bottom: 8px;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      background: rgba(0,0,0,0.65);
+      text-align: center;
+      line-height: 20px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255,238,102,0.35);
     }
 
-    .leaf.one {
-      left: calc(50% - 44px);
-      bottom: 76px;
-      transform: rotate(-28deg);
+    @keyframes blink {
+      0%, 48%, 100% { opacity: 1; }
+      49%, 85% { opacity: 0.25; }
     }
 
-    .leaf.two {
-      left: calc(50% + 5px);
-      bottom: 98px;
-      transform: rotate(28deg) scaleX(-1);
+    .machineTitle {
+      color: var(--yellow);
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
-    .flower {
-      position: absolute;
-      left: 50%;
-      bottom: 105px;
-      width: 44px;
-      height: 44px;
-      transform: translateX(-50%);
-      animation: flowerPulse 2.4s ease-in-out infinite;
+    .machineSub {
+      font-size: 12px;
+      color: #9dffbd;
+      margin-bottom: 10px;
     }
 
-    @keyframes flowerPulse {
-      0%, 100% { filter: brightness(1); transform: translateX(-50%) scale(1); }
-      50% { filter: brightness(1.3); transform: translateX(-50%) scale(1.06); }
+    .flowerDisplay {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 6px auto 0;
     }
 
     .petal {
       position: absolute;
-      width: 22px;
-      height: 22px;
-      background: #8cffaa;
-      border: 1px solid #d8ffe6;
+      width: 26px;
+      height: 26px;
+      border: 2px solid #d8ffe6;
       border-radius: 50%;
-      box-shadow: 0 0 9px rgba(0,255,102,0.45);
+      background: rgba(255,238,102,0.18);
+      box-shadow: 0 0 10px rgba(255,238,102,0.16);
+      animation: bloomPulse 2s ease-in-out infinite;
     }
 
-    .p1 { left: 11px; top: 0; }
-    .p2 { left: 0; top: 12px; }
-    .p3 { left: 22px; top: 12px; }
-    .p4 { left: 6px; top: 25px; }
-    .p5 { left: 18px; top: 25px; }
+    .petal.p1 { left: 37px; top: 6px; }
+    .petal.p2 { left: 65px; top: 27px; animation-delay: 0.25s; }
+    .petal.p3 { left: 54px; top: 59px; animation-delay: 0.5s; }
+    .petal.p4 { left: 20px; top: 59px; animation-delay: 0.75s; }
+    .petal.p5 { left: 9px; top: 27px; animation-delay: 1s; }
 
-    .center {
+    .flowerCore {
       position: absolute;
-      left: 15px;
-      top: 16px;
-      width: 14px;
-      height: 14px;
-      background: var(--yellow);
+      left: 37px;
+      top: 37px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      border: 1px solid #001100;
+      background: var(--yellow);
+      box-shadow: 0 0 12px rgba(255,238,102,0.45);
     }
 
-    .fileGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(180px, 1fr));
-      gap: 10px;
-      margin-top: 14px;
+    .stem {
+      position: absolute;
+      left: 48px;
+      top: 58px;
+      width: 4px;
+      height: 46px;
+      background: var(--leaf2);
+      box-shadow: 0 0 8px rgba(0,255,102,0.22);
     }
 
-    .fileButton {
-      background: rgba(0,0,0,0.35);
-      border: 1px dotted rgba(0,255,102,0.35);
-      color: var(--text);
-      padding: 12px;
-      min-height: 88px;
-      font-family: "Courier New", monospace;
-      cursor: pointer;
-      text-align: left;
+    .leaf {
+      position: absolute;
+      width: 18px;
+      height: 10px;
+      border: 2px solid #d8ffe6;
+      border-radius: 0 100% 0 100%;
+      background: rgba(0,255,102,0.22);
     }
 
-    .fileButton:hover {
-      background: rgba(0,255,102,0.10);
+    .leaf.l1 {
+      left: 30px;
+      top: 74px;
+      transform: rotate(-25deg);
+    }
+
+    .leaf.l2 {
+      left: 50px;
+      top: 85px;
+      transform: rotate(155deg);
+    }
+
+    @keyframes bloomPulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.08); filter: brightness(1.25); }
+    }
+
+    .herbariumSheet {
+      margin-top: 10px;
+      height: 100px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background:
+        linear-gradient(90deg, rgba(0,255,102,0.07) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.07) 1px, transparent 1px),
+        rgba(0,0,0,0.42);
+      background-size: 18px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .leafSpecimen {
+      position: absolute;
+      width: 22px;
+      height: 44px;
+      border: 2px solid var(--leaf);
+      border-radius: 100% 0 100% 0;
+      background: rgba(42,193,91,0.18);
+      box-shadow: 0 0 10px rgba(0,255,102,0.16);
+      animation: specimenShift 2.2s ease-in-out infinite;
+    }
+
+    .leafSpecimen.s1 { left: 28px; top: 28px; transform: rotate(-12deg); }
+    .leafSpecimen.s2 { left: 82px; top: 18px; transform: rotate(10deg); animation-delay: 0.35s; }
+    .leafSpecimen.s3 { left: 136px; top: 30px; transform: rotate(-8deg); animation-delay: 0.7s; }
+
+    @keyframes specimenShift {
+      0%, 100% { transform: translateY(0) rotate(-10deg); }
+      50% { transform: translateY(-3px) rotate(-6deg); }
+    }
+
+    .rootBox {
+      height: 100px;
+      margin-top: 10px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rootLine {
+      position: absolute;
+      height: 2px;
+      background: var(--leaf);
+      box-shadow: 0 0 8px rgba(0,255,102,0.22);
+      transform-origin: left center;
+      animation: rootPulse 1.8s ease-in-out infinite;
+    }
+
+    .rootLine.r1 { left: 18px; top: 28px; width: 110px; transform: rotate(16deg); }
+    .rootLine.r2 { left: 62px; top: 40px; width: 92px; transform: rotate(-18deg); animation-delay: 0.3s; }
+    .rootLine.r3 { left: 32px; top: 62px; width: 140px; transform: rotate(8deg); animation-delay: 0.6s; }
+    .rootLine.r4 { left: 104px; top: 74px; width: 70px; transform: rotate(-25deg); animation-delay: 0.9s; }
+
+    @keyframes rootPulse {
+      0%, 100% { opacity: 0.45; }
+      50% { opacity: 1; }
+    }
+
+    .pollenBox {
+      height: 100px;
+      margin-top: 10px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pollenDot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,238,102,0.8);
+      box-shadow: 0 0 10px rgba(255,238,102,0.35);
+      animation: pollenFloat 3s linear infinite;
+    }
+
+    .pollenDot.d1 { left: 24px; top: 80px; animation-delay: 0s; }
+    .pollenDot.d2 { left: 62px; top: 68px; animation-delay: 0.4s; }
+    .pollenDot.d3 { left: 102px; top: 76px; animation-delay: 0.8s; }
+    .pollenDot.d4 { left: 140px; top: 66px; animation-delay: 1.2s; }
+    .pollenDot.d5 { left: 176px; top: 74px; animation-delay: 1.6s; }
+
+    @keyframes pollenFloat {
+      0%   { transform: translateY(0) scale(0.7); opacity: 0.2; }
+      20%  { opacity: 1; }
+      100% { transform: translateY(-70px) scale(1.2); opacity: 0; }
+    }
+
+    .scanStatus {
+      margin-top: 12px;
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.42);
       color: var(--yellow);
+      padding: 9px;
+      font-size: 12px;
+      min-height: 32px;
+      line-height: 1.4;
     }
 
-    .fileButton.pulse {
-      animation: filePulse 2.5s ease-in-out infinite;
+    .scanStatus.complete {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
+      animation: completePulse 1.4s ease-in-out infinite;
     }
 
-    @keyframes filePulse {
-      0%, 100% { box-shadow: 0 0 0 rgba(0,255,102,0); }
-      50% { box-shadow: 0 0 18px rgba(0,255,102,0.25); }
+    @keyframes completePulse {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(255,238,102,0);
+      }
+      50% {
+        box-shadow: 0 0 14px rgba(255,238,102,0.25);
+      }
     }
 
     .viewer {
       margin-top: 14px;
-      min-height: 270px;
-      border: 1px solid rgba(0,255,102,0.32);
-      background: rgba(0,0,0,0.34);
+      min-height: 160px;
+      border: 2px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.46);
       padding: 12px;
       color: var(--text);
-      line-height: 1.55;
-      font-size: 13px;
-      white-space: pre-line;
+      line-height: 1.45;
+      font-size: 14px;
     }
 
     .viewer h3 {
+      margin: 0 0 8px;
       color: var(--yellow);
-      margin-top: 0;
+      font-size: 16px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 8px;
-      font-size: 12px;
+    .checkBlock {
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.26);
+      padding: 10px;
+      margin-bottom: 12px;
     }
 
-    th, td {
-      border: 1px solid rgba(0,255,102,0.26);
-      padding: 6px;
-      text-align: left;
-      color: var(--text);
+    .checkBlock.correct {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
     }
 
-    th {
+    .checkBlock.wrong {
+      border-color: var(--red);
+      background: rgba(255,85,85,0.05);
+      animation: shake 0.25s;
+    }
+
+    .checkHeader {
       color: var(--yellow);
-      background: rgba(0,255,102,0.08);
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 5px;
     }
 
     label {
       display: block;
       color: var(--white);
       font-size: 12px;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     input {
@@ -355,37 +542,73 @@
       border-color: var(--yellow);
     }
 
-    button, .backLink, .gameLink {
+    input.correctInput {
+      border-color: var(--yellow);
+      box-shadow: 0 0 10px rgba(255,238,102,0.22);
+    }
+
+    input.wrongInput {
+      border-color: var(--red);
+      box-shadow: 0 0 10px rgba(255,85,85,0.18);
+    }
+
+    button,
+    .backLink,
+    .gameLink {
       color: var(--white);
       background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
       border-top: 2px solid #d8ffe6;
       border-left: 2px solid #d8ffe6;
       border-right: 2px solid #052b13;
       border-bottom: 2px solid #052b13;
-      padding: 10px 13px;
+      padding: 9px 12px;
       font-family: "Courier New", monospace;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 9px;
+    }
+
+    button:hover,
+    .backLink:hover,
+    .gameLink:hover {
+      filter: brightness(1.18);
+    }
+
+    .checkButton {
+      width: 100%;
     }
 
     .gameLink {
       background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
       color: var(--yellow);
+      width: 100%;
+      text-align: center;
+      margin-bottom: 12px;
     }
 
     .status {
-      min-height: 22px;
-      margin-top: 10px;
-      font-size: 13px;
+      min-height: 18px;
+      margin-top: 8px;
+      font-size: 12px;
       color: var(--red);
+      line-height: 1.4;
     }
 
     .status.ok {
       color: var(--yellow);
+    }
+
+    .masterStatus {
+      border: 1px dashed rgba(255,238,102,0.4);
+      background: rgba(255,238,102,0.05);
+      padding: 10px;
+      color: var(--yellow);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-top: 12px;
     }
 
     .recoveredEnvironment {
@@ -406,7 +629,7 @@
     }
 
     .codeFragment {
-      font-size: 22px;
+      font-size: 23px;
       color: var(--yellow);
       letter-spacing: 2px;
       margin-top: 10px;
@@ -416,8 +639,17 @@
       text-align: center;
     }
 
-    @media (max-width: 900px) {
-      .layout, .fileGrid {
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 950px) {
+      .layout,
+      .gardenGrid {
         grid-template-columns: 1fr;
       }
 
@@ -431,95 +663,154 @@
 <body>
   <main class="screen">
     <div class="topBar">
-      <span>THORNE OS // BOTANY DIRECTORY</span>
-      <span>SPECIMEN MEMORY ARCHIVE</span>
+      <span>THORNE OS // BOTANICAL ARCHIVE</span>
+      <span>GREENHOUSE ACCESS CHECK</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
     <section class="layout">
       <section class="window">
-        <div class="windowTitle">Botany Folder</div>
-        <div class="content">
-          <h1>BOTANY</h1>
-          <h2>Specimen index and plant memory archive</h2>
+        <div class="windowTitle">
+          <span>Botanical Archive</span>
+          <span>GREENHOUSE CACHE</span>
+        </div>
 
-          <div class="plantBox">
-            <div class="stem"></div>
-            <div class="leaf one"></div>
-            <div class="leaf two"></div>
-            <div class="flower">
-              <div class="petal p1"></div>
-              <div class="petal p2"></div>
-              <div class="petal p3"></div>
-              <div class="petal p4"></div>
-              <div class="petal p5"></div>
-              <div class="center"></div>
-            </div>
+        <div class="content">
+          <h1>BOTANICAL</h1>
+
+          <div class="simpleIntro">
+            LOCAL BOTANICAL CACHE DETECTED<br>
+            Three inputs required before deeper greenhouse layer can be restored.
           </div>
 
-          <p>
-            This folder contains Nessa Thorne's botanical archive.
-            The real puzzle is physical. Use the items from the box to find two answers.
-            The third code comes from the required game.
-          </p>
+          <div class="gardenGrid">
+            <button class="gardenMachine active" onclick="openPanel('bloom', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge">✓</span>
+              <div class="machineTitle">BLOOM CHAMBER</div>
+              <div class="machineSub">Floral specimen active</div>
 
-          <div class="fileGrid">
-            <button class="fileButton pulse" onclick="openFile('specimen')">specimen_index.xls</button>
-            <button class="fileButton" onclick="openFile('flower')">favourite_flower.note</button>
-            <button class="fileButton" onclick="openFile('memory')">memory_plants.db</button>
-            <button class="fileButton" onclick="openFile('jason')">krane_marker.tmp</button>
+              <div class="flowerDisplay">
+                <div class="petal p1"></div>
+                <div class="petal p2"></div>
+                <div class="petal p3"></div>
+                <div class="petal p4"></div>
+                <div class="petal p5"></div>
+                <div class="flowerCore"></div>
+                <div class="stem"></div>
+                <div class="leaf l1"></div>
+                <div class="leaf l2"></div>
+              </div>
+            </button>
+
+            <button class="gardenMachine" onclick="openPanel('herbarium', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge">✓</span>
+              <div class="machineTitle">HERBARIUM SCANNER</div>
+              <div class="machineSub">Pressed plant trace detected</div>
+
+              <div class="herbariumSheet">
+                <div class="leafSpecimen s1"></div>
+                <div class="leafSpecimen s2"></div>
+                <div class="leafSpecimen s3"></div>
+              </div>
+            </button>
+
+            <button class="gardenMachine" onclick="openPanel('roots', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge">✓</span>
+              <div class="machineTitle">ROOT NETWORK</div>
+              <div class="machineSub">Subsoil pathways unstable</div>
+
+              <div class="rootBox">
+                <div class="rootLine r1"></div>
+                <div class="rootLine r2"></div>
+                <div class="rootLine r3"></div>
+                <div class="rootLine r4"></div>
+              </div>
+            </button>
+
+            <button class="gardenMachine" onclick="openPanel('pollen', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge">✓</span>
+              <div class="machineTitle">POLLEN ANALYZER</div>
+              <div class="machineSub">Airborne residue active</div>
+
+              <div class="pollenBox">
+                <div class="pollenDot d1"></div>
+                <div class="pollenDot d2"></div>
+                <div class="pollenDot d3"></div>
+                <div class="pollenDot d4"></div>
+                <div class="pollenDot d5"></div>
+              </div>
+            </button>
+          </div>
+
+          <div class="scanStatus" id="scanStatus">
+            BLOOM CHAMBER // scan loaded
           </div>
 
           <div class="viewer" id="viewer">
-            <h3>No file selected</h3>
-            Click a botanical file to inspect Nessa's plant archive.
+            <h3>BLOOM CHAMBER</h3>
+            Scan result:<br>
+            floral marker unstable.<br><br>
+            Input channel:<br>
+            A<br><br>
+            Archive response:<br>
+            waiting for bloom-linked identifier.
           </div>
 
           <div class="recoveredEnvironment" id="recoveredEnvironment">
-            <h2>RECOVERED BOTANY ENVIRONMENT</h2>
+            <h2>RECOVERED BOTANICAL ENVIRONMENT</h2>
+
             <p>
-              The specimen archive opens into a deeper botanical index.
-              Nessa links her favourite flower, Jason Krane and the private directory through one repeated image:
-              the garden.
+              Botanical access complete.
             </p>
 
             <p>
-              Recovered note:
-              “A garden is not peaceful because nothing dies there.
-              It is peaceful because everything dead returns as something else.”
+              Nessa’s greenhouse archive releases a second private access fragment.
             </p>
 
             <div class="codeFragment">
-              PRIVATE CODE PART 2: GARDEN
+              PRIVATE CODE PART 2: NESSA
             </div>
           </div>
         </div>
       </section>
 
       <aside class="window">
-        <div class="windowTitle">Folder Access Checks</div>
+        <div class="windowTitle">Access Sequence</div>
+
         <div class="content">
-          <h2>Botany Verification</h2>
+          <a class="gameLink" href="snake.html">OPEN BOTANICAL GAME</a>
 
-          <p>
-            Enter both physical puzzle answers and the recovered game code.
-            All three must be correct before the recovered environment opens.
-          </p>
+          <div class="checkBlock" id="blockA">
+            <div class="checkHeader">INPUT A</div>
+            <label for="answerA">Bloom marker</label>
+            <input id="answerA" type="text" autocomplete="off" placeholder="input A">
+            <button class="checkButton" onclick="checkA()">CHECK INPUT A</button>
+            <div class="status" id="statusA">Awaiting input.</div>
+          </div>
 
-          <label for="answerA">Physical answer A</label>
-          <input id="answerA" type="text" autocomplete="off" placeholder="enter answer A">
+          <div class="checkBlock" id="blockB">
+            <div class="checkHeader">INPUT B</div>
+            <label for="answerB">Specimen marker</label>
+            <input id="answerB" type="text" autocomplete="off" placeholder="input B">
+            <button class="checkButton" onclick="checkB()">CHECK INPUT B</button>
+            <div class="status" id="statusB">Awaiting input.</div>
+          </div>
 
-          <label for="answerB">Physical answer B</label>
-          <input id="answerB" type="text" autocomplete="off" placeholder="enter answer B">
+          <div class="checkBlock" id="blockGame">
+            <div class="checkHeader">GROWTH CODE</div>
+            <label for="gameCode">External greenhouse code</label>
+            <input id="gameCode" type="text" autocomplete="off" placeholder="growth code">
+            <button class="checkButton" onclick="checkGame()">CHECK GROWTH CODE</button>
+            <div class="status" id="statusGame">Awaiting protocol.</div>
+          </div>
 
-          <label for="gameCode">Game protocol code</label>
-          <input id="gameCode" type="text" autocomplete="off" placeholder="enter game code">
-
-          <button onclick="checkAll()">VERIFY ALL THREE</button>
-
-          <a class="gameLink" href="snake.html">OPEN BOTANY GAME</a>
-
-          <div class="status" id="status">Awaiting all three checks.</div>
+          <div class="masterStatus" id="masterStatus">
+            Deeper greenhouse layer sealed.
+          </div>
 
           <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
         </div>
@@ -528,62 +819,54 @@
   </main>
 
   <script>
-    const correctAnswerA = "GERANIUM";
-    const correctAnswerB = "CRANESBILL";
-    const correctGameCode = "NIGHTSHADE";
+    const correctAnswerA = "DIGITALIS";
+    const correctAnswerB = "HERBARIUM";
+    const correctGameCode = "WITTEKLAVER";
 
-    const files = {
-      specimen:
-`<h3>specimen_index.xls</h3>
-<table>
-  <tr><th>Sample</th><th>Common Name</th><th>Thorne Label</th></tr>
-  <tr><td>SB-17</td><td>Bloody Cranesbill</td><td>Password memory</td></tr>
-  <tr><td>SB-22</td><td>Rosehip</td><td>Archive key marker</td></tr>
-  <tr><td>SB-31</td><td>Nightshade</td><td>Warning symbol</td></tr>
-  <tr><td>SB-44</td><td>Blackthorn</td><td>Name echo</td></tr>
-</table>`,
+    let aSolved = false;
+    let bSolved = false;
+    let gameSolved = false;
 
-      flower:
-`<h3>favourite_flower.note</h3>
-Favourite flower:
-Geranium sanguineum
+    const inspectedPanels = {
+      bloom: false,
+      herbarium: false,
+      roots: false,
+      pollen: false
+    };
 
-Common name:
-Bloody Cranesbill
+    const panels = {
+      bloom:
+`<h3>BLOOM CHAMBER</h3>
+Scan result:<br>
+floral marker unstable.<br><br>
+Input channel:<br>
+A<br><br>
+Archive response:<br>
+waiting for bloom-linked identifier.`,
 
-Reason:
-"Beautiful name. Terrible omen. Perfect memory."
+      herbarium:
+`<h3>HERBARIUM SCANNER</h3>
+Scan result:<br>
+pressed specimen trace found.<br><br>
+Input channel:<br>
+B<br><br>
+Archive response:<br>
+waiting for preserved-specimen identifier.`,
 
-- N. Thorne`,
+      roots:
+`<h3>ROOT NETWORK</h3>
+Scan result:<br>
+subsoil pathways active.<br><br>
+Archive note:<br>
+"Follow only the living route. Avoid the poisoned growth."`,
 
-      memory:
-`<h3>memory_plants.db</h3>
-Plants linked to memory:
-
-Bloody Cranesbill:
-password memory
-
-Rosehip:
-archive marker
-
-Nightshade:
-false transmission symbol
-
-Blackthorn:
-surname echo
-
-Jason:
-not a plant.
-Still indexed.`,
-
-      jason:
-`<h3>krane_marker.tmp</h3>
-Jason Krane appears repeatedly in the botanical archive.
-
-Not as an agent.
-Not as a target.
-
-As a memory.`
+      pollen:
+`<h3>POLLEN ANALYZER</h3>
+Scan result:<br>
+three channels detected.<br><br>
+A: unresolved<br>
+B: unresolved<br>
+Growth code: unresolved`
     };
 
     function normalize(value) {
@@ -595,45 +878,201 @@ As a memory.`
         .trim();
     }
 
-    function openFile(id) {
-      document.getElementById("viewer").innerHTML = files[id];
+    function openPanel(id, button) {
+      const machines = document.querySelectorAll(".gardenMachine");
+
+      machines.forEach(function(machine) {
+        machine.classList.remove("active");
+        machine.classList.remove("scanning");
+      });
+
+      button.classList.add("active");
+      button.classList.add("seen");
+
+      setTimeout(function() {
+        button.classList.add("scanning");
+      }, 10);
+
+      inspectedPanels[id] = true;
+      document.getElementById("viewer").innerHTML = panels[id];
+
+      const scanStatus = document.getElementById("scanStatus");
+
+      if (id === "bloom") {
+        scanStatus.textContent = "BLOOM CHAMBER // scan complete";
+      }
+
+      if (id === "herbarium") {
+        scanStatus.textContent = "HERBARIUM SCANNER // scan complete";
+      }
+
+      if (id === "roots") {
+        scanStatus.textContent = "ROOT NETWORK // scan complete";
+      }
+
+      if (id === "pollen") {
+        scanStatus.textContent = "POLLEN ANALYZER // scan complete";
+      }
+
+      const allInspected =
+        inspectedPanels.bloom &&
+        inspectedPanels.herbarium &&
+        inspectedPanels.roots &&
+        inspectedPanels.pollen;
+
+      if (allInspected) {
+        scanStatus.textContent = "LOCAL GREENHOUSE CACHE FULLY INSPECTED // deeper layer still sealed";
+        scanStatus.classList.add("complete");
+      }
+    }
+
+    function setCorrect(blockId, inputId, statusId, message) {
+      const block = document.getElementById(blockId);
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+
+      block.classList.remove("wrong");
+      block.classList.add("correct");
+
+      input.classList.remove("wrongInput");
+      input.classList.add("correctInput");
+
+      status.textContent = message;
+      status.classList.add("ok");
+    }
+
+    function setWrong(blockId, inputId, statusId, message) {
+      const block = document.getElementById(blockId);
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+
+      block.classList.remove("correct");
+      block.classList.remove("wrong");
+
+      input.classList.remove("correctInput");
+      input.classList.add("wrongInput");
+
+      setTimeout(function() {
+        block.classList.add("wrong");
+      }, 10);
+
+      status.textContent = message;
+      status.classList.remove("ok");
+    }
+
+    function checkA() {
+      const value = normalize(document.getElementById("answerA").value);
+
+      if (value === normalize(correctAnswerA)) {
+        aSolved = true;
+        localStorage.setItem("botanicalA", "yes");
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+      } else {
+        aSolved = false;
+        localStorage.removeItem("botanicalA");
+        setWrong("blockA", "answerA", "statusA", "Input A rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkB() {
+      const value = normalize(document.getElementById("answerB").value);
+
+      if (value === normalize(correctAnswerB)) {
+        bSolved = true;
+        localStorage.setItem("botanicalB", "yes");
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+      } else {
+        bSolved = false;
+        localStorage.removeItem("botanicalB");
+        setWrong("blockB", "answerB", "statusB", "Input B rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkGame() {
+      const value = normalize(document.getElementById("gameCode").value);
+
+      if (value === normalize(correctGameCode)) {
+        gameSolved = true;
+        localStorage.setItem("botanicalGame", "yes");
+        setCorrect("blockGame", "gameCode", "statusGame", "Growth code accepted.");
+      } else {
+        gameSolved = false;
+        localStorage.removeItem("botanicalGame");
+        setWrong("blockGame", "gameCode", "statusGame", "Growth code rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkUnlock() {
+      const masterStatus = document.getElementById("masterStatus");
+
+      if (aSolved && bSolved && gameSolved) {
+        unlockRecoveredEnvironment();
+      } else {
+        const solvedCount = [aSolved, bSolved, gameSolved].filter(Boolean).length;
+        masterStatus.textContent = "Deeper greenhouse layer sealed. Channels accepted: " + solvedCount + " / 3.";
+      }
     }
 
     function unlockRecoveredEnvironment() {
-      localStorage.setItem("botanySolved", "yes");
-      document.getElementById("status").textContent = "All checks accepted. Botany recovered environment unlocked.";
-      document.getElementById("status").classList.add("ok");
+      localStorage.setItem("botanicalSolved", "yes");
+
+      const masterStatus = document.getElementById("masterStatus");
+      masterStatus.textContent = "All channels accepted. Greenhouse layer restored.";
+
       document.getElementById("recoveredEnvironment").style.display = "block";
+      document.getElementById("recoveredEnvironment").scrollIntoView({ behavior: "smooth" });
     }
 
-    function checkAll() {
-      const answerA = normalize(document.getElementById("answerA").value);
-      const answerB = normalize(document.getElementById("answerB").value);
-      const gameCode = normalize(document.getElementById("gameCode").value);
-      const status = document.getElementById("status");
+    function restoreProgress() {
+      if (localStorage.getItem("botanicalA") === "yes") {
+        aSolved = true;
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+      }
 
-      if (
-        answerA === normalize(correctAnswerA) &&
-        answerB === normalize(correctAnswerB) &&
-        gameCode === normalize(correctGameCode)
-      ) {
+      if (localStorage.getItem("botanicalB") === "yes") {
+        bSolved = true;
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+      }
+
+      if (localStorage.getItem("botanicalGame") === "yes") {
+        gameSolved = true;
+        setCorrect("blockGame", "gameCode", "statusGame", "Growth code accepted.");
+      }
+
+      if (localStorage.getItem("botanicalSolved") === "yes") {
+        aSolved = true;
+        bSolved = true;
+        gameSolved = true;
+
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+        setCorrect("blockGame", "gameCode", "statusGame", "Growth code accepted.");
+
         unlockRecoveredEnvironment();
       } else {
-        status.textContent = "One or more checks are incorrect.";
-        status.classList.remove("ok");
-        document.getElementById("recoveredEnvironment").style.display = "none";
+        checkUnlock();
       }
     }
 
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkAll();
-      }
+    document.getElementById("answerA").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") checkA();
     });
 
-    if (localStorage.getItem("botanySolved") === "yes") {
-      unlockRecoveredEnvironment();
-    }
+    document.getElementById("answerB").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") checkB();
+    });
+
+    document.getElementById("gameCode").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") checkGame();
+    });
+
+    restoreProgress();
   </script>
 </body>
 </html>
