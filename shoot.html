@@ -369,8 +369,8 @@ Recover the command word.</div>
     const COLS = 20;
     const ROWS = 15;
 
-    const playerSize = 24;
-    const enemySize = 26;
+    const playerSize = 22;
+    const enemySize = 24;
     const projectileSize = 8;
 
     const targetWord = "EYESONLY";
@@ -629,8 +629,11 @@ Recover the command word.</div>
       const newX = entity.x + dx;
       const newY = entity.y + dy;
 
-      if (!collidesWithWalls(newX, newY, size)) {
+      if (!collidesWithWalls(newX, entity.y, size)) {
         entity.x = newX;
+      }
+
+      if (!collidesWithWalls(entity.x, newY, size)) {
         entity.y = newY;
       }
     }
@@ -649,10 +652,20 @@ Recover the command word.</div>
         const px = points[i][0];
         const py = points[i][1];
 
-        if (px < TILE || px > canvas.width - TILE || py < TILE || py > canvas.height - TILE) {
-          if (!isDoorArea(px, py)) {
-            return true;
-          }
+        if (px < TILE) {
+          if (!isDoorArea(px, py)) return true;
+        }
+
+        if (px > canvas.width - TILE) {
+          if (!isDoorArea(px, py)) return true;
+        }
+
+        if (py < TILE) {
+          if (!isDoorArea(px, py)) return true;
+        }
+
+        if (py > canvas.height - TILE) {
+          if (!isDoorArea(px, py)) return true;
         }
 
         const tileX = Math.floor(px / TILE);
@@ -752,7 +765,7 @@ Recover the command word.</div>
         const dyToPlayer = player.y - enemy.py;
         const distance = Math.sqrt(dxToPlayer * dxToPlayer + dyToPlayer * dyToPlayer);
 
-        if (distance < 180) {
+        if (distance < 180 && distance > 0) {
           enemy.vx = dxToPlayer / distance;
           enemy.vy = dyToPlayer / distance;
         }
@@ -985,7 +998,6 @@ Recover the command word.</div>
     }
 
     function drawLabDetails() {
-      // Kleine pixel-labdetails voor sfeer.
       ctx.fillStyle = "#00240d";
       ctx.fillRect(2 * TILE, 2 * TILE, 22, 22);
       ctx.fillRect(17 * TILE, 12 * TILE, 22, 22);
@@ -1045,11 +1057,9 @@ Recover the command word.</div>
       ctx.save();
       ctx.translate(x, y);
 
-      // Shadow
       ctx.fillStyle = "rgba(0,0,0,0.45)";
       ctx.fillRect(-14, 15, 28, 7);
 
-      // Legs
       ctx.fillStyle = "#080808";
       ctx.fillRect(-10, 4 + walk, 7, 13);
       ctx.fillRect(3, 4 - walk, 7, 13);
@@ -1058,7 +1068,6 @@ Recover the command word.</div>
       ctx.strokeRect(-10, 4 + walk, 7, 13);
       ctx.strokeRect(3, 4 - walk, 7, 13);
 
-      // Body
       ctx.fillStyle = "#111111";
       ctx.fillRect(-13, -13, 26, 24);
 
@@ -1066,25 +1075,23 @@ Recover the command word.</div>
       ctx.lineWidth = 2;
       ctx.strokeRect(-13, -13, 26, 24);
 
-      // Head
       ctx.fillStyle = "#050505";
       ctx.fillRect(-9, -27, 18, 15);
+
       ctx.strokeStyle = "#ffeeee";
       ctx.strokeRect(-9, -27, 18, 15);
 
-      // Visor
       ctx.fillStyle = "#ff5555";
       ctx.fillRect(-6, -22, 12, 4);
 
-      // Arms
       ctx.fillStyle = "#0b0b0b";
       ctx.fillRect(-18, -9, 5, 17);
       ctx.fillRect(13, -9, 5, 17);
+
       ctx.strokeStyle = "#ff5555";
       ctx.strokeRect(-18, -9, 5, 17);
       ctx.strokeRect(13, -9, 5, 17);
 
-      // Chest label
       ctx.fillStyle = "#300000";
       ctx.fillRect(-8, -7, 16, 14);
 
@@ -1119,11 +1126,9 @@ Recover the command word.</div>
         ctx.globalAlpha = 0.45;
       }
 
-      // Shadow
       ctx.fillStyle = "rgba(0,0,0,0.45)";
       ctx.fillRect(-13, 15, 26, 7);
 
-      // Legs
       ctx.fillStyle = "#001f0b";
       ctx.fillRect(-9, 4 + walk, 7, 13);
       ctx.fillRect(2, 4 - walk, 7, 13);
@@ -1132,7 +1137,6 @@ Recover the command word.</div>
       ctx.strokeRect(-9, 4 + walk, 7, 13);
       ctx.strokeRect(2, 4 - walk, 7, 13);
 
-      // Body / coat
       ctx.fillStyle = "#003b16";
       ctx.fillRect(-12, -13, 24, 25);
 
@@ -1140,7 +1144,6 @@ Recover the command word.</div>
       ctx.lineWidth = 2;
       ctx.strokeRect(-12, -13, 24, 25);
 
-      // Arms
       ctx.fillStyle = "#00280f";
       ctx.fillRect(-17, -9, 5, 17);
       ctx.fillRect(12, -9, 5, 17);
@@ -1149,18 +1152,15 @@ Recover the command word.</div>
       ctx.strokeRect(-17, -9, 5, 17);
       ctx.strokeRect(12, -9, 5, 17);
 
-      // Head
       ctx.fillStyle = "#d7b07a";
       ctx.fillRect(-8, -28, 16, 15);
 
       ctx.strokeStyle = "#001100";
       ctx.strokeRect(-8, -28, 16, 15);
 
-      // Hair / top
       ctx.fillStyle = "#1a0f05";
       ctx.fillRect(-8, -30, 16, 5);
 
-      // Eyes / visor depending on direction
       ctx.fillStyle = "#001100";
 
       if (player.dy === -1) {
@@ -1174,7 +1174,6 @@ Recover the command word.</div>
         ctx.fillRect(2, -22, 4, 3);
       }
 
-      // Direction marker / small bio blaster
       ctx.fillStyle = "#ffee66";
 
       if (player.dy === -1) {
@@ -1193,7 +1192,6 @@ Recover the command word.</div>
         ctx.fillRect(15, -5, 10, 6);
       }
 
-      // Chest detail
       ctx.fillStyle = "#00ff66";
       ctx.fillRect(-4, -6, 8, 4);
 
@@ -1237,38 +1235,31 @@ Recover the command word.</div>
       }
 
       if (direction === "up") {
-        player.y -= 24;
         player.dx = 0;
         player.dy = -1;
+        moveEntity(player, 0, -24, playerSize);
       }
 
       if (direction === "down") {
-        player.y += 24;
         player.dx = 0;
         player.dy = 1;
+        moveEntity(player, 0, 24, playerSize);
       }
 
       if (direction === "left") {
-        player.x -= 24;
         player.dx = -1;
         player.dy = 0;
+        moveEntity(player, -24, 0, playerSize);
       }
 
       if (direction === "right") {
-        player.x += 24;
         player.dx = 1;
         player.dy = 0;
+        moveEntity(player, 24, 0, playerSize);
       }
 
       player.moving = true;
       player.walkFrame++;
-
-      if (collidesWithWalls(player.x, player.y, playerSize)) {
-        if (direction === "up") player.y += 24;
-        if (direction === "down") player.y -= 24;
-        if (direction === "left") player.x += 24;
-        if (direction === "right") player.x -= 24;
-      }
 
       handleRoomTransition();
     }
