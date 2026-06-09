@@ -297,7 +297,8 @@
     <h1>MI6 BOTANICAL LAB // TOP-DOWN RANGE</h1>
 
     <div class="subtitle">Top-down laboratory simulation recovered.
-Find the key. Open the weapon chest.
+Find the key in another room.
+Open the weapon chest in the specimen vault.
 Only then can you fire bio-darts.
 Collect all hidden letters and defeat all M/Q security dummies.</div>
 
@@ -363,8 +364,8 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
           A / ← = move left<br>
           D / → = move right<br>
           SPACE = fire bio-dart<br><br>
-          First collect the key.<br>
-          Then open the chest.<br>
+          First find the key in WEST LAB.<br>
+          Then open the chest in SPECIMEN VAULT.<br>
           Red shots from M/Q are fatal.
         </div>
 
@@ -413,19 +414,18 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
 
     let hasKey = false;
     let hasWeapon = false;
-    let chestOpened = false;
 
     const keyItem = {
-      room: "1,1",
+      room: "1,0",
       x: 3,
       y: 10,
       collected: false
     };
 
     const weaponChest = {
-      room: "1,1",
-      x: 6,
-      y: 10,
+      room: "0,2",
+      x: 16,
+      y: 11,
       opened: false
     };
 
@@ -562,7 +562,6 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
 
       hasKey = false;
       hasWeapon = false;
-      chestOpened = false;
       keyItem.collected = false;
       weaponChest.opened = false;
 
@@ -598,7 +597,7 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       winBoxEl.style.display = "none";
       gameOverBoxEl.style.display = "none";
 
-      messageEl.textContent = "Find the key. Open the chest. Recover the weapon.";
+      messageEl.textContent = "Find the key in WEST LAB. Then open the chest in SPECIMEN VAULT.";
       updateHud();
 
       animationId = requestAnimationFrame(gameLoop);
@@ -953,7 +952,7 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       }
 
       if (!hasWeapon) {
-        messageEl.textContent = "NO WEAPON // Find the key and open the chest first.";
+        messageEl.textContent = "NO WEAPON // Find the key in WEST LAB and open the chest in SPECIMEN VAULT.";
         return;
       }
 
@@ -981,7 +980,7 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       if (distance < 28) {
         keyItem.collected = true;
         hasKey = true;
-        messageEl.textContent = "KEY RECOVERED // Find the weapon chest.";
+        messageEl.textContent = "KEY RECOVERED // Travel to SPECIMEN VAULT and open the chest.";
       }
     }
 
@@ -998,12 +997,11 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
 
       if (distance < 32) {
         if (!hasKey) {
-          messageEl.textContent = "CHEST LOCKED // Key required.";
+          messageEl.textContent = "CHEST LOCKED // Key required from WEST LAB.";
           return;
         }
 
         weaponChest.opened = true;
-        chestOpened = true;
         hasWeapon = true;
         messageEl.textContent = "CHEST OPENED // BIO-DART WEAPON ACQUIRED.";
       }
@@ -1213,7 +1211,6 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       ctx.strokeRect(x - 4, y - 12, 8, 24);
       ctx.strokeRect(x - 4, y + 6, 18, 6);
 
-      ctx.fillStyle = "#000000";
       ctx.beginPath();
       ctx.arc(x, y - 16, 8, 0, Math.PI * 2);
       ctx.stroke();
@@ -1455,7 +1452,7 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       const room = rooms[currentRoom];
 
       ctx.fillStyle = "rgba(0,0,0,0.7)";
-      ctx.fillRect(8, 8, 306, 90);
+      ctx.fillRect(8, 8, 330, 90);
 
       ctx.fillStyle = "#00ff66";
       ctx.font = "14px Courier New";
@@ -1467,7 +1464,7 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       if (hasWeapon) {
         ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 88);
       } else {
-        ctx.fillText("FIND KEY + CHEST", 18, 88);
+        ctx.fillText("KEY: WEST LAB // CHEST: VAULT", 18, 88);
       }
     }
 
