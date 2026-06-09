@@ -227,6 +227,26 @@
       box-shadow: 0 0 20px rgba(255,238,102,0.20);
     }
 
+    .labMachine.seen .seenBadge {
+      display: block;
+    }
+
+    .labMachine.scanning {
+      animation: scanFlash 0.45s ease-out;
+    }
+
+    @keyframes scanFlash {
+      0% {
+        filter: brightness(2);
+        transform: scale(1.02);
+      }
+
+      100% {
+        filter: brightness(1);
+        transform: scale(1);
+      }
+    }
+
     .clickLabel {
       position: absolute;
       right: 8px;
@@ -234,6 +254,22 @@
       color: var(--yellow);
       font-size: 11px;
       animation: blink 1.2s infinite;
+    }
+
+    .seenBadge {
+      display: none;
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--yellow);
+      color: var(--yellow);
+      background: rgba(0,0,0,0.65);
+      text-align: center;
+      line-height: 20px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255,238,102,0.35);
     }
 
     @keyframes blink {
@@ -467,6 +503,33 @@
       50% { filter: brightness(1.35); }
     }
 
+    .scanStatus {
+      margin-top: 12px;
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.42);
+      color: var(--yellow);
+      padding: 9px;
+      font-size: 12px;
+      min-height: 32px;
+      line-height: 1.4;
+    }
+
+    .scanStatus.complete {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
+      animation: completePulse 1.4s ease-in-out infinite;
+    }
+
+    @keyframes completePulse {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(255,238,102,0);
+      }
+
+      50% {
+        box-shadow: 0 0 14px rgba(255,238,102,0.25);
+      }
+    }
+
     .viewer {
       margin-top: 14px;
       min-height: 160px;
@@ -506,6 +569,8 @@
     .stepNumber {
       color: var(--yellow);
       font-weight: bold;
+      display: block;
+      margin-bottom: 3px;
     }
 
     label {
@@ -647,20 +712,21 @@
       <section class="window">
         <div class="windowTitle">
           <span>Chemistry Lab</span>
-          <span>CLICK THE MACHINES</span>
+          <span>LOCAL CACHE</span>
         </div>
 
         <div class="content">
           <h1>CHEMISTRY</h1>
 
           <div class="simpleIntro">
-            Klik op de lab-onderdelen. Vul daarna de twee antwoorden uit de fysieke puzzels in.
-            De derde code komt uit het Chemistry-spel.
+            LOCAL CHEMISTRY CACHE DETECTED<br>
+            Three inputs required before deeper archive layer can be restored.
           </div>
 
           <div class="labGrid">
-            <button class="labMachine active" onclick="openPanel('flask', this)">
-              <span class="clickLabel">CLICK</span>
+            <button class="labMachine active" id="machine-flask" onclick="openPanel('flask', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge" id="seen-flask">✓</span>
               <div class="machineTitle">REAGENT FLASK</div>
               <div class="machineSub">Liquid sample active</div>
 
@@ -673,8 +739,9 @@
               </div>
             </button>
 
-            <button class="labMachine" onclick="openPanel('scanner', this)">
-              <span class="clickLabel">CLICK</span>
+            <button class="labMachine" id="machine-scanner" onclick="openPanel('scanner', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge" id="seen-scanner">✓</span>
               <div class="machineTitle">ELEMENT SCANNER</div>
               <div class="machineSub">Periodic trace detected</div>
 
@@ -701,8 +768,9 @@
               </div>
             </button>
 
-            <button class="labMachine" onclick="openPanel('signal', this)">
-              <span class="clickLabel">CLICK</span>
+            <button class="labMachine" id="machine-signal" onclick="openPanel('signal', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge" id="seen-signal">✓</span>
               <div class="machineTitle">SAMPLE SIGNAL</div>
               <div class="machineSub">Compound instability</div>
 
@@ -718,8 +786,9 @@
               </div>
             </button>
 
-            <button class="labMachine" onclick="openPanel('meter', this)">
-              <span class="clickLabel">CLICK</span>
+            <button class="labMachine" id="machine-meter" onclick="openPanel('meter', this)">
+              <span class="clickLabel">SCAN</span>
+              <span class="seenBadge" id="seen-meter">✓</span>
               <div class="machineTitle">REACTION METER</div>
               <div class="machineSub">Archive residue</div>
 
@@ -745,12 +814,18 @@
             </button>
           </div>
 
+          <div class="scanStatus" id="scanStatus">
+            REAGENT FLASK // scan loaded
+          </div>
+
           <div class="viewer" id="viewer">
             <h3>REAGENT FLASK</h3>
-            Physical answer A is checked here.
-            Use the real object/puzzle from the box.
-
-            <strong>No answer is hidden in this text.</strong>
+            Scan result:<br>
+            liquid marker unstable.<br><br>
+            Input channel:<br>
+            A<br><br>
+            Archive response:<br>
+            waiting for chemical marker.
           </div>
 
           <div class="recoveredEnvironment" id="recoveredEnvironment">
@@ -772,40 +847,40 @@
       </section>
 
       <aside class="window">
-        <div class="windowTitle">Access Checklist</div>
+        <div class="windowTitle">Access Sequence</div>
 
         <div class="content">
           <div class="stepList">
             <div class="step">
-              <span class="stepNumber">1.</span>
-              Solve physical Chemistry puzzle A.
+              <span class="stepNumber">INPUT A</span>
+              Chemical marker required.
             </div>
 
             <div class="step">
-              <span class="stepNumber">2.</span>
-              Solve physical Chemistry puzzle B.
+              <span class="stepNumber">INPUT B</span>
+              Reagent marker required.
             </div>
 
             <div class="step">
-              <span class="stepNumber">3.</span>
-              Play the Chemistry game and recover the game code.
+              <span class="stepNumber">PROTOCOL</span>
+              External stack code required.
             </div>
           </div>
 
-          <label for="answerA">Physical answer A</label>
-          <input id="answerA" type="text" autocomplete="off" placeholder="answer A">
+          <label for="answerA">INPUT A</label>
+          <input id="answerA" type="text" autocomplete="off" placeholder="chemical marker">
 
-          <label for="answerB">Physical answer B</label>
-          <input id="answerB" type="text" autocomplete="off" placeholder="answer B">
+          <label for="answerB">INPUT B</label>
+          <input id="answerB" type="text" autocomplete="off" placeholder="reagent marker">
 
-          <label for="gameCode">Game code</label>
-          <input id="gameCode" type="text" autocomplete="off" placeholder="game code">
+          <label for="gameCode">PROTOCOL CODE</label>
+          <input id="gameCode" type="text" autocomplete="off" placeholder="external code">
 
-          <button class="verifyButton" onclick="checkAll()">VERIFY CHEMISTRY ACCESS</button>
+          <button class="verifyButton" onclick="checkAll()">RUN ACCESS SEQUENCE</button>
 
           <a class="gameLink" href="tetris.html">OPEN CHEMISTRY GAME</a>
 
-          <div class="status" id="status">Waiting for 3 correct entries.</div>
+          <div class="status" id="status">Access sequence incomplete.</div>
 
           <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
         </div>
@@ -818,34 +893,46 @@
     const correctAnswerB = "REAGENT";
     const correctGameCode = "ROZENBOTTEL";
 
+    const inspectedPanels = {
+      flask: false,
+      scanner: false,
+      signal: false,
+      meter: false
+    };
+
     const panels = {
       flask:
 `<h3>REAGENT FLASK</h3>
-Physical answer A is checked here.
-Use the real object/puzzle from the box.
-
-<strong>No answer is hidden in this text.</strong>`,
+Scan result:<br>
+liquid marker unstable.<br><br>
+Input channel:<br>
+A<br><br>
+Archive response:<br>
+waiting for chemical marker.`,
 
       scanner:
 `<h3>ELEMENT SCANNER</h3>
-Physical answer B is checked here.
-Use the element-related puzzle from the box.
-
-<strong>No answer is hidden in this text.</strong>`,
+Scan result:<br>
+periodic trace found.<br><br>
+Input channel:<br>
+B<br><br>
+Archive response:<br>
+waiting for reagent-linked identifier.`,
 
       signal:
 `<h3>SAMPLE SIGNAL</h3>
-The signal is unstable.
-
-Play the Chemistry game to recover the game code.`,
+Scan result:<br>
+external protocol missing.<br><br>
+Archive note:<br>
+"Stack the unstable elements until the missing word returns."`,
 
       meter:
 `<h3>REACTION METER</h3>
-Access requires exactly three entries:
-
-1. Physical answer A
-2. Physical answer B
-3. Chemistry game code`
+Scan result:<br>
+three channels detected.<br><br>
+A: unresolved<br>
+B: unresolved<br>
+Protocol: unresolved`
     };
 
     function normalize(value) {
@@ -862,17 +949,55 @@ Access requires exactly three entries:
 
       machines.forEach(function(machine) {
         machine.classList.remove("active");
+        machine.classList.remove("scanning");
       });
 
       button.classList.add("active");
+      button.classList.add("seen");
+
+      setTimeout(function() {
+        button.classList.add("scanning");
+      }, 10);
+
+      inspectedPanels[id] = true;
+
       document.getElementById("viewer").innerHTML = panels[id];
+
+      const scanStatus = document.getElementById("scanStatus");
+
+      if (id === "flask") {
+        scanStatus.textContent = "REAGENT FLASK // scan complete";
+      }
+
+      if (id === "scanner") {
+        scanStatus.textContent = "ELEMENT SCANNER // scan complete";
+      }
+
+      if (id === "signal") {
+        scanStatus.textContent = "SAMPLE SIGNAL // scan complete";
+      }
+
+      if (id === "meter") {
+        scanStatus.textContent = "REACTION METER // scan complete";
+      }
+
+      const allInspected =
+        inspectedPanels.flask &&
+        inspectedPanels.scanner &&
+        inspectedPanels.signal &&
+        inspectedPanels.meter;
+
+      if (allInspected) {
+        scanStatus.textContent = "LOCAL CHEMISTRY CACHE FULLY INSPECTED // access sequence still sealed";
+        scanStatus.classList.add("complete");
+      }
     }
 
     function unlockRecoveredEnvironment() {
       localStorage.setItem("chemistrySolved", "yes");
 
       const status = document.getElementById("status");
-      status.textContent = "Access accepted. Chemistry environment unlocked.";
+      status.textContent = "Access sequence complete. Deeper layer restored.";
       status.classList.add("ok");
 
       document.getElementById("recoveredEnvironment").style.display = "block";
@@ -894,21 +1019,7 @@ Access requires exactly three entries:
         return;
       }
 
-      let missing = [];
-
-      if (!aCorrect) {
-        missing.push("Answer A");
-      }
-
-      if (!bCorrect) {
-        missing.push("Answer B");
-      }
-
-      if (!gameCorrect) {
-        missing.push("Game code");
-      }
-
-      status.textContent = "Not accepted: check " + missing.join(", ") + ".";
+      status.textContent = "Access denied. One or more channels unstable.";
       status.classList.remove("ok");
 
       const sideWindow = status.closest(".window");
