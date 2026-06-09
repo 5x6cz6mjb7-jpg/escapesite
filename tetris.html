@@ -323,7 +323,7 @@
       }
     }
 
-    .compoundLegend {
+    .elementLegend {
       display: grid;
       gap: 8px;
       margin-top: 12px;
@@ -331,42 +331,47 @@
 
     .legendItem {
       display: grid;
-      grid-template-columns: 38px 1fr;
+      grid-template-columns: 42px 1fr;
       gap: 8px;
       align-items: center;
       color: var(--text);
       font-size: 12px;
     }
 
-    .legendAtom {
-      width: 34px;
-      height: 34px;
+    .legendElement {
+      width: 38px;
+      height: 38px;
       border: 2px solid var(--green);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
+      background:
+        linear-gradient(180deg, rgba(216,255,230,0.18), rgba(0,170,68,0.46)),
+        rgba(0,0,0,0.45);
+      display: grid;
+      grid-template-rows: 10px 17px 8px;
       align-items: center;
+      justify-items: center;
       color: var(--yellow);
       box-shadow: 0 0 10px rgba(0,255,102,0.30);
-      font-size: 11px;
       position: relative;
+      overflow: hidden;
     }
 
-    .legendAtom::before,
-    .legendAtom::after {
-      content: "";
-      position: absolute;
-      width: 48px;
-      height: 12px;
-      border: 1px solid rgba(0,255,102,0.45);
-      border-radius: 50%;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(28deg);
+    .legendElement .num {
+      font-size: 8px;
+      color: #eaffef;
+      line-height: 1;
     }
 
-    .legendAtom::after {
-      transform: translate(-50%, -50%) rotate(-28deg);
+    .legendElement .sym {
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .legendElement .name {
+      font-size: 5px;
+      color: #eaffef;
+      line-height: 1;
     }
 
     .winBox {
@@ -483,12 +488,12 @@
 
 <body>
   <div class="glitchOverlay" id="glitchOverlay">
-    COMPOUND DEFRAGMENTATION IN PROGRESS...
+    PERIODIC STACK DEFRAGMENTATION IN PROGRESS...
   </div>
 
   <main class="screen" id="screen">
     <div class="topBar">
-      <span>THORNE OS // COMPOUND STACK PROTOCOL</span>
+      <span>THORNE OS // PERIODIC STACK PROTOCOL</span>
       <span>CHEMISTRY GAME NODE</span>
       <span>USER: DR. N. THORNE</span>
     </div>
@@ -497,19 +502,19 @@
       <aside class="window">
         <div class="windowTitle">Protocol Notes</div>
         <div class="content">
-          <h1>COMPOUND STACK</h1>
-          <h2>Chemical pattern reconstruction</h2>
+          <h1>PERIODIC STACK</h1>
+          <h2>Element-tile reconstruction</h2>
 
           <div class="compoundPanel">
 This is not a standard block game.
 
-Each falling shape represents an unstable compound cluster.
+Each falling shape is built from periodic element tiles.
 Complete reaction rows to stabilise the archive.
 Every 2 completed rows reveals one scrambled letter.
           </div>
 
           <div class="formula">
-            C₁₇H₁₉NO₃<br>
+            H · C · N · O<br>
             TRACE: UNSTABLE
           </div>
 
@@ -517,6 +522,12 @@ Every 2 completed rows reveals one scrambled letter.
             Recover all letters. They will appear scrambled.
             Reconstruct the final chemistry protocol code and enter it back in the Chemistry folder.
           </p>
+
+          <div class="controls">
+            <div class="controlRow">← / → : move element cluster</div>
+            <div class="controlRow">↓ : accelerate fall</div>
+            <div class="controlRow">↑ or SPACE : rotate cluster</div>
+          </div>
 
           <a href="chemistry.html" class="backLink">RETURN TO CHEMISTRY</a>
         </div>
@@ -529,7 +540,7 @@ Every 2 completed rows reveals one scrambled letter.
             <canvas id="gameCanvas" width="300" height="600"></canvas>
           </div>
 
-          <div class="statusLine" id="statusLine">Press START to initialise compound stack.</div>
+          <div class="statusLine" id="statusLine">Press START to initialise periodic stack.</div>
 
           <button onclick="startGame()">START PROTOCOL</button>
           <button onclick="resetGame()">RESET</button>
@@ -552,30 +563,46 @@ Letters required: 11
 
           <div class="letterGrid" id="letterGrid"></div>
 
-          <div class="compoundLegend">
+          <div class="elementLegend">
             <div class="legendItem">
-              <div class="legendAtom">ALK</div>
-              <div>Alkaloid cluster</div>
+              <div class="legendElement">
+                <div class="num">1</div>
+                <div class="sym">H</div>
+                <div class="name">Hydro</div>
+              </div>
+              <div>Hydrogen tile</div>
             </div>
 
             <div class="legendItem">
-              <div class="legendAtom">TAN</div>
-              <div>Tannin bond</div>
+              <div class="legendElement">
+                <div class="num">6</div>
+                <div class="sym">C</div>
+                <div class="name">Carbon</div>
+              </div>
+              <div>Carbon tile</div>
             </div>
 
             <div class="legendItem">
-              <div class="legendAtom">ION</div>
-              <div>Ion trace</div>
+              <div class="legendElement">
+                <div class="num">8</div>
+                <div class="sym">O</div>
+                <div class="name">Oxygen</div>
+              </div>
+              <div>Oxygen tile</div>
             </div>
 
             <div class="legendItem">
-              <div class="legendAtom">OX</div>
-              <div>Oxidised sample</div>
+              <div class="legendElement">
+                <div class="num">26</div>
+                <div class="sym">Fe</div>
+                <div class="name">Iron</div>
+              </div>
+              <div>Iron tile</div>
             </div>
           </div>
 
           <div class="winBox" id="winBox">
-            <h2>COMPOUND STACK COMPLETE</h2>
+            <h2>PERIODIC STACK COMPLETE</h2>
             <p>
               The recovered letters form the chemistry game code.
               Return to the Chemistry folder and enter this as the game protocol code.
@@ -600,11 +627,24 @@ Letters required: 11
     const scrambledLetters = ["B", "O", "T", "E", "R", "Z", "L", "O", "N", "E", "T"];
     const rowsNeededPerLetter = 2;
 
-    const chemicalLabels = ["ALK", "TAN", "ION", "OX", "PH", "CN", "H2", "NO", "SB", "RG"];
+    const chemicalElements = [
+      { number: 1, symbol: "H", name: "Hydrogen" },
+      { number: 6, symbol: "C", name: "Carbon" },
+      { number: 7, symbol: "N", name: "Nitrogen" },
+      { number: 8, symbol: "O", name: "Oxygen" },
+      { number: 11, symbol: "Na", name: "Sodium" },
+      { number: 12, symbol: "Mg", name: "Magnesium" },
+      { number: 15, symbol: "P", name: "Phosphorus" },
+      { number: 16, symbol: "S", name: "Sulfur" },
+      { number: 17, symbol: "Cl", name: "Chlorine" },
+      { number: 19, symbol: "K", name: "Potassium" },
+      { number: 20, symbol: "Ca", name: "Calcium" },
+      { number: 26, symbol: "Fe", name: "Iron" }
+    ];
 
     let board = [];
     let currentPiece = null;
-    let currentLabel = "ALK";
+    let currentElement = chemicalElements[0];
     let gameInterval = null;
     let isRunning = false;
     let isGameOver = false;
@@ -668,38 +708,31 @@ Letters required: 11
 
     function randomPiece() {
       const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-      currentLabel = chemicalLabels[Math.floor(Math.random() * chemicalLabels.length)];
+      currentElement = chemicalElements[Math.floor(Math.random() * chemicalElements.length)];
 
       return {
         shape: shape,
         x: Math.floor(COLS / 2) - Math.ceil(shape[0].length / 2),
         y: 0,
-        label: currentLabel
+        element: currentElement
       };
     }
 
-    function drawCell(x, y, label, active) {
+    function drawCell(x, y, element, active) {
       const px = x * BLOCK;
       const py = y * BLOCK;
 
       ctx.save();
 
-      const gradient = ctx.createRadialGradient(
-        px + BLOCK / 2,
-        py + BLOCK / 2,
-        3,
-        px + BLOCK / 2,
-        py + BLOCK / 2,
-        BLOCK / 1.1
-      );
+      const gradient = ctx.createLinearGradient(px, py, px, py + BLOCK);
 
       if (active) {
-        gradient.addColorStop(0, "#ffee66");
-        gradient.addColorStop(0.45, "#00ff66");
-        gradient.addColorStop(1, "#005522");
+        gradient.addColorStop(0, "#d8ffe6");
+        gradient.addColorStop(0.38, "#00ff66");
+        gradient.addColorStop(1, "#006622");
       } else {
-        gradient.addColorStop(0, "#baffc9");
-        gradient.addColorStop(0.45, "#00aa44");
+        gradient.addColorStop(0, "#9dffbd");
+        gradient.addColorStop(0.42, "#00aa44");
         gradient.addColorStop(1, "#003b18");
       }
 
@@ -710,30 +743,37 @@ Letters required: 11
       ctx.lineWidth = 2;
       ctx.strokeRect(px + 3, py + 3, BLOCK - 6, BLOCK - 6);
 
-      ctx.strokeStyle = "rgba(216,255,230,0.55)";
+      ctx.strokeStyle = "rgba(216,255,230,0.45)";
       ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(px + BLOCK / 2, py + BLOCK / 2, 10, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.ellipse(px + BLOCK / 2, py + BLOCK / 2, 14, 5, Math.PI / 5, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.ellipse(px + BLOCK / 2, py + BLOCK / 2, 14, 5, -Math.PI / 5, 0, Math.PI * 2);
-      ctx.stroke();
+      ctx.strokeRect(px + 6, py + 6, BLOCK - 12, BLOCK - 12);
 
       ctx.fillStyle = "#001100";
-      ctx.globalAlpha = 0.85;
-      ctx.fillRect(px + 6, py + 10, BLOCK - 12, 12);
+      ctx.globalAlpha = 0.35;
+      ctx.fillRect(px + 5, py + 5, BLOCK - 10, BLOCK - 10);
       ctx.globalAlpha = 1;
 
       ctx.fillStyle = active ? "#ffee66" : "#eaffef";
-      ctx.font = "bold 9px Courier New";
+      ctx.font = "bold 8px Courier New";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText(element.number, px + 6, py + 5);
+
+      ctx.fillStyle = active ? "#ffee66" : "#ffffff";
+      ctx.font = "bold 15px Courier New";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(label, px + BLOCK / 2, py + 16);
+      ctx.fillText(element.symbol, px + BLOCK / 2, py + 18);
+
+      ctx.fillStyle = "rgba(234,255,239,0.85)";
+      ctx.font = "bold 5px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+
+      const shortName = element.name.length > 7
+        ? element.name.substring(0, 7)
+        : element.name;
+
+      ctx.fillText(shortName, px + BLOCK / 2, py + BLOCK - 5);
 
       ctx.restore();
     }
@@ -778,7 +818,7 @@ Letters required: 11
       for (let y = 0; y < piece.shape.length; y++) {
         for (let x = 0; x < piece.shape[y].length; x++) {
           if (piece.shape[y][x]) {
-            drawCell(piece.x + x, piece.y + y, piece.label, true);
+            drawCell(piece.x + x, piece.y + y, piece.element, true);
           }
         }
       }
@@ -815,7 +855,7 @@ Letters required: 11
             const boardX = currentPiece.x + x;
 
             if (boardY >= 0) {
-              board[boardY][boardX] = currentPiece.label;
+              board[boardY][boardX] = currentPiece.element;
             }
           }
         }
@@ -913,7 +953,7 @@ Letters required: 11
       resetGame();
       isRunning = true;
       isGameOver = false;
-      document.getElementById("statusLine").textContent = "Compound stack active.";
+      document.getElementById("statusLine").textContent = "Periodic stack active.";
 
       gameInterval = setInterval(dropPiece, dropSpeed);
     }
@@ -931,7 +971,7 @@ Letters required: 11
       currentPiece = randomPiece();
 
       document.getElementById("letterCount").textContent = "LETTERS FOUND: 0 / 11";
-      document.getElementById("statusLine").textContent = "Press START to initialise compound stack.";
+      document.getElementById("statusLine").textContent = "Press START to initialise periodic stack.";
       document.getElementById("winBox").style.display = "none";
       document.body.classList.remove("archiveGlitch");
 
@@ -942,14 +982,14 @@ Letters required: 11
       clearInterval(gameInterval);
       isRunning = false;
       isGameOver = true;
-      document.getElementById("statusLine").textContent = "Compound stack collapsed. Reset required.";
+      document.getElementById("statusLine").textContent = "Periodic stack collapsed. Reset required.";
     }
 
     function winGame() {
       clearInterval(gameInterval);
       isRunning = false;
 
-      document.getElementById("statusLine").textContent = "Compound stack complete. Code recovered.";
+      document.getElementById("statusLine").textContent = "Periodic stack complete. Code recovered.";
 
       document.body.classList.add("archiveGlitch");
       document.getElementById("glitchOverlay").style.display = "flex";
