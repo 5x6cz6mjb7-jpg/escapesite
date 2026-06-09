@@ -790,7 +790,8 @@
 
     .systemWindow,
     .readmeWindow,
-    .recycleWindow {
+    .recycleWindow,
+    .easterEggWindow {
       border: 2px solid #d8ffe6;
       background: #031203;
       box-shadow:
@@ -803,10 +804,11 @@
     }
 
     .readmeWindow,
-    .recycleWindow {
+    .recycleWindow,
+    .easterEggWindow {
       display: none;
       position: absolute;
-      width: 460px;
+      width: 480px;
       max-width: calc(100% - 40px);
       z-index: 30;
     }
@@ -817,8 +819,14 @@
     }
 
     .recycleWindow {
-      left: 36%;
-      top: 178px;
+      left: 35%;
+      top: 150px;
+    }
+
+    .easterEggWindow {
+      left: 40%;
+      top: 245px;
+      z-index: 31;
     }
 
     .windowButtons {
@@ -847,7 +855,8 @@
 
     .systemBody,
     .readmeBody,
-    .recycleBody {
+    .recycleBody,
+    .easterEggBody {
       padding: 14px;
       color: var(--text);
       font-size: 13px;
@@ -856,7 +865,8 @@
 
     .systemBox,
     .readmeBox,
-    .recycleBox {
+    .recycleBox,
+    .easterEggBox {
       border: 1px dashed var(--green2);
       background: rgba(0,255,102,0.045);
       padding: 10px;
@@ -865,7 +875,8 @@
     }
 
     .readmeBox strong,
-    .recycleBox strong {
+    .recycleBox strong,
+    .easterEggBox strong {
       color: var(--yellow);
     }
 
@@ -906,6 +917,7 @@
     }
 
     .deletedItem {
+      width: 100%;
       display: grid;
       grid-template-columns: 28px 1fr;
       gap: 10px;
@@ -914,6 +926,16 @@
       padding: 8px;
       background: rgba(0,0,0,0.22);
       margin-bottom: 8px;
+      color: var(--text);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .deletedItem:hover {
+      background: rgba(0,255,102,0.11);
+      color: var(--yellow);
     }
 
     .tinyTextIcon {
@@ -938,6 +960,13 @@
     .joke {
       color: var(--yellow);
       margin-top: 10px;
+    }
+
+    .easterEggText {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #caffd7;
+      white-space: pre-line;
     }
 
     .taskbar {
@@ -1042,7 +1071,8 @@
       }
 
       .readmeWindow,
-      .recycleWindow {
+      .recycleWindow,
+      .easterEggWindow {
         left: 50%;
         transform: translateX(-50%);
       }
@@ -1053,6 +1083,10 @@
 
       .recycleWindow {
         top: 190px;
+      }
+
+      .easterEggWindow {
+        top: 330px;
       }
     }
 
@@ -1073,7 +1107,7 @@
 
       .loginScreen,
       .desktop {
-        min-height: 980px;
+        min-height: 1040px;
       }
 
       .desktopTopStrip {
@@ -1108,13 +1142,18 @@
       }
 
       .readmeWindow,
-      .recycleWindow {
+      .recycleWindow,
+      .easterEggWindow {
         width: calc(100% - 28px);
         top: 150px;
       }
 
       .recycleWindow {
         top: 220px;
+      }
+
+      .easterEggWindow {
+        top: 410px;
       }
     }
 
@@ -1125,7 +1164,7 @@
 
       .loginScreen,
       .desktop {
-        min-height: 1160px;
+        min-height: 1220px;
       }
     }
   </style>
@@ -1389,26 +1428,45 @@ The truth about Jason Krane is buried inside the last file.</div>
               <div class="recycleBox"><strong>RECYCLE BIN CONTENTS</strong>
 
 3 deleted items found.
-Recovery confidence: embarrassing.</div>
+Click an item to recover readable text.</div>
 
-              <div class="deletedItem">
+              <button class="deletedItem" onclick="openEasterEgg('poem')">
                 <span class="tinyTextIcon"></span>
                 <span>krane_love_poem_final_FINAL2.txt</span>
-              </div>
+              </button>
 
-              <div class="deletedItem">
+              <button class="deletedItem" onclick="openEasterEgg('revenge')">
                 <span class="tinyTextIcon"></span>
                 <span>definitely_not_a_revenge_plan.txt</span>
-              </div>
+              </button>
 
-              <div class="deletedItem">
+              <button class="deletedItem" onclick="openEasterEgg('plants')">
                 <span class="tinyTextIcon"></span>
                 <span>plants_that_understand_me.xls</span>
-              </div>
+              </button>
 
               <div class="joke">
                 Deleted note recovered:<br><br>
                 “Reminder: stop naming poisonous plants after ex-colleagues.”
+              </div>
+            </div>
+          </section>
+
+          <section class="easterEggWindow" id="easterEggWindow">
+            <div class="windowTitleBar">
+              <span id="easterEggTitle">Recovered File</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeEasterEgg()"></span>
+              </div>
+            </div>
+
+            <div class="easterEggBody">
+              <div class="easterEggBox">
+                <strong id="easterEggHeader">RECOVERED TEXT</strong>
+
+                <div class="easterEggText" id="easterEggText"></div>
               </div>
             </div>
           </section>
@@ -1438,12 +1496,83 @@ Recovery confidence: embarrassing.</div>
     const correctEmail = "n.thorne@stbrigid-lab.ie";
     const correctPassword = "BLOODYCRANESBILL";
 
+    const easterEggs = {
+      poem: {
+        title: "krane_love_poem_final_FINAL2.txt",
+        header: "RECOVERED ROMANTIC DOCUMENT",
+        text:
+`Jason,
+
+Roses are red.
+Violets are blue.
+Your spy career was unstable,
+but my lab results were too.
+
+I tried to write something romantic,
+but the rhododendron judged me.
+
+Delete this before anyone from the department finds it.
+
+- N.`
+      },
+
+      revenge: {
+        title: "definitely_not_a_revenge_plan.txt",
+        header: "RECOVERED SUSPICIOUS DOCUMENT",
+        text:
+`This is absolutely not a revenge plan.
+
+Step 1:
+Do not create a fake Jason transmission.
+
+Step 2:
+Do not lure agents into following emotional clues.
+
+Step 3:
+Do not leave four encrypted folders on my desktop.
+
+Step 4:
+Do not call the folder "definitely_not_a_revenge_plan.txt".
+
+Note to self:
+Rename file later.`
+      },
+
+      plants: {
+        title: "plants_that_understand_me.xls",
+        header: "RECOVERED BOTANICAL SPREADSHEET",
+        text:
+`Plants That Understand Me:
+
+1. Bloody Cranesbill
+Reason: dramatic, loyal, excellent name.
+
+2. Nightshade
+Reason: never asks unnecessary questions.
+
+3. Rosehip
+Reason: looks harmless, keeps secrets.
+
+4. Office fern
+Reason: emotionally unavailable, but consistent.
+
+5. Jason
+Reason: technically not a plant.
+Moved to archive.`
+      }
+    };
+
     function normalizePassword(value) {
       return value
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
         .replaceAll("_", "");
+    }
+
+    function openDesktop() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("desktop").style.display = "block";
     }
 
     function attemptLogin() {
@@ -1455,9 +1584,10 @@ Recovery confidence: embarrassing.</div>
         message.style.color = "#ffee66";
         message.textContent = "ACCESS GRANTED // opening private workstation...";
 
+        localStorage.setItem("thorneLoggedIn", "yes");
+
         setTimeout(function() {
-          document.getElementById("loginScreen").style.display = "none";
-          document.getElementById("desktop").style.display = "block";
+          openDesktop();
         }, 900);
       } else {
         message.style.color = "#ff5555";
@@ -1485,6 +1615,7 @@ Recovery confidence: embarrassing.</div>
     function openReadme() {
       document.getElementById("readmeWindow").style.display = "block";
       document.getElementById("recycleWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
     function closeReadme() {
@@ -1494,10 +1625,25 @@ Recovery confidence: embarrassing.</div>
     function openRecycle() {
       document.getElementById("recycleWindow").style.display = "block";
       document.getElementById("readmeWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
     function closeRecycle() {
       document.getElementById("recycleWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
+    }
+
+    function openEasterEgg(type) {
+      const file = easterEggs[type];
+
+      document.getElementById("easterEggTitle").textContent = file.title;
+      document.getElementById("easterEggHeader").textContent = file.header;
+      document.getElementById("easterEggText").textContent = file.text;
+      document.getElementById("easterEggWindow").style.display = "block";
+    }
+
+    function closeEasterEgg() {
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
@@ -1511,6 +1657,10 @@ Recovery confidence: embarrassing.</div>
         document.getElementById("passwordInput").focus();
       }
     });
+
+    if (localStorage.getItem("thorneLoggedIn") === "yes") {
+      openDesktop();
+    }
 
     updateClock();
     setInterval(updateClock, 1000);
