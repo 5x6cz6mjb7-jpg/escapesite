@@ -2,22 +2,17 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Retro Desktop Terminal</title>
+  <title>Thorne Private Workstation</title>
 
   <style>
     :root {
       --green: #00ff66;
       --green2: #00aa44;
-      --green3: #007a33;
       --dark: #001100;
-      --black: #020602;
-      --screen: #041804;
-      --panel: #082508;
       --text: #baffc9;
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
-      --shadow: rgba(0, 255, 100, 0.25);
     }
 
     * {
@@ -58,29 +53,41 @@
       width: 100%;
       max-width: 1420px;
       background:
-        linear-gradient(180deg, #1b211b, #0d130d);
+        linear-gradient(180deg, #242b24 0%, #141a14 45%, #0b100b 100%);
       border: 4px solid #3c4a3c;
-      border-radius: 18px;
-      padding: 18px 18px 28px;
+      border-radius: 22px;
+      padding: 22px 22px 34px;
       box-shadow:
         0 0 0 3px #050805,
-        0 22px 50px rgba(0, 0, 0, 0.75),
-        inset 0 0 18px rgba(255, 255, 255, 0.04);
+        0 22px 50px rgba(0, 0, 0, 0.78),
+        inset 0 0 18px rgba(255, 255, 255, 0.05);
       position: relative;
       z-index: 2;
+    }
+
+    .computerShell::before {
+      content: "";
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      top: 12px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      pointer-events: none;
     }
 
     .computerShell::after {
       content: "";
       display: block;
-      width: 190px;
-      height: 18px;
+      width: 210px;
+      height: 20px;
       background: #090d09;
       border: 2px solid #273527;
       border-radius: 0 0 18px 18px;
       position: absolute;
       left: 50%;
-      bottom: 4px;
+      bottom: 5px;
       transform: translateX(-50%);
       box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
     }
@@ -90,24 +97,25 @@
       color: #9fc29f;
       font-size: 12px;
       letter-spacing: 2px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       text-transform: uppercase;
     }
 
     .monitorScreen {
-      min-height: 780px;
+      min-height: 790px;
       background:
-        radial-gradient(circle at center, rgba(0, 255, 102, 0.11), transparent 52%),
+        radial-gradient(circle at center, rgba(0, 255, 102, 0.16), transparent 48%),
         linear-gradient(180deg, #052005 0%, #020b02 100%);
-      border: 5px solid #111b11;
-      border-radius: 10px;
-      padding: 12px;
+      border: 7px solid #0c140c;
+      border-radius: 28px;
+      padding: 16px;
       position: relative;
       overflow: hidden;
       box-shadow:
-        inset 0 0 0 2px #2c3b2c,
-        inset 0 0 42px rgba(0, 255, 100, 0.08),
-        inset 0 0 120px rgba(0, 0, 0, 0.68);
+        inset 0 0 0 2px #324532,
+        inset 0 0 55px rgba(0, 255, 100, 0.12),
+        inset 0 0 135px rgba(0, 0, 0, 0.78),
+        0 0 22px rgba(0, 0, 0, 0.8);
     }
 
     .monitorScreen::before {
@@ -117,13 +125,13 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(255, 255, 255, 0.025),
-          rgba(255, 255, 255, 0.025) 1px,
+          rgba(255, 255, 255, 0.026),
+          rgba(255, 255, 255, 0.026) 1px,
           transparent 1px,
           transparent 3px
         );
       pointer-events: none;
-      z-index: 40;
+      z-index: 45;
       mix-blend-mode: screen;
       animation: scanMove 7s linear infinite;
     }
@@ -131,11 +139,33 @@
     .monitorScreen::after {
       content: "";
       position: absolute;
-      inset: 0;
+      inset: -8px;
       background:
-        radial-gradient(circle at center, transparent 58%, rgba(0,0,0,0.42) 100%);
+        radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.58) 100%),
+        radial-gradient(ellipse at center, transparent 58%, rgba(0, 255, 102, 0.08) 70%, rgba(0, 0, 0, 0.45) 100%);
       pointer-events: none;
-      z-index: 41;
+      z-index: 48;
+    }
+
+    .glassReflection {
+      position: absolute;
+      inset: 0;
+      z-index: 47;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          115deg,
+          rgba(255, 255, 255, 0.10) 0%,
+          rgba(255, 255, 255, 0.045) 13%,
+          transparent 30%
+        ),
+        radial-gradient(
+          ellipse at 32% 18%,
+          rgba(255, 255, 255, 0.09),
+          transparent 28%
+        );
+      mix-blend-mode: screen;
+      opacity: 0.58;
     }
 
     .crtGlow {
@@ -144,11 +174,11 @@
       pointer-events: none;
       z-index: 35;
       background:
-        radial-gradient(circle at 28% 32%, rgba(0, 255, 102, 0.22), transparent 26%),
-        radial-gradient(circle at 72% 62%, rgba(0, 255, 102, 0.13), transparent 30%),
-        radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.08), transparent 54%);
+        radial-gradient(circle at 28% 32%, rgba(0, 255, 102, 0.24), transparent 26%),
+        radial-gradient(circle at 72% 62%, rgba(0, 255, 102, 0.14), transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.12), transparent 54%);
       mix-blend-mode: screen;
-      opacity: 0.55;
+      opacity: 0.62;
       animation: greenWaas 9s ease-in-out infinite alternate;
     }
 
@@ -165,56 +195,68 @@
       position: absolute;
       left: 0;
       right: 0;
-      height: 120px;
-      top: -140px;
+      height: 130px;
+      top: -150px;
       pointer-events: none;
       z-index: 37;
       background: linear-gradient(
         180deg,
         transparent,
-        rgba(0, 255, 102, 0.08),
+        rgba(0, 255, 102, 0.10),
         transparent
       );
       animation: sweep 6.8s linear infinite;
     }
 
+    .crtNoise {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 38;
+      opacity: 0.12;
+      background-image:
+        radial-gradient(rgba(0,255,102,0.45) 1px, transparent 1px);
+      background-size: 7px 7px;
+      animation: noiseShift 0.35s steps(2) infinite;
+    }
+
     @keyframes greenWaas {
       0% {
         transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
+        opacity: 0.44;
       }
 
       35% {
         transform: translate(2%, 1%) scale(1.04);
-        opacity: 0.62;
+        opacity: 0.66;
       }
 
       70% {
         transform: translate(-1%, 3%) scale(1.02);
-        opacity: 0.5;
+        opacity: 0.53;
       }
 
       100% {
         transform: translate(3%, -2%) scale(1.06);
-        opacity: 0.68;
+        opacity: 0.72;
       }
     }
 
     @keyframes flicker {
       0%, 100% { opacity: 0.05; }
-      8% { opacity: 0.12; }
+      8% { opacity: 0.13; }
       9% { opacity: 0.02; }
-      10% { opacity: 0.16; }
+      10% { opacity: 0.18; }
       11% { opacity: 0.04; }
       38% { opacity: 0.07; }
-      39% { opacity: 0.14; }
+      39% { opacity: 0.15; }
       40% { opacity: 0.03; }
-      72% { opacity: 0.1; }
+      72% { opacity: 0.11; }
       73% { opacity: 0.04; }
     }
 
     @keyframes sweep {
-      0% { top: -140px; }
+      0% { top: -150px; }
       100% { top: 100%; }
     }
 
@@ -223,6 +265,13 @@
       100% { transform: translateY(12px); }
     }
 
+    @keyframes noiseShift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(3px, -2px); }
+      100% { transform: translate(-2px, 2px); }
+    }
+
+    .loginScreen,
     .desktop {
       height: 100%;
       min-height: 748px;
@@ -231,22 +280,176 @@
       background:
         linear-gradient(90deg, rgba(0,255,102,0.035) 1px, transparent 1px),
         linear-gradient(0deg, rgba(0,255,102,0.035) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 68%),
         linear-gradient(180deg, #082308 0%, #031203 100%);
-      background-size: 32px 32px, 32px 32px, auto;
-      box-shadow: inset 0 0 18px rgba(0, 255, 100, 0.08);
+      background-size: 32px 32px, 32px 32px, auto, auto;
+      box-shadow:
+        inset 0 0 18px rgba(0, 255, 100, 0.09),
+        inset 0 0 90px rgba(0, 0, 0, 0.55);
       overflow: hidden;
-      padding-bottom: 46px;
+      border-radius: 12px;
       animation: desktopPulse 6s ease-in-out infinite;
     }
 
     @keyframes desktopPulse {
       0%, 100% {
         filter: brightness(1) contrast(1);
+        transform: scale(1);
       }
 
       50% {
         filter: brightness(1.08) contrast(1.05);
+        transform: scale(1.002);
       }
+    }
+
+    .loginScreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
+    }
+
+    .loginWindow {
+      width: 100%;
+      max-width: 540px;
+      border: 2px solid #d8ffe6;
+      background: #031203;
+      box-shadow:
+        6px 6px 0 rgba(0, 0, 0, 0.72),
+        0 0 28px rgba(0,255,100,0.22);
+      position: relative;
+      z-index: 10;
+    }
+
+    .loginTitleBar,
+    .windowTitleBar {
+      height: 30px;
+      background:
+        linear-gradient(180deg, #12a046 0%, #0a4c22 100%);
+      color: var(--white);
+      border-bottom: 2px solid #d8ffe6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 7px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .loginBody {
+      padding: 22px;
+      color: var(--text);
+    }
+
+    .loginHeader {
+      text-align: center;
+      border: 1px dashed rgba(0,255,102,0.35);
+      padding: 14px;
+      margin-bottom: 18px;
+      background: rgba(0,0,0,0.28);
+    }
+
+    .loginHeader h1 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 21px;
+      letter-spacing: 2px;
+    }
+
+    .loginHeader p {
+      margin: 4px 0;
+      font-size: 12px;
+      color: #9dffbd;
+    }
+
+    .loginField {
+      margin-bottom: 14px;
+    }
+
+    .loginField label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--white);
+    }
+
+    .loginField input {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid var(--green2);
+      padding: 11px;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      outline: none;
+      box-shadow: inset 0 0 12px rgba(0,255,100,0.08);
+    }
+
+    .loginField input:focus {
+      border-color: var(--yellow);
+      box-shadow:
+        inset 0 0 12px rgba(0,255,100,0.13),
+        0 0 12px rgba(255,238,102,0.16);
+    }
+
+    .loginButtons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .oldButton {
+      color: var(--white);
+      background:
+        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      border-top: 2px solid #d8ffe6;
+      border-left: 2px solid #d8ffe6;
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      padding: 10px 14px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .oldButton:hover {
+      filter: brightness(1.18);
+    }
+
+    .oldButton.secondary {
+      background:
+        linear-gradient(180deg, #0b4c22 0%, #062b13 100%);
+      color: var(--yellow);
+    }
+
+    .loginMessage {
+      min-height: 22px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--red);
+    }
+
+    .hintBox {
+      display: none;
+      border: 1px dashed var(--green2);
+      background: rgba(0,255,102,0.045);
+      padding: 12px;
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .hintBox strong {
+      color: var(--yellow);
+    }
+
+    .desktop {
+      display: none;
+      padding-bottom: 46px;
     }
 
     .desktopTopStrip {
@@ -586,7 +789,8 @@
     }
 
     .systemWindow,
-    .readmeWindow {
+    .readmeWindow,
+    .recycleWindow {
       border: 2px solid #d8ffe6;
       background: #031203;
       box-shadow:
@@ -598,28 +802,23 @@
       align-self: start;
     }
 
-    .readmeWindow {
+    .readmeWindow,
+    .recycleWindow {
       display: none;
       position: absolute;
-      left: 42%;
-      top: 104px;
       width: 460px;
       max-width: calc(100% - 40px);
       z-index: 30;
     }
 
-    .windowTitleBar {
-      height: 28px;
-      background:
-        linear-gradient(180deg, #12a046 0%, #0a4c22 100%);
-      color: var(--white);
-      border-bottom: 2px solid #d8ffe6;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 7px;
-      font-size: 12px;
-      font-weight: bold;
+    .readmeWindow {
+      left: 42%;
+      top: 104px;
+    }
+
+    .recycleWindow {
+      left: 36%;
+      top: 178px;
     }
 
     .windowButtons {
@@ -647,7 +846,8 @@
     }
 
     .systemBody,
-    .readmeBody {
+    .readmeBody,
+    .recycleBody {
       padding: 14px;
       color: var(--text);
       font-size: 13px;
@@ -655,7 +855,8 @@
     }
 
     .systemBox,
-    .readmeBox {
+    .readmeBox,
+    .recycleBox {
       border: 1px dashed var(--green2);
       background: rgba(0,255,102,0.045);
       padding: 10px;
@@ -663,59 +864,80 @@
       white-space: pre-line;
     }
 
-    .readmeBox strong {
+    .readmeBox strong,
+    .recycleBox strong {
       color: var(--yellow);
     }
 
-    .fileStatusList {
+    .statusGrid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
       border: 1px solid rgba(0,255,102,0.25);
       background: rgba(0,0,0,0.25);
-      padding: 8px;
+      padding: 10px;
       margin-bottom: 12px;
     }
 
-    .fileStatusItem {
-      display: grid;
-      grid-template-columns: 18px 1fr auto;
-      gap: 8px;
-      align-items: center;
-      padding: 6px 4px;
-      border-bottom: 1px dotted rgba(0,255,102,0.18);
+    .statusGrid div:nth-child(even) {
+      color: var(--yellow);
+      text-align: right;
     }
 
-    .fileStatusItem:last-child {
-      border-bottom: none;
+    .miniLog {
+      height: 145px;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,102,0.25);
+      background: rgba(0,0,0,0.28);
+      padding: 8px;
+      color: #8dffb0;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    .tinyFolder {
-      width: 16px;
-      height: 12px;
-      background: #16b652;
-      border: 1px solid #d8ffe6;
-      position: relative;
-    }
-
-    .tinyFolder::before {
-      content: "";
-      position: absolute;
-      left: 2px;
-      top: -4px;
-      width: 7px;
-      height: 4px;
-      background: #25dd6d;
-      border: 1px solid #d8ffe6;
-      border-bottom: none;
-    }
-
-    .statusTag {
-      color: var(--red);
-      font-size: 11px;
+    .miniLog div {
+      margin-bottom: 5px;
     }
 
     .hintLine {
       color: var(--yellow);
       font-size: 12px;
       margin-top: 12px;
+    }
+
+    .deletedItem {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      border: 1px dotted rgba(0,255,102,0.28);
+      padding: 8px;
+      background: rgba(0,0,0,0.22);
+      margin-bottom: 8px;
+    }
+
+    .tinyTextIcon {
+      width: 20px;
+      height: 24px;
+      background: #d8ffe6;
+      border: 1px solid #001100;
+      position: relative;
+    }
+
+    .tinyTextIcon::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      width: 12px;
+      height: 2px;
+      background: #001100;
+      box-shadow: 0 5px 0 #001100;
+    }
+
+    .joke {
+      color: var(--yellow);
+      margin-top: 10px;
     }
 
     .taskbar {
@@ -819,10 +1041,18 @@
         min-height: 420px;
       }
 
-      .readmeWindow {
+      .readmeWindow,
+      .recycleWindow {
         left: 50%;
         transform: translateX(-50%);
+      }
+
+      .readmeWindow {
         top: 120px;
+      }
+
+      .recycleWindow {
+        top: 190px;
       }
     }
 
@@ -838,10 +1068,12 @@
       .monitorScreen {
         padding: 8px;
         min-height: auto;
+        border-radius: 18px;
       }
 
+      .loginScreen,
       .desktop {
-        min-height: 940px;
+        min-height: 980px;
       }
 
       .desktopTopStrip {
@@ -875,9 +1107,14 @@
         min-width: 78px;
       }
 
-      .readmeWindow {
+      .readmeWindow,
+      .recycleWindow {
         width: calc(100% - 28px);
         top: 150px;
+      }
+
+      .recycleWindow {
+        top: 220px;
       }
     }
 
@@ -886,8 +1123,9 @@
         grid-template-columns: repeat(2, 88px);
       }
 
+      .loginScreen,
       .desktop {
-        min-height: 1120px;
+        min-height: 1160px;
       }
     }
   </style>
@@ -896,18 +1134,68 @@
 <body>
 
   <main class="computerShell">
-    <div class="monitorLabel">MI6 Secure Computer Terminal // CRT Archive Workstation</div>
+    <div class="monitorLabel">Thorne Private Workstation // Botanical Chemistry Archive</div>
 
     <section class="monitorScreen">
       <div class="crtGlow"></div>
       <div class="crtFlicker"></div>
       <div class="crtSweep"></div>
+      <div class="crtNoise"></div>
+      <div class="glassReflection"></div>
 
-      <div class="desktop">
+      <section class="loginScreen" id="loginScreen">
+        <div class="loginWindow">
+          <div class="loginTitleBar">
+            <span>Private Workstation Login</span>
+            <div class="windowButtons">
+              <span class="winButton"></span>
+              <span class="winButton"></span>
+              <span class="winButton close"></span>
+            </div>
+          </div>
+
+          <div class="loginBody">
+            <div class="loginHeader">
+              <h1>THORNE PRIVATE WORKSTATION</h1>
+              <p>Botanical Chemistry Archive</p>
+              <p>Owner: Dr. Nessa Thorne</p>
+              <p>St. Brigid's University, Dublin</p>
+            </div>
+
+            <div class="loginField">
+              <label for="emailInput">EMAIL ADDRESS</label>
+              <input id="emailInput" type="text" autocomplete="off" placeholder="enter email address">
+            </div>
+
+            <div class="loginField">
+              <label for="passwordInput">PASSWORD</label>
+              <input id="passwordInput" type="password" autocomplete="off" placeholder="enter password">
+            </div>
+
+            <div class="loginButtons">
+              <button class="oldButton" onclick="attemptLogin()">LOGIN</button>
+              <button class="oldButton secondary" onclick="showPasswordHint()">FORGOT PASSWORD?</button>
+            </div>
+
+            <div class="loginMessage" id="loginMessage"></div>
+
+            <div class="hintBox" id="hintBox">
+              <strong>PASSWORD RECOVERY QUESTION</strong><br><br>
+              What is my favourite flower?<br><br>
+              Botanical file hint:<br>
+              <em>Geranium sanguineum</em><br><br>
+              Common name required.<br>
+              Spaces are not required.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="desktop" id="desktop">
         <div class="desktopTopStrip">
-          <span>MI6 RETRO DESKTOP OS 3.7</span>
-          <span>ARCHIVE NODE: BOTANICAL-RECOVERY</span>
-          <span>STATUS: ENCRYPTED</span>
+          <span>THORNE OS // PRIVATE LAB DESKTOP</span>
+          <span>ARCHIVE NODE: BOTANICAL-CHEMISTRY</span>
+          <span>USER: DR. N. THORNE</span>
         </div>
 
         <div class="desktopMain">
@@ -963,31 +1251,31 @@
               <span class="iconName">Readme.txt</span>
             </button>
 
-            <div class="desktopIcon">
+            <button class="desktopIcon" onclick="openRecycle()">
               <span class="oldIcon trashIcon"></span>
               <span class="iconName">Recycle Bin</span>
-            </div>
+            </button>
           </nav>
 
           <section class="centerArea">
             <div class="desktopStamp">
-              classified<br>
-              archive<br>
-              recovery
+              private<br>
+              botanical<br>
+              archive
             </div>
 
             <div class="warningNote">
               <div class="warningTitle">System Warning</div>
               <div class="warningBody">
                 Four locked archive files remain on this workstation.
-                Each file requires two passwords and one completed protocol.
+                The final file is marked as identity-sensitive.
               </div>
             </div>
           </section>
 
           <aside class="systemWindow">
             <div class="windowTitleBar">
-              <span>Archive Recovery Console</span>
+              <span>System Monitor</span>
               <div class="windowButtons">
                 <span class="winButton"></span>
                 <span class="winButton"></span>
@@ -996,50 +1284,41 @@
             </div>
 
             <div class="systemBody">
-              <div class="systemBox">Recovered file group:
-KRANE_PERSONAL_GARDEN.LOG
+              <div class="systemBox">THORNE BOTANICAL CHEMISTRY NODE
+Signal source: private workstation
+Local cache: partially restored
+Operator: DR. N. THORNE
+Last external contact: JASON KRANE</div>
 
-Archive source:
-Department of Biology
+              <div class="statusGrid">
+                <div>Archive files detected</div>
+                <div>4</div>
 
-Last known user:
-DR. A. VOSS</div>
+                <div>Encrypted folders</div>
+                <div>4</div>
 
-              <div class="fileStatusList">
-                <div class="fileStatusItem">
-                  <span class="tinyFolder"></span>
-                  <span>Locked File 1</span>
-                  <span class="statusTag">LOCKED</span>
-                </div>
+                <div>Deleted items</div>
+                <div>3</div>
 
-                <div class="fileStatusItem">
-                  <span class="tinyFolder"></span>
-                  <span>Locked File 2</span>
-                  <span class="statusTag">LOCKED</span>
-                </div>
+                <div>Botanical records</div>
+                <div>corrupted</div>
 
-                <div class="fileStatusItem">
-                  <span class="tinyFolder"></span>
-                  <span>Locked File 3</span>
-                  <span class="statusTag">LOCKED</span>
-                </div>
-
-                <div class="fileStatusItem">
-                  <span class="tinyFolder"></span>
-                  <span>Locked File 4</span>
-                  <span class="statusTag">LOCKED</span>
-                </div>
+                <div>Sender identity</div>
+                <div>hidden</div>
               </div>
 
-              <div class="systemBox">Required for each file:
-- Password A
-- Password B
-- Minigame protocol code
-
-Final file contains the sender identity.</div>
+              <div class="miniLog">
+                <div>&gt; booting private recovery shell...</div>
+                <div>&gt; scanning botanical access logs...</div>
+                <div>&gt; warning: Krane voiceprint mismatch</div>
+                <div>&gt; warning: staged transmission detected</div>
+                <div>&gt; four locked file fragments located</div>
+                <div>&gt; final file requires full recovery chain</div>
+                <div>&gt; recycle bin contains suspicious rubbish</div>
+              </div>
 
               <div class="hintLine">
-                Open Readme.txt for instructions.
+                Open Readme.txt for actual instructions.
               </div>
             </div>
           </aside>
@@ -1055,9 +1334,11 @@ Final file contains the sender identity.</div>
             </div>
 
             <div class="readmeBody">
-              <div class="readmeBox"><strong>MI6 ARCHIVE RECOVERY INSTRUCTIONS</strong>
+              <div class="readmeBox"><strong>PRIVATE WORKSTATION RECOVERY INSTRUCTIONS</strong>
 
-This workstation contains four encrypted archive folders.
+This workstation belongs to Dr. Nessa Thorne.
+
+Four encrypted archive folders remain on the desktop.
 
 Each folder requires three things before it opens:
 
@@ -1090,7 +1371,45 @@ The first files contain partial clues.
 
 The final locked file contains the full reveal.
 
-Do not open files out of order unless instructed by M or Q.</div>
+The truth about Jason Krane is buried inside the last file.</div>
+            </div>
+          </section>
+
+          <section class="recycleWindow" id="recycleWindow">
+            <div class="windowTitleBar">
+              <span>Recycle Bin</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeRecycle()"></span>
+              </div>
+            </div>
+
+            <div class="recycleBody">
+              <div class="recycleBox"><strong>RECYCLE BIN CONTENTS</strong>
+
+3 deleted items found.
+Recovery confidence: embarrassing.</div>
+
+              <div class="deletedItem">
+                <span class="tinyTextIcon"></span>
+                <span>krane_love_poem_final_FINAL2.txt</span>
+              </div>
+
+              <div class="deletedItem">
+                <span class="tinyTextIcon"></span>
+                <span>definitely_not_a_revenge_plan.txt</span>
+              </div>
+
+              <div class="deletedItem">
+                <span class="tinyTextIcon"></span>
+                <span>plants_that_understand_me.xls</span>
+              </div>
+
+              <div class="joke">
+                Deleted note recovered:<br><br>
+                “Reminder: stop naming poisonous plants after ex-colleagues.”
+              </div>
             </div>
           </section>
         </div>
@@ -1104,7 +1423,7 @@ Do not open files out of order unless instructed by M or Q.</div>
           </a>
 
           <div class="taskButtons">
-            <div class="taskButton">Archive Recovery Console</div>
+            <div class="taskButton">System Monitor</div>
             <div class="taskButton">Desktop</div>
             <div class="taskButton">Locked Files</div>
           </div>
@@ -1116,6 +1435,45 @@ Do not open files out of order unless instructed by M or Q.</div>
   </main>
 
   <script>
+    const correctEmail = "n.thorne@stbrigid-lab.ie";
+    const correctPassword = "BLOODYCRANESBILL";
+
+    function normalizePassword(value) {
+      return value
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "");
+    }
+
+    function attemptLogin() {
+      const emailInput = document.getElementById("emailInput").value.trim().toLowerCase();
+      const passwordInput = normalizePassword(document.getElementById("passwordInput").value);
+      const message = document.getElementById("loginMessage");
+
+      if (emailInput === correctEmail && passwordInput === correctPassword) {
+        message.style.color = "#ffee66";
+        message.textContent = "ACCESS GRANTED // opening private workstation...";
+
+        setTimeout(function() {
+          document.getElementById("loginScreen").style.display = "none";
+          document.getElementById("desktop").style.display = "block";
+        }, 900);
+      } else {
+        message.style.color = "#ff5555";
+        message.textContent = "ACCESS DENIED // invalid email or password.";
+      }
+    }
+
+    function showPasswordHint() {
+      const hintBox = document.getElementById("hintBox");
+      const message = document.getElementById("loginMessage");
+
+      hintBox.style.display = "block";
+      message.style.color = "#ffee66";
+      message.textContent = "PASSWORD RECOVERY HINT LOADED.";
+    }
+
     function updateClock() {
       const clock = document.getElementById("clockBox");
       const now = new Date();
@@ -1126,11 +1484,33 @@ Do not open files out of order unless instructed by M or Q.</div>
 
     function openReadme() {
       document.getElementById("readmeWindow").style.display = "block";
+      document.getElementById("recycleWindow").style.display = "none";
     }
 
     function closeReadme() {
       document.getElementById("readmeWindow").style.display = "none";
     }
+
+    function openRecycle() {
+      document.getElementById("recycleWindow").style.display = "block";
+      document.getElementById("readmeWindow").style.display = "none";
+    }
+
+    function closeRecycle() {
+      document.getElementById("recycleWindow").style.display = "none";
+    }
+
+    document.getElementById("passwordInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        attemptLogin();
+      }
+    });
+
+    document.getElementById("emailInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        document.getElementById("passwordInput").focus();
+      }
+    });
 
     updateClock();
     setInterval(updateClock, 1000);
