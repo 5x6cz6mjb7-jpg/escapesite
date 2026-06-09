@@ -13,6 +13,7 @@
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
+      --purple: #d48cff;
     }
 
     * {
@@ -539,6 +540,31 @@
       height: 42px;
       position: relative;
       margin-top: 4px;
+      animation: folderFloat 3.2s ease-in-out infinite;
+    }
+
+    .folder95.chemistry {
+      animation-delay: 0s;
+    }
+
+    .folder95.botany {
+      animation-delay: 0.4s;
+    }
+
+    .folder95.private {
+      animation-delay: 0.8s;
+    }
+
+    @keyframes folderFloat {
+      0%, 100% {
+        transform: translateY(0);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: translateY(-2px);
+        filter: brightness(1.18);
+      }
     }
 
     .folder95 .tab {
@@ -580,7 +606,7 @@
         0 0 10px rgba(0,255,100,0.18);
     }
 
-    .folder95.locked .front::before {
+    .folder95.private .front::before {
       content: "";
       position: absolute;
       left: 17px;
@@ -592,7 +618,7 @@
       border-radius: 7px 7px 0 0;
     }
 
-    .folder95.locked .front::after {
+    .folder95.private .front::after {
       content: "";
       position: absolute;
       left: 14px;
@@ -767,7 +793,7 @@
       position: absolute;
       left: 28px;
       bottom: 30px;
-      width: 330px;
+      width: 350px;
       border: 2px solid var(--green2);
       background: rgba(0, 0, 0, 0.35);
       box-shadow: 0 0 14px rgba(0,255,100,0.12);
@@ -896,7 +922,7 @@
     }
 
     .miniLog {
-      height: 145px;
+      height: 150px;
       overflow: hidden;
       border: 1px solid rgba(0,255,102,0.25);
       background: rgba(0,0,0,0.28);
@@ -1239,40 +1265,31 @@
 
         <div class="desktopMain">
           <nav class="iconColumn">
-            <a class="desktopIcon" href="lockedfile1.html">
-              <span class="folder95 locked">
+            <a class="desktopIcon" href="chemistry.html">
+              <span class="folder95 chemistry">
                 <span class="tab"></span>
                 <span class="back"></span>
                 <span class="front"></span>
               </span>
-              <span class="iconName">Locked File 1</span>
+              <span class="iconName">Chemistry</span>
             </a>
 
-            <a class="desktopIcon" href="lockedfile2.html">
-              <span class="folder95 locked">
+            <a class="desktopIcon" href="botany.html">
+              <span class="folder95 botany">
                 <span class="tab"></span>
                 <span class="back"></span>
                 <span class="front"></span>
               </span>
-              <span class="iconName">Locked File 2</span>
+              <span class="iconName">Botany</span>
             </a>
 
-            <a class="desktopIcon" href="lockedfile3.html">
-              <span class="folder95 locked">
+            <a class="desktopIcon" href="private.html">
+              <span class="folder95 private">
                 <span class="tab"></span>
                 <span class="back"></span>
                 <span class="front"></span>
               </span>
-              <span class="iconName">Locked File 3</span>
-            </a>
-
-            <a class="desktopIcon" href="lockedfile4.html">
-              <span class="folder95 locked">
-                <span class="tab"></span>
-                <span class="back"></span>
-                <span class="front"></span>
-              </span>
-              <span class="iconName">Locked File 4</span>
+              <span class="iconName">Private</span>
             </a>
 
             <div class="desktopIcon">
@@ -1298,16 +1315,17 @@
 
           <section class="centerArea">
             <div class="desktopStamp">
+              thorne<br>
               private<br>
-              botanical<br>
-              archive
+              workstation
             </div>
 
             <div class="warningNote">
-              <div class="warningTitle">System Warning</div>
+              <div class="warningTitle">Local System Warning</div>
               <div class="warningBody">
-                Four locked archive files remain on this workstation.
-                The final file is marked as identity-sensitive.
+                Three main directories remain accessible:
+                Chemistry, Botany and Private.
+                The Private folder appears to contain personal material connected to Jason Krane.
               </div>
             </div>
           </section>
@@ -1330,34 +1348,34 @@ Operator: DR. N. THORNE
 Last external contact: JASON KRANE</div>
 
               <div class="statusGrid">
-                <div>Archive files detected</div>
-                <div>4</div>
-
-                <div>Encrypted folders</div>
-                <div>4</div>
-
-                <div>Deleted items</div>
+                <div>Main folders</div>
                 <div>3</div>
 
-                <div>Botanical records</div>
-                <div>corrupted</div>
+                <div>Chemistry records</div>
+                <div>unstable</div>
 
-                <div>Sender identity</div>
+                <div>Botany records</div>
+                <div>fragmented</div>
+
+                <div>Private records</div>
+                <div>locked</div>
+
+                <div>Diary reference</div>
                 <div>hidden</div>
               </div>
 
               <div class="miniLog">
                 <div>&gt; booting private recovery shell...</div>
-                <div>&gt; scanning botanical access logs...</div>
-                <div>&gt; warning: Krane voiceprint mismatch</div>
-                <div>&gt; warning: staged transmission detected</div>
-                <div>&gt; four locked file fragments located</div>
-                <div>&gt; final file requires full recovery chain</div>
-                <div>&gt; recycle bin contains suspicious rubbish</div>
+                <div>&gt; scanning chemical notebooks...</div>
+                <div>&gt; botanical index partially restored</div>
+                <div>&gt; private correspondence detected</div>
+                <div>&gt; Jason Krane reference count: abnormal</div>
+                <div>&gt; warning: staged transmission residue found</div>
+                <div>&gt; open Readme.txt for recovery order</div>
               </div>
 
               <div class="hintLine">
-                Open Readme.txt for actual instructions.
+                Recommended order: Chemistry → Botany → Private.
               </div>
             </div>
           </aside>
@@ -1377,40 +1395,29 @@ Last external contact: JASON KRANE</div>
 
 This workstation belongs to Dr. Nessa Thorne.
 
-Four encrypted archive folders remain on the desktop.
+Three main directories are available:
 
-Each folder requires three things before it opens:
+1. Chemistry
+2. Botany
+3. Private</div>
 
-1. PASSWORD A
-2. PASSWORD B
-3. A completed minigame code</div>
+              <div class="readmeBox"><strong>RECOMMENDED RECOVERY ORDER</strong>
 
-              <div class="readmeBox"><strong>HOW TO OPEN A LOCKED FILE</strong>
+Open Chemistry first.
 
-Step 1:
-Open a locked folder.
+Then open Botany.
 
-Step 2:
-Enter the two passwords.
+Only open Private after recovering enough context from the first two folders.
 
-Step 3:
-Start the required game from inside the locked file.
-
-Step 4:
-Finish the game and copy the recovered code.
-
-Step 5:
-Return to the locked file and enter the game code.
-
-When all three locks are correct, the file decrypts.</div>
+The Private folder may contain personal material connected to Jason Krane.</div>
 
               <div class="readmeBox"><strong>WARNING</strong>
 
-The first files contain partial clues.
+Do not assume Jason Krane is the sender.
 
-The final locked file contains the full reveal.
+Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
 
-The truth about Jason Krane is buried inside the last file.</div>
+Find the diary.</div>
             </div>
           </section>
 
@@ -1447,7 +1454,7 @@ Click an item to recover readable text.</div>
 
               <div class="joke">
                 Deleted note recovered:<br><br>
-                “Reminder: stop naming poisonous plants after ex-colleagues.”
+                “Reminder: stop naming suspicious folders suspicious names.”
               </div>
             </div>
           </section>
@@ -1483,7 +1490,7 @@ Click an item to recover readable text.</div>
           <div class="taskButtons">
             <div class="taskButton">System Monitor</div>
             <div class="taskButton">Desktop</div>
-            <div class="taskButton">Locked Files</div>
+            <div class="taskButton">Thorne Archive</div>
           </div>
 
           <div class="clock" id="clockBox">00:00</div>
@@ -1505,11 +1512,11 @@ Click an item to recover readable text.</div>
 
 Roses are red.
 Violets are blue.
-Your spy career was unstable,
-but my lab results were too.
+Your cover was terrible,
+but I still covered for you.
 
-I tried to write something romantic,
-but the rhododendron judged me.
+I tried to write something romantic.
+The rhododendron judged me.
 
 Delete this before anyone from the department finds it.
 
@@ -1523,16 +1530,16 @@ Delete this before anyone from the department finds it.
 `This is absolutely not a revenge plan.
 
 Step 1:
-Do not create a fake Jason transmission.
+Do not fake a Jason transmission.
 
 Step 2:
 Do not lure agents into following emotional clues.
 
 Step 3:
-Do not leave four encrypted folders on my desktop.
+Do not leave obvious files on your desktop.
 
 Step 4:
-Do not call the folder "definitely_not_a_revenge_plan.txt".
+Do not name this file definitely_not_a_revenge_plan.txt.
 
 Note to self:
 Rename file later.`
