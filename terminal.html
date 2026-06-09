@@ -2,300 +2,454 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Mission Terminal</title>
+  <title>MI6 Retro Desktop Terminal</title>
 
   <style>
+    :root {
+      --green: #00ff66;
+      --softGreen: #00aa44;
+      --dark: #001100;
+      --panel: #031403;
+      --text: #baffc9;
+      --yellow: #ffee66;
+      --red: #ff5555;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #001100;
-      color: #00ff66;
+      background:
+        radial-gradient(circle at center, #062006 0%, #020902 62%, #000 100%);
+      color: var(--green);
       font-family: "Courier New", monospace;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 16px;
       overflow: auto;
-      padding: 20px;
-      box-sizing: border-box;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.08),
-          rgba(0, 255, 100, 0.08) 1px,
+          rgba(0, 255, 100, 0.06),
+          rgba(0, 255, 100, 0.06) 1px,
           transparent 1px,
-          transparent 5px
+          transparent 4px
         );
-      pointer-events: none;
       z-index: 1;
     }
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.65) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .terminal {
+    .computer {
       width: 100%;
-      max-width: 1080px;
-      padding: 28px;
-      background: #000900;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      max-width: 1380px;
+      background: #0c140c;
+      border: 3px solid #244524;
+      border-radius: 16px;
+      padding: 18px 18px 26px;
+      box-shadow:
+        0 0 0 3px #050805,
+        0 18px 45px rgba(0, 0, 0, 0.65);
       position: relative;
       z-index: 2;
-      box-sizing: border-box;
     }
 
-    .title {
-      font-size: 24px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+    .monitorHeader {
+      color: #9fc29f;
+      font-size: 13px;
       letter-spacing: 1px;
+      margin-bottom: 10px;
+      text-align: center;
+      text-transform: uppercase;
     }
 
-    .text {
+    .screen {
+      min-height: 760px;
+      background:
+        radial-gradient(circle at center, rgba(0, 255, 100, 0.08), transparent 52%),
+        linear-gradient(180deg, #041104 0%, #020c02 100%);
+      border: 4px solid #1d391d;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow:
+        inset 0 0 35px rgba(0, 255, 100, 0.08),
+        inset 0 0 90px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.3) 100%);
+      z-index: 1;
+    }
+
+    .topBar {
+      height: 34px;
+      border: 2px solid var(--softGreen);
+      background: linear-gradient(180deg, #0c320c, #061b06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .topLeft,
+    .topRight {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .signalDot {
+      width: 9px;
+      height: 9px;
+      background: var(--green);
+      border: 1px solid #d8ffe6;
+      box-shadow: 0 0 8px rgba(0, 255, 100, 0.7);
+    }
+
+    .desktopLayout {
+      display: grid;
+      grid-template-columns: 1fr 410px;
+      gap: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .desktop {
+      min-height: 620px;
+      border: 2px solid rgba(0, 255, 100, 0.28);
+      background:
+        linear-gradient(180deg, rgba(0, 255, 100, 0.035), rgba(0, 255, 100, 0.01)),
+        rgba(0, 10, 0, 0.22);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 78px);
+      grid-auto-rows: 96px;
+      gap: 12px;
+      align-content: start;
+      position: relative;
+      box-shadow: inset 0 0 18px rgba(0, 255, 100, 0.06);
+    }
+
+    .desktopNote {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      color: #8dffb0;
+      opacity: 0.72;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: right;
+      pointer-events: none;
+    }
+
+    .iconLink,
+    .iconDummy {
+      width: 74px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .iconLink:hover,
+    .iconDummy:hover {
+      border: 1px dashed var(--softGreen);
+      background: rgba(0, 255, 100, 0.06);
+    }
+
+    .iconLabel {
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.2;
+      color: #e9ffef;
+      word-break: break-word;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.3);
+    }
+
+    .folderIcon {
+      width: 42px;
+      height: 30px;
+      background: linear-gradient(180deg, #28bd62, #0d7a34);
+      border: 2px solid #d8ffe6;
+      position: relative;
+      box-shadow: 0 0 12px rgba(0, 255, 100, 0.2);
+    }
+
+    .folderIcon::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: -8px;
+      width: 18px;
+      height: 8px;
+      background: linear-gradient(180deg, #2de06f, #139441);
+      border: 2px solid #d8ffe6;
+      border-bottom: none;
+    }
+
+    .folderIcon::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 8px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    .smallIcon {
+      width: 34px;
+      height: 34px;
+      border: 2px solid #d8ffe6;
+      background: linear-gradient(180deg, #0d3d0d, #061b06);
+      position: relative;
+      box-shadow: 0 0 10px rgba(0, 255, 100, 0.14);
+    }
+
+    .iconDrive::before {
+      content: "A:";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    .iconDisk::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      width: 16px;
+      height: 18px;
+      background: var(--green);
+      border: 1px solid #d8ffe6;
+    }
+
+    .iconDisk::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 9px;
+      width: 10px;
+      height: 4px;
+      background: #001100;
+    }
+
+    .iconTrash::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 9px;
+      width: 14px;
+      height: 16px;
+      border: 2px solid #d8ffe6;
+      border-top: none;
+    }
+
+    .iconTrash::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 5px;
+      width: 16px;
+      height: 4px;
+      background: #d8ffe6;
+    }
+
+    .iconFile::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 5px;
+      width: 16px;
+      height: 22px;
+      background: var(--green);
+      clip-path: polygon(0 0, 75% 0, 100% 25%, 100% 100%, 0 100%);
+    }
+
+    .window {
+      min-height: 620px;
+      border: 2px solid var(--softGreen);
+      background: var(--panel);
+      box-shadow:
+        0 0 16px rgba(0, 255, 100, 0.12),
+        inset 0 0 22px rgba(0, 255, 100, 0.05);
+    }
+
+    .windowTitle {
+      background: linear-gradient(180deg, #0c360c, #071d07);
+      border-bottom: 2px solid var(--softGreen);
+      padding: 8px 10px;
+      color: #e9ffef;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .windowButtons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .winBtn {
+      width: 16px;
+      height: 16px;
+      border: 1px solid #d8ffe6;
+      background: #0c2d0c;
+    }
+
+    .windowBody {
+      padding: 16px;
+      color: var(--text);
       line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .alert {
+      border: 1px dashed var(--softGreen);
+      background: rgba(0, 255, 100, 0.04);
+      padding: 12px;
+      margin-bottom: 14px;
       white-space: pre-line;
     }
 
-    .warningText {
-      color: #ff5555;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    .archiveBox {
-      margin: 22px 0;
-      padding: 16px;
-      border: 1px solid #00aa44;
-      background: rgba(0, 20, 0, 0.9);
-      color: #8dffb0;
-      line-height: 1.8;
-      font-size: 17px;
-    }
-
-    .protocolGrid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin: 22px 0;
-    }
-
-    .protocolBox {
-      padding: 16px;
-      border: 1px dashed #00aa44;
-      background: rgba(0, 30, 0, 0.65);
-      color: #baffc9;
-      line-height: 1.6;
-      box-sizing: border-box;
-      min-height: 225px;
-    }
-
-    .protocolTitle {
-      color: #00ff66;
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
-    }
-
-    .protocolStatus {
-      margin-top: 10px;
-      color: #ffaa00;
-      font-size: 14px;
-    }
-
-    .protocolButton {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 12px 14px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      text-decoration: none;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    .protocolButton:hover {
-      background: #005c22;
-    }
-
-    .inputSection {
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid #00aa44;
-    }
-
-    .wordRow {
-      display: grid;
-      grid-template-columns: 250px 1fr auto auto;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .wordLabel {
-      color: #8dffb0;
-      font-size: 15px;
-    }
-
-    input {
-      background: #000;
-      color: #00ff66;
-      border: 1px solid #00aa44;
+    .fileList {
+      border: 1px dashed rgba(0, 255, 100, 0.25);
       padding: 12px;
-      font-family: "Courier New", monospace;
-      font-size: 17px;
-      text-transform: uppercase;
-      outline: none;
+      background: rgba(0, 0, 0, 0.25);
+      color: #9dffbd;
     }
 
-    input::placeholder {
-      color: #006b2a;
+    .fileList div {
+      margin-bottom: 8px;
     }
 
-    input:focus {
-      box-shadow: 0 0 12px rgba(0, 255, 100, 0.7);
-    }
-
-    input.correct {
-      background: #002b10;
-      border-color: #00ff66;
-      color: #baffc9;
-    }
-
-    input.wrong {
-      background: #260000;
-      border-color: #ff4444;
-      color: #ff9999;
-    }
-
-    button {
-      padding: 12px 16px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      cursor: pointer;
-      letter-spacing: 1px;
-    }
-
-    button:hover {
-      background: #005c22;
-    }
-
-    button:disabled {
-      background: #00200c;
-      color: #5aff91;
-      cursor: default;
-      opacity: 0.7;
-    }
-
-    .status {
-      min-width: 90px;
-      font-size: 14px;
-    }
-
-    .correctStatus {
-      color: #00ff66;
-    }
-
-    .wrongStatus {
-      color: #ff4444;
-    }
-
-    #terminalMessage {
-      margin-top: 20px;
-      color: #ff4444;
-      min-height: 24px;
-      line-height: 1.5;
-    }
-
-    #continueArea {
-      display: none;
-      margin-top: 24px;
-      padding: 18px;
-      border: 1px solid #00ff66;
-      background: rgba(0, 35, 0, 0.9);
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.35);
-    }
-
-    .continueButton {
-      display: inline-block;
+    .warning {
+      color: var(--red);
       margin-top: 14px;
-      padding: 14px 20px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
+    }
+
+    .taskbar {
+      margin-top: 12px;
+      height: 40px;
+      border: 2px solid var(--softGreen);
+      background: linear-gradient(180deg, #0c320c, #061806);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .startButton {
+      height: 26px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #d8ffe6;
+      background: linear-gradient(180deg, #127a32, #0a4f20);
+      color: #e9ffef;
+      font-size: 13px;
+      font-weight: bold;
       text-decoration: none;
-      font-size: 16px;
-      letter-spacing: 2px;
     }
 
-    .continueButton:hover {
-      background: #005c22;
-    }
-
-    .cursor {
-      display: inline-block;
+    .startSquare {
       width: 10px;
-      height: 18px;
-      background: #00ff66;
-      animation: blink 1s infinite;
-      vertical-align: middle;
-      margin-left: 4px;
+      height: 10px;
+      background: var(--green);
+      border: 1px solid #d8ffe6;
+      box-shadow: 0 0 6px rgba(0, 255, 100, 0.45);
     }
 
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+    .taskbarMiddle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #9dffbd;
+      font-size: 12px;
+      padding: 0 10px;
+      flex: 1;
+      margin-left: 10px;
     }
 
-    @media (max-width: 1050px) {
-      .protocolGrid {
-        grid-template-columns: repeat(2, 1fr);
+    .taskTag {
+      border: 1px solid var(--softGreen);
+      padding: 5px 10px;
+      background: rgba(0, 255, 100, 0.05);
+      white-space: nowrap;
+    }
+
+    .clockBox {
+      border: 1px solid var(--softGreen);
+      min-width: 88px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--yellow);
+      font-size: 13px;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 1100px) {
+      .desktopLayout {
+        grid-template-columns: 1fr;
+      }
+
+      .desktop {
+        min-height: 420px;
+      }
+
+      .window {
+        min-height: auto;
       }
     }
 
     @media (max-width: 700px) {
-      .protocolGrid {
-        grid-template-columns: 1fr;
+      .screen {
+        min-height: auto;
       }
 
-      .wordRow {
-        grid-template-columns: 1fr;
-        gap: 6px;
-        margin-bottom: 16px;
+      .desktop {
+        grid-template-columns: repeat(auto-fill, 72px);
+        grid-auto-rows: 92px;
       }
 
-      .status {
-        min-width: auto;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .terminal {
-        padding: 20px;
-      }
-
-      .title {
-        font-size: 18px;
-      }
-
-      .archiveBox {
-        font-size: 15px;
+      .taskbarMiddle {
+        display: none;
       }
     }
   </style>
@@ -303,195 +457,134 @@
 
 <body>
 
-  <main class="terminal">
-    <div class="title">
-      MI6 BOTANICAL ARCHIVE // MINIGAME ACCESS TERMINAL<span class="cursor"></span>
-    </div>
+  <div class="computer">
+    <div class="monitorHeader">MI6 Secure Computer Terminal // Botanical Archive Recovery Node</div>
 
-    <div class="text">Recovered file: KRANE_PERSONAL_GARDEN.LOG
-Status: LOCKED
+    <div class="screen">
+      <div class="topBar">
+        <div class="topLeft">
+          <span class="signalDot"></span>
+          <span>MI6 RETRO DESKTOP OS 3.7</span>
+        </div>
+
+        <div class="topRight">
+          <span>USER: M_Q_SHARED</span>
+          <span>STATUS: PARTIALLY LOCKED</span>
+        </div>
+      </div>
+
+      <div class="desktopLayout">
+        <section class="desktop">
+          <div class="desktopNote">
+            recovered desktop<br>
+            4 locked files<br>
+            more icons available
+          </div>
+
+          <a class="iconLink" href="lockedfile1.html">
+            <span class="folderIcon"></span>
+            <span class="iconLabel">Locked File 1</span>
+          </a>
+
+          <a class="iconLink" href="lockedfile2.html">
+            <span class="folderIcon"></span>
+            <span class="iconLabel">Locked File 2</span>
+          </a>
+
+          <a class="iconLink" href="lockedfile3.html">
+            <span class="folderIcon"></span>
+            <span class="iconLabel">Locked File 3</span>
+          </a>
+
+          <a class="iconLink" href="lockedfile4.html">
+            <span class="folderIcon"></span>
+            <span class="iconLabel">Locked File 4</span>
+          </a>
+
+          <div class="iconDummy">
+            <span class="smallIcon iconDrive"></span>
+            <span class="iconLabel">A:\ Drive</span>
+          </div>
+
+          <div class="iconDummy">
+            <span class="smallIcon iconDisk"></span>
+            <span class="iconLabel">Backup Disk</span>
+          </div>
+
+          <div class="iconDummy">
+            <span class="smallIcon iconTrash"></span>
+            <span class="iconLabel">Recycle</span>
+          </div>
+
+          <div class="iconDummy">
+            <span class="smallIcon iconFile"></span>
+            <span class="iconLabel">Readme.txt</span>
+          </div>
+        </section>
+
+        <aside class="window">
+          <div class="windowTitle">
+            <span>Archive Recovery Console</span>
+            <div class="windowButtons">
+              <span class="winBtn"></span>
+              <span class="winBtn"></span>
+              <span class="winBtn"></span>
+            </div>
+          </div>
+
+          <div class="windowBody">
+            <div class="alert">Recovered file group: KRANE_PERSONAL_GARDEN.LOG
 Archive source: Department of Biology
 Last known user: DR. A. VOSS
 
-The local archive has been wiped.
-All remaining fragments are locked inside external simulations.
-Complete each protocol and enter the recovered codes below.</div>
+Four locked files remain on this desktop.
+Each file requires:
+- Password A
+- Password B
+- One completed minigame code</div>
 
-    <div class="warningText">
-      WARNING: No local keyword recovery available.
-      Four external protocols are required to restore the classified file.
-    </div>
+            <div class="fileList">
+              <div>LOCKED FILE 1 // Botanical Containment</div>
+              <div>LOCKED FILE 2 // Pixel Stack Archive</div>
+              <div>LOCKED FILE 3 // Top-Down Lab Report</div>
+              <div>LOCKED FILE 4 // Final Memory Record</div>
+            </div>
 
-    <div class="archiveBox">
-      FRAGMENT 1: BOTANICAL CONTAINMENT PROTOCOL REQUIRED<br>
-      FRAGMENT 2: BOTANICAL PIXEL STACK PROTOCOL REQUIRED<br>
-      FRAGMENT 3: MI6 TOP-DOWN LAB PROTOCOL REQUIRED<br>
-      FRAGMENT 4: MI6 MEMORY PROTOCOL REQUIRED
-    </div>
-
-    <div class="protocolGrid">
-      <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL A // SNAKE</div>
-        Botanical containment simulation.<br>
-        Collect safe samples. Avoid toxic specimens and barriers.
-        <div class="protocolStatus">OUTPUT: SPECIMEN WORD</div>
-        <a class="protocolButton" href="snake.html">
-          OPEN SNAKE PROTOCOL
-        </a>
+            <div class="warning">
+              WARNING: Final file contains the identity of the sender.
+            </div>
+          </div>
+        </aside>
       </div>
 
-      <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL B // PIXEL STACK</div>
-        Botanical memory stack simulation.<br>
-        Complete rows to recover scrambled archive letters.
-        <div class="protocolStatus">OUTPUT: SCRAMBLED SPECIMEN WORD</div>
-        <a class="protocolButton" href="tetris.html">
-          OPEN PIXEL STACK
+      <div class="taskbar">
+        <a class="startButton" href="#">
+          <span class="startSquare"></span>
+          <span>Start</span>
         </a>
-      </div>
 
-      <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL C // TOP-DOWN LAB</div>
-        Explore connected rooms.<br>
-        Find a key, open the chest, recover the weapon and defeat M/Q dummies.
-        <div class="protocolStatus">OUTPUT: COMMAND CODE</div>
-        <a class="protocolButton" href="shoot.html">
-          OPEN TOP-DOWN LAB
-        </a>
-      </div>
+        <div class="taskbarMiddle">
+          <span class="taskTag">Desktop</span>
+          <span class="taskTag">Archive Console</span>
+          <span class="taskTag">Locked Files</span>
+        </div>
 
-      <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL D // MEMORY</div>
-        Classified visual memory test.<br>
-        Match all spy-symbol pairs before the two-minute timer expires.
-        <div class="protocolStatus">OUTPUT: MEMORY CODE</div>
-        <a class="protocolButton" href="memory.html">
-          OPEN MEMORY PROTOCOL
-        </a>
+        <div class="clockBox" id="clockBox">00:00</div>
       </div>
     </div>
-
-    <section class="inputSection">
-      <div class="text">Enter recovered minigame codes:</div>
-
-      <div class="wordRow">
-        <div class="wordLabel">FRAGMENT 1 // SNAKE</div>
-        <input id="word1" type="text" placeholder="CODE FROM SNAKE">
-        <button id="button1" onclick="checkSingleWord(1)">CHECK</button>
-        <span id="status1" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">FRAGMENT 2 // PIXEL STACK</div>
-        <input id="word2" type="text" placeholder="CODE FROM TETRIS">
-        <button id="button2" onclick="checkSingleWord(2)">CHECK</button>
-        <span id="status2" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">FRAGMENT 3 // TOP-DOWN LAB</div>
-        <input id="word3" type="text" placeholder="CODE FROM LAB">
-        <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
-        <span id="status3" class="status"></span>
-      </div>
-
-      <div class="wordRow">
-        <div class="wordLabel">FRAGMENT 4 // MEMORY</div>
-        <input id="word4" type="text" placeholder="CODE FROM MEMORY">
-        <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
-        <span id="status4" class="status"></span>
-      </div>
-
-      <div id="terminalMessage"></div>
-    </section>
-
-    <div id="continueArea">
-      <div class="text">ALL MINIGAME FRAGMENTS RESTORED.
-FILE READY FOR RECOVERY.</div>
-
-      <a class="continueButton" href="recovered.html">
-        OPEN RESTORED FILE
-      </a>
-    </div>
-  </main>
+  </div>
 
   <script>
-    const answers = {
-      1: "NIGHTSHADE",
-      2: "ROZENBOTTEL",
-      3: "EYESONLY",
-      4: "GOLDENEYE"
-    };
-
-    const solved = {
-      1: false,
-      2: false,
-      3: false,
-      4: false
-    };
-
-    function cleanInput(value) {
-      return value.trim().toUpperCase().replace(/\s+/g, "");
+    function updateClock() {
+      const clock = document.getElementById("clockBox");
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      clock.textContent = hours + ":" + minutes;
     }
 
-    function checkSingleWord(number) {
-      const input = document.getElementById("word" + number);
-      const button = document.getElementById("button" + number);
-      const status = document.getElementById("status" + number);
-      const message = document.getElementById("terminalMessage");
-
-      const value = cleanInput(input.value);
-
-      if (value === answers[number]) {
-        solved[number] = true;
-
-        input.classList.remove("wrong");
-        input.classList.add("correct");
-        input.disabled = true;
-
-        button.disabled = true;
-        button.textContent = "LOCKED";
-
-        status.textContent = "CORRECT";
-        status.className = "status correctStatus";
-
-        message.style.color = "#00ff66";
-        message.textContent = "FRAGMENT " + number + " RESTORED.";
-
-        checkIfComplete();
-      } else {
-        input.classList.remove("correct");
-        input.classList.add("wrong");
-
-        status.textContent = "ERROR";
-        status.className = "status wrongStatus";
-
-        message.style.color = "#ff4444";
-        message.textContent = "FRAGMENT " + number + " REJECTED // CODE MATCH FAILED.";
-      }
-    }
-
-    function checkIfComplete() {
-      if (solved[1] && solved[2] && solved[3] && solved[4]) {
-        const message = document.getElementById("terminalMessage");
-        message.style.color = "#00ff66";
-        message.textContent = "ACCESS GRANTED // ALL MINIGAME DATA RESTORED.";
-
-        document.getElementById("continueArea").style.display = "block";
-        document.getElementById("continueArea").scrollIntoView({ behavior: "smooth" });
-      }
-    }
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        const active = document.activeElement;
-
-        if (active && active.id && active.id.startsWith("word")) {
-          const number = active.id.replace("word", "");
-          checkSingleWord(number);
-        }
-      }
-    });
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 
 </body>
