@@ -137,6 +137,17 @@
       line-height: 1.5;
     }
 
+    #gameOverBox {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid #ff4444;
+      background: rgba(40, 0, 0, 0.92);
+      color: #ff9999;
+      line-height: 1.6;
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
+    }
+
     #glitchStatus {
       display: none;
       margin-top: 16px;
@@ -288,7 +299,7 @@
     <div class="subtitle">Top-down laboratory simulation recovered.
 Explore 8 connected rooms.
 Collect all hidden letters and defeat all M/Q security dummies.
-Recover the command word.</div>
+Warning: M and Q dummies can fire back.</div>
 
     <div class="layout">
       <section>
@@ -309,7 +320,7 @@ Recover the command word.</div>
 
         <div class="statBox">
           ROOM: <span id="roomName">CENTRAL LAB</span><br>
-          HEALTH: <span id="health">5</span><br>
+          STATUS: <span id="status">ACTIVE</span><br>
           ENEMIES LEFT: <span id="enemiesLeft">0</span><br>
           LETTERS: <span id="lettersFound">0</span> / 8<br>
           WORD: <span id="wordProgress">________</span>
@@ -319,6 +330,12 @@ Recover the command word.</div>
         <button onclick="shoot()">FIRE BIO-DART</button>
 
         <div id="message">Simulation standby.</div>
+
+        <div id="gameOverBox">
+          <strong>SIMULATION FAILED</strong><br><br>
+          You were hit by enemy fire.<br>
+          Restart the lab to try again.
+        </div>
 
         <div id="glitchStatus">
           LAB MEMORY UNSTABLE // RECONSTRUCTING WORD...
@@ -343,7 +360,8 @@ Recover the command word.</div>
           A / ← = move left<br>
           D / → = move right<br>
           SPACE = fire bio-dart<br><br>
-          Walk through open doors to enter other rooms.
+          Walk through open doors to enter other rooms.<br>
+          Red shots from M/Q are fatal.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -356,11 +374,12 @@ Recover the command word.</div>
     const ctx = canvas.getContext("2d");
 
     const roomNameEl = document.getElementById("roomName");
-    const healthEl = document.getElementById("health");
+    const statusEl = document.getElementById("status");
     const enemiesLeftEl = document.getElementById("enemiesLeft");
     const lettersFoundEl = document.getElementById("lettersFound");
     const wordProgressEl = document.getElementById("wordProgress");
     const messageEl = document.getElementById("message");
+    const gameOverBoxEl = document.getElementById("gameOverBox");
     const glitchStatusEl = document.getElementById("glitchStatus");
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
@@ -380,10 +399,10 @@ Recover the command word.</div>
     let currentRoom;
     let keys = {};
     let projectiles = [];
+    let enemyProjectiles = [];
     let animationId = null;
     let gameRunning = false;
     let collectedLetters = [];
-    let invulnerableTimer = 0;
     let frameCount = 0;
 
     const rooms = {
@@ -434,7 +453,7 @@ Recover the command word.</div>
       "1,1": {
         name: "CENTRAL LAB",
         doors: { up: "0,1", right: "1,2", down: "2,1", left: "1,0" },
-        letter: { value: "S", x: 10, y: 7 },
+        letter: { value: "S", x: 15, y: 7 },
         enemies: [
           { x: 4, y: 4, label: "Q" },
           { x: 16, y: 11, label: "M" }
@@ -513,7 +532,7 @@ Recover the command word.</div>
       currentRoom = "1,1";
       collectedLetters = [];
       projectiles = [];
-      invulnerableTimer = 0;
+      enemyProjectiles = [];
       frameCount = 0;
       gameRunning = true;
 
@@ -528,17 +547,17 @@ Recover the command word.</div>
           enemy.py = enemy.y * TILE + TILE / 2;
           enemy.vx = Math.random() < 0.5 ? 1 : -1;
           enemy.vy = Math.random() < 0.5 ? 1 : -1;
-          enemy.hitTimer = 0;
           enemy.walkFrame = 0;
+          enemy.shootCooldown = 90 + Math.floor(Math.random() * 100);
         });
       });
 
       player = {
-        x: 10 * TILE,
-        y: 7 * TILE,
-        dx: 0,
-        dy: -1,
-        health: 5,
+        x: 3 * TILE + TILE / 2,
+        y: 7 * TILE + TILE / 2,
+        dx: 1,
+        dy: 0,
+        status: "ACTIVE",
         hurtTimer: 0,
         walkFrame: 0,
         moving: false
@@ -547,9 +566,11 @@ Recover the command word.</div>
       glitchOverlayEl.style.display = "none";
       glitchStatusEl.style.display = "none";
       winBoxEl.style.display = "none";
-      messageEl.textContent = "Lab active. Explore all 8 rooms.";
+      gameOverBoxEl.style.display = "none";
 
+      messageEl.textContent = "Lab active. Avoid enemy fire.";
       updateHud();
+
       animationId = requestAnimationFrame(gameLoop);
     }
 
@@ -564,6 +585,7 @@ Recover the command word.</div>
       updatePlayer();
       updateEnemies();
       updateProjectiles();
+      updateEnemyProjectiles();
       checkLetterPickup();
       checkWinCondition();
       drawGame();
@@ -618,10 +640,6 @@ Recover the command word.</div>
 
       if (player.hurtTimer > 0) {
         player.hurtTimer--;
-      }
-
-      if (invulnerableTimer > 0) {
-        invulnerableTimer--;
       }
     }
 
@@ -719,6 +737,7 @@ Recover the command word.</div>
         player.y = canvas.height - TILE * 2;
         player.x = canvas.width / 2;
         projectiles = [];
+        enemyProjectiles = [];
         messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
       }
 
@@ -727,6 +746,7 @@ Recover the command word.</div>
         player.y = TILE * 2;
         player.x = canvas.width / 2;
         projectiles = [];
+        enemyProjectiles = [];
         messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
       }
 
@@ -735,6 +755,7 @@ Recover the command word.</div>
         player.x = canvas.width - TILE * 2;
         player.y = canvas.height / 2;
         projectiles = [];
+        enemyProjectiles = [];
         messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
       }
 
@@ -743,6 +764,7 @@ Recover the command word.</div>
         player.x = TILE * 2;
         player.y = canvas.height / 2;
         projectiles = [];
+        enemyProjectiles = [];
         messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
       }
     }
@@ -756,10 +778,7 @@ Recover the command word.</div>
         }
 
         enemy.walkFrame++;
-
-        if (enemy.hitTimer > 0) {
-          enemy.hitTimer--;
-        }
+        enemy.shootCooldown--;
 
         const dxToPlayer = player.x - enemy.px;
         const dyToPlayer = player.y - enemy.py;
@@ -770,7 +789,7 @@ Recover the command word.</div>
           enemy.vy = dyToPlayer / distance;
         }
 
-        const speed = enemy.label === "Q" ? 1.35 : 1.1;
+        const speed = enemy.label === "Q" ? 1.25 : 1.0;
 
         const nextX = enemy.px + enemy.vx * speed;
         const nextY = enemy.py + enemy.vy * speed;
@@ -787,17 +806,32 @@ Recover the command word.</div>
           enemy.vy *= -1;
         }
 
-        if (distance < 28 && invulnerableTimer <= 0) {
-          player.health--;
-          invulnerableTimer = 80;
-          player.hurtTimer = 20;
-          messageEl.textContent = "Hit by " + enemy.label + " security dummy.";
-
-          if (player.health <= 0) {
-            messageEl.textContent = "Simulation failed. Restart required.";
-            gameRunning = false;
-          }
+        if (distance < 260 && enemy.shootCooldown <= 0) {
+          enemyShoot(enemy, dxToPlayer, dyToPlayer, distance);
+          enemy.shootCooldown = enemy.label === "Q"
+            ? 70 + Math.floor(Math.random() * 50)
+            : 95 + Math.floor(Math.random() * 70);
         }
+
+        if (distance < 26) {
+          loseGame("You were caught by " + enemy.label + " security dummy.");
+        }
+      });
+    }
+
+    function enemyShoot(enemy, dxToPlayer, dyToPlayer, distance) {
+      if (distance <= 0) {
+        return;
+      }
+
+      enemyProjectiles.push({
+        x: enemy.px,
+        y: enemy.py,
+        dx: dxToPlayer / distance,
+        dy: dyToPlayer / distance,
+        speed: enemy.label === "Q" ? 3.3 : 2.8,
+        life: 95,
+        label: enemy.label
       });
     }
 
@@ -839,11 +873,44 @@ Recover the command word.</div>
 
           if (distance < 22) {
             enemy.alive = false;
-            enemy.hitTimer = 12;
             projectiles.splice(i, 1);
             messageEl.textContent = enemy.label + " security dummy disabled.";
             break;
           }
+        }
+      }
+    }
+
+    function updateEnemyProjectiles() {
+      for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
+        const projectile = enemyProjectiles[i];
+
+        projectile.x += projectile.dx * projectile.speed;
+        projectile.y += projectile.dy * projectile.speed;
+        projectile.life--;
+
+        const tileX = Math.floor(projectile.x / TILE);
+        const tileY = Math.floor(projectile.y / TILE);
+
+        if (
+          projectile.life <= 0 ||
+          projectile.x < 0 ||
+          projectile.x > canvas.width ||
+          projectile.y < 0 ||
+          projectile.y > canvas.height ||
+          isBlock(tileX, tileY)
+        ) {
+          enemyProjectiles.splice(i, 1);
+          continue;
+        }
+
+        const dx = projectile.x - player.x;
+        const dy = projectile.y - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 17) {
+          loseGame("You were hit by " + projectile.label + " enemy fire.");
+          return;
         }
       }
     }
@@ -907,8 +974,19 @@ Recover the command word.</div>
       return count;
     }
 
+    function loseGame(reason) {
+      gameRunning = false;
+      player.status = "FAILED";
+      messageEl.textContent = reason;
+      gameOverBoxEl.style.display = "block";
+      enemyProjectiles = [];
+      projectiles = [];
+      updateHud();
+    }
+
     function winGame() {
       gameRunning = false;
+      player.status = "CLEARED";
       glitchStatusEl.style.display = "block";
       glitchOverlayEl.style.display = "block";
 
@@ -925,6 +1003,7 @@ Recover the command word.</div>
       drawLetters();
       drawEnemies();
       drawProjectiles();
+      drawEnemyProjectiles();
       drawPlayer();
       drawHudOnCanvas();
     }
@@ -1116,13 +1195,30 @@ Recover the command word.</div>
       });
     }
 
+    function drawEnemyProjectiles() {
+      enemyProjectiles.forEach(function(projectile) {
+        ctx.fillStyle = "#ff3333";
+        ctx.beginPath();
+        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#ff9999";
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(255,0,0,0.25)";
+        ctx.beginPath();
+        ctx.arc(projectile.x, projectile.y, projectileSize, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
     function drawPlayer() {
       const walk = player.moving ? Math.sin(player.walkFrame * 0.25) * 2 : 0;
 
       ctx.save();
       ctx.translate(player.x, player.y);
 
-      if (player.hurtTimer > 0) {
+      if (player.hurtTimer > 0 || player.status === "FAILED") {
         ctx.globalAlpha = 0.45;
       }
 
@@ -1202,13 +1298,14 @@ Recover the command word.</div>
       const room = rooms[currentRoom];
 
       ctx.fillStyle = "rgba(0,0,0,0.7)";
-      ctx.fillRect(8, 8, 260, 54);
+      ctx.fillRect(8, 8, 282, 72);
 
       ctx.fillStyle = "#00ff66";
       ctx.font = "14px Courier New";
       ctx.textAlign = "left";
       ctx.fillText(room.name, 18, 28);
       ctx.fillText("WORD: " + getWordProgress(), 18, 48);
+      ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 68);
     }
 
     function getWordProgress() {
@@ -1223,7 +1320,7 @@ Recover the command word.</div>
 
     function updateHud() {
       roomNameEl.textContent = rooms[currentRoom].name;
-      healthEl.textContent = player.health;
+      statusEl.textContent = player.status;
       enemiesLeftEl.textContent = countEnemiesLeft();
       lettersFoundEl.textContent = collectedLetters.length;
       wordProgressEl.textContent = getWordProgress();
