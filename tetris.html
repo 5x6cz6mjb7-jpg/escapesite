@@ -2,934 +2,999 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Botanical Pixel Stack</title>
+  <title>Compound Stack Protocol</title>
 
   <style>
+    :root {
+      --green: #00ff66;
+      --green2: #00aa44;
+      --dark: #001100;
+      --text: #caffd7;
+      --white: #eaffef;
+      --yellow: #ffee66;
+      --red: #ff5555;
+      --blue: #7dfcff;
+      --orange: #ffb347;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #001100;
-      color: #00ff66;
+      background:
+        radial-gradient(circle at center, #183018 0%, #030803 62%, #000 100%);
+      color: var(--green);
       font-family: "Courier New", monospace;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: auto;
-      padding: 20px;
-      box-sizing: border-box;
+      padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.08),
-          rgba(0, 255, 100, 0.08) 1px,
+          rgba(0,255,102,0.055),
+          rgba(0,255,102,0.055) 1px,
           transparent 1px,
-          transparent 5px
+          transparent 4px
         );
-      pointer-events: none;
-      z-index: 1;
+      animation: scanMove 7s linear infinite;
+      z-index: 20;
     }
 
     body::after {
       content: "";
       position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.65) 100%);
+      inset: -20%;
       pointer-events: none;
-      z-index: 1;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.20), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(255,238,102,0.10), transparent 32%);
+      mix-blend-mode: screen;
+      animation: glowMove 8s ease-in-out infinite alternate;
+      z-index: 19;
     }
 
-    body.archiveGlitch {
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(12px); }
+    }
+
+    @keyframes glowMove {
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 1180px;
+      min-height: calc(100vh - 36px);
+      border: 5px solid #132313;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
+        linear-gradient(180deg, #061906 0%, #010801 100%);
+      box-shadow:
+        inset 0 0 80px rgba(0,0,0,0.82),
+        inset 0 0 30px rgba(0,255,102,0.13),
+        0 0 35px rgba(0,0,0,0.82);
+      padding: 14px;
+      position: relative;
+      z-index: 2;
       overflow: hidden;
     }
 
-    body.archiveGlitch .glitchOverlay {
+    .screen::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: -150px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.11), transparent);
+      animation: sweep 6.5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+      0% { top: -150px; }
+      100% { top: 100%; }
+    }
+
+    .topBar {
+      height: 34px;
+      background: linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
+      border: 2px solid #d8ffe6;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr 300px;
+      gap: 14px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .window {
+      border: 2px solid #d8ffe6;
+      background: rgba(0, 10, 0, 0.84);
+      box-shadow:
+        4px 4px 0 rgba(0,0,0,0.7),
+        0 0 18px rgba(0,255,102,0.13);
+    }
+
+    .windowTitle {
+      min-height: 30px;
+      background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
+      border-bottom: 2px solid #d8ffe6;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    h1 {
+      color: var(--yellow);
+      font-size: 24px;
+      margin: 0 0 8px;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      color: var(--green);
+      font-size: 15px;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .compoundPanel {
+      border: 1px dashed rgba(0,255,102,0.35);
+      background: rgba(0,255,102,0.045);
+      padding: 10px;
+      color: #9dffbd;
+      font-size: 12px;
+      line-height: 1.55;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+
+    .formula {
+      font-size: 22px;
+      color: var(--yellow);
+      letter-spacing: 2px;
+      text-align: center;
+      border: 1px solid rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.06);
+      padding: 12px;
+      margin: 12px 0;
+      animation: formulaPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes formulaPulse {
+      0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+      }
+
+      50% {
+        filter: brightness(1.25);
+        transform: scale(1.01);
+      }
+    }
+
+    .gameArea {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    canvas {
+      background:
+        linear-gradient(90deg, rgba(0,255,102,0.04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.04) 1px, transparent 1px),
+        #020902;
+      background-size: 30px 30px;
+      border: 3px solid #d8ffe6;
+      box-shadow:
+        0 0 18px rgba(0,255,102,0.24),
+        inset 0 0 22px rgba(0,255,102,0.08);
       display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .statusLine {
+      color: var(--yellow);
+      font-size: 13px;
+      margin: 8px 0;
+      min-height: 18px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .controlRow {
+      border: 1px solid rgba(0,255,102,0.25);
+      padding: 7px;
+      background: rgba(0,0,0,0.25);
+    }
+
+    button,
+    .backLink {
+      color: var(--white);
+      background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      border-top: 2px solid #d8ffe6;
+      border-left: 2px solid #d8ffe6;
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      padding: 10px 13px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    button:hover,
+    .backLink:hover {
+      filter: brightness(1.18);
+    }
+
+    .letterGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .letterBox {
+      height: 42px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.35);
+      color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      box-shadow: inset 0 0 8px rgba(0,255,102,0.06);
+    }
+
+    .letterBox.unlocked {
+      color: var(--yellow);
+      background: rgba(255,238,102,0.08);
+      border-color: var(--yellow);
+      animation: unlockFlash 0.55s ease-out;
+    }
+
+    @keyframes unlockFlash {
+      0% {
+        transform: scale(1.18);
+        filter: brightness(2);
+      }
+
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+
+    .compoundLegend {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .legendItem {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 8px;
+      align-items: center;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .legendAtom {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--yellow);
+      box-shadow: 0 0 10px rgba(0,255,102,0.30);
+      font-size: 11px;
+      position: relative;
+    }
+
+    .legendAtom::before,
+    .legendAtom::after {
+      content: "";
+      position: absolute;
+      width: 48px;
+      height: 12px;
+      border: 1px solid rgba(0,255,102,0.45);
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(28deg);
+    }
+
+    .legendAtom::after {
+      transform: translate(-50%, -50%) rotate(-28deg);
+    }
+
+    .winBox {
+      display: none;
+      margin-top: 12px;
+      border: 2px solid var(--yellow);
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.09), transparent 62%),
+        rgba(0,0,0,0.42);
+      padding: 14px;
+      color: var(--text);
+      animation: reveal 0.5s ease-out;
+    }
+
+    .winCode {
+      font-size: 28px;
+      color: var(--yellow);
+      letter-spacing: 3px;
+      text-align: center;
+      border: 1px dashed var(--yellow);
+      padding: 12px;
+      margin-top: 12px;
+      background: rgba(255,238,102,0.06);
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .archiveGlitch {
+      animation: archiveShake 0.12s infinite;
+    }
+
+    @keyframes archiveShake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(2px); }
+      50% { transform: translateX(-2px); }
+      75% { transform: translateX(1px); }
+      100% { transform: translateX(0); }
     }
 
     .glitchOverlay {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 98;
-      pointer-events: none;
+      z-index: 200;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.10) 0px,
-          rgba(0, 255, 100, 0.10) 2px,
+          rgba(0,255,102,0.18),
+          rgba(0,255,102,0.18) 2px,
           transparent 2px,
-          transparent 6px
-        );
-      animation: overlayFlicker 0.12s infinite;
-    }
-
-    .glitchOverlay::before {
-      content: "ARCHIVE DEFRAGMENTATION IN PROGRESS";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #baffc9;
-      background: rgba(0, 20, 0, 0.92);
-      border: 2px solid #00ff66;
-      padding: 18px 24px;
-      font-size: 28px;
-      letter-spacing: 3px;
-      text-align: center;
-      text-shadow: 0 0 12px rgba(0, 255, 100, 0.9);
-      box-shadow: 0 0 25px rgba(0, 255, 100, 0.45);
-      animation: textJump 0.18s infinite;
-    }
-
-    .glitchOverlay::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          180deg,
-          transparent 0px,
-          transparent 22px,
-          rgba(0, 255, 100, 0.20) 22px,
-          rgba(0, 255, 100, 0.20) 30px,
-          transparent 30px,
-          transparent 54px,
-          rgba(255, 255, 255, 0.08) 54px,
-          rgba(255, 255, 255, 0.08) 60px
-        );
-      mix-blend-mode: screen;
-      animation: scanShift 0.20s infinite;
-    }
-
-    @keyframes overlayFlicker {
-      0% { opacity: 0.35; }
-      50% { opacity: 0.85; }
-      100% { opacity: 0.4; }
-    }
-
-    @keyframes textJump {
-      0% { transform: translate(-50%, -50%); }
-      25% { transform: translate(-49.5%, -50.4%); }
-      50% { transform: translate(-50.6%, -49.7%); }
-      75% { transform: translate(-49.8%, -50.3%); }
-      100% { transform: translate(-50%, -50%); }
-    }
-
-    @keyframes scanShift {
-      0% { transform: translateY(0) translateX(0); opacity: 0.45; }
-      25% { transform: translateY(-8px) translateX(4px); opacity: 0.7; }
-      50% { transform: translateY(6px) translateX(-3px); opacity: 0.5; }
-      75% { transform: translateY(-4px) translateX(2px); opacity: 0.8; }
-      100% { transform: translateY(0) translateX(0); opacity: 0.45; }
-    }
-
-    .terminal {
-      width: 100%;
-      max-width: 920px;
-      background: #000900;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
-      padding: 28px;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 2;
-    }
-
-    .terminal.glitchMode {
-      animation: terminalCorrupt 0.16s infinite;
-      filter: contrast(1.15) brightness(1.05);
-    }
-
-    @keyframes terminalCorrupt {
-      0% {
-        clip-path: inset(0 0 0 0);
-        transform: translateX(0);
-      }
-      20% {
-        clip-path: inset(4% 0 78% 0);
-        transform: translateX(-4px);
-      }
-      40% {
-        clip-path: inset(38% 0 42% 0);
-        transform: translateX(6px);
-      }
-      60% {
-        clip-path: inset(62% 0 18% 0);
-        transform: translateX(-3px);
-      }
-      80% {
-        clip-path: inset(16% 0 60% 0);
-        transform: translateX(5px);
-      }
-      100% {
-        clip-path: inset(0 0 0 0);
-        transform: translateX(0);
-      }
-    }
-
-    h1 {
-      margin: 0 0 10px 0;
-      color: #00ff66;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
-      font-size: 26px;
-      letter-spacing: 2px;
-      text-align: center;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #8dffb0;
-      margin-bottom: 22px;
-      line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    .gameLayout {
-      display: grid;
-      grid-template-columns: 1fr 290px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .gamePanel {
-      text-align: center;
-    }
-
-    canvas {
-      background: #000000;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 22px rgba(0, 255, 100, 0.45);
-      image-rendering: pixelated;
-      max-width: 100%;
-    }
-
-    .sidePanel {
-      background: rgba(0, 20, 0, 0.9);
-      border: 1px solid #00aa44;
-      padding: 16px;
-      box-sizing: border-box;
-      min-height: 560px;
-    }
-
-    .panelTitle {
-      color: #00ff66;
-      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
-      margin-bottom: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .wordBox {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 7px;
-      margin: 16px 0 20px 0;
-    }
-
-    .letterBox {
-      height: 42px;
-      background: #001600;
-      border: 1px solid #00aa44;
-      color: transparent;
-      display: flex;
+          transparent 7px
+        ),
+        rgba(0,0,0,0.86);
       align-items: center;
       justify-content: center;
-      font-size: 23px;
-      font-weight: bold;
-      box-shadow: inset 0 0 12px rgba(0, 255, 100, 0.08);
-      text-shadow: none;
-      user-select: none;
+      color: var(--yellow);
+      font-size: 22px;
+      text-align: center;
+      letter-spacing: 2px;
+      animation: glitchFlash 0.12s infinite;
     }
 
-    .letterBox.unlocked {
-      background: #003b16;
-      color: #baffc9;
-      border-color: #00ff66;
-      box-shadow:
-        0 0 12px rgba(0, 255, 100, 0.55),
-        inset 0 0 10px rgba(0, 255, 100, 0.25);
-      animation: letterPulse 0.7s ease-in-out;
+    @keyframes glitchFlash {
+      0% { opacity: 0.92; transform: translateX(0); }
+      50% { opacity: 0.72; transform: translateX(4px); }
+      100% { opacity: 0.95; transform: translateX(-3px); }
     }
 
-    @keyframes letterPulse {
-      0% {
-        transform: scale(1);
-        filter: brightness(1);
-      }
-      50% {
-        transform: scale(1.18);
-        filter: brightness(1.8);
-      }
-      100% {
-        transform: scale(1);
-        filter: brightness(1);
-      }
-    }
-
-    .stats {
-      line-height: 1.8;
-      color: #baffc9;
-      margin-bottom: 18px;
-    }
-
-    .progressBox {
-      margin: 14px 0;
-      padding: 12px;
-      border: 1px dashed #00aa44;
-      color: #8dffb0;
-      line-height: 1.6;
-      background: rgba(0, 40, 0, 0.45);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 15px;
-      letter-spacing: 1px;
-    }
-
-    button:hover {
-      background: #005c22;
-    }
-
-    #winBox {
-      display: none;
-      margin-top: 18px;
-      padding: 14px;
-      background: rgba(0, 35, 0, 0.95);
-      color: #baffc9;
-      border: 1px solid #00ff66;
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
-      line-height: 1.6;
-      font-weight: bold;
-    }
-
-    #gameOver {
-      display: none;
-      color: #ff5555;
-      margin-top: 14px;
-      font-weight: bold;
-      line-height: 1.5;
-    }
-
-    #glitchStatus {
-      display: none;
-      color: #baffc9;
-      margin-top: 14px;
-      font-weight: bold;
-      line-height: 1.5;
-      animation: statusBlink 0.35s infinite;
-    }
-
-    @keyframes statusBlink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.25; }
-    }
-
-    .controls {
-      margin-top: 16px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #8dffb0;
-    }
-
-    .mobileControls {
-      display: none;
-      margin-top: 18px;
-      grid-template-columns: repeat(3, 70px);
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .mobileControls button {
-      width: 70px;
-      height: 54px;
-      padding: 0;
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .wideButton {
-      grid-column: span 3;
-      width: 226px !important;
-    }
-
-    .backLink {
-      display: inline-block;
-      margin-top: 20px;
-      color: #00ff66;
-      text-decoration: none;
-      border-bottom: 1px solid #00ff66;
-      font-weight: bold;
-    }
-
-    .warning {
-      color: #ff5555;
-      margin-top: 14px;
-      line-height: 1.5;
-      font-size: 13px;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 18px;
-      background: #00ff66;
-      animation: blink 1s infinite;
-      vertical-align: middle;
-      margin-left: 4px;
-    }
-
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-
-    @media (max-width: 780px) {
-      .gameLayout {
+    @media (max-width: 1050px) {
+      .layout {
         grid-template-columns: 1fr;
       }
 
-      .sidePanel {
-        min-height: auto;
+      .gameArea {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 8px;
       }
 
-      .mobileControls {
-        display: grid;
+      .topBar {
+        font-size: 10px;
+        gap: 8px;
+      }
+
+      .topBar span:nth-child(2) {
+        display: none;
       }
 
       h1 {
-        font-size: 21px;
+        font-size: 20px;
       }
 
-      .terminal {
-        padding: 20px;
-      }
-
-      .glitchOverlay::before {
-        font-size: 18px;
-        width: 85%;
+      canvas {
+        width: 300px;
+        height: 600px;
       }
     }
   </style>
 </head>
 
 <body>
+  <div class="glitchOverlay" id="glitchOverlay">
+    COMPOUND DEFRAGMENTATION IN PROGRESS...
+  </div>
 
-  <div class="glitchOverlay" id="glitchOverlay"></div>
+  <main class="screen" id="screen">
+    <div class="topBar">
+      <span>THORNE OS // COMPOUND STACK PROTOCOL</span>
+      <span>CHEMISTRY GAME NODE</span>
+      <span>USER: DR. N. THORNE</span>
+    </div>
 
-  <main class="terminal" id="terminal">
-    <h1>BOTANICAL STACK ARCHIVE // 1987<span class="cursor"></span></h1>
+    <section class="layout">
+      <aside class="window">
+        <div class="windowTitle">Protocol Notes</div>
+        <div class="content">
+          <h1>COMPOUND STACK</h1>
+          <h2>Chemical pattern reconstruction</h2>
 
-    <div class="subtitle">Memory blocks are corrupted.
-Clear 2 full rows to recover 1 botanical letter.
-Recovered letters are scrambled.</div>
+          <div class="compoundPanel">
+This is not a standard block game.
 
-    <div class="gameLayout">
-      <section class="gamePanel">
-        <canvas id="game" width="300" height="600"></canvas>
+Each falling shape represents an unstable compound cluster.
+Complete reaction rows to stabilise the archive.
+Every 2 completed rows reveals one scrambled letter.
+          </div>
 
-        <div class="mobileControls">
-          <button onclick="movePiece(-1)">◀</button>
-          <button onclick="rotatePiece()">⟳</button>
-          <button onclick="movePiece(1)">▶</button>
-          <button class="wideButton" onclick="dropPiece()">DROP</button>
+          <div class="formula">
+            C₁₇H₁₉NO₃<br>
+            TRACE: UNSTABLE
+          </div>
+
+          <p>
+            Recover all letters. They will appear scrambled.
+            Reconstruct the final chemistry protocol code and enter it back in the Chemistry folder.
+          </p>
+
+          <a href="chemistry.html" class="backLink">RETURN TO CHEMISTRY</a>
+        </div>
+      </aside>
+
+      <section class="window">
+        <div class="windowTitle">Reaction Chamber</div>
+        <div class="content">
+          <div class="gameArea">
+            <canvas id="gameCanvas" width="300" height="600"></canvas>
+          </div>
+
+          <div class="statusLine" id="statusLine">Press START to initialise compound stack.</div>
+
+          <button onclick="startGame()">START PROTOCOL</button>
+          <button onclick="resetGame()">RESET</button>
         </div>
       </section>
 
-      <aside class="sidePanel">
-        <div class="panelTitle">SCRAMBLED BOTANICAL LETTERS</div>
+      <aside class="window">
+        <div class="windowTitle">Recovered Letters</div>
+        <div class="content">
+          <h2>Archive Letters</h2>
 
-        <div class="wordBox" id="wordBox"></div>
+          <div class="compoundPanel">
+Letters are hidden until enough reaction rows are completed.
 
-        <div class="stats">
-          ROWS CLEARED: <span id="rowsCleared">0</span><br>
-          ROWS UNTIL NEXT LETTER: <span id="rowsUntilLetter">2</span><br>
-          LETTERS FOUND: <span id="lettersFound">0</span> / 11
+Rows needed per letter: 2
+Letters required: 11
+          </div>
+
+          <div class="statusLine" id="letterCount">LETTERS FOUND: 0 / 11</div>
+
+          <div class="letterGrid" id="letterGrid"></div>
+
+          <div class="compoundLegend">
+            <div class="legendItem">
+              <div class="legendAtom">ALK</div>
+              <div>Alkaloid cluster</div>
+            </div>
+
+            <div class="legendItem">
+              <div class="legendAtom">TAN</div>
+              <div>Tannin bond</div>
+            </div>
+
+            <div class="legendItem">
+              <div class="legendAtom">ION</div>
+              <div>Ion trace</div>
+            </div>
+
+            <div class="legendItem">
+              <div class="legendAtom">OX</div>
+              <div>Oxidised sample</div>
+            </div>
+          </div>
+
+          <div class="winBox" id="winBox">
+            <h2>COMPOUND STACK COMPLETE</h2>
+            <p>
+              The recovered letters form the chemistry game code.
+              Return to the Chemistry folder and enter this as the game protocol code.
+            </p>
+
+            <div class="winCode">ROZENBOTTEL</div>
+          </div>
         </div>
-
-        <div class="progressBox">
-          Every 2 completed rows releases 1 encrypted letter.<br>
-          The order has been damaged by archive corruption.
-        </div>
-
-        <button onclick="startGame()">START / RESTART</button>
-
-        <div id="gameOver">
-          STACK OVERFLOW // ARCHIVE RESET REQUIRED
-        </div>
-
-        <div id="glitchStatus">
-          DEFRAGMENTING ARCHIVE MEMORY...
-        </div>
-
-        <div id="winBox">
-          ACCESS GRANTED<br><br>
-          ALL LETTERS RECOVERED:<br>
-          <span id="finalLetters"></span><br><br>
-          Reconstruct the botanical specimen and enter it in the terminal.
-        </div>
-
-        <div class="controls">
-          CONTROLS:<br>
-          ← / → = move<br>
-          ↑ = rotate<br>
-          ↓ = faster<br>
-          space = drop
-        </div>
-
-        <div class="warning">
-          WARNING: Botanical archive contains unstable growth patterns.
-        </div>
-
-        <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
       </aside>
-    </div>
+    </section>
   </main>
 
   <script>
-    const canvas = document.getElementById("game");
+    const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const cols = 10;
-    const rows = 20;
-    const blockSize = 30;
+    const COLS = 10;
+    const ROWS = 20;
+    const BLOCK = 30;
 
     const targetWord = "ROZENBOTTEL";
-
-    // Zelfde letters als ROZENBOTTEL, maar expres niet op volgorde:
     const scrambledLetters = ["B", "O", "T", "E", "R", "Z", "L", "O", "N", "E", "T"];
-
     const rowsNeededPerLetter = 2;
-    const glitchDuration = 4000;
 
-    let board;
-    let currentPiece;
-    let currentX;
-    let currentY;
-    let gameLoop;
-    let gameRunning = false;
-    let rowsCleared = 0;
-    let lettersFound = 0;
-    let rowsSinceLastLetter = 0;
+    const chemicalLabels = ["ALK", "TAN", "ION", "OX", "PH", "CN", "H2", "NO", "SB", "RG"];
 
-    const pieces = [
-      {
-        shape: [
-          [1, 1, 1, 1]
-        ],
-        color: "#00ff66"
-      },
-      {
-        shape: [
-          [1, 1],
-          [1, 1]
-        ],
-        color: "#8dffb0"
-      },
-      {
-        shape: [
-          [0, 1, 0],
-          [1, 1, 1]
-        ],
-        color: "#00cc55"
-      },
-      {
-        shape: [
-          [1, 0, 0],
-          [1, 1, 1]
-        ],
-        color: "#009944"
-      },
-      {
-        shape: [
-          [0, 0, 1],
-          [1, 1, 1]
-        ],
-        color: "#66ff99"
-      },
-      {
-        shape: [
-          [0, 1, 1],
-          [1, 1, 0]
-        ],
-        color: "#33dd77"
-      },
-      {
-        shape: [
-          [1, 1, 0],
-          [0, 1, 1]
-        ],
-        color: "#00aa44"
-      }
+    let board = [];
+    let currentPiece = null;
+    let currentLabel = "ALK";
+    let gameInterval = null;
+    let isRunning = false;
+    let isGameOver = false;
+    let totalLinesCleared = 0;
+    let lettersUnlocked = 0;
+    let dropSpeed = 520;
+
+    const SHAPES = [
+      [
+        [1, 1, 1, 1]
+      ],
+      [
+        [1, 1],
+        [1, 1]
+      ],
+      [
+        [0, 1, 0],
+        [1, 1, 1]
+      ],
+      [
+        [1, 0, 0],
+        [1, 1, 1]
+      ],
+      [
+        [0, 0, 1],
+        [1, 1, 1]
+      ],
+      [
+        [1, 1, 0],
+        [0, 1, 1]
+      ],
+      [
+        [0, 1, 1],
+        [1, 1, 0]
+      ]
     ];
 
-    function createWordBoxes() {
-      const wordBox = document.getElementById("wordBox");
-      wordBox.innerHTML = "";
+    function createBoard() {
+      board = [];
+      for (let y = 0; y < ROWS; y++) {
+        const row = [];
+        for (let x = 0; x < COLS; x++) {
+          row.push(null);
+        }
+        board.push(row);
+      }
+    }
 
-      scrambledLetters.forEach(function(letter, index) {
+    function createLetterGrid() {
+      const grid = document.getElementById("letterGrid");
+      grid.innerHTML = "";
+
+      scrambledLetters.forEach(function(letter) {
         const box = document.createElement("div");
         box.className = "letterBox";
-        box.id = "letter-" + index;
         box.dataset.letter = letter;
         box.textContent = "";
-        wordBox.appendChild(box);
+        grid.appendChild(box);
       });
     }
 
-    function startGame() {
-      document.body.classList.remove("archiveGlitch");
-      document.getElementById("terminal").classList.remove("glitchMode");
-      document.getElementById("glitchStatus").style.display = "none";
+    function randomPiece() {
+      const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      currentLabel = chemicalLabels[Math.floor(Math.random() * chemicalLabels.length)];
 
-      board = createBoard();
-      rowsCleared = 0;
-      lettersFound = 0;
-      rowsSinceLastLetter = 0;
-      gameRunning = true;
-
-      document.getElementById("rowsCleared").textContent = rowsCleared;
-      document.getElementById("lettersFound").textContent = lettersFound;
-      document.getElementById("rowsUntilLetter").textContent = rowsNeededPerLetter;
-      document.getElementById("winBox").style.display = "none";
-      document.getElementById("gameOver").style.display = "none";
-      document.getElementById("finalLetters").textContent = "";
-
-      createWordBoxes();
-      spawnPiece();
-
-      clearInterval(gameLoop);
-      gameLoop = setInterval(updateGame, 520);
-
-      drawGame();
-    }
-
-    function createBoard() {
-      const newBoard = [];
-
-      for (let y = 0; y < rows; y++) {
-        newBoard[y] = [];
-        for (let x = 0; x < cols; x++) {
-          newBoard[y][x] = null;
-        }
-      }
-
-      return newBoard;
-    }
-
-    function spawnPiece() {
-      const randomPiece = pieces[Math.floor(Math.random() * pieces.length)];
-
-      currentPiece = {
-        shape: randomPiece.shape.map(function(row) {
-          return row.slice();
-        }),
-        color: randomPiece.color
+      return {
+        shape: shape,
+        x: Math.floor(COLS / 2) - Math.ceil(shape[0].length / 2),
+        y: 0,
+        label: currentLabel
       };
-
-      currentX = Math.floor(cols / 2) - Math.ceil(currentPiece.shape[0].length / 2);
-      currentY = 0;
-
-      if (collides(currentPiece.shape, currentX, currentY)) {
-        endGame();
-      }
     }
 
-    function updateGame() {
-      if (!gameRunning) {
-        return;
-      }
+    function drawCell(x, y, label, active) {
+      const px = x * BLOCK;
+      const py = y * BLOCK;
 
-      if (!collides(currentPiece.shape, currentX, currentY + 1)) {
-        currentY++;
+      ctx.save();
+
+      const gradient = ctx.createRadialGradient(
+        px + BLOCK / 2,
+        py + BLOCK / 2,
+        3,
+        px + BLOCK / 2,
+        py + BLOCK / 2,
+        BLOCK / 1.1
+      );
+
+      if (active) {
+        gradient.addColorStop(0, "#ffee66");
+        gradient.addColorStop(0.45, "#00ff66");
+        gradient.addColorStop(1, "#005522");
       } else {
-        lockPiece();
-        clearRows();
-        spawnPiece();
+        gradient.addColorStop(0, "#baffc9");
+        gradient.addColorStop(0.45, "#00aa44");
+        gradient.addColorStop(1, "#003b18");
       }
 
-      drawGame();
-    }
+      ctx.fillStyle = gradient;
+      ctx.fillRect(px + 2, py + 2, BLOCK - 4, BLOCK - 4);
 
-    function drawGame() {
-      ctx.fillStyle = "#000000";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = active ? "#ffee66" : "#00ff66";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(px + 3, py + 3, BLOCK - 6, BLOCK - 6);
 
-      drawGrid();
-      drawBoard();
-      drawPiece();
-    }
-
-    function drawGrid() {
-      ctx.strokeStyle = "rgba(0, 255, 100, 0.12)";
+      ctx.strokeStyle = "rgba(216,255,230,0.55)";
       ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(px + BLOCK / 2, py + BLOCK / 2, 10, 0, Math.PI * 2);
+      ctx.stroke();
 
-      for (let x = 0; x <= cols; x++) {
-        ctx.beginPath();
-        ctx.moveTo(x * blockSize, 0);
-        ctx.lineTo(x * blockSize, canvas.height);
-        ctx.stroke();
-      }
+      ctx.beginPath();
+      ctx.ellipse(px + BLOCK / 2, py + BLOCK / 2, 14, 5, Math.PI / 5, 0, Math.PI * 2);
+      ctx.stroke();
 
-      for (let y = 0; y <= rows; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * blockSize);
-        ctx.lineTo(canvas.width, y * blockSize);
-        ctx.stroke();
-      }
+      ctx.beginPath();
+      ctx.ellipse(px + BLOCK / 2, py + BLOCK / 2, 14, 5, -Math.PI / 5, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = "#001100";
+      ctx.globalAlpha = 0.85;
+      ctx.fillRect(px + 6, py + 10, BLOCK - 12, 12);
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = active ? "#ffee66" : "#eaffef";
+      ctx.font = "bold 9px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, px + BLOCK / 2, py + 16);
+
+      ctx.restore();
     }
 
     function drawBoard() {
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#020902";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "rgba(0,255,102,0.12)";
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= COLS; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * BLOCK, 0);
+        ctx.lineTo(x * BLOCK, canvas.height);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= ROWS; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * BLOCK);
+        ctx.lineTo(canvas.width, y * BLOCK);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
           if (board[y][x]) {
-            drawBlock(x, y, board[y][x]);
+            drawCell(x, y, board[y][x], false);
+          }
+        }
+      }
+
+      if (currentPiece) {
+        drawPiece(currentPiece);
+      }
+    }
+
+    function drawPiece(piece) {
+      for (let y = 0; y < piece.shape.length; y++) {
+        for (let x = 0; x < piece.shape[y].length; x++) {
+          if (piece.shape[y][x]) {
+            drawCell(piece.x + x, piece.y + y, piece.label, true);
           }
         }
       }
     }
 
-    function drawPiece() {
-      if (!currentPiece) {
-        return;
-      }
+    function isValidMove(piece, offsetX, offsetY, newShape) {
+      const shape = newShape || piece.shape;
 
-      currentPiece.shape.forEach(function(row, y) {
-        row.forEach(function(cell, x) {
-          if (cell) {
-            drawBlock(currentX + x, currentY + y, currentPiece.color);
-          }
-        });
-      });
-    }
-
-    function drawBlock(x, y, color) {
-      ctx.fillStyle = color;
-      ctx.fillRect(x * blockSize + 1, y * blockSize + 1, blockSize - 2, blockSize - 2);
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.28)";
-      ctx.fillRect(x * blockSize + 4, y * blockSize + 4, blockSize - 8, 5);
-
-      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-      ctx.fillRect(x * blockSize + 4, y * blockSize + blockSize - 8, blockSize - 8, 5);
-
-      ctx.strokeStyle = "#001100";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(x * blockSize + 2, y * blockSize + 2, blockSize - 4, blockSize - 4);
-    }
-
-    function collides(shape, offsetX, offsetY) {
       for (let y = 0; y < shape.length; y++) {
         for (let x = 0; x < shape[y].length; x++) {
-          if (shape[y][x]) {
-            const newX = offsetX + x;
-            const newY = offsetY + y;
+          if (!shape[y][x]) continue;
 
-            if (newX < 0 || newX >= cols || newY >= rows) {
-              return true;
-            }
+          const newX = piece.x + x + offsetX;
+          const newY = piece.y + y + offsetY;
 
-            if (newY >= 0 && board[newY][newX]) {
-              return true;
-            }
+          if (newX < 0 || newX >= COLS || newY >= ROWS) {
+            return false;
+          }
+
+          if (newY >= 0 && board[newY][newX]) {
+            return false;
           }
         }
       }
 
-      return false;
+      return true;
     }
 
-    function lockPiece() {
-      currentPiece.shape.forEach(function(row, y) {
-        row.forEach(function(cell, x) {
-          if (cell) {
-            const boardX = currentX + x;
-            const boardY = currentY + y;
+    function mergePiece() {
+      for (let y = 0; y < currentPiece.shape.length; y++) {
+        for (let x = 0; x < currentPiece.shape[y].length; x++) {
+          if (currentPiece.shape[y][x]) {
+            const boardY = currentPiece.y + y;
+            const boardX = currentPiece.x + x;
 
             if (boardY >= 0) {
-              board[boardY][boardX] = currentPiece.color;
+              board[boardY][boardX] = currentPiece.label;
             }
           }
-        });
-      });
+        }
+      }
     }
 
-    function clearRows() {
-      let clearedThisTurn = 0;
+    function clearLines() {
+      let linesClearedNow = 0;
 
-      for (let y = rows - 1; y >= 0; y--) {
-        const full = board[y].every(function(cell) {
-          return cell !== null;
-        });
+      for (let y = ROWS - 1; y >= 0; y--) {
+        let full = true;
+
+        for (let x = 0; x < COLS; x++) {
+          if (!board[y][x]) {
+            full = false;
+            break;
+          }
+        }
 
         if (full) {
           board.splice(y, 1);
-          board.unshift(new Array(cols).fill(null));
-          clearedThisTurn++;
+          const emptyRow = [];
+          for (let x = 0; x < COLS; x++) {
+            emptyRow.push(null);
+          }
+          board.unshift(emptyRow);
+          linesClearedNow++;
           y++;
         }
       }
 
-      if (clearedThisTurn > 0) {
-        rowsCleared += clearedThisTurn;
-        rowsSinceLastLetter += clearedThisTurn;
-
-        document.getElementById("rowsCleared").textContent = rowsCleared;
-
-        while (rowsSinceLastLetter >= rowsNeededPerLetter && lettersFound < scrambledLetters.length) {
-          rowsSinceLastLetter -= rowsNeededPerLetter;
-          revealNextLetter();
-        }
-
-        updateRowsUntilLetter();
+      if (linesClearedNow > 0) {
+        totalLinesCleared += linesClearedNow;
+        updateLetters();
+        document.getElementById("statusLine").textContent =
+          "Reaction rows stabilised: " + totalLinesCleared;
       }
     }
 
-    function updateRowsUntilLetter() {
-      if (lettersFound >= scrambledLetters.length) {
-        document.getElementById("rowsUntilLetter").textContent = 0;
-        return;
+    function updateLetters() {
+      const possibleLetters = Math.floor(totalLinesCleared / rowsNeededPerLetter);
+      const boxes = document.querySelectorAll(".letterBox");
+
+      while (lettersUnlocked < possibleLetters && lettersUnlocked < scrambledLetters.length) {
+        boxes[lettersUnlocked].textContent = boxes[lettersUnlocked].dataset.letter;
+        boxes[lettersUnlocked].classList.add("unlocked");
+        lettersUnlocked++;
       }
 
-      const remaining = rowsNeededPerLetter - rowsSinceLastLetter;
-      document.getElementById("rowsUntilLetter").textContent = remaining;
-    }
+      document.getElementById("letterCount").textContent =
+        "LETTERS FOUND: " + lettersUnlocked + " / " + scrambledLetters.length;
 
-    function revealNextLetter() {
-      if (lettersFound >= scrambledLetters.length) {
-        return;
-      }
-
-      const box = document.getElementById("letter-" + lettersFound);
-      box.textContent = box.dataset.letter;
-      box.classList.add("unlocked");
-
-      lettersFound++;
-      document.getElementById("lettersFound").textContent = lettersFound;
-
-      if (lettersFound >= scrambledLetters.length) {
+      if (lettersUnlocked >= scrambledLetters.length) {
         winGame();
       }
     }
 
-    function movePiece(direction) {
-      if (!gameRunning) {
-        return;
-      }
+    function rotateShape(shape) {
+      const rotated = [];
 
-      if (!collides(currentPiece.shape, currentX + direction, currentY)) {
-        currentX += direction;
-        drawGame();
-      }
-    }
+      for (let x = 0; x < shape[0].length; x++) {
+        const row = [];
 
-    function rotatePiece() {
-      if (!gameRunning) {
-        return;
-      }
-
-      const rotated = rotateMatrix(currentPiece.shape);
-
-      if (!collides(rotated, currentX, currentY)) {
-        currentPiece.shape = rotated;
-        drawGame();
-      }
-    }
-
-    function rotateMatrix(matrix) {
-      const result = [];
-
-      for (let x = 0; x < matrix[0].length; x++) {
-        result[x] = [];
-        for (let y = matrix.length - 1; y >= 0; y--) {
-          result[x].push(matrix[y][x]);
+        for (let y = shape.length - 1; y >= 0; y--) {
+          row.push(shape[y][x]);
         }
+
+        rotated.push(row);
       }
 
-      return result;
+      return rotated;
     }
 
     function dropPiece() {
-      if (!gameRunning) {
-        return;
+      if (!isRunning || isGameOver) return;
+
+      if (isValidMove(currentPiece, 0, 1)) {
+        currentPiece.y++;
+      } else {
+        mergePiece();
+        clearLines();
+        currentPiece = randomPiece();
+
+        if (!isValidMove(currentPiece, 0, 0)) {
+          gameOver();
+        }
       }
 
-      while (!collides(currentPiece.shape, currentX, currentY + 1)) {
-        currentY++;
-      }
-
-      updateGame();
+      drawBoard();
     }
 
-    function endGame() {
-      clearInterval(gameLoop);
-      gameRunning = false;
-      document.getElementById("gameOver").style.display = "block";
+    function startGame() {
+      if (isRunning) return;
+
+      resetGame();
+      isRunning = true;
+      isGameOver = false;
+      document.getElementById("statusLine").textContent = "Compound stack active.";
+
+      gameInterval = setInterval(dropPiece, dropSpeed);
+    }
+
+    function resetGame() {
+      clearInterval(gameInterval);
+      isRunning = false;
+      isGameOver = false;
+      totalLinesCleared = 0;
+      lettersUnlocked = 0;
+      dropSpeed = 520;
+
+      createBoard();
+      createLetterGrid();
+      currentPiece = randomPiece();
+
+      document.getElementById("letterCount").textContent = "LETTERS FOUND: 0 / 11";
+      document.getElementById("statusLine").textContent = "Press START to initialise compound stack.";
+      document.getElementById("winBox").style.display = "none";
+      document.body.classList.remove("archiveGlitch");
+
+      drawBoard();
+    }
+
+    function gameOver() {
+      clearInterval(gameInterval);
+      isRunning = false;
+      isGameOver = true;
+      document.getElementById("statusLine").textContent = "Compound stack collapsed. Reset required.";
     }
 
     function winGame() {
-      clearInterval(gameLoop);
-      gameRunning = false;
+      clearInterval(gameInterval);
+      isRunning = false;
 
-      document.getElementById("glitchStatus").style.display = "block";
+      document.getElementById("statusLine").textContent = "Compound stack complete. Code recovered.";
+
       document.body.classList.add("archiveGlitch");
-      document.getElementById("terminal").classList.add("glitchMode");
+      document.getElementById("glitchOverlay").style.display = "flex";
 
       setTimeout(function() {
+        document.getElementById("glitchOverlay").style.display = "none";
         document.body.classList.remove("archiveGlitch");
-        document.getElementById("terminal").classList.remove("glitchMode");
-
-        document.getElementById("finalLetters").textContent = scrambledLetters.join(" ");
         document.getElementById("winBox").style.display = "block";
-        document.getElementById("winBox").scrollIntoView({ behavior: "smooth" });
-      }, glitchDuration);
+      }, 4000);
     }
 
     document.addEventListener("keydown", function(event) {
+      if (!isRunning || isGameOver || !currentPiece) return;
+
       if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        movePiece(-1);
+        if (isValidMove(currentPiece, -1, 0)) {
+          currentPiece.x--;
+        }
       }
 
       if (event.key === "ArrowRight") {
-        event.preventDefault();
-        movePiece(1);
-      }
-
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        rotatePiece();
+        if (isValidMove(currentPiece, 1, 0)) {
+          currentPiece.x++;
+        }
       }
 
       if (event.key === "ArrowDown") {
-        event.preventDefault();
-        updateGame();
-      }
-
-      if (event.code === "Space") {
-        event.preventDefault();
         dropPiece();
       }
+
+      if (event.key === "ArrowUp" || event.key === " ") {
+        const rotated = rotateShape(currentPiece.shape);
+
+        if (isValidMove(currentPiece, 0, 0, rotated)) {
+          currentPiece.shape = rotated;
+        }
+      }
+
+      drawBoard();
     });
 
-    createWordBoxes();
-    startGame();
+    createBoard();
+    createLetterGrid();
+    currentPiece = randomPiece();
+    drawBoard();
   </script>
-
 </body>
 </html>
