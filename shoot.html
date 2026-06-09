@@ -297,9 +297,9 @@
     <h1>MI6 BOTANICAL LAB // TOP-DOWN RANGE</h1>
 
     <div class="subtitle">Top-down laboratory simulation recovered.
-Explore 8 connected rooms.
-Collect all hidden letters and defeat all M/Q security dummies.
-Warning: M and Q dummies can fire back.</div>
+Find the key. Open the weapon chest.
+Only then can you fire bio-darts.
+Collect all hidden letters and defeat all M/Q security dummies.</div>
 
     <div class="layout">
       <section>
@@ -321,6 +321,8 @@ Warning: M and Q dummies can fire back.</div>
         <div class="statBox">
           ROOM: <span id="roomName">CENTRAL LAB</span><br>
           STATUS: <span id="status">ACTIVE</span><br>
+          KEY: <span id="keyStatus">NO</span><br>
+          WEAPON: <span id="weaponStatus">NO</span><br>
           ENEMIES LEFT: <span id="enemiesLeft">0</span><br>
           LETTERS: <span id="lettersFound">0</span> / 8<br>
           WORD: <span id="wordProgress">________</span>
@@ -344,6 +346,7 @@ Warning: M and Q dummies can fire back.</div>
         <div id="winBox">
           <strong>ACCESS GRANTED // LAB CLEARED</strong><br><br>
 
+          Weapon recovered.<br>
           All rooms cleared.<br>
           All letters recovered.<br><br>
 
@@ -360,7 +363,8 @@ Warning: M and Q dummies can fire back.</div>
           A / ← = move left<br>
           D / → = move right<br>
           SPACE = fire bio-dart<br><br>
-          Walk through open doors to enter other rooms.<br>
+          First collect the key.<br>
+          Then open the chest.<br>
           Red shots from M/Q are fatal.
         </div>
 
@@ -375,6 +379,8 @@ Warning: M and Q dummies can fire back.</div>
 
     const roomNameEl = document.getElementById("roomName");
     const statusEl = document.getElementById("status");
+    const keyStatusEl = document.getElementById("keyStatus");
+    const weaponStatusEl = document.getElementById("weaponStatus");
     const enemiesLeftEl = document.getElementById("enemiesLeft");
     const lettersFoundEl = document.getElementById("lettersFound");
     const wordProgressEl = document.getElementById("wordProgress");
@@ -404,6 +410,24 @@ Warning: M and Q dummies can fire back.</div>
     let gameRunning = false;
     let collectedLetters = [];
     let frameCount = 0;
+
+    let hasKey = false;
+    let hasWeapon = false;
+    let chestOpened = false;
+
+    const keyItem = {
+      room: "1,1",
+      x: 3,
+      y: 10,
+      collected: false
+    };
+
+    const weaponChest = {
+      room: "1,1",
+      x: 6,
+      y: 10,
+      opened: false
+    };
 
     const rooms = {
       "0,1": {
@@ -536,6 +560,12 @@ Warning: M and Q dummies can fire back.</div>
       frameCount = 0;
       gameRunning = true;
 
+      hasKey = false;
+      hasWeapon = false;
+      chestOpened = false;
+      keyItem.collected = false;
+      weaponChest.opened = false;
+
       Object.keys(rooms).forEach(function(key) {
         const room = rooms[key];
 
@@ -568,7 +598,7 @@ Warning: M and Q dummies can fire back.</div>
       winBoxEl.style.display = "none";
       gameOverBoxEl.style.display = "none";
 
-      messageEl.textContent = "Lab active. Avoid enemy fire.";
+      messageEl.textContent = "Find the key. Open the chest. Recover the weapon.";
       updateHud();
 
       animationId = requestAnimationFrame(gameLoop);
@@ -586,6 +616,8 @@ Warning: M and Q dummies can fire back.</div>
       updateEnemies();
       updateProjectiles();
       updateEnemyProjectiles();
+      checkKeyPickup();
+      checkChestOpen();
       checkLetterPickup();
       checkWinCondition();
       drawGame();
@@ -806,7 +838,7 @@ Warning: M and Q dummies can fire back.</div>
           enemy.vy *= -1;
         }
 
-        if (distance < 260 && enemy.shootCooldown <= 0) {
+        if (hasWeapon && distance < 260 && enemy.shootCooldown <= 0) {
           enemyShoot(enemy, dxToPlayer, dyToPlayer, distance);
           enemy.shootCooldown = enemy.label === "Q"
             ? 70 + Math.floor(Math.random() * 50)
@@ -920,6 +952,11 @@ Warning: M and Q dummies can fire back.</div>
         return;
       }
 
+      if (!hasWeapon) {
+        messageEl.textContent = "NO WEAPON // Find the key and open the chest first.";
+        return;
+      }
+
       projectiles.push({
         x: player.x + player.dx * 16,
         y: player.y + player.dy * 16,
@@ -928,6 +965,48 @@ Warning: M and Q dummies can fire back.</div>
         speed: 6,
         life: 55
       });
+    }
+
+    function checkKeyPickup() {
+      if (keyItem.collected || currentRoom !== keyItem.room) {
+        return;
+      }
+
+      const kx = keyItem.x * TILE + TILE / 2;
+      const ky = keyItem.y * TILE + TILE / 2;
+      const dx = player.x - kx;
+      const dy = player.y - ky;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 28) {
+        keyItem.collected = true;
+        hasKey = true;
+        messageEl.textContent = "KEY RECOVERED // Find the weapon chest.";
+      }
+    }
+
+    function checkChestOpen() {
+      if (weaponChest.opened || currentRoom !== weaponChest.room) {
+        return;
+      }
+
+      const cx = weaponChest.x * TILE + TILE / 2;
+      const cy = weaponChest.y * TILE + TILE / 2;
+      const dx = player.x - cx;
+      const dy = player.y - cy;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 32) {
+        if (!hasKey) {
+          messageEl.textContent = "CHEST LOCKED // Key required.";
+          return;
+        }
+
+        weaponChest.opened = true;
+        chestOpened = true;
+        hasWeapon = true;
+        messageEl.textContent = "CHEST OPENED // BIO-DART WEAPON ACQUIRED.";
+      }
     }
 
     function checkLetterPickup() {
@@ -955,7 +1034,7 @@ Warning: M and Q dummies can fire back.</div>
       const allLettersCollected = collectedLetters.length >= targetWord.length;
       const enemiesLeft = countEnemiesLeft();
 
-      if (allLettersCollected && enemiesLeft === 0) {
+      if (allLettersCollected && enemiesLeft === 0 && hasWeapon) {
         winGame();
       }
     }
@@ -1001,6 +1080,8 @@ Warning: M and Q dummies can fire back.</div>
     function drawGame() {
       drawRoom();
       drawLetters();
+      drawKey();
+      drawChest();
       drawEnemies();
       drawProjectiles();
       drawEnemyProjectiles();
@@ -1114,6 +1195,75 @@ Warning: M and Q dummies can fire back.</div>
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(letter.value, x, y + 1);
+    }
+
+    function drawKey() {
+      if (keyItem.collected || currentRoom !== keyItem.room) {
+        return;
+      }
+
+      const x = keyItem.x * TILE + TILE / 2;
+      const y = keyItem.y * TILE + TILE / 2;
+
+      ctx.fillStyle = "#ffee66";
+      ctx.fillRect(x - 4, y - 12, 8, 24);
+      ctx.fillRect(x - 4, y + 6, 18, 6);
+
+      ctx.strokeStyle = "#000000";
+      ctx.strokeRect(x - 4, y - 12, 8, 24);
+      ctx.strokeRect(x - 4, y + 6, 18, 6);
+
+      ctx.fillStyle = "#000000";
+      ctx.beginPath();
+      ctx.arc(x, y - 16, 8, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffee66";
+      ctx.font = "bold 12px Courier New";
+      ctx.textAlign = "center";
+      ctx.fillText("KEY", x, y + 28);
+    }
+
+    function drawChest() {
+      if (currentRoom !== weaponChest.room) {
+        return;
+      }
+
+      const x = weaponChest.x * TILE;
+      const y = weaponChest.y * TILE;
+
+      if (weaponChest.opened) {
+        ctx.fillStyle = "#3b2500";
+        ctx.fillRect(x + 4, y + 14, TILE - 8, TILE - 10);
+
+        ctx.fillStyle = "#111111";
+        ctx.fillRect(x + 6, y + 6, TILE - 12, 10);
+
+        ctx.strokeStyle = "#ffee66";
+        ctx.strokeRect(x + 4, y + 14, TILE - 8, TILE - 10);
+
+        ctx.fillStyle = "#66ff99";
+        ctx.fillRect(x + 13, y + 18, 6, 10);
+        ctx.fillRect(x + 18, y + 15, 10, 6);
+      } else {
+        ctx.fillStyle = "#5c3500";
+        ctx.fillRect(x + 4, y + 9, TILE - 8, TILE - 8);
+
+        ctx.fillStyle = "#8a5200";
+        ctx.fillRect(x + 4, y + 4, TILE - 8, 11);
+
+        ctx.strokeStyle = "#ffee66";
+        ctx.strokeRect(x + 4, y + 9, TILE - 8, TILE - 8);
+        ctx.strokeRect(x + 4, y + 4, TILE - 8, 11);
+
+        ctx.fillStyle = "#ffee66";
+        ctx.fillRect(x + 14, y + 15, 6, 8);
+      }
+
+      ctx.fillStyle = "#ffee66";
+      ctx.font = "bold 12px Courier New";
+      ctx.textAlign = "center";
+      ctx.fillText(weaponChest.opened ? "OPEN" : "CHEST", x + TILE / 2, y + TILE + 12);
     }
 
     function drawEnemies() {
@@ -1270,25 +1420,32 @@ Warning: M and Q dummies can fire back.</div>
         ctx.fillRect(2, -22, 4, 3);
       }
 
-      ctx.fillStyle = "#ffee66";
+      if (hasWeapon) {
+        ctx.fillStyle = "#ffee66";
 
-      if (player.dy === -1) {
-        ctx.fillRect(-3, -38, 6, 10);
+        if (player.dy === -1) {
+          ctx.fillRect(-3, -38, 6, 10);
+        }
+
+        if (player.dy === 1) {
+          ctx.fillRect(-3, 12, 6, 10);
+        }
+
+        if (player.dx === -1) {
+          ctx.fillRect(-25, -5, 10, 6);
+        }
+
+        if (player.dx === 1) {
+          ctx.fillRect(15, -5, 10, 6);
+        }
       }
 
-      if (player.dy === 1) {
-        ctx.fillRect(-3, 12, 6, 10);
+      if (hasKey) {
+        ctx.fillStyle = "#ffee66";
+        ctx.fillRect(7, -8, 5, 10);
       }
 
-      if (player.dx === -1) {
-        ctx.fillRect(-25, -5, 10, 6);
-      }
-
-      if (player.dx === 1) {
-        ctx.fillRect(15, -5, 10, 6);
-      }
-
-      ctx.fillStyle = "#00ff66";
+      ctx.fillStyle = hasWeapon ? "#00ff66" : "#006b2a";
       ctx.fillRect(-4, -6, 8, 4);
 
       ctx.restore();
@@ -1298,14 +1455,20 @@ Warning: M and Q dummies can fire back.</div>
       const room = rooms[currentRoom];
 
       ctx.fillStyle = "rgba(0,0,0,0.7)";
-      ctx.fillRect(8, 8, 282, 72);
+      ctx.fillRect(8, 8, 306, 90);
 
       ctx.fillStyle = "#00ff66";
       ctx.font = "14px Courier New";
       ctx.textAlign = "left";
       ctx.fillText(room.name, 18, 28);
       ctx.fillText("WORD: " + getWordProgress(), 18, 48);
-      ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 68);
+      ctx.fillText("KEY: " + (hasKey ? "YES" : "NO") + " // WEAPON: " + (hasWeapon ? "YES" : "NO"), 18, 68);
+
+      if (hasWeapon) {
+        ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 88);
+      } else {
+        ctx.fillText("FIND KEY + CHEST", 18, 88);
+      }
     }
 
     function getWordProgress() {
@@ -1321,6 +1484,8 @@ Warning: M and Q dummies can fire back.</div>
     function updateHud() {
       roomNameEl.textContent = rooms[currentRoom].name;
       statusEl.textContent = player.status;
+      keyStatusEl.textContent = hasKey ? "YES" : "NO";
+      weaponStatusEl.textContent = hasWeapon ? "YES" : "NO";
       enemiesLeftEl.textContent = countEnemiesLeft();
       lettersFoundEl.textContent = collectedLetters.length;
       wordProgressEl.textContent = getWordProgress();
