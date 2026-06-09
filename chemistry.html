@@ -2,17 +2,19 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Thorne Chemistry Folder</title>
+  <title>Thorne Chemistry Lab</title>
 
   <style>
     :root {
       --green: #00ff66;
       --green2: #00aa44;
+      --dark: #020802;
       --text: #caffd7;
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
-      --dark: #020802;
+      --blue: #7dfcff;
+      --orange: #ffb347;
     }
 
     * {
@@ -27,6 +29,7 @@
       color: var(--green);
       font-family: "Courier New", monospace;
       padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -65,12 +68,19 @@
     }
 
     @keyframes glowMove {
-      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
-      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
     }
 
     .screen {
-      max-width: 1180px;
+      max-width: 1220px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
       border: 5px solid #132313;
@@ -143,6 +153,7 @@
       color: var(--white);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 8px;
       font-size: 12px;
       font-weight: bold;
@@ -168,80 +179,277 @@
     p {
       color: var(--text);
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.45;
     }
 
-    .fileGrid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(180px, 1fr));
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .fileButton {
-      background: rgba(0,0,0,0.35);
-      border: 1px dotted rgba(0,255,102,0.35);
-      color: var(--text);
-      padding: 12px;
-      min-height: 88px;
-      font-family: "Courier New", monospace;
-      cursor: pointer;
-      text-align: left;
-    }
-
-    .fileButton:hover {
-      background: rgba(0,255,102,0.10);
+    .simpleIntro {
+      border: 1px dashed rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.06);
+      padding: 10px;
+      margin-bottom: 14px;
       color: var(--yellow);
-    }
-
-    .fileButton.pulse {
-      animation: filePulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes filePulse {
-      0%, 100% { box-shadow: 0 0 0 rgba(0,255,102,0); }
-      50% { box-shadow: 0 0 18px rgba(0,255,102,0.25); }
-    }
-
-    .viewer {
-      margin-top: 14px;
-      min-height: 270px;
-      border: 1px solid rgba(0,255,102,0.32);
-      background: rgba(0,0,0,0.34);
-      padding: 12px;
-      color: var(--text);
-      line-height: 1.55;
       font-size: 13px;
-      white-space: pre-line;
+      line-height: 1.5;
     }
 
-    .viewer h3 {
+    .labGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .labMachine {
+      border: 2px solid rgba(0,255,102,0.45);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 60%),
+        rgba(0,0,0,0.34);
+      min-height: 180px;
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      color: var(--text);
+      font-family: "Courier New", monospace;
+      text-align: left;
+      transition: 0.15s;
+    }
+
+    .labMachine:hover {
+      border-color: var(--yellow);
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.12), transparent 60%),
+        rgba(0,0,0,0.38);
+      transform: translateY(-2px);
+    }
+
+    .labMachine.active {
+      border-color: var(--yellow);
+      box-shadow: 0 0 20px rgba(255,238,102,0.20);
+    }
+
+    .clickLabel {
+      position: absolute;
+      right: 8px;
+      top: 8px;
       color: var(--yellow);
-      margin-top: 0;
+      font-size: 11px;
+      animation: blink 1.2s infinite;
     }
 
-    .bars {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
+    @keyframes blink {
+      0%, 48%, 100% { opacity: 1; }
+      49%, 85% { opacity: 0.25; }
     }
 
-    .barRow {
+    .machineTitle {
+      color: var(--yellow);
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .machineSub {
+      font-size: 12px;
+      color: #9dffbd;
+      margin-bottom: 10px;
+    }
+
+    .bubblingFlask {
+      width: 90px;
+      height: 110px;
+      margin: 6px auto 4px;
+      position: relative;
+    }
+
+    .flaskNeck {
+      position: absolute;
+      left: 36px;
+      top: 0;
+      width: 18px;
+      height: 42px;
+      border-left: 3px solid #d8ffe6;
+      border-right: 3px solid #d8ffe6;
+      background: rgba(0,255,102,0.08);
+    }
+
+    .flaskBody {
+      position: absolute;
+      left: 13px;
+      bottom: 0;
+      width: 64px;
+      height: 72px;
+      border: 3px solid #d8ffe6;
+      border-radius: 8px 8px 30px 30px;
+      background:
+        linear-gradient(180deg, transparent 22%, rgba(0,255,102,0.72) 23%, rgba(0,170,68,0.82) 100%);
+      box-shadow: 0 0 18px rgba(0,255,102,0.35);
+      overflow: hidden;
+    }
+
+    .flaskBody::before {
+      content: "";
+      position: absolute;
+      left: -20px;
+      right: -20px;
+      bottom: 22px;
+      height: 18px;
+      background: rgba(255,238,102,0.22);
+      border-radius: 50%;
+      animation: liquidWave 2s ease-in-out infinite;
+    }
+
+    @keyframes liquidWave {
+      0%, 100% { transform: translateX(-6px) rotate(-2deg); }
+      50% { transform: translateX(6px) rotate(2deg); }
+    }
+
+    .bubble {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--yellow);
+      border-radius: 50%;
+      background: rgba(255,238,102,0.16);
+      bottom: 14px;
+      animation: bubbleRise 2s infinite;
+    }
+
+    .bubble.b1 { left: 26px; animation-delay: 0s; }
+    .bubble.b2 { left: 45px; animation-delay: 0.4s; }
+    .bubble.b3 { left: 57px; animation-delay: 0.8s; }
+
+    @keyframes bubbleRise {
+      0% { transform: translateY(0) scale(0.7); opacity: 0.2; }
+      30% { opacity: 1; }
+      100% { transform: translateY(-56px) scale(1.2); opacity: 0; }
+    }
+
+    .scanner {
+      height: 96px;
+      border: 1px solid rgba(0,255,102,0.40);
+      background:
+        linear-gradient(90deg, rgba(0,255,102,0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.08) 1px, transparent 1px),
+        rgba(0,0,0,0.48);
+      background-size: 16px 16px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .scanner::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -18px;
+      height: 18px;
+      background: rgba(255,238,102,0.45);
+      box-shadow: 0 0 18px rgba(255,238,102,0.55);
+      animation: scanDown 2.2s linear infinite;
+    }
+
+    @keyframes scanDown {
+      0% { top: -18px; }
+      100% { top: 100%; }
+    }
+
+    .elementRow {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 22px;
+    }
+
+    .elementTile {
+      width: 44px;
+      height: 50px;
+      border: 2px solid var(--green);
+      background:
+        linear-gradient(180deg, rgba(216,255,230,0.16), rgba(0,170,68,0.45)),
+        rgba(0,0,0,0.5);
       display: grid;
-      grid-template-columns: 100px 1fr 44px;
+      grid-template-rows: 12px 23px 10px;
+      align-items: center;
+      justify-items: center;
+      box-shadow: 0 0 12px rgba(0,255,102,0.20);
+      animation: tilePulse 2.4s ease-in-out infinite;
+    }
+
+    .elementTile:nth-child(2) { animation-delay: 0.2s; }
+    .elementTile:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes tilePulse {
+      0%, 100% { transform: translateY(0); filter: brightness(1); }
+      50% { transform: translateY(-3px); filter: brightness(1.3); }
+    }
+
+    .elementTile .num {
+      font-size: 8px;
+      color: var(--white);
+    }
+
+    .elementTile .sym {
+      font-size: 17px;
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    .elementTile .name {
+      font-size: 6px;
+      color: var(--white);
+    }
+
+    .waveBox {
+      height: 96px;
+      display: flex;
+      align-items: end;
+      gap: 5px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.45);
+      padding: 8px;
+      margin-top: 12px;
+    }
+
+    .waveBox span {
+      flex: 1;
+      background: var(--green);
+      min-height: 8px;
+      box-shadow: 0 0 8px rgba(0,255,102,0.35);
+      animation: wave 1.2s ease-in-out infinite alternate;
+    }
+
+    .waveBox span:nth-child(2n) { animation-delay: 0.2s; }
+    .waveBox span:nth-child(3n) { animation-delay: 0.4s; }
+
+    @keyframes wave {
+      from { height: 15%; opacity: 0.5; }
+      to { height: 90%; opacity: 1; }
+    }
+
+    .meter {
+      margin-top: 14px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .meterRow {
+      display: grid;
+      grid-template-columns: 80px 1fr 38px;
       gap: 8px;
       align-items: center;
-      color: var(--text);
       font-size: 12px;
+      color: var(--text);
     }
 
-    .barTrack {
+    .meterTrack {
       height: 12px;
       border: 1px solid rgba(0,255,102,0.35);
       background: rgba(0,0,0,0.5);
+      overflow: hidden;
     }
 
-    .barFill {
+    .meterFill {
       height: 100%;
       background:
         repeating-linear-gradient(
@@ -251,12 +459,53 @@
           rgba(255,238,102,0.9) 5px,
           rgba(255,238,102,0.9) 8px
         );
-      animation: flicker 2s ease-in-out infinite;
+      animation: meterFlicker 2s ease-in-out infinite;
     }
 
-    @keyframes flicker {
+    @keyframes meterFlicker {
       0%, 100% { filter: brightness(1); }
       50% { filter: brightness(1.35); }
+    }
+
+    .viewer {
+      margin-top: 14px;
+      min-height: 160px;
+      border: 2px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.46);
+      padding: 12px;
+      color: var(--text);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .viewer h3 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 16px;
+    }
+
+    .viewer strong {
+      color: var(--yellow);
+    }
+
+    .stepList {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .step {
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.26);
+      padding: 9px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .stepNumber {
+      color: var(--yellow);
+      font-weight: bold;
     }
 
     label {
@@ -271,7 +520,7 @@
       background: #000;
       color: var(--green);
       border: 2px solid var(--green2);
-      padding: 11px;
+      padding: 12px;
       font-family: "Courier New", monospace;
       font-size: 15px;
       outline: none;
@@ -282,7 +531,9 @@
       border-color: var(--yellow);
     }
 
-    button, .backLink, .gameLink {
+    button,
+    .backLink,
+    .gameLink {
       color: var(--white);
       background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
       border-top: 2px solid #d8ffe6;
@@ -299,9 +550,24 @@
       margin-top: 10px;
     }
 
+    button:hover,
+    .backLink:hover,
+    .gameLink:hover {
+      filter: brightness(1.18);
+    }
+
+    .verifyButton {
+      width: 100%;
+      font-size: 14px;
+      padding: 12px;
+      margin-top: 14px;
+    }
+
     .gameLink {
       background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
       color: var(--yellow);
+      width: 100%;
+      text-align: center;
     }
 
     .status {
@@ -309,6 +575,7 @@
       margin-top: 10px;
       font-size: 13px;
       color: var(--red);
+      line-height: 1.4;
     }
 
     .status.ok {
@@ -333,7 +600,7 @@
     }
 
     .codeFragment {
-      font-size: 22px;
+      font-size: 23px;
       color: var(--yellow);
       letter-spacing: 2px;
       margin-top: 10px;
@@ -343,8 +610,21 @@
       text-align: center;
     }
 
-    @media (max-width: 900px) {
-      .layout, .fileGrid {
+    .shake {
+      animation: shake 0.25s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 950px) {
+      .layout,
+      .labGrid {
         grid-template-columns: 1fr;
       }
 
@@ -358,47 +638,130 @@
 <body>
   <main class="screen">
     <div class="topBar">
-      <span>THORNE OS // CHEMISTRY DIRECTORY</span>
-      <span>BOTANICAL CHEMISTRY NODE</span>
+      <span>THORNE OS // CHEMISTRY LAB</span>
+      <span>COMPOUND ACCESS CHECK</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
     <section class="layout">
       <section class="window">
-        <div class="windowTitle">Chemistry Folder</div>
+        <div class="windowTitle">
+          <span>Chemistry Lab</span>
+          <span>CLICK THE MACHINES</span>
+        </div>
+
         <div class="content">
           <h1>CHEMISTRY</h1>
-          <h2>Lab notes and chemical classification cache</h2>
 
-          <p>
-            This folder contains Nessa Thorne's chemical research notes.
-            The real puzzle is physical. Use the items from the box to find two answers.
-            The third code comes from the required game.
-          </p>
+          <div class="simpleIntro">
+            Klik op de lab-onderdelen. Vul daarna de twee antwoorden uit de fysieke puzzels in.
+            De derde code komt uit het Chemistry-spel.
+          </div>
 
-          <div class="fileGrid">
-            <button class="fileButton pulse" onclick="openFile('lab')">lab_results_17.dat</button>
-            <button class="fileButton" onclick="openFile('compound')">compound_family_scan.img</button>
-            <button class="fileButton" onclick="openFile('warning')">safety_warning.tmp</button>
-            <button class="fileButton" onclick="openFile('annotation')">personal_annotation.txt</button>
+          <div class="labGrid">
+            <button class="labMachine active" onclick="openPanel('flask', this)">
+              <span class="clickLabel">CLICK</span>
+              <div class="machineTitle">REAGENT FLASK</div>
+              <div class="machineSub">Liquid sample active</div>
+
+              <div class="bubblingFlask">
+                <div class="flaskNeck"></div>
+                <div class="flaskBody"></div>
+                <div class="bubble b1"></div>
+                <div class="bubble b2"></div>
+                <div class="bubble b3"></div>
+              </div>
+            </button>
+
+            <button class="labMachine" onclick="openPanel('scanner', this)">
+              <span class="clickLabel">CLICK</span>
+              <div class="machineTitle">ELEMENT SCANNER</div>
+              <div class="machineSub">Periodic trace detected</div>
+
+              <div class="scanner">
+                <div class="elementRow">
+                  <div class="elementTile">
+                    <div class="num">6</div>
+                    <div class="sym">C</div>
+                    <div class="name">Carbon</div>
+                  </div>
+
+                  <div class="elementTile">
+                    <div class="num">8</div>
+                    <div class="sym">O</div>
+                    <div class="name">Oxygen</div>
+                  </div>
+
+                  <div class="elementTile">
+                    <div class="num">7</div>
+                    <div class="sym">N</div>
+                    <div class="name">Nitrogen</div>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            <button class="labMachine" onclick="openPanel('signal', this)">
+              <span class="clickLabel">CLICK</span>
+              <div class="machineTitle">SAMPLE SIGNAL</div>
+              <div class="machineSub">Compound instability</div>
+
+              <div class="waveBox">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+
+            <button class="labMachine" onclick="openPanel('meter', this)">
+              <span class="clickLabel">CLICK</span>
+              <div class="machineTitle">REACTION METER</div>
+              <div class="machineSub">Archive residue</div>
+
+              <div class="meter">
+                <div class="meterRow">
+                  <span>Trace</span>
+                  <div class="meterTrack"><div class="meterFill" style="width: 78%;"></div></div>
+                  <span>78%</span>
+                </div>
+
+                <div class="meterRow">
+                  <span>Memory</span>
+                  <div class="meterTrack"><div class="meterFill" style="width: 92%;"></div></div>
+                  <span>92%</span>
+                </div>
+
+                <div class="meterRow">
+                  <span>Jason</span>
+                  <div class="meterTrack"><div class="meterFill" style="width: 64%;"></div></div>
+                  <span>64%</span>
+                </div>
+              </div>
+            </button>
           </div>
 
           <div class="viewer" id="viewer">
-            <h3>No file selected</h3>
-            Click a lab file to inspect Nessa's chemistry notes.
+            <h3>REAGENT FLASK</h3>
+            Physical answer A is checked here.
+            Use the real object/puzzle from the box.
+
+            <strong>No answer is hidden in this text.</strong>
           </div>
 
           <div class="recoveredEnvironment" id="recoveredEnvironment">
             <h2>RECOVERED CHEMISTRY ENVIRONMENT</h2>
+
             <p>
-              The chemistry cache opens into a deeper archive layer.
-              Nessa repeatedly attaches one name-marker to the private directory.
+              Chemistry access complete.
             </p>
 
             <p>
-              Recovered note:
-              “The chemical work was never the weapon. It was the trace.
-              Everything living leaves one.”
+              Nessa’s lab system releases the first private access fragment.
             </p>
 
             <div class="codeFragment">
@@ -409,29 +772,40 @@
       </section>
 
       <aside class="window">
-        <div class="windowTitle">Folder Access Checks</div>
-        <div class="content">
-          <h2>Chemistry Verification</h2>
+        <div class="windowTitle">Access Checklist</div>
 
-          <p>
-            Enter both physical puzzle answers and the recovered game code.
-            All three must be correct before the recovered environment opens.
-          </p>
+        <div class="content">
+          <div class="stepList">
+            <div class="step">
+              <span class="stepNumber">1.</span>
+              Solve physical Chemistry puzzle A.
+            </div>
+
+            <div class="step">
+              <span class="stepNumber">2.</span>
+              Solve physical Chemistry puzzle B.
+            </div>
+
+            <div class="step">
+              <span class="stepNumber">3.</span>
+              Play the Chemistry game and recover the game code.
+            </div>
+          </div>
 
           <label for="answerA">Physical answer A</label>
-          <input id="answerA" type="text" autocomplete="off" placeholder="enter answer A">
+          <input id="answerA" type="text" autocomplete="off" placeholder="answer A">
 
           <label for="answerB">Physical answer B</label>
-          <input id="answerB" type="text" autocomplete="off" placeholder="enter answer B">
+          <input id="answerB" type="text" autocomplete="off" placeholder="answer B">
 
-          <label for="gameCode">Game protocol code</label>
-          <input id="gameCode" type="text" autocomplete="off" placeholder="enter game code">
+          <label for="gameCode">Game code</label>
+          <input id="gameCode" type="text" autocomplete="off" placeholder="game code">
 
-          <button onclick="checkAll()">VERIFY ALL THREE</button>
+          <button class="verifyButton" onclick="checkAll()">VERIFY CHEMISTRY ACCESS</button>
 
           <a class="gameLink" href="tetris.html">OPEN CHEMISTRY GAME</a>
 
-          <div class="status" id="status">Awaiting all three checks.</div>
+          <div class="status" id="status">Waiting for 3 correct entries.</div>
 
           <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
         </div>
@@ -444,49 +818,34 @@
     const correctAnswerB = "REAGENT";
     const correctGameCode = "ROZENBOTTEL";
 
-    const files = {
-      lab:
-`<h3>lab_results_17.dat</h3>
-Sample group:
-SB-CHEM-17
+    const panels = {
+      flask:
+`<h3>REAGENT FLASK</h3>
+Physical answer A is checked here.
+Use the real object/puzzle from the box.
 
-Research classification:
-Plant-derived compound behaviour.
+<strong>No answer is hidden in this text.</strong>`,
 
-Result:
-Unstable symbolic markers detected.
+      scanner:
+`<h3>ELEMENT SCANNER</h3>
+Physical answer B is checked here.
+Use the element-related puzzle from the box.
 
-No usable formulae recovered.
-Only classification notes remain.`,
+<strong>No answer is hidden in this text.</strong>`,
 
-      compound:
-`<h3>compound_family_scan.img</h3>
-Recovered compound family scan:
+      signal:
+`<h3>SAMPLE SIGNAL</h3>
+The signal is unstable.
 
-<div class="bars">
-  <div class="barRow"><span>Alkaloid</span><div class="barTrack"><div class="barFill" style="width:84%"></div></div><span>84%</span></div>
-  <div class="barRow"><span>Tannin</span><div class="barTrack"><div class="barFill" style="width:63%"></div></div><span>63%</span></div>
-  <div class="barRow"><span>Pigment</span><div class="barTrack"><div class="barFill" style="width:72%"></div></div><span>72%</span></div>
-  <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width:99%"></div></div><span>99%</span></div>
-</div>`,
+Play the Chemistry game to recover the game code.`,
 
-      warning:
-`<h3>safety_warning.tmp</h3>
-Local note:
+      meter:
+`<h3>REACTION METER</h3>
+Access requires exactly three entries:
 
-The samples are symbolic.
-Do not reconstruct, mix, extract or imitate laboratory procedures.
-
-This archive is for classification only.
-
-Nessa's work appears to connect chemistry with memory, grief and plant folklore.`,
-
-      annotation:
-`<h3>personal_annotation.txt</h3>
-"They called it chemistry.
-I called it proof that everything living leaves a trace."
-
-- N. Thorne`
+1. Physical answer A
+2. Physical answer B
+3. Chemistry game code`
     };
 
     function normalize(value) {
@@ -498,15 +857,26 @@ I called it proof that everything living leaves a trace."
         .trim();
     }
 
-    function openFile(id) {
-      document.getElementById("viewer").innerHTML = files[id];
+    function openPanel(id, button) {
+      const machines = document.querySelectorAll(".labMachine");
+
+      machines.forEach(function(machine) {
+        machine.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      document.getElementById("viewer").innerHTML = panels[id];
     }
 
     function unlockRecoveredEnvironment() {
       localStorage.setItem("chemistrySolved", "yes");
-      document.getElementById("status").textContent = "All checks accepted. Chemistry recovered environment unlocked.";
-      document.getElementById("status").classList.add("ok");
+
+      const status = document.getElementById("status");
+      status.textContent = "Access accepted. Chemistry environment unlocked.";
+      status.classList.add("ok");
+
       document.getElementById("recoveredEnvironment").style.display = "block";
+      document.getElementById("recoveredEnvironment").scrollIntoView({ behavior: "smooth" });
     }
 
     function checkAll() {
@@ -515,17 +885,38 @@ I called it proof that everything living leaves a trace."
       const gameCode = normalize(document.getElementById("gameCode").value);
       const status = document.getElementById("status");
 
-      if (
-        answerA === normalize(correctAnswerA) &&
-        answerB === normalize(correctAnswerB) &&
-        gameCode === normalize(correctGameCode)
-      ) {
+      const aCorrect = answerA === normalize(correctAnswerA);
+      const bCorrect = answerB === normalize(correctAnswerB);
+      const gameCorrect = gameCode === normalize(correctGameCode);
+
+      if (aCorrect && bCorrect && gameCorrect) {
         unlockRecoveredEnvironment();
-      } else {
-        status.textContent = "One or more checks are incorrect.";
-        status.classList.remove("ok");
-        document.getElementById("recoveredEnvironment").style.display = "none";
+        return;
       }
+
+      let missing = [];
+
+      if (!aCorrect) {
+        missing.push("Answer A");
+      }
+
+      if (!bCorrect) {
+        missing.push("Answer B");
+      }
+
+      if (!gameCorrect) {
+        missing.push("Game code");
+      }
+
+      status.textContent = "Not accepted: check " + missing.join(", ") + ".";
+      status.classList.remove("ok");
+
+      const sideWindow = status.closest(".window");
+      sideWindow.classList.remove("shake");
+
+      setTimeout(function() {
+        sideWindow.classList.add("shake");
+      }, 10);
     }
 
     document.addEventListener("keydown", function(event) {
