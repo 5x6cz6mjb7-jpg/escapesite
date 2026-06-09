@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Botanical Lab // Dummy Range</title>
+  <title>MI6 Botanical Lab // Top Down Protocol</title>
 
   <style>
     body {
@@ -66,20 +66,14 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 285px;
+      grid-template-columns: 1fr 300px;
       gap: 20px;
       align-items: start;
     }
 
-    .gameWrap {
-      position: relative;
-      text-align: center;
-    }
-
     canvas {
       width: 100%;
-      max-width: 800px;
-      aspect-ratio: 4 / 3;
+      max-width: 640px;
       background: #000;
       border: 2px solid #00ff66;
       box-shadow: inset 0 0 28px rgba(0, 255, 100, 0.14);
@@ -94,7 +88,7 @@
       padding: 16px;
       box-sizing: border-box;
       color: #baffc9;
-      min-height: 600px;
+      min-height: 480px;
     }
 
     .panelTitle {
@@ -134,13 +128,6 @@
       line-height: 1.8;
       color: #8dffb0;
       font-size: 14px;
-    }
-
-    .warning {
-      margin-top: 16px;
-      color: #ff5555;
-      line-height: 1.5;
-      font-size: 13px;
     }
 
     #message {
@@ -229,7 +216,7 @@
     }
 
     .glitchOverlay::before {
-      content: "DUMMY RANGE AUTHORIZATION RESTORED";
+      content: "LAB WORD RECOVERED";
       position: absolute;
       top: 50%;
       left: 50%;
@@ -296,36 +283,36 @@
   <div class="glitchOverlay" id="glitchOverlay"></div>
 
   <main class="terminal">
-    <h1>MI6 BOTANICAL LAB // DUMMY RANGE</h1>
+    <h1>MI6 BOTANICAL LAB // TOP-DOWN RANGE</h1>
 
-    <div class="subtitle">First-person lab simulation recovered.
-Moving training dummy targets are active.
-Fire cobra venom at dummies marked M and Q.
-Hit 10 moving dummies to unlock the command code.</div>
+    <div class="subtitle">Top-down laboratory simulation recovered.
+Explore 8 connected rooms.
+Collect all hidden letters and defeat all M/Q security enemies.
+Recover the command word.</div>
 
     <div class="layout">
-      <section class="gameWrap">
-        <canvas id="game" width="800" height="600"></canvas>
+      <section>
+        <canvas id="game" width="640" height="480"></canvas>
 
         <div class="mobileControls">
-          <button onclick="turnLeft()">↶</button>
-          <button onclick="moveForward()">▲</button>
-          <button onclick="turnRight()">↷</button>
-          <button onclick="moveLeft()">◀</button>
-          <button onclick="moveBackward()">▼</button>
-          <button onclick="moveRight()">▶</button>
+          <button onclick="pressMove('up')">▲</button>
+          <button onclick="shoot()">✹</button>
+          <button onclick="pressMove('down')">▼</button>
+          <button onclick="pressMove('left')">◀</button>
+          <button onclick="pressMove('right')">▶</button>
           <button class="shootWide" onclick="shoot()">SPIT VENOM</button>
         </div>
       </section>
 
       <aside class="panel">
-        <div class="panelTitle">LAB SIMULATION STATUS</div>
+        <div class="panelTitle">LAB STATUS</div>
 
         <div class="statBox">
-          HITS: <span id="hits">0</span> / 10<br>
-          SHOTS: <span id="shots">0</span><br>
-          DUMMIES LEFT: <span id="targetsLeft">10</span><br>
-          POSITION: <span id="position">0 / 0</span>
+          ROOM: <span id="roomName">CENTRAL LAB</span><br>
+          HEALTH: <span id="health">5</span><br>
+          ENEMIES LEFT: <span id="enemiesLeft">0</span><br>
+          LETTERS: <span id="lettersFound">0</span> / 8<br>
+          WORD: <span id="wordProgress">________</span>
         </div>
 
         <button onclick="startGame()">START / RESTART LAB</button>
@@ -334,16 +321,14 @@ Hit 10 moving dummies to unlock the command code.</div>
         <div id="message">Simulation standby.</div>
 
         <div id="glitchStatus">
-          DUMMY RANGE UNSTABLE // RESTORING ACCESS...
+          LAB MEMORY UNSTABLE // RECONSTRUCTING WORD...
         </div>
 
         <div id="winBox">
-          <strong>ACCESS GRANTED // DUMMY RANGE CLEARED</strong><br><br>
+          <strong>ACCESS GRANTED // LAB CLEARED</strong><br><br>
 
-          Recovered command fragment:<br><br>
-
-          The moving dummy range was connected to an old MI6 authorization layer.<br>
-          The marked targets concealed an access code.<br><br>
+          All rooms cleared.<br>
+          All letters recovered.<br><br>
 
           UNLOCK CODE:<br>
           <strong>EYESONLY</strong><br><br>
@@ -353,18 +338,12 @@ Hit 10 moving dummies to unlock the command code.</div>
 
         <div class="controls">
           CONTROLS:<br>
-          W / ↑ = walk forward<br>
-          S / ↓ = walk backward<br>
-          A / ← = turn left<br>
-          D / → = turn right<br>
-          Q = strafe left<br>
-          E = strafe right<br>
-          SPACE = spit venom
-        </div>
-
-        <div class="warning">
-          Targets are moving training dummies only.
-          Weapon system: Cobra Venom Launcher.
+          W / ↑ = move up<br>
+          S / ↓ = move down<br>
+          A / ← = move left<br>
+          D / → = move right<br>
+          SPACE = spit venom<br><br>
+          Walk through open doors to enter other rooms.
         </div>
 
         <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
@@ -376,735 +355,465 @@ Hit 10 moving dummies to unlock the command code.</div>
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
-    const hitsEl = document.getElementById("hits");
-    const shotsEl = document.getElementById("shots");
-    const targetsLeftEl = document.getElementById("targetsLeft");
-    const positionEl = document.getElementById("position");
+    const roomNameEl = document.getElementById("roomName");
+    const healthEl = document.getElementById("health");
+    const enemiesLeftEl = document.getElementById("enemiesLeft");
+    const lettersFoundEl = document.getElementById("lettersFound");
+    const wordProgressEl = document.getElementById("wordProgress");
     const messageEl = document.getElementById("message");
     const glitchStatusEl = document.getElementById("glitchStatus");
     const winBoxEl = document.getElementById("winBox");
     const glitchOverlayEl = document.getElementById("glitchOverlay");
 
-    /*
-      1 = wall
-      0 = open floor
-      2 = possible dummy spawn point
-    */
-    const map = [
-      "11111111111111111111",
-      "10000000000001000001",
-      "10201111111001011101",
-      "10001000001000010001",
-      "11101011101011110101",
-      "10001010000010000101",
-      "10111010111110110101",
-      "10000010000000100101",
-      "10111111101111100101",
-      "10000000001000000101",
-      "10111101111011110101",
-      "10000101000010000101",
-      "11110101011110111101",
-      "10000100010000000001",
-      "10111111010111111011",
-      "10000000010000000001",
-      "10111101111101111101",
-      "10200001000001000021",
-      "10011111011111011101",
-      "10000000000000000001",
-      "11111111111111111111"
-    ];
+    const TILE = 32;
+    const COLS = 20;
+    const ROWS = 15;
 
-    const fov = Math.PI / 3;
-    const numRays = 200;
-    const maxDistance = 30;
-    const moveSpeed = 0.075;
-    const turnSpeed = 0.052;
-    const hitGoal = 10;
+    const playerSize = 22;
+    const enemySize = 24;
+    const projectileSize = 8;
+
+    const targetWord = "EYESONLY";
     const glitchDuration = 4200;
 
-    const dummySpeed = 0.018;
-    const dummyRadius = 0.23;
-
-    let mapWidth = map[0].length;
-    let mapHeight = map.length;
-
     let player;
-    let targets;
-    let hits;
-    let shots;
+    let currentRoom;
     let keys = {};
-    let gameRunning = false;
-    let shotFlash = 0;
-    let venomTrail = 0;
-    let rayDistances = [];
+    let projectiles = [];
     let animationId = null;
+    let gameRunning = false;
+    let collectedLetters = [];
+    let invulnerableTimer = 0;
+
+    const rooms = {
+      "0,1": {
+        name: "GREENHOUSE A",
+        doors: { down: "1,1", right: "0,2" },
+        letter: { value: "E", x: 10, y: 7 },
+        enemies: [
+          { x: 5, y: 5, label: "M" },
+          { x: 15, y: 10, label: "Q" }
+        ],
+        blocks: [
+          [4, 3], [5, 3], [6, 3],
+          [13, 4], [14, 4],
+          [9, 10], [10, 10], [11, 10]
+        ]
+      },
+
+      "0,2": {
+        name: "SPECIMEN VAULT",
+        doors: { left: "0,1", down: "1,2" },
+        letter: { value: "Y", x: 14, y: 4 },
+        enemies: [
+          { x: 7, y: 8, label: "Q" }
+        ],
+        blocks: [
+          [3, 5], [4, 5], [5, 5],
+          [10, 3], [10, 4], [10, 5],
+          [15, 9], [16, 9]
+        ]
+      },
+
+      "1,0": {
+        name: "WEST LAB",
+        doors: { right: "1,1", down: "2,0" },
+        letter: { value: "E", x: 5, y: 10 },
+        enemies: [
+          { x: 13, y: 5, label: "M" }
+        ],
+        blocks: [
+          [7, 4], [8, 4], [9, 4],
+          [7, 5],
+          [4, 9], [5, 9],
+          [14, 11], [15, 11]
+        ]
+      },
+
+      "1,1": {
+        name: "CENTRAL LAB",
+        doors: { up: "0,1", right: "1,2", down: "2,1", left: "1,0" },
+        letter: { value: "S", x: 10, y: 7 },
+        enemies: [
+          { x: 4, y: 4, label: "Q" },
+          { x: 16, y: 11, label: "M" }
+        ],
+        blocks: [
+          [8, 6], [9, 6], [10, 6], [11, 6],
+          [8, 8], [9, 8], [10, 8], [11, 8],
+          [5, 11], [14, 3]
+        ]
+      },
+
+      "1,2": {
+        name: "SERVER GARDEN",
+        doors: { up: "0,2", down: "2,2", left: "1,1" },
+        letter: { value: "O", x: 6, y: 6 },
+        enemies: [
+          { x: 15, y: 5, label: "Q" },
+          { x: 14, y: 11, label: "M" }
+        ],
+        blocks: [
+          [5, 3], [5, 4], [5, 5],
+          [10, 7], [11, 7], [12, 7],
+          [16, 10], [16, 11]
+        ]
+      },
+
+      "2,0": {
+        name: "VENOM STORAGE",
+        doors: { up: "1,0", right: "2,1" },
+        letter: { value: "N", x: 13, y: 9 },
+        enemies: [
+          { x: 5, y: 5, label: "M" }
+        ],
+        blocks: [
+          [6, 8], [7, 8], [8, 8],
+          [12, 3], [13, 3],
+          [15, 11], [16, 11]
+        ]
+      },
+
+      "2,1": {
+        name: "ROOT ARCHIVE",
+        doors: { up: "1,1", left: "2,0", right: "2,2" },
+        letter: { value: "L", x: 10, y: 11 },
+        enemies: [
+          { x: 4, y: 10, label: "Q" }
+        ],
+        blocks: [
+          [3, 4], [4, 4], [5, 4],
+          [10, 5], [10, 6], [10, 7],
+          [14, 9], [15, 9]
+        ]
+      },
+
+      "2,2": {
+        name: "FINAL CONSERVATORY",
+        doors: { up: "1,2", left: "2,1" },
+        letter: { value: "Y", x: 15, y: 5 },
+        enemies: [
+          { x: 5, y: 5, label: "M" },
+          { x: 10, y: 10, label: "Q" }
+        ],
+        blocks: [
+          [7, 3], [8, 3], [9, 3],
+          [12, 6], [12, 7], [12, 8],
+          [4, 11], [5, 11], [6, 11]
+        ]
+      }
+    };
 
     function startGame() {
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
 
-      player = {
-        x: 1.5,
-        y: 1.5,
-        angle: 0
-      };
-
-      hits = 0;
-      shots = 0;
-      shotFlash = 0;
-      venomTrail = 0;
+      currentRoom = "1,1";
+      collectedLetters = [];
+      projectiles = [];
+      invulnerableTimer = 0;
       gameRunning = true;
 
-      targets = createTargetsFromMap();
+      Object.keys(rooms).forEach(function(key) {
+        const room = rooms[key];
+
+        room.letter.collected = false;
+
+        room.enemies.forEach(function(enemy) {
+          enemy.alive = true;
+          enemy.px = enemy.x * TILE + TILE / 2;
+          enemy.py = enemy.y * TILE + TILE / 2;
+          enemy.vx = Math.random() < 0.5 ? 1 : -1;
+          enemy.vy = Math.random() < 0.5 ? 1 : -1;
+          enemy.hitTimer = 0;
+        });
+      });
+
+      player = {
+        x: 10 * TILE,
+        y: 7 * TILE,
+        dx: 0,
+        dy: -1,
+        health: 5,
+        hurtTimer: 0
+      };
 
       glitchOverlayEl.style.display = "none";
-      winBoxEl.style.display = "none";
       glitchStatusEl.style.display = "none";
+      winBoxEl.style.display = "none";
+      messageEl.textContent = "Lab active. Explore all 8 rooms.";
 
-      messageEl.textContent = "Moving dummy range active. Locate all M and Q targets.";
+      updateHud();
+      animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop() {
+      if (!gameRunning) {
+        drawGame();
+        return;
+      }
+
+      updatePlayer();
+      updateEnemies();
+      updateProjectiles();
+      checkLetterPickup();
+      checkWinCondition();
+      drawGame();
       updateHud();
 
       animationId = requestAnimationFrame(gameLoop);
     }
 
-    function createTargetsFromMap() {
-      const spawnPoints = [];
-
-      for (let y = 0; y < map.length; y++) {
-        for (let x = 0; x < map[y].length; x++) {
-          if (map[y][x] === "2") {
-            spawnPoints.push({ x: x + 0.5, y: y + 0.5 });
-          }
-        }
-      }
-
-      const extraOpenSpaces = [
-        { x: 8.5, y: 1.5 },
-        { x: 15.5, y: 1.5 },
-        { x: 5.5, y: 3.5 },
-        { x: 13.5, y: 3.5 },
-        { x: 1.5, y: 7.5 },
-        { x: 10.5, y: 7.5 },
-        { x: 16.5, y: 9.5 },
-        { x: 5.5, y: 11.5 },
-        { x: 13.5, y: 13.5 },
-        { x: 8.5, y: 15.5 },
-        { x: 17.5, y: 15.5 },
-        { x: 3.5, y: 19.5 }
-      ];
-
-      extraOpenSpaces.forEach(function(point) {
-        if (isOpenForDummy(point.x, point.y)) {
-          spawnPoints.push(point);
-        }
-      });
-
-      shuffleArray(spawnPoints);
-
-      const labels = ["M", "Q", "M", "Q", "M", "Q", "M", "Q", "M", "Q"];
-      const result = [];
-
-      for (let i = 0; i < hitGoal && i < spawnPoints.length; i++) {
-        const direction = Math.random() * Math.PI * 2;
-
-        result.push({
-          x: spawnPoints[i].x,
-          y: spawnPoints[i].y,
-          label: labels[i],
-          alive: true,
-          angle: direction,
-          phase: Math.random() * Math.PI * 2,
-          turnTimer: 40 + Math.floor(Math.random() * 100)
-        });
-      }
-
-      return result;
-    }
-
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
-    }
-
-    function gameLoop() {
-      if (gameRunning) {
-        updatePlayer();
-        updateDummies();
-        drawScene();
-        animationId = requestAnimationFrame(gameLoop);
-      } else {
-        drawScene();
-      }
-    }
-
     function updatePlayer() {
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-        player.angle -= turnSpeed;
-      }
-
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-        player.angle += turnSpeed;
-      }
+      let moveX = 0;
+      let moveY = 0;
+      const speed = 2.4;
 
       if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-        movePlayer(Math.cos(player.angle) * moveSpeed, Math.sin(player.angle) * moveSpeed);
+        moveY -= speed;
+        player.dx = 0;
+        player.dy = -1;
       }
 
       if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-        movePlayer(-Math.cos(player.angle) * moveSpeed, -Math.sin(player.angle) * moveSpeed);
+        moveY += speed;
+        player.dx = 0;
+        player.dy = 1;
       }
 
-      if (keys["q"] || keys["Q"]) {
-        movePlayer(Math.cos(player.angle - Math.PI / 2) * moveSpeed, Math.sin(player.angle - Math.PI / 2) * moveSpeed);
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+        moveX -= speed;
+        player.dx = -1;
+        player.dy = 0;
       }
 
-      if (keys["e"] || keys["E"]) {
-        movePlayer(Math.cos(player.angle + Math.PI / 2) * moveSpeed, Math.sin(player.angle + Math.PI / 2) * moveSpeed);
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+        moveX += speed;
+        player.dx = 1;
+        player.dy = 0;
       }
 
-      if (shotFlash > 0) {
-        shotFlash--;
+      moveEntity(player, moveX, 0, playerSize);
+      moveEntity(player, 0, moveY, playerSize);
+
+      handleRoomTransition();
+
+      if (player.hurtTimer > 0) {
+        player.hurtTimer--;
       }
 
-      if (venomTrail > 0) {
-        venomTrail--;
+      if (invulnerableTimer > 0) {
+        invulnerableTimer--;
       }
-
-      updateHud();
     }
 
-    function updateDummies() {
-      targets.forEach(function(dummy) {
-        if (!dummy.alive) {
-          return;
-        }
+    function moveEntity(entity, dx, dy, size) {
+      const newX = entity.x + dx;
+      const newY = entity.y + dy;
 
-        dummy.phase += 0.07;
-        dummy.turnTimer--;
-
-        if (dummy.turnTimer <= 0) {
-          chooseNewDummyDirection(dummy);
-        }
-
-        const nextX = dummy.x + Math.cos(dummy.angle) * dummySpeed;
-        const nextY = dummy.y + Math.sin(dummy.angle) * dummySpeed;
-
-        if (isOpenForDummy(nextX, nextY)) {
-          dummy.x = nextX;
-          dummy.y = nextY;
-        } else {
-          chooseNewDummyDirection(dummy);
-        }
-      });
+      if (!collidesWithWalls(newX, newY, size)) {
+        entity.x = newX;
+        entity.y = newY;
+      }
     }
 
-    function chooseNewDummyDirection(dummy) {
-      const possibleAngles = [
-        0,
-        Math.PI / 2,
-        Math.PI,
-        Math.PI * 1.5,
-        Math.PI / 4,
-        Math.PI * 0.75,
-        Math.PI * 1.25,
-        Math.PI * 1.75
+    function collidesWithWalls(x, y, size) {
+      const half = size / 2;
+
+      const points = [
+        [x - half, y - half],
+        [x + half, y - half],
+        [x - half, y + half],
+        [x + half, y + half]
       ];
 
-      shuffleArray(possibleAngles);
+      for (let i = 0; i < points.length; i++) {
+        const px = points[i][0];
+        const py = points[i][1];
 
-      for (let i = 0; i < possibleAngles.length; i++) {
-        const angle = possibleAngles[i];
-        const testX = dummy.x + Math.cos(angle) * 0.45;
-        const testY = dummy.y + Math.sin(angle) * 0.45;
+        if (px < TILE || px > canvas.width - TILE || py < TILE || py > canvas.height - TILE) {
+          if (!isDoorArea(px, py)) {
+            return true;
+          }
+        }
 
-        if (isOpenForDummy(testX, testY)) {
-          dummy.angle = angle;
-          dummy.turnTimer = 45 + Math.floor(Math.random() * 120);
-          return;
+        const tileX = Math.floor(px / TILE);
+        const tileY = Math.floor(py / TILE);
+
+        if (isBlock(tileX, tileY)) {
+          return true;
         }
       }
 
-      dummy.angle += Math.PI;
-      dummy.turnTimer = 60;
+      return false;
     }
 
-    function movePlayer(dx, dy) {
-      const radius = 0.20;
-      const newX = player.x + dx;
-      const newY = player.y + dy;
+    function isDoorArea(x, y) {
+      const room = rooms[currentRoom];
+      const doorMin = 8 * TILE;
+      const doorMax = 12 * TILE;
 
-      if (
-        !isWall(newX + radius, player.y) &&
-        !isWall(newX - radius, player.y) &&
-        !isWall(newX, player.y + radius) &&
-        !isWall(newX, player.y - radius)
-      ) {
-        player.x = newX;
-      }
-
-      if (
-        !isWall(player.x + radius, newY) &&
-        !isWall(player.x - radius, newY) &&
-        !isWall(player.x, newY + radius) &&
-        !isWall(player.x, newY - radius)
-      ) {
-        player.y = newY;
-      }
-    }
-
-    function isWall(x, y) {
-      const mapX = Math.floor(x);
-      const mapY = Math.floor(y);
-
-      if (mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight) {
+      if (y < TILE && x >= doorMin && x <= doorMax && room.doors.up) {
         return true;
       }
 
-      return map[mapY][mapX] === "1";
+      if (y > canvas.height - TILE && x >= doorMin && x <= doorMax && room.doors.down) {
+        return true;
+      }
+
+      if (x < TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.left) {
+        return true;
+      }
+
+      if (x > canvas.width - TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.right) {
+        return true;
+      }
+
+      return false;
     }
 
-    function isOpenForDummy(x, y) {
-      return (
-        !isWall(x + dummyRadius, y) &&
-        !isWall(x - dummyRadius, y) &&
-        !isWall(x, y + dummyRadius) &&
-        !isWall(x, y - dummyRadius)
-      );
+    function isBlock(tileX, tileY) {
+      const room = rooms[currentRoom];
+
+      return room.blocks.some(function(block) {
+        return block[0] === tileX && block[1] === tileY;
+      });
     }
 
-    function drawScene() {
-      const w = canvas.width;
-      const h = canvas.height;
+    function handleRoomTransition() {
+      const room = rooms[currentRoom];
 
-      ctx.clearRect(0, 0, w, h);
+      if (player.y < 0 && room.doors.up) {
+        currentRoom = room.doors.up;
+        player.y = canvas.height - TILE * 2;
+        player.x = canvas.width / 2;
+        projectiles = [];
+        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+      }
 
-      drawCeilingAndFloor(w, h);
-      castWalls(w, h);
-      drawTargets(w, h);
-      drawLabOverlay(w, h);
-      drawCrosshair(w, h);
-      drawCobraBlaster(w, h);
-      drawMiniMap();
+      if (player.y > canvas.height && room.doors.down) {
+        currentRoom = room.doors.down;
+        player.y = TILE * 2;
+        player.x = canvas.width / 2;
+        projectiles = [];
+        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+      }
 
-      if (shotFlash > 0) {
-        ctx.fillStyle = "rgba(120, 255, 180, 0.16)";
-        ctx.fillRect(0, 0, w, h);
+      if (player.x < 0 && room.doors.left) {
+        currentRoom = room.doors.left;
+        player.x = canvas.width - TILE * 2;
+        player.y = canvas.height / 2;
+        projectiles = [];
+        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+      }
+
+      if (player.x > canvas.width && room.doors.right) {
+        currentRoom = room.doors.right;
+        player.x = TILE * 2;
+        player.y = canvas.height / 2;
+        projectiles = [];
+        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
       }
     }
 
-    function drawCeilingAndFloor(w, h) {
-      const ceiling = ctx.createLinearGradient(0, 0, 0, h / 2);
-      ceiling.addColorStop(0, "#001100");
-      ceiling.addColorStop(1, "#071807");
-      ctx.fillStyle = ceiling;
-      ctx.fillRect(0, 0, w, h / 2);
+    function updateEnemies() {
+      const room = rooms[currentRoom];
 
-      const floor = ctx.createLinearGradient(0, h / 2, 0, h);
-      floor.addColorStop(0, "#061206");
-      floor.addColorStop(1, "#000000");
-      ctx.fillStyle = floor;
-      ctx.fillRect(0, h / 2, w, h / 2);
-
-      ctx.strokeStyle = "rgba(0,255,100,0.07)";
-      for (let y = h / 2; y < h; y += 18) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-    }
-
-    function castWalls(w, h) {
-      rayDistances = [];
-
-      for (let i = 0; i < numRays; i++) {
-        const rayAngle = player.angle - fov / 2 + (i / numRays) * fov;
-        const ray = castRay(rayAngle);
-
-        const correctedDistance = ray.distance * Math.cos(rayAngle - player.angle);
-        rayDistances[i] = correctedDistance;
-
-        const wallHeight = Math.min(h, h / correctedDistance);
-        const x = (i / numRays) * w;
-        const stripWidth = Math.ceil(w / numRays) + 1;
-        const y = h / 2 - wallHeight / 2;
-
-        let brightness = Math.max(35, 220 - correctedDistance * 30);
-        let green = Math.floor(brightness);
-
-        if (ray.side === "x") {
-          green = Math.floor(green * 0.72);
+      room.enemies.forEach(function(enemy) {
+        if (!enemy.alive) {
+          return;
         }
 
-        ctx.fillStyle = "rgb(0," + green + ",62)";
-        ctx.fillRect(x, y, stripWidth, wallHeight);
-
-        ctx.fillStyle = "rgba(0,0,0,0.22)";
-        ctx.fillRect(x, y + wallHeight - 9, stripWidth, 9);
-
-        if (i % 10 === 0) {
-          ctx.fillStyle = "rgba(255,255,255,0.055)";
-          ctx.fillRect(x, y, 2, wallHeight);
+        if (enemy.hitTimer > 0) {
+          enemy.hitTimer--;
         }
 
-        if (ray.hitMarker) {
-          ctx.fillStyle = "rgba(180,255,200,0.12)";
-          ctx.fillRect(x, y + wallHeight * 0.18, stripWidth, wallHeight * 0.15);
-        }
-      }
-    }
+        const dxToPlayer = player.x - enemy.px;
+        const dyToPlayer = player.y - enemy.py;
+        const distance = Math.sqrt(dxToPlayer * dxToPlayer + dyToPlayer * dyToPlayer);
 
-    function castRay(angle) {
-      let distance = 0;
-      let hit = false;
-      let hitX = player.x;
-      let hitY = player.y;
-      let lastMapX = Math.floor(player.x);
-      let lastMapY = Math.floor(player.y);
-      let side = "x";
-      let hitMarker = false;
-
-      while (!hit && distance < maxDistance) {
-        distance += 0.025;
-        hitX = player.x + Math.cos(angle) * distance;
-        hitY = player.y + Math.sin(angle) * distance;
-
-        const mapX = Math.floor(hitX);
-        const mapY = Math.floor(hitY);
-
-        if (mapX !== lastMapX) {
-          side = "x";
+        if (distance < 180) {
+          enemy.vx = dxToPlayer / distance;
+          enemy.vy = dyToPlayer / distance;
         }
 
-        if (mapY !== lastMapY) {
-          side = "y";
+        const speed = enemy.label === "Q" ? 1.35 : 1.1;
+
+        const nextX = enemy.px + enemy.vx * speed;
+        const nextY = enemy.py + enemy.vy * speed;
+
+        if (!collidesWithWalls(nextX, enemy.py, enemySize)) {
+          enemy.px = nextX;
+        } else {
+          enemy.vx *= -1;
         }
 
-        lastMapX = mapX;
-        lastMapY = mapY;
-
-        if (isWall(hitX, hitY)) {
-          hit = true;
-          hitMarker = (mapX + mapY) % 5 === 0;
+        if (!collidesWithWalls(enemy.px, nextY, enemySize)) {
+          enemy.py = nextY;
+        } else {
+          enemy.vy *= -1;
         }
-      }
 
-      return {
-        distance: distance,
-        side: side,
-        hitMarker: hitMarker
-      };
-    }
+        if (distance < 28 && invulnerableTimer <= 0) {
+          player.health--;
+          invulnerableTimer = 80;
+          player.hurtTimer = 20;
+          messageEl.textContent = "Hit by " + enemy.label + " security dummy.";
 
-    function drawTargets(w, h) {
-      const visibleTargets = targets
-        .filter(function(target) {
-          return target.alive;
-        })
-        .map(function(target) {
-          const dx = target.x - player.x;
-          const dy = target.y - player.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          let angleToTarget = Math.atan2(dy, dx) - player.angle;
-
-          angleToTarget = normalizeAngle(angleToTarget);
-
-          return {
-            target: target,
-            distance: distance,
-            angle: angleToTarget
-          };
-        })
-        .filter(function(item) {
-          return Math.abs(item.angle) < fov / 1.65 && item.distance > 0.35;
-        })
-        .sort(function(a, b) {
-          return b.distance - a.distance;
-        });
-
-      visibleTargets.forEach(function(item) {
-        const screenX = (0.5 + item.angle / fov) * w;
-        const size = Math.min(170, h / item.distance * 0.50);
-        const screenY = h / 2 + size * 0.20 + Math.sin(item.target.phase) * 4;
-
-        const rayIndex = Math.floor((screenX / w) * numRays);
-        const wallDistance = rayDistances[rayIndex] || maxDistance;
-
-        if (item.distance < wallDistance + 0.25) {
-          drawTrainingDummy(screenX, screenY, size, item.target.label, item.target.phase);
+          if (player.health <= 0) {
+            messageEl.textContent = "Simulation failed. Restart required.";
+            gameRunning = false;
+          }
         }
       });
     }
 
-    function drawTrainingDummy(x, y, size, label, phase) {
-      const s = size / 100;
+    function updateProjectiles() {
+      for (let i = projectiles.length - 1; i >= 0; i--) {
+        const projectile = projectiles[i];
 
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.imageSmoothingEnabled = false;
+        projectile.x += projectile.dx * projectile.speed;
+        projectile.y += projectile.dy * projectile.speed;
+        projectile.life--;
 
-      const sway = Math.sin(phase) * 3 * s;
+        const tileX = Math.floor(projectile.x / TILE);
+        const tileY = Math.floor(projectile.y / TILE);
 
-      ctx.translate(sway, 0);
+        if (
+          projectile.life <= 0 ||
+          projectile.x < 0 ||
+          projectile.x > canvas.width ||
+          projectile.y < 0 ||
+          projectile.y > canvas.height ||
+          isBlock(tileX, tileY)
+        ) {
+          projectiles.splice(i, 1);
+          continue;
+        }
 
-      // shadow
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.fillRect(-38 * s, 38 * s, 76 * s, 11 * s);
+        const room = rooms[currentRoom];
 
-      // base rail
-      ctx.fillStyle = "#050505";
-      ctx.strokeStyle = "#00ff66";
-      ctx.lineWidth = Math.max(1, 2 * s);
-      ctx.fillRect(-34 * s, 28 * s, 68 * s, 12 * s);
-      ctx.strokeRect(-34 * s, 28 * s, 68 * s, 12 * s);
+        for (let j = 0; j < room.enemies.length; j++) {
+          const enemy = room.enemies[j];
 
-      // pole
-      ctx.fillStyle = "#001f0b";
-      ctx.strokeStyle = "#baffc9";
-      ctx.fillRect(-5 * s, -18 * s, 10 * s, 46 * s);
-      ctx.strokeRect(-5 * s, -18 * s, 10 * s, 46 * s);
-
-      // torso plate
-      ctx.fillStyle = "#071707";
-      ctx.strokeStyle = "#eaffee";
-      ctx.lineWidth = Math.max(2, 3 * s);
-      ctx.fillRect(-34 * s, -58 * s, 68 * s, 54 * s);
-      ctx.strokeRect(-34 * s, -58 * s, 68 * s, 54 * s);
-
-      // angled shoulders
-      ctx.fillStyle = "#0e2812";
-      ctx.beginPath();
-      ctx.moveTo(-42 * s, -52 * s);
-      ctx.lineTo(-34 * s, -58 * s);
-      ctx.lineTo(-34 * s, -4 * s);
-      ctx.lineTo(-48 * s, -12 * s);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(42 * s, -52 * s);
-      ctx.lineTo(34 * s, -58 * s);
-      ctx.lineTo(34 * s, -4 * s);
-      ctx.lineTo(48 * s, -12 * s);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // head block
-      ctx.fillStyle = "#050505";
-      ctx.strokeStyle = "#eaffee";
-      ctx.fillRect(-22 * s, -92 * s, 44 * s, 30 * s);
-      ctx.strokeRect(-22 * s, -92 * s, 44 * s, 30 * s);
-
-      // visor
-      ctx.fillStyle = "#00ff66";
-      ctx.fillRect(-14 * s, -82 * s, 28 * s, 7 * s);
-
-      // target circle
-      ctx.strokeStyle = "#ff4444";
-      ctx.lineWidth = Math.max(2, 3 * s);
-      ctx.beginPath();
-      ctx.arc(0, -31 * s, 19 * s, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(-24 * s, -31 * s);
-      ctx.lineTo(24 * s, -31 * s);
-      ctx.moveTo(0, -55 * s);
-      ctx.lineTo(0, -7 * s);
-      ctx.stroke();
-
-      // label panel
-      ctx.fillStyle = "#300000";
-      ctx.fillRect(-17 * s, -42 * s, 34 * s, 22 * s);
-      ctx.strokeStyle = "#ff4444";
-      ctx.strokeRect(-17 * s, -42 * s, 34 * s, 22 * s);
-
-      ctx.fillStyle = "#ff5555";
-      ctx.font = Math.max(13, 22 * s) + "px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(label, 0, -30 * s);
-
-      // small lights
-      ctx.fillStyle = "#ffee66";
-      ctx.fillRect(-27 * s, -52 * s, 7 * s, 7 * s);
-      ctx.fillRect(20 * s, -52 * s, 7 * s, 7 * s);
-
-      // rails wheels
-      ctx.fillStyle = "#111111";
-      ctx.strokeStyle = "#baffc9";
-      ctx.beginPath();
-      ctx.arc(-22 * s, 42 * s, 6 * s, 0, Math.PI * 2);
-      ctx.arc(22 * s, 42 * s, 6 * s, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.restore();
-    }
-
-    function drawLabOverlay(w, h) {
-      ctx.fillStyle = "rgba(0,255,100,0.18)";
-      ctx.font = "14px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText("BOTANICAL LAB // MOVING DUMMY GRID", 14, 24);
-      ctx.fillText("AUTHORIZED TARGETS: M / Q", 14, 44);
-    }
-
-    function drawCrosshair(w, h) {
-      const cx = w / 2;
-      const cy = h / 2;
-
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
-      ctx.lineWidth = 2;
-
-      ctx.beginPath();
-      ctx.moveTo(cx - 28, cy);
-      ctx.lineTo(cx - 8, cy);
-      ctx.moveTo(cx + 8, cy);
-      ctx.lineTo(cx + 28, cy);
-      ctx.moveTo(cx, cy - 28);
-      ctx.lineTo(cx, cy - 8);
-      ctx.moveTo(cx, cy + 8);
-      ctx.lineTo(cx, cy + 28);
-      ctx.stroke();
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.beginPath();
-      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-      ctx.stroke();
-
-      if (venomTrail > 0) {
-        ctx.fillStyle = "rgba(90, 255, 160, 0.95)";
-        ctx.beginPath();
-        ctx.arc(cx, cy - 45 + venomTrail * 4, 5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function drawCobraBlaster(w, h) {
-      const baseX = w / 2;
-      const baseY = h - 10;
-
-      // neck
-      ctx.fillStyle = "#0b2d0f";
-      ctx.beginPath();
-      ctx.moveTo(baseX - 36, h);
-      ctx.quadraticCurveTo(baseX - 34, h - 110, baseX - 6, h - 150);
-      ctx.lineTo(baseX + 6, h - 150);
-      ctx.quadraticCurveTo(baseX + 34, h - 110, baseX + 36, h);
-      ctx.closePath();
-      ctx.fill();
-
-      // hood
-      ctx.fillStyle = "#143d18";
-      ctx.beginPath();
-      ctx.moveTo(baseX, h - 200);
-      ctx.quadraticCurveTo(baseX - 76, h - 170, baseX - 54, h - 112);
-      ctx.quadraticCurveTo(baseX - 22, h - 126, baseX, h - 132);
-      ctx.quadraticCurveTo(baseX + 22, h - 126, baseX + 54, h - 112);
-      ctx.quadraticCurveTo(baseX + 76, h - 170, baseX, h - 200);
-      ctx.closePath();
-      ctx.fill();
-
-      // head
-      ctx.fillStyle = "#1d4f22";
-      ctx.beginPath();
-      ctx.moveTo(baseX - 28, h - 170);
-      ctx.quadraticCurveTo(baseX, h - 205, baseX + 28, h - 170);
-      ctx.quadraticCurveTo(baseX + 24, h - 140, baseX, h - 132);
-      ctx.quadraticCurveTo(baseX - 24, h - 140, baseX - 28, h - 170);
-      ctx.closePath();
-      ctx.fill();
-
-      // mouth opening
-      ctx.fillStyle = "#020202";
-      ctx.beginPath();
-      ctx.moveTo(baseX - 18, h - 150);
-      ctx.lineTo(baseX + 18, h - 150);
-      ctx.lineTo(baseX + 8, h - 130);
-      ctx.lineTo(baseX - 8, h - 130);
-      ctx.closePath();
-      ctx.fill();
-
-      // fangs
-      ctx.fillStyle = "#f7fff9";
-      ctx.fillRect(baseX - 10, h - 148, 4, 12);
-      ctx.fillRect(baseX + 6, h - 148, 4, 12);
-
-      // eyes
-      ctx.fillStyle = "#66ffee";
-      ctx.fillRect(baseX - 15, h - 170, 6, 6);
-      ctx.fillRect(baseX + 9, h - 170, 6, 6);
-
-      // scale tech lines
-      ctx.strokeStyle = "#66ffee";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(baseX - 46, h - 136);
-      ctx.lineTo(baseX - 18, h - 146);
-      ctx.moveTo(baseX + 46, h - 136);
-      ctx.lineTo(baseX + 18, h - 146);
-      ctx.moveTo(baseX - 10, h - 112);
-      ctx.lineTo(baseX - 10, h - 24);
-      ctx.moveTo(baseX + 10, h - 112);
-      ctx.lineTo(baseX + 10, h - 24);
-      ctx.stroke();
-
-      // venom canister
-      ctx.fillStyle = "#0a1d0d";
-      ctx.fillRect(baseX - 74, h - 102, 44, 54);
-      ctx.strokeStyle = "#78ffd6";
-      ctx.strokeRect(baseX - 74, h - 102, 44, 54);
-
-      ctx.fillStyle = "#66ff99";
-      ctx.fillRect(baseX - 68, h - 94, 32, 12);
-      ctx.fillRect(baseX - 68, h - 76, 32, 12);
-
-      // label
-      ctx.fillStyle = "#78ffd6";
-      ctx.font = "13px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("COBRA VX-86", baseX, baseY - 6);
-    }
-
-    function drawMiniMap() {
-      const scale = 5;
-      const offsetX = 12;
-      const offsetY = 58;
-
-      ctx.fillStyle = "rgba(0, 0, 0, 0.58)";
-      ctx.fillRect(offsetX - 4, offsetY - 4, mapWidth * scale + 8, mapHeight * scale + 8);
-
-      for (let y = 0; y < mapHeight; y++) {
-        for (let x = 0; x < mapWidth; x++) {
-          if (map[y][x] === "1") {
-            ctx.fillStyle = "#00aa44";
-          } else {
-            ctx.fillStyle = "#001600";
+          if (!enemy.alive) {
+            continue;
           }
 
-          ctx.fillRect(offsetX + x * scale, offsetY + y * scale, scale - 1, scale - 1);
+          const dx = projectile.x - enemy.px;
+          const dy = projectile.y - enemy.py;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 22) {
+            enemy.alive = false;
+            enemy.hitTimer = 12;
+            projectiles.splice(i, 1);
+            messageEl.textContent = enemy.label + " security dummy disabled.";
+            break;
+          }
         }
       }
-
-      targets.forEach(function(target) {
-        if (target.alive) {
-          ctx.fillStyle = "#ff4444";
-          ctx.fillRect(offsetX + target.x * scale - 2, offsetY + target.y * scale - 2, 4, 4);
-        }
-      });
-
-      ctx.fillStyle = "#ffee66";
-      ctx.beginPath();
-      ctx.arc(offsetX + player.x * scale, offsetY + player.y * scale, 3, 0, Math.PI * 2);
-      ctx.fill();
     }
 
     function shoot() {
@@ -1112,54 +821,58 @@ Hit 10 moving dummies to unlock the command code.</div>
         return;
       }
 
-      shots++;
-      shotFlash = 4;
-      venomTrail = 8;
-
-      let bestTarget = null;
-      let bestScore = 999;
-
-      targets.forEach(function(target) {
-        if (!target.alive) {
-          return;
-        }
-
-        const dx = target.x - player.x;
-        const dy = target.y - player.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        let angleToTarget = Math.atan2(dy, dx) - player.angle;
-
-        angleToTarget = normalizeAngle(angleToTarget);
-
-        const aimTolerance = 0.105 + Math.min(0.12, 0.28 / distance);
-
-        if (Math.abs(angleToTarget) < aimTolerance) {
-          const ray = castRay(Math.atan2(dy, dx));
-
-          if (distance < ray.distance + 0.18) {
-            const score = Math.abs(angleToTarget) + distance * 0.018;
-
-            if (score < bestScore) {
-              bestScore = score;
-              bestTarget = target;
-            }
-          }
-        }
+      projectiles.push({
+        x: player.x,
+        y: player.y,
+        dx: player.dx,
+        dy: player.dy,
+        speed: 6,
+        life: 55
       });
+    }
 
-      if (bestTarget) {
-        bestTarget.alive = false;
-        hits++;
-        messageEl.textContent = "Moving dummy " + bestTarget.label + " disabled by cobra venom.";
-      } else {
-        messageEl.textContent = "Venom discharged. No dummy hit.";
+    function checkLetterPickup() {
+      const room = rooms[currentRoom];
+      const letter = room.letter;
+
+      if (letter.collected) {
+        return;
       }
 
-      if (hits >= hitGoal) {
+      const lx = letter.x * TILE + TILE / 2;
+      const ly = letter.y * TILE + TILE / 2;
+      const dx = player.x - lx;
+      const dy = player.y - ly;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 28) {
+        letter.collected = true;
+        collectedLetters.push(letter.value);
+        messageEl.textContent = "Letter recovered: " + letter.value;
+      }
+    }
+
+    function checkWinCondition() {
+      const allLettersCollected = collectedLetters.length >= targetWord.length;
+      const enemiesLeft = countEnemiesLeft();
+
+      if (allLettersCollected && enemiesLeft === 0) {
         winGame();
       }
+    }
 
-      updateHud();
+    function countEnemiesLeft() {
+      let count = 0;
+
+      Object.keys(rooms).forEach(function(key) {
+        rooms[key].enemies.forEach(function(enemy) {
+          if (enemy.alive) {
+            count++;
+          }
+        });
+      });
+
+      return count;
     }
 
     function winGame() {
@@ -1171,59 +884,238 @@ Hit 10 moving dummies to unlock the command code.</div>
         glitchOverlayEl.style.display = "none";
         winBoxEl.style.display = "block";
         winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Dummy range authorization restored.";
+        messageEl.textContent = "Word recovered: EYESONLY.";
       }, glitchDuration);
     }
 
+    function drawGame() {
+      drawRoom();
+      drawLetters();
+      drawEnemies();
+      drawProjectiles();
+      drawPlayer();
+      drawHudOnCanvas();
+    }
+
+    function drawRoom() {
+      const room = rooms[currentRoom];
+
+      ctx.fillStyle = "#001100";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          ctx.fillStyle = (x + y) % 2 === 0 ? "#001600" : "#001000";
+          ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+        }
+      }
+
+      drawWallsAndDoors(room);
+      drawBlocks(room);
+    }
+
+    function drawWallsAndDoors(room) {
+      ctx.fillStyle = "#005522";
+
+      ctx.fillRect(0, 0, canvas.width, TILE);
+      ctx.fillRect(0, canvas.height - TILE, canvas.width, TILE);
+      ctx.fillRect(0, 0, TILE, canvas.height);
+      ctx.fillRect(canvas.width - TILE, 0, TILE, canvas.height);
+
+      ctx.fillStyle = "#000000";
+
+      if (room.doors.up) {
+        ctx.fillRect(8 * TILE, 0, 4 * TILE, TILE);
+      }
+
+      if (room.doors.down) {
+        ctx.fillRect(8 * TILE, canvas.height - TILE, 4 * TILE, TILE);
+      }
+
+      if (room.doors.left) {
+        ctx.fillRect(0, 6 * TILE, TILE, 3 * TILE);
+      }
+
+      if (room.doors.right) {
+        ctx.fillRect(canvas.width - TILE, 6 * TILE, TILE, 3 * TILE);
+      }
+
+      ctx.strokeStyle = "#00ff66";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(TILE, TILE, canvas.width - TILE * 2, canvas.height - TILE * 2);
+    }
+
+    function drawBlocks(room) {
+      room.blocks.forEach(function(block) {
+        const x = block[0] * TILE;
+        const y = block[1] * TILE;
+
+        ctx.fillStyle = "#003b16";
+        ctx.fillRect(x, y, TILE, TILE);
+
+        ctx.strokeStyle = "#00aa44";
+        ctx.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
+
+        ctx.fillStyle = "rgba(0,255,100,0.15)";
+        ctx.fillRect(x + 6, y + 6, TILE - 12, 6);
+      });
+    }
+
+    function drawLetters() {
+      const room = rooms[currentRoom];
+      const letter = room.letter;
+
+      if (letter.collected) {
+        return;
+      }
+
+      const x = letter.x * TILE + TILE / 2;
+      const y = letter.y * TILE + TILE / 2;
+
+      ctx.fillStyle = "#ffee66";
+      ctx.beginPath();
+      ctx.arc(x, y, 15, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#000000";
+      ctx.stroke();
+
+      ctx.fillStyle = "#000000";
+      ctx.font = "bold 20px Courier New";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(letter.value, x, y + 1);
+    }
+
+    function drawEnemies() {
+      const room = rooms[currentRoom];
+
+      room.enemies.forEach(function(enemy) {
+        if (!enemy.alive) {
+          return;
+        }
+
+        ctx.save();
+        ctx.translate(enemy.px, enemy.py);
+
+        ctx.fillStyle = "#111111";
+        ctx.fillRect(-14, -14, 28, 28);
+
+        ctx.strokeStyle = "#ff5555";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-14, -14, 28, 28);
+
+        ctx.fillStyle = "#ff5555";
+        ctx.font = "bold 20px Courier New";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(enemy.label, 0, 1);
+
+        ctx.fillStyle = "#00ff66";
+        ctx.fillRect(-10, -22, 20, 4);
+
+        ctx.restore();
+      });
+    }
+
+    function drawProjectiles() {
+      projectiles.forEach(function(projectile) {
+        ctx.fillStyle = "#66ff99";
+        ctx.beginPath();
+        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#baffc9";
+        ctx.stroke();
+      });
+    }
+
+    function drawPlayer() {
+      ctx.save();
+      ctx.translate(player.x, player.y);
+
+      if (player.hurtTimer > 0) {
+        ctx.globalAlpha = 0.45;
+      }
+
+      ctx.fillStyle = "#00ff66";
+      ctx.fillRect(-11, -11, 22, 22);
+
+      ctx.fillStyle = "#001100";
+      ctx.fillRect(-6, -6, 12, 12);
+
+      ctx.fillStyle = "#ffee66";
+      ctx.beginPath();
+      ctx.arc(player.dx * 14, player.dy * 14, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawHudOnCanvas() {
+      const room = rooms[currentRoom];
+
+      ctx.fillStyle = "rgba(0,0,0,0.7)";
+      ctx.fillRect(8, 8, 260, 54);
+
+      ctx.fillStyle = "#00ff66";
+      ctx.font = "14px Courier New";
+      ctx.textAlign = "left";
+      ctx.fillText(room.name, 18, 28);
+      ctx.fillText("WORD: " + getWordProgress(), 18, 48);
+    }
+
+    function getWordProgress() {
+      let result = "";
+
+      for (let i = 0; i < targetWord.length; i++) {
+        result += collectedLetters[i] ? collectedLetters[i] : "_";
+      }
+
+      return result;
+    }
+
     function updateHud() {
-      hitsEl.textContent = hits;
-      shotsEl.textContent = shots;
-      targetsLeftEl.textContent = targets.filter(function(target) {
-        return target.alive;
-      }).length;
-      positionEl.textContent = player.x.toFixed(1) + " / " + player.y.toFixed(1);
+      roomNameEl.textContent = rooms[currentRoom].name;
+      healthEl.textContent = player.health;
+      enemiesLeftEl.textContent = countEnemiesLeft();
+      lettersFoundEl.textContent = collectedLetters.length;
+      wordProgressEl.textContent = getWordProgress();
     }
 
-    function normalizeAngle(angle) {
-      while (angle < -Math.PI) {
-        angle += Math.PI * 2;
+    function pressMove(direction) {
+      if (direction === "up") {
+        player.y -= 24;
+        player.dx = 0;
+        player.dy = -1;
       }
 
-      while (angle > Math.PI) {
-        angle -= Math.PI * 2;
+      if (direction === "down") {
+        player.y += 24;
+        player.dx = 0;
+        player.dy = 1;
       }
 
-      return angle;
-    }
+      if (direction === "left") {
+        player.x -= 24;
+        player.dx = -1;
+        player.dy = 0;
+      }
 
-    function moveForward() {
-      movePlayer(Math.cos(player.angle) * 0.25, Math.sin(player.angle) * 0.25);
-      updateHud();
-    }
+      if (direction === "right") {
+        player.x += 24;
+        player.dx = 1;
+        player.dy = 0;
+      }
 
-    function moveBackward() {
-      movePlayer(-Math.cos(player.angle) * 0.25, -Math.sin(player.angle) * 0.25);
-      updateHud();
-    }
+      if (collidesWithWalls(player.x, player.y, playerSize)) {
+        if (direction === "up") player.y += 24;
+        if (direction === "down") player.y -= 24;
+        if (direction === "left") player.x += 24;
+        if (direction === "right") player.x -= 24;
+      }
 
-    function moveLeft() {
-      movePlayer(Math.cos(player.angle - Math.PI / 2) * 0.25, Math.sin(player.angle - Math.PI / 2) * 0.25);
-      updateHud();
-    }
-
-    function moveRight() {
-      movePlayer(Math.cos(player.angle + Math.PI / 2) * 0.25, Math.sin(player.angle + Math.PI / 2) * 0.25);
-      updateHud();
-    }
-
-    function turnLeft() {
-      player.angle -= 0.25;
-      updateHud();
-    }
-
-    function turnRight() {
-      player.angle += 0.25;
-      updateHud();
+      handleRoomTransition();
     }
 
     document.addEventListener("keydown", function(event) {
@@ -1237,10 +1129,6 @@ Hit 10 moving dummies to unlock the command code.</div>
 
     document.addEventListener("keyup", function(event) {
       keys[event.key] = false;
-    });
-
-    canvas.addEventListener("click", function() {
-      shoot();
     });
 
     startGame();
