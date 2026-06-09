@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>MI6 Memory Protocol</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #001100;
+      color: #00ff66;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 100, 0.08),
+          rgba(0, 255, 100, 0.08) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .terminal {
+      width: 100%;
+      max-width: 1120px;
+      background: #000900;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
+      padding: 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+      color: #00ff66;
+      font-size: 26px;
+      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #8dffb0;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      white-space: pre-line;
+    }
+
+    .statusPanel {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .statusBox {
+      border: 1px dashed #00aa44;
+      background: rgba(0, 30, 0, 0.8);
+      padding: 12px;
+      text-align: center;
+      color: #baffc9;
+      box-sizing: border-box;
+      min-height: 64px;
+    }
+
+    .statusLabel {
+      color: #00ff66;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .statusValue {
+      font-size: 22px;
+      color: #ffee66;
+      font-weight: bold;
+      text-shadow: 0 0 6px rgba(255, 238, 102, 0.5);
+    }
+
+    .danger {
+      color: #ff4444 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+      animation: dangerBlink 0.6s infinite;
+    }
+
+    @keyframes dangerBlink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.45; }
+    }
+
+    .gameArea {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin: 20px auto;
+      max-width: 850px;
+    }
+
+    .card {
+      aspect-ratio: 1 / 1.18;
+      border: 1px solid #00ff66;
+      background: #001600;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 0 12px rgba(0, 255, 100, 0.12);
+    }
+
+    .card:hover {
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.35);
+    }
+
+    .card.flipped,
+    .card.matched {
+      transform: rotateY(180deg);
+      cursor: default;
+    }
+
+    .card.matched {
+      box-shadow: 0 0 18px rgba(255, 238, 102, 0.45);
+      border-color: #ffee66;
+    }
+
+    .cardFace {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      box-sizing: border-box;
+      padding: 8px;
+    }
+
+    .cardBack {
+      background:
+        linear-gradient(135deg, rgba(0,255,100,0.12), transparent 45%),
+        #001600;
+    }
+
+    .cardBack::before {
+      content: "MI6";
+      font-size: 26px;
+      font-weight: bold;
+      color: #00ff66;
+      text-shadow: 0 0 8px rgba(0,255,100,0.8);
+    }
+
+    .cardBack::after {
+      content: "CLASSIFIED";
+      margin-top: 8px;
+      font-size: 10px;
+      color: #8dffb0;
+      letter-spacing: 1px;
+    }
+
+    .cardFront {
+      background: #030803;
+      transform: rotateY(180deg);
+      border: 1px solid rgba(255, 238, 102, 0.25);
+    }
+
+    .pixelIcon {
+      width: 74px;
+      height: 74px;
+      position: relative;
+      margin-bottom: 8px;
+      image-rendering: pixelated;
+    }
+
+    .iconLabel {
+      color: #ffee66;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.2;
+      letter-spacing: 1px;
+      min-height: 28px;
+    }
+
+    .message {
+      min-height: 28px;
+      text-align: center;
+      color: #8dffb0;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 18px;
+      background: #003b16;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+
+    button:hover {
+      background: #005c22;
+    }
+
+    .backLink {
+      display: inline-block;
+      color: #00ff66;
+      text-decoration: none;
+      border-bottom: 1px solid #00ff66;
+      font-weight: bold;
+      padding: 12px 18px;
+    }
+
+    #winBox,
+    #loseBox {
+      display: none;
+      max-width: 760px;
+      margin: 18px auto 0 auto;
+      padding: 18px;
+      line-height: 1.7;
+      box-sizing: border-box;
+    }
+
+    #winBox {
+      border: 1px solid #00ff66;
+      background: rgba(0, 35, 0, 0.95);
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
+      color: #baffc9;
+    }
+
+    #loseBox {
+      border: 1px solid #ff4444;
+      background: rgba(40, 0, 0, 0.92);
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
+      color: #ff9999;
+    }
+
+    .glitchOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.04),
+          rgba(255,255,255,0.04) 2px,
+          transparent 2px,
+          transparent 8px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,255,100,0.08),
+          rgba(0,255,100,0.08) 3px,
+          transparent 3px,
+          transparent 11px
+        );
+      animation: glitchFlash 0.13s infinite;
+    }
+
+    .glitchOverlay::before {
+      content: "MEMORY ARCHIVE RESTORED";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff4a3;
+      background: rgba(10,20,0,0.92);
+      border: 2px solid #ffee66;
+      padding: 18px 24px;
+      text-align: center;
+      letter-spacing: 2px;
+      font-size: 26px;
+      text-shadow: 0 0 10px rgba(255,230,120,0.8);
+      box-shadow: 0 0 24px rgba(255,230,120,0.35);
+      animation: textSkew 0.18s infinite;
+    }
+
+    @keyframes glitchFlash {
+      0% { opacity: 0.35; filter: hue-rotate(0deg); }
+      50% { opacity: 0.8; filter: hue-rotate(35deg); }
+      100% { opacity: 0.45; filter: hue-rotate(0deg); }
+    }
+
+    @keyframes textSkew {
+      0% { transform: translate(-50%, -50%) skewX(0deg); }
+      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
+      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
+      75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
+      100% { transform: translate(-50%, -50%) skewX(0deg); }
+    }
+
+    /* Pixel icons */
+    .icon-tuxedo::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 8px;
+      width: 30px;
+      height: 58px;
+      background:
+        linear-gradient(135deg, transparent 0 38%, #ffffff 39% 45%, transparent 46%),
+        linear-gradient(225deg, transparent 0 38%, #ffffff 39% 45%, transparent 46%),
+        #050505;
+      border: 2px solid #ffee66;
+    }
+
+    .icon-tuxedo::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      top: 34px;
+      width: 6px;
+      height: 6px;
+      background: #ffee66;
+      box-shadow: 0 12px 0 #ffee66;
+    }
+
+    .icon-martini::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      width: 50px;
+      height: 28px;
+      clip-path: polygon(0 0, 100% 0, 58% 100%, 42% 100%);
+      background: #baffc9;
+      border: 2px solid #ffee66;
+    }
+
+    .icon-martini::after {
+      content: "";
+      position: absolute;
+      left: 35px;
+      top: 38px;
+      width: 5px;
+      height: 28px;
+      background: #ffee66;
+      box-shadow: -12px 28px 0 2px #ffee66;
+    }
+
+    .icon-watch::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 4px;
+      width: 34px;
+      height: 66px;
+      background:
+        linear-gradient(#003b16 0 18px, #111 18px 48px, #003b16 48px);
+      border: 2px solid #baffc9;
+    }
+
+    .icon-watch::after {
+      content: "";
+      position: absolute;
+      left: 29px;
+      top: 26px;
+      width: 16px;
+      height: 16px;
+      background: #ffee66;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #ffee66;
+    }
+
+    .icon-car::before {
+      content: "";
+      position: absolute;
+      left: 9px;
+      top: 27px;
+      width: 56px;
+      height: 23px;
+      background: #0b3b16;
+      border: 2px solid #ffee66;
+    }
+
+    .icon-car::after {
+      content: "";
+      position: absolute;
+      left: 16px;
+      top: 46px;
+      width: 11px;
+      height: 11px;
+      background: #050505;
+      border: 2px solid #baffc9;
+      box-shadow: 33px 0 0 #050505, 33px 0 0 2px #baffc9;
+    }
+
+    .icon-diamond::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 13px;
+      width: 34px;
+      height: 34px;
+      background: #baffc9;
+      transform: rotate(45deg);
+      border: 2px solid #ffee66;
+      box-shadow: 0 0 12px rgba(255,238,102,0.65);
+    }
+
+    .icon-diamond::after {
+      content: "";
+      position: absolute;
+      left: 29px;
+      top: 22px;
+      width: 17px;
+      height: 17px;
+      border-left: 2px solid #001100;
+      border-top: 2px solid #001100;
+      transform: rotate(45deg);
+    }
+
+    .icon-vault::before {
+      content: "";
+      position: absolute;
+      left: 11px;
+      top: 13px;
+      width: 52px;
+      height: 52px;
+      background: #111;
+      border: 3px solid #ffee66;
+      border-radius: 50%;
+    }
+
+    .icon-vault::after {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 33px;
+      width: 12px;
+      height: 12px;
+      background: #00ff66;
+      border-radius: 50%;
+      box-shadow:
+        0 -18px 0 -3px #baffc9,
+        0 18px 0 -3px #baffc9,
+        18px 0 0 -3px #baffc9,
+        -18px 0 0 -3px #baffc9;
+    }
+
+    .icon-satellite::before {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 29px;
+      width: 13px;
+      height: 13px;
+      background: #ffee66;
+      transform: rotate(45deg);
+    }
+
+    .icon-satellite::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 18px;
+      width: 20px;
+      height: 38px;
+      background: #003b16;
+      border: 2px solid #baffc9;
+      box-shadow: 38px 0 0 #003b16, 38px 0 0 2px #baffc9;
+    }
+
+    .icon-passport::before {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: 8px;
+      width: 36px;
+      height: 58px;
+      background: #102810;
+      border: 2px solid #ffee66;
+    }
+
+    .icon-passport::after {
+      content: "MI6";
+      position: absolute;
+      left: 25px;
+      top: 30px;
+      color: #ffee66;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .icon-island::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 44px;
+      width: 54px;
+      height: 16px;
+      background: #003b16;
+      border: 2px solid #ffee66;
+      border-radius: 50%;
+    }
+
+    .icon-island::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      top: 10px;
+      width: 6px;
+      height: 39px;
+      background: #baffc9;
+      box-shadow:
+        -12px 4px 0 4px #00ff66,
+        12px 9px 0 5px #00ff66;
+    }
+
+    .icon-cat::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 22px;
+      width: 38px;
+      height: 32px;
+      background: #d8d8d8;
+      border: 2px solid #ffee66;
+      border-radius: 8px;
+    }
+
+    .icon-cat::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      top: 14px;
+      width: 10px;
+      height: 10px;
+      background: #d8d8d8;
+      transform: rotate(45deg);
+      box-shadow: 18px -18px 0 #d8d8d8;
+      border-left: 2px solid #ffee66;
+      border-top: 2px solid #ffee66;
+    }
+
+    @media (max-width: 900px) {
+      .statusPanel {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .gameArea {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 680px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .terminal {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      .gameArea {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .pixelIcon {
+        width: 48px;
+        height: 48px;
+        transform: scale(0.72);
+      }
+
+      .iconLabel {
+        font-size: 9px;
+      }
+
+      .statusValue {
+        font-size: 18px;
+      }
+
+      .glitchOverlay::before {
+        font-size: 18px;
+        width: 86%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="glitchOverlay" id="glitchOverlay"></div>
+
+  <main class="terminal">
+    <h1>MI6 MEMORY PROTOCOL</h1>
+
+    <div class="subtitle">Classified visual memory test recovered.
+Find all matching spy-symbol pairs before the timer reaches zero.
+You have 2 minutes.</div>
+
+    <div class="statusPanel">
+      <div class="statusBox">
+        <div class="statusLabel">TIME REMAINING</div>
+        <div class="statusValue" id="timer">02:00</div>
+      </div>
+
+      <div class="statusBox">
+        <div class="statusLabel">MATCHES</div>
+        <div class="statusValue"><span id="matches">0</span> / 10</div>
+      </div>
+
+      <div class="statusBox">
+        <div class="statusLabel">MOVES</div>
+        <div class="statusValue" id="moves">0</div>
+      </div>
+
+      <div class="statusBox">
+        <div class="statusLabel">STATUS</div>
+        <div class="statusValue" id="status">READY</div>
+      </div>
+    </div>
+
+    <section class="gameArea" id="gameArea"></section>
+
+    <div class="message" id="message">
+      Press START MEMORY TEST to begin.
+    </div>
+
+    <div id="loseBox">
+      <strong>MEMORY TEST FAILED</strong><br><br>
+      Time expired before all pairs were matched.<br>
+      Restart the protocol and try again.
+    </div>
+
+    <div id="winBox">
+      <strong>ACCESS GRANTED // MEMORY ARCHIVE RESTORED</strong><br><br>
+
+      All visual pairs recovered before the timer expired.<br><br>
+
+      UNLOCK CODE:<br>
+      <strong>GOLDENEYE</strong><br><br>
+
+      Enter this code in the mission terminal.
+    </div>
+
+    <div class="buttons">
+      <button onclick="startGame()">START MEMORY TEST</button>
+      <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+    </div>
+  </main>
+
+  <script>
+    const gameArea = document.getElementById("gameArea");
+    const timerEl = document.getElementById("timer");
+    const matchesEl = document.getElementById("matches");
+    const movesEl = document.getElementById("moves");
+    const statusEl = document.getElementById("status");
+    const messageEl = document.getElementById("message");
+    const winBoxEl = document.getElementById("winBox");
+    const loseBoxEl = document.getElementById("loseBox");
+    const glitchOverlayEl = document.getElementById("glitchOverlay");
+
+    const totalTime = 120;
+    const unlockCode = "GOLDENEYE";
+
+    const symbols = [
+      { id: "tuxedo", label: "BLACK TIE", icon: "icon-tuxedo" },
+      { id: "martini", label: "GLASS", icon: "icon-martini" },
+      { id: "watch", label: "LASER WATCH", icon: "icon-watch" },
+      { id: "car", label: "SPY CAR", icon: "icon-car" },
+      { id: "diamond", label: "DIAMOND", icon: "icon-diamond" },
+      { id: "vault", label: "GOLD VAULT", icon: "icon-vault" },
+      { id: "satellite", label: "ORBITAL LINK", icon: "icon-satellite" },
+      { id: "passport", label: "FALSE ID", icon: "icon-passport" },
+      { id: "island", label: "SECRET LAIR", icon: "icon-island" },
+      { id: "cat", label: "VILLAIN CAT", icon: "icon-cat" }
+    ];
+
+    let deck = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matches = 0;
+    let moves = 0;
+    let timeLeft = totalTime;
+    let timerInterval = null;
+    let gameRunning = false;
+
+    function startGame() {
+      clearInterval(timerInterval);
+
+      deck = [];
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      matches = 0;
+      moves = 0;
+      timeLeft = totalTime;
+      gameRunning = true;
+
+      winBoxEl.style.display = "none";
+      loseBoxEl.style.display = "none";
+      glitchOverlayEl.style.display = "none";
+
+      statusEl.textContent = "ACTIVE";
+      statusEl.classList.remove("danger");
+      messageEl.textContent = "Memory protocol active. Find all 10 pairs.";
+
+      symbols.forEach(function(symbol) {
+        deck.push({ ...symbol, uniqueId: symbol.id + "-A" });
+        deck.push({ ...symbol, uniqueId: symbol.id + "-B" });
+      });
+
+      shuffle(deck);
+      renderBoard();
+      updateHud();
+
+      timerInterval = setInterval(function() {
+        if (!gameRunning) {
+          return;
+        }
+
+        timeLeft--;
+        updateHud();
+
+        if (timeLeft <= 20) {
+          timerEl.classList.add("danger");
+        } else {
+          timerEl.classList.remove("danger");
+        }
+
+        if (timeLeft <= 0) {
+          loseGame();
+        }
+      }, 1000);
+    }
+
+    function renderBoard() {
+      gameArea.innerHTML = "";
+
+      deck.forEach(function(cardData, index) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.index = index;
+        card.dataset.id = cardData.id;
+
+        card.innerHTML = `
+          <div class="cardFace cardBack"></div>
+          <div class="cardFace cardFront">
+            <div class="pixelIcon ${cardData.icon}"></div>
+            <div class="iconLabel">${cardData.label}</div>
+          </div>
+        `;
+
+        card.addEventListener("click", function() {
+          flipCard(card);
+        });
+
+        gameArea.appendChild(card);
+      });
+    }
+
+    function flipCard(card) {
+      if (!gameRunning || lockBoard) {
+        return;
+      }
+
+      if (card.classList.contains("flipped") || card.classList.contains("matched")) {
+        return;
+      }
+
+      card.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      secondCard = card;
+      moves++;
+      updateHud();
+
+      checkMatch();
+    }
+
+    function checkMatch() {
+      const firstId = firstCard.dataset.id;
+      const secondId = secondCard.dataset.id;
+
+      if (firstId === secondId) {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+
+        matches++;
+        messageEl.textContent = "MATCH CONFIRMED // " + matches + " / 10";
+        resetTurn();
+        updateHud();
+
+        if (matches === symbols.length) {
+          winGame();
+        }
+
+        return;
+      }
+
+      lockBoard = true;
+      messageEl.textContent = "NO MATCH // MEMORY TRACE REJECTED";
+
+      setTimeout(function() {
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
+        resetTurn();
+      }, 850);
+    }
+
+    function resetTurn() {
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+    }
+
+    function updateHud() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+
+      timerEl.textContent =
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0");
+
+      matchesEl.textContent = matches;
+      movesEl.textContent = moves;
+    }
+
+    function loseGame() {
+      gameRunning = false;
+      clearInterval(timerInterval);
+
+      statusEl.textContent = "FAILED";
+      statusEl.classList.add("danger");
+      messageEl.textContent = "TIME EXPIRED // MEMORY ARCHIVE LOCKED";
+      loseBoxEl.style.display = "block";
+    }
+
+    function winGame() {
+      gameRunning = false;
+      clearInterval(timerInterval);
+
+      statusEl.textContent = "CLEARED";
+      statusEl.classList.remove("danger");
+      messageEl.textContent = "ACCESS GRANTED // CODE RECOVERED: " + unlockCode;
+
+      glitchOverlayEl.style.display = "block";
+
+      setTimeout(function() {
+        glitchOverlayEl.style.display = "none";
+        winBoxEl.style.display = "block";
+        winBoxEl.scrollIntoView({ behavior: "smooth" });
+      }, 3600);
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+  </script>
+
+</body>
+</html>
