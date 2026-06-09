@@ -132,7 +132,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1fr 360px;
+      grid-template-columns: 1fr 380px;
       gap: 14px;
       position: relative;
       z-index: 3;
@@ -551,33 +551,36 @@
       color: var(--yellow);
     }
 
-    .stepList {
-      display: grid;
-      gap: 9px;
-      margin-bottom: 14px;
-    }
-
-    .step {
+    .checkBlock {
       border: 1px solid rgba(0,255,102,0.32);
       background: rgba(0,0,0,0.26);
-      padding: 9px;
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.35;
+      padding: 10px;
+      margin-bottom: 12px;
     }
 
-    .stepNumber {
+    .checkBlock.correct {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
+    }
+
+    .checkBlock.wrong {
+      border-color: var(--red);
+      background: rgba(255,85,85,0.05);
+      animation: shake 0.25s;
+    }
+
+    .checkHeader {
       color: var(--yellow);
       font-weight: bold;
-      display: block;
-      margin-bottom: 3px;
+      font-size: 13px;
+      margin-bottom: 5px;
     }
 
     label {
       display: block;
       color: var(--white);
       font-size: 12px;
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     input {
@@ -585,7 +588,7 @@
       background: #000;
       color: var(--green);
       border: 2px solid var(--green2);
-      padding: 12px;
+      padding: 11px;
       font-family: "Courier New", monospace;
       font-size: 15px;
       outline: none;
@@ -594,6 +597,16 @@
 
     input:focus {
       border-color: var(--yellow);
+    }
+
+    input.correctInput {
+      border-color: var(--yellow);
+      box-shadow: 0 0 10px rgba(255,238,102,0.22);
+    }
+
+    input.wrongInput {
+      border-color: var(--red);
+      box-shadow: 0 0 10px rgba(255,85,85,0.18);
     }
 
     button,
@@ -605,14 +618,14 @@
       border-left: 2px solid #d8ffe6;
       border-right: 2px solid #052b13;
       border-bottom: 2px solid #052b13;
-      padding: 10px 13px;
+      padding: 9px 12px;
       font-family: "Courier New", monospace;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 9px;
     }
 
     button:hover,
@@ -621,11 +634,8 @@
       filter: brightness(1.18);
     }
 
-    .verifyButton {
+    .checkButton {
       width: 100%;
-      font-size: 14px;
-      padding: 12px;
-      margin-top: 14px;
     }
 
     .gameLink {
@@ -633,18 +643,29 @@
       color: var(--yellow);
       width: 100%;
       text-align: center;
+      margin-bottom: 12px;
     }
 
     .status {
-      min-height: 22px;
-      margin-top: 10px;
-      font-size: 13px;
+      min-height: 18px;
+      margin-top: 8px;
+      font-size: 12px;
       color: var(--red);
       line-height: 1.4;
     }
 
     .status.ok {
       color: var(--yellow);
+    }
+
+    .masterStatus {
+      border: 1px dashed rgba(255,238,102,0.4);
+      background: rgba(255,238,102,0.05);
+      padding: 10px;
+      color: var(--yellow);
+      font-size: 13px;
+      line-height: 1.4;
+      margin-top: 12px;
     }
 
     .recoveredEnvironment {
@@ -673,10 +694,6 @@
       padding: 12px;
       background: rgba(255,238,102,0.06);
       text-align: center;
-    }
-
-    .shake {
-      animation: shake 0.25s;
     }
 
     @keyframes shake {
@@ -850,37 +867,35 @@
         <div class="windowTitle">Access Sequence</div>
 
         <div class="content">
-          <div class="stepList">
-            <div class="step">
-              <span class="stepNumber">INPUT A</span>
-              Chemical marker required.
-            </div>
-
-            <div class="step">
-              <span class="stepNumber">INPUT B</span>
-              Reagent marker required.
-            </div>
-
-            <div class="step">
-              <span class="stepNumber">PROTOCOL</span>
-              External stack code required.
-            </div>
-          </div>
-
-          <label for="answerA">INPUT A</label>
-          <input id="answerA" type="text" autocomplete="off" placeholder="chemical marker">
-
-          <label for="answerB">INPUT B</label>
-          <input id="answerB" type="text" autocomplete="off" placeholder="reagent marker">
-
-          <label for="gameCode">PROTOCOL CODE</label>
-          <input id="gameCode" type="text" autocomplete="off" placeholder="external code">
-
-          <button class="verifyButton" onclick="checkAll()">RUN ACCESS SEQUENCE</button>
-
           <a class="gameLink" href="tetris.html">OPEN CHEMISTRY GAME</a>
 
-          <div class="status" id="status">Access sequence incomplete.</div>
+          <div class="checkBlock" id="blockA">
+            <div class="checkHeader">INPUT A</div>
+            <label for="answerA">Chemical marker</label>
+            <input id="answerA" type="text" autocomplete="off" placeholder="input A">
+            <button class="checkButton" onclick="checkA()">CHECK INPUT A</button>
+            <div class="status" id="statusA">Awaiting input.</div>
+          </div>
+
+          <div class="checkBlock" id="blockB">
+            <div class="checkHeader">INPUT B</div>
+            <label for="answerB">Reagent marker</label>
+            <input id="answerB" type="text" autocomplete="off" placeholder="input B">
+            <button class="checkButton" onclick="checkB()">CHECK INPUT B</button>
+            <div class="status" id="statusB">Awaiting input.</div>
+          </div>
+
+          <div class="checkBlock" id="blockGame">
+            <div class="checkHeader">PROTOCOL CODE</div>
+            <label for="gameCode">External stack code</label>
+            <input id="gameCode" type="text" autocomplete="off" placeholder="protocol code">
+            <button class="checkButton" onclick="checkGame()">CHECK PROTOCOL</button>
+            <div class="status" id="statusGame">Awaiting protocol.</div>
+          </div>
+
+          <div class="masterStatus" id="masterStatus">
+            Deeper layer sealed.
+          </div>
 
           <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
         </div>
@@ -892,6 +907,10 @@
     const correctAnswerA = "ALKALOID";
     const correctAnswerB = "REAGENT";
     const correctGameCode = "ROZENBOTTEL";
+
+    let aSolved = false;
+    let bSolved = false;
+    let gameSolved = false;
 
     const inspectedPanels = {
       flask: false,
@@ -993,52 +1012,159 @@ Protocol: unresolved`
       }
     }
 
+    function setCorrect(blockId, inputId, statusId, message) {
+      const block = document.getElementById(blockId);
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+
+      block.classList.remove("wrong");
+      block.classList.add("correct");
+
+      input.classList.remove("wrongInput");
+      input.classList.add("correctInput");
+
+      status.textContent = message;
+      status.classList.add("ok");
+    }
+
+    function setWrong(blockId, inputId, statusId, message) {
+      const block = document.getElementById(blockId);
+      const input = document.getElementById(inputId);
+      const status = document.getElementById(statusId);
+
+      block.classList.remove("correct");
+      block.classList.remove("wrong");
+
+      input.classList.remove("correctInput");
+      input.classList.add("wrongInput");
+
+      setTimeout(function() {
+        block.classList.add("wrong");
+      }, 10);
+
+      status.textContent = message;
+      status.classList.remove("ok");
+    }
+
+    function checkA() {
+      const value = normalize(document.getElementById("answerA").value);
+
+      if (value === normalize(correctAnswerA)) {
+        aSolved = true;
+        localStorage.setItem("chemistryA", "yes");
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+      } else {
+        aSolved = false;
+        localStorage.removeItem("chemistryA");
+        setWrong("blockA", "answerA", "statusA", "Input A rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkB() {
+      const value = normalize(document.getElementById("answerB").value);
+
+      if (value === normalize(correctAnswerB)) {
+        bSolved = true;
+        localStorage.setItem("chemistryB", "yes");
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+      } else {
+        bSolved = false;
+        localStorage.removeItem("chemistryB");
+        setWrong("blockB", "answerB", "statusB", "Input B rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkGame() {
+      const value = normalize(document.getElementById("gameCode").value);
+
+      if (value === normalize(correctGameCode)) {
+        gameSolved = true;
+        localStorage.setItem("chemistryGame", "yes");
+        setCorrect("blockGame", "gameCode", "statusGame", "Protocol accepted.");
+      } else {
+        gameSolved = false;
+        localStorage.removeItem("chemistryGame");
+        setWrong("blockGame", "gameCode", "statusGame", "Protocol rejected.");
+      }
+
+      checkUnlock();
+    }
+
+    function checkUnlock() {
+      const masterStatus = document.getElementById("masterStatus");
+
+      if (aSolved && bSolved && gameSolved) {
+        unlockRecoveredEnvironment();
+      } else {
+        const solvedCount = [aSolved, bSolved, gameSolved].filter(Boolean).length;
+        masterStatus.textContent = "Deeper layer sealed. Channels accepted: " + solvedCount + " / 3.";
+      }
+    }
+
     function unlockRecoveredEnvironment() {
       localStorage.setItem("chemistrySolved", "yes");
 
-      const status = document.getElementById("status");
-      status.textContent = "Access sequence complete. Deeper layer restored.";
-      status.classList.add("ok");
+      const masterStatus = document.getElementById("masterStatus");
+      masterStatus.textContent = "All channels accepted. Deeper layer restored.";
 
       document.getElementById("recoveredEnvironment").style.display = "block";
       document.getElementById("recoveredEnvironment").scrollIntoView({ behavior: "smooth" });
     }
 
-    function checkAll() {
-      const answerA = normalize(document.getElementById("answerA").value);
-      const answerB = normalize(document.getElementById("answerB").value);
-      const gameCode = normalize(document.getElementById("gameCode").value);
-      const status = document.getElementById("status");
-
-      const aCorrect = answerA === normalize(correctAnswerA);
-      const bCorrect = answerB === normalize(correctAnswerB);
-      const gameCorrect = gameCode === normalize(correctGameCode);
-
-      if (aCorrect && bCorrect && gameCorrect) {
-        unlockRecoveredEnvironment();
-        return;
+    function restoreProgress() {
+      if (localStorage.getItem("chemistryA") === "yes") {
+        aSolved = true;
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
       }
 
-      status.textContent = "Access denied. One or more channels unstable.";
-      status.classList.remove("ok");
+      if (localStorage.getItem("chemistryB") === "yes") {
+        bSolved = true;
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+      }
 
-      const sideWindow = status.closest(".window");
-      sideWindow.classList.remove("shake");
+      if (localStorage.getItem("chemistryGame") === "yes") {
+        gameSolved = true;
+        setCorrect("blockGame", "gameCode", "statusGame", "Protocol accepted.");
+      }
 
-      setTimeout(function() {
-        sideWindow.classList.add("shake");
-      }, 10);
+      if (localStorage.getItem("chemistrySolved") === "yes") {
+        aSolved = true;
+        bSolved = true;
+        gameSolved = true;
+
+        setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+        setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+        setCorrect("blockGame", "gameCode", "statusGame", "Protocol accepted.");
+
+        unlockRecoveredEnvironment();
+      } else {
+        checkUnlock();
+      }
     }
 
-    document.addEventListener("keydown", function(event) {
+    document.getElementById("answerA").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        checkAll();
+        checkA();
       }
     });
 
-    if (localStorage.getItem("chemistrySolved") === "yes") {
-      unlockRecoveredEnvironment();
-    }
+    document.getElementById("answerB").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkB();
+      }
+    });
+
+    document.getElementById("gameCode").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkGame();
+      }
+    });
+
+    restoreProgress();
   </script>
 </body>
 </html>
