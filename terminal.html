@@ -46,7 +46,7 @@
 
     .terminal {
       width: 100%;
-      max-width: 980px;
+      max-width: 1080px;
       padding: 28px;
       background: #000900;
       border: 2px solid #00ff66;
@@ -81,12 +81,12 @@
       background: rgba(0, 20, 0, 0.9);
       color: #8dffb0;
       line-height: 1.8;
-      font-size: 18px;
+      font-size: 17px;
     }
 
     .protocolGrid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       margin: 22px 0;
     }
@@ -98,7 +98,7 @@
       color: #baffc9;
       line-height: 1.6;
       box-sizing: border-box;
-      min-height: 200px;
+      min-height: 225px;
     }
 
     .protocolTitle {
@@ -139,7 +139,7 @@
 
     .wordRow {
       display: grid;
-      grid-template-columns: 230px 1fr auto auto;
+      grid-template-columns: 250px 1fr auto auto;
       gap: 10px;
       align-items: center;
       margin-top: 10px;
@@ -263,7 +263,13 @@
       51%, 100% { opacity: 0; }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1050px) {
+      .protocolGrid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
       .protocolGrid {
         grid-template-columns: 1fr;
       }
@@ -313,13 +319,14 @@ Complete each protocol and enter the recovered codes below.</div>
 
     <div class="warningText">
       WARNING: No local keyword recovery available.
-      External protocols are required.
+      Four external protocols are required to restore the classified file.
     </div>
 
     <div class="archiveBox">
       FRAGMENT 1: BOTANICAL CONTAINMENT PROTOCOL REQUIRED<br>
       FRAGMENT 2: BOTANICAL PIXEL STACK PROTOCOL REQUIRED<br>
-      FRAGMENT 3: MI6 DUMMY RANGE PROTOCOL REQUIRED
+      FRAGMENT 3: MI6 TOP-DOWN LAB PROTOCOL REQUIRED<br>
+      FRAGMENT 4: MI6 MEMORY PROTOCOL REQUIRED
     </div>
 
     <div class="protocolGrid">
@@ -344,12 +351,22 @@ Complete each protocol and enter the recovered codes below.</div>
       </div>
 
       <div class="protocolBox">
-        <div class="protocolTitle">PROTOCOL C // DUMMY RANGE</div>
-        Old MI6 lab training simulation.<br>
-        Locate and disable moving dummy targets.
+        <div class="protocolTitle">PROTOCOL C // TOP-DOWN LAB</div>
+        Explore connected rooms.<br>
+        Find a key, open the chest, recover the weapon and defeat M/Q dummies.
         <div class="protocolStatus">OUTPUT: COMMAND CODE</div>
         <a class="protocolButton" href="shoot.html">
-          OPEN DUMMY RANGE
+          OPEN TOP-DOWN LAB
+        </a>
+      </div>
+
+      <div class="protocolBox">
+        <div class="protocolTitle">PROTOCOL D // MEMORY</div>
+        Classified visual memory test.<br>
+        Match all spy-symbol pairs before the two-minute timer expires.
+        <div class="protocolStatus">OUTPUT: MEMORY CODE</div>
+        <a class="protocolButton" href="memory.html">
+          OPEN MEMORY PROTOCOL
         </a>
       </div>
     </div>
@@ -372,10 +389,17 @@ Complete each protocol and enter the recovered codes below.</div>
       </div>
 
       <div class="wordRow">
-        <div class="wordLabel">FRAGMENT 3 // DUMMY RANGE</div>
-        <input id="word3" type="text" placeholder="CODE FROM RANGE">
+        <div class="wordLabel">FRAGMENT 3 // TOP-DOWN LAB</div>
+        <input id="word3" type="text" placeholder="CODE FROM LAB">
         <button id="button3" onclick="checkSingleWord(3)">CHECK</button>
         <span id="status3" class="status"></span>
+      </div>
+
+      <div class="wordRow">
+        <div class="wordLabel">FRAGMENT 4 // MEMORY</div>
+        <input id="word4" type="text" placeholder="CODE FROM MEMORY">
+        <button id="button4" onclick="checkSingleWord(4)">CHECK</button>
+        <span id="status4" class="status"></span>
       </div>
 
       <div id="terminalMessage"></div>
@@ -395,13 +419,15 @@ FILE READY FOR RECOVERY.</div>
     const answers = {
       1: "NIGHTSHADE",
       2: "ROZENBOTTEL",
-      3: "EYESONLY"
+      3: "EYESONLY",
+      4: "GOLDENEYE"
     };
 
     const solved = {
       1: false,
       2: false,
-      3: false
+      3: false,
+      4: false
     };
 
     function cleanInput(value) {
@@ -446,7 +472,7 @@ FILE READY FOR RECOVERY.</div>
     }
 
     function checkIfComplete() {
-      if (solved[1] && solved[2] && solved[3]) {
+      if (solved[1] && solved[2] && solved[3] && solved[4]) {
         const message = document.getElementById("terminalMessage");
         message.style.color = "#00ff66";
         message.textContent = "ACCESS GRANTED // ALL MINIGAME DATA RESTORED.";
