@@ -2,17 +2,20 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Locked File</title>
+  <title>Thorne Private Archive</title>
 
   <style>
     :root {
       --green: #00ff66;
-      --softGreen: #00aa44;
+      --green2: #00aa44;
       --dark: #001100;
-      --panel: #031403;
-      --text: #baffc9;
+      --black: #020602;
+      --panel: #061806;
+      --text: #caffd7;
       --yellow: #ffee66;
       --red: #ff5555;
+      --blue: #7dfcff;
+      --purple: #d48cff;
     }
 
     * {
@@ -23,14 +26,11 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #062006 0%, #020902 62%, #000 100%);
+        radial-gradient(circle at center, #133013 0%, #030803 58%, #000 100%);
       color: var(--green);
       font-family: "Courier New", monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       padding: 18px;
-      overflow: auto;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -41,622 +41,1024 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.06),
-          rgba(0, 255, 100, 0.06) 1px,
+          rgba(0, 255, 102, 0.055),
+          rgba(0, 255, 102, 0.055) 1px,
           transparent 1px,
           transparent 4px
         );
-      z-index: 1;
+      z-index: 20;
     }
 
-    .computer {
-      width: 100%;
-      max-width: 1100px;
-      background: #0c140c;
-      border: 3px solid #244524;
-      border-radius: 16px;
-      padding: 18px 18px 26px;
-      box-shadow:
-        0 0 0 3px #050805,
-        0 18px 45px rgba(0, 0, 0, 0.65);
-      position: relative;
-      z-index: 2;
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(0,255,102,0.18), transparent 28%),
+        radial-gradient(circle at 70% 60%, rgba(0,255,102,0.10), transparent 32%);
+      animation: greenWaas 9s ease-in-out infinite alternate;
+      mix-blend-mode: screen;
+      z-index: 19;
     }
 
-    .monitorHeader {
-      color: #9fc29f;
-      font-size: 13px;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      text-align: center;
-      text-transform: uppercase;
+    @keyframes greenWaas {
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
     }
 
     .screen {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: calc(100vh - 36px);
+      border: 5px solid #132313;
+      border-radius: 18px;
       background:
-        radial-gradient(circle at center, rgba(0, 255, 100, 0.08), transparent 52%),
-        linear-gradient(180deg, #041104 0%, #020c02 100%);
-      border: 4px solid #1d391d;
-      border-radius: 10px;
-      padding: 14px;
-      min-height: 700px;
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
+        linear-gradient(180deg, #061906 0%, #010801 100%);
       box-shadow:
-        inset 0 0 35px rgba(0, 255, 100, 0.08),
-        inset 0 0 90px rgba(0, 0, 0, 0.5);
+        inset 0 0 80px rgba(0,0,0,0.8),
+        inset 0 0 30px rgba(0,255,102,0.12),
+        0 0 35px rgba(0,0,0,0.8);
+      padding: 14px;
       position: relative;
       overflow: hidden;
     }
 
     .topBar {
       height: 34px;
-      border: 2px solid var(--softGreen);
-      background: linear-gradient(180deg, #0c320c, #061b06);
+      background:
+        linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
+      border: 2px solid #d8ffe6;
+      color: #eaffef;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       padding: 0 10px;
-      margin-bottom: 14px;
-      color: var(--text);
-      font-size: 13px;
+      font-size: 12px;
+      position: relative;
+      z-index: 3;
     }
 
-    .signalDot {
-      width: 9px;
-      height: 9px;
-      background: var(--green);
-      border: 1px solid #d8ffe6;
-      box-shadow: 0 0 8px rgba(0, 255, 100, 0.7);
-      display: inline-block;
-      margin-right: 8px;
+    .mainLayout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 14px;
+      padding-top: 14px;
+      position: relative;
+      z-index: 3;
     }
 
-    .window {
-      border: 2px solid var(--softGreen);
-      background: var(--panel);
+    .sidePanel,
+    .mainPanel,
+    .unlockedPanel {
+      border: 2px solid #d8ffe6;
+      background: rgba(0, 10, 0, 0.82);
       box-shadow:
-        0 0 16px rgba(0, 255, 100, 0.12),
-        inset 0 0 22px rgba(0, 255, 100, 0.05);
+        4px 4px 0 rgba(0,0,0,0.68),
+        0 0 18px rgba(0,255,102,0.12);
     }
 
     .windowTitle {
-      background: linear-gradient(180deg, #0c360c, #071d07);
-      border-bottom: 2px solid var(--softGreen);
-      padding: 8px 10px;
-      color: #e9ffef;
-      font-size: 13px;
+      height: 28px;
+      background:
+        linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
+      border-bottom: 2px solid #d8ffe6;
+      color: #eaffef;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .windowButtons {
       display: flex;
-      gap: 6px;
+      gap: 4px;
     }
 
-    .winBtn {
-      width: 16px;
-      height: 16px;
+    .winButton {
+      width: 15px;
+      height: 15px;
       border: 1px solid #d8ffe6;
-      background: #0c2d0c;
+      background: #062806;
     }
 
-    .windowBody {
-      padding: 18px;
+    .content {
+      padding: 14px;
     }
 
     h1 {
-      margin: 0 0 12px;
-      color: var(--green);
+      margin: 0 0 8px;
+      color: var(--yellow);
       font-size: 24px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.75);
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 17px;
       letter-spacing: 1px;
     }
 
-    .intro {
-      border: 1px dashed var(--softGreen);
-      background: rgba(0, 255, 100, 0.04);
-      padding: 12px;
+    p {
       color: var(--text);
-      line-height: 1.6;
-      margin-bottom: 16px;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .metaBox {
+      border: 1px dashed rgba(0,255,102,0.35);
+      background: rgba(0,255,102,0.045);
+      padding: 10px;
+      margin-bottom: 12px;
+      color: #9dffbd;
+      font-size: 12px;
+      line-height: 1.55;
       white-space: pre-line;
     }
 
-    .accessGrid {
+    .fileIconBig {
+      width: 90px;
+      height: 76px;
+      margin: 8px auto 14px;
+      position: relative;
+    }
+
+    .fileIconBig .tab {
+      position: absolute;
+      left: 8px;
+      top: 4px;
+      width: 36px;
+      height: 18px;
+      background: #2bdd70;
+      border-left: 3px solid #d8ffe6;
+      border-top: 3px solid #d8ffe6;
+      border-right: 3px solid #073b19;
+    }
+
+    .fileIconBig .back {
+      position: absolute;
+      left: 0;
+      top: 19px;
+      width: 90px;
+      height: 50px;
+      background: #0b7832;
+      border: 3px solid #d8ffe6;
+    }
+
+    .fileIconBig .front {
+      position: absolute;
+      left: 4px;
+      top: 31px;
+      width: 86px;
+      height: 43px;
+      background:
+        linear-gradient(180deg, #35e879 0%, #0c8437 100%);
+      border-left: 3px solid #d8ffe6;
+      border-top: 3px solid rgba(255,255,255,0.45);
+      border-right: 3px solid #042b12;
+      border-bottom: 3px solid #042b12;
+    }
+
+    .lockBadge {
+      position: absolute;
+      left: 32px;
+      top: 39px;
+      width: 30px;
+      height: 25px;
+      background: var(--yellow);
+      border: 2px solid #001100;
+      box-shadow: 0 0 12px rgba(255,238,102,0.45);
+    }
+
+    .lockBadge::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: -15px;
+      width: 16px;
+      height: 16px;
+      border: 3px solid var(--yellow);
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .lockSection {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 16px;
+      margin-top: 12px;
     }
 
-    .accessBox {
-      border: 1px dashed rgba(0, 255, 100, 0.35);
-      background: rgba(0, 0, 0, 0.22);
+    .lockBox {
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.35);
       padding: 12px;
-      min-height: 150px;
+      min-height: 178px;
     }
 
-    .accessTitle {
+    .lockBox h3 {
+      margin: 0 0 8px;
       color: var(--yellow);
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-
-    label {
-      display: block;
-      color: var(--text);
       font-size: 13px;
-      margin-bottom: 6px;
     }
 
-    input {
+    .lockBox label {
+      display: block;
+      color: #eaffef;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .lockBox input {
       width: 100%;
       background: #000;
       color: var(--green);
-      border: 1px solid var(--softGreen);
-      padding: 11px;
+      border: 2px solid var(--green2);
+      padding: 10px;
       font-family: "Courier New", monospace;
-      font-size: 15px;
-      text-transform: uppercase;
+      font-size: 14px;
       outline: none;
-      margin-bottom: 10px;
     }
 
-    input::placeholder {
-      color: #2f7b45;
-    }
-
-    input:focus {
-      box-shadow: 0 0 10px rgba(0, 255, 100, 0.35);
-    }
-
-    input.correct {
-      background: #012e12;
-      border-color: var(--green);
-      color: #d9ffe6;
-    }
-
-    input.wrong {
-      background: #260000;
-      border-color: var(--red);
-      color: #ffb0b0;
+    .lockBox input:focus {
+      border-color: var(--yellow);
     }
 
     button,
-    .buttonLink {
-      display: inline-block;
-      background: linear-gradient(180deg, #0f4b1f, #093112);
-      color: var(--green);
-      border: 1px solid var(--green);
-      padding: 11px 14px;
+    .gameLink,
+    .backLink {
+      color: #eaffef;
+      background:
+        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      border-top: 2px solid #d8ffe6;
+      border-left: 2px solid #d8ffe6;
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      padding: 9px 11px;
       font-family: "Courier New", monospace;
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: bold;
       cursor: pointer;
       text-decoration: none;
-      text-align: center;
+      display: inline-block;
+      margin-top: 9px;
     }
 
     button:hover,
-    .buttonLink:hover {
-      background: linear-gradient(180deg, #146428, #0b3a15);
+    .gameLink:hover,
+    .backLink:hover {
+      filter: brightness(1.18);
     }
 
-    button:disabled {
-      opacity: 0.65;
-      cursor: default;
-    }
-
-    .miniStatus {
-      min-height: 18px;
+    .status {
       font-size: 12px;
+      color: var(--red);
+      min-height: 18px;
       margin-top: 8px;
     }
 
-    .ok {
-      color: var(--green);
-    }
-
-    .bad {
-      color: var(--red);
-    }
-
-    #mainMessage {
-      min-height: 24px;
-      color: var(--red);
-      margin: 14px 0;
-      line-height: 1.5;
-    }
-
-    #fileContent {
-      display: none;
-      border: 1px solid var(--green);
-      background: rgba(0, 255, 100, 0.05);
-      padding: 16px;
-      color: var(--text);
-      line-height: 1.7;
-      box-shadow: 0 0 14px rgba(0, 255, 100, 0.2);
-      margin-top: 16px;
-    }
-
-    .fileTitle {
+    .status.ok {
       color: var(--yellow);
-      font-size: 18px;
-      margin-bottom: 10px;
-      text-shadow: 0 0 8px rgba(255, 238, 102, 0.45);
     }
 
-    .videoBox {
-      border: 1px dashed var(--softGreen);
-      background: rgba(0, 0, 0, 0.45);
-      padding: 18px;
-      margin-top: 14px;
-      color: #9dffbd;
-      text-align: center;
-      min-height: 120px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      white-space: pre-line;
+    .gameLink {
+      background:
+        linear-gradient(180deg, #786a10 0%, #3c3408 100%);
+      color: var(--yellow);
     }
 
-    .glitch {
+    .unlockedPanel {
       display: none;
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 99;
+      margin-top: 14px;
+    }
+
+    .researchGrid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .researchCard {
+      border: 1px solid rgba(0,255,102,0.33);
+      background: rgba(0,0,0,0.32);
+      padding: 12px;
+      min-height: 120px;
+    }
+
+    .researchCard h3 {
+      margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 14px;
+    }
+
+    .researchCard p,
+    .researchCard li {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .researchCard ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .specimenTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .specimenTable th,
+    .specimenTable td {
+      border: 1px solid rgba(0,255,102,0.26);
+      padding: 6px;
+      text-align: left;
+      color: var(--text);
+    }
+
+    .specimenTable th {
+      color: var(--yellow);
+      background: rgba(0,255,102,0.08);
+    }
+
+    .analysisBars {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .barRow {
+      display: grid;
+      grid-template-columns: 90px 1fr 42px;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .barTrack {
+      height: 12px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .barFill {
+      height: 100%;
       background:
         repeating-linear-gradient(
           90deg,
-          rgba(255,255,255,0.04),
-          rgba(255,255,255,0.04) 2px,
-          transparent 2px,
-          transparent 8px
-        ),
+          rgba(0,255,102,0.9),
+          rgba(0,255,102,0.9) 5px,
+          rgba(255,238,102,0.9) 5px,
+          rgba(255,238,102,0.9) 8px
+        );
+    }
+
+    .photoFrame {
+      border: 1px solid rgba(0,255,102,0.35);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.15), transparent 55%),
+        rgba(0,0,0,0.4);
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .plantStem {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      width: 5px;
+      height: 90px;
+      background: var(--green);
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(0,255,102,0.5);
+    }
+
+    .leaf {
+      position: absolute;
+      width: 42px;
+      height: 18px;
+      background: #1fcf63;
+      border: 1px solid #d8ffe6;
+      border-radius: 70% 15% 70% 15%;
+      box-shadow: 0 0 8px rgba(0,255,102,0.4);
+    }
+
+    .leaf.one {
+      left: calc(50% - 44px);
+      bottom: 78px;
+      transform: rotate(-28deg);
+    }
+
+    .leaf.two {
+      left: calc(50% + 5px);
+      bottom: 100px;
+      transform: rotate(28deg) scaleX(-1);
+    }
+
+    .flower {
+      position: absolute;
+      left: 50%;
+      bottom: 108px;
+      width: 44px;
+      height: 44px;
+      transform: translateX(-50%);
+    }
+
+    .petal {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: #8cffaa;
+      border: 1px solid #d8ffe6;
+      border-radius: 50%;
+      box-shadow: 0 0 9px rgba(0,255,102,0.45);
+    }
+
+    .petal.p1 { left: 11px; top: 0; }
+    .petal.p2 { left: 0; top: 12px; }
+    .petal.p3 { left: 22px; top: 12px; }
+    .petal.p4 { left: 6px; top: 25px; }
+    .petal.p5 { left: 18px; top: 25px; }
+
+    .petalCenter {
+      position: absolute;
+      left: 15px;
+      top: 16px;
+      width: 14px;
+      height: 14px;
+      background: var(--yellow);
+      border-radius: 50%;
+      border: 1px solid #001100;
+    }
+
+    .handwriting {
+      color: var(--purple);
+      font-style: italic;
+      letter-spacing: 0.5px;
+    }
+
+    .glitchOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,100,0.08),
-          rgba(0,255,100,0.08) 3px,
-          transparent 3px,
-          transparent 11px
-        );
-      animation: flash 0.12s infinite;
-    }
-
-    .glitch::before {
-      content: "LOCKED FILE OPENED";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
+          rgba(0,255,102,0.18),
+          rgba(0,255,102,0.18) 2px,
+          transparent 2px,
+          transparent 7px
+        ),
+        rgba(0,0,0,0.86);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
       color: var(--yellow);
-      background: rgba(0, 20, 0, 0.95);
-      border: 2px solid var(--yellow);
-      padding: 18px 24px;
-      font-size: 24px;
-      letter-spacing: 2px;
+      font-size: 22px;
       text-align: center;
-      box-shadow: 0 0 24px rgba(255, 238, 102, 0.35);
+      letter-spacing: 2px;
+      animation: glitchFlash 0.12s infinite;
     }
 
-    @keyframes flash {
-      0% { opacity: 0.35; }
-      50% { opacity: 0.85; }
-      100% { opacity: 0.45; }
+    @keyframes glitchFlash {
+      0% { opacity: 0.92; transform: translateX(0); }
+      50% { opacity: 0.72; transform: translateX(4px); }
+      100% { opacity: 0.95; transform: translateX(-3px); }
     }
 
-    .bottomButtons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .accessGrid {
+    @media (max-width: 880px) {
+      .mainLayout {
         grid-template-columns: 1fr;
       }
 
-      .screen {
-        min-height: auto;
-      }
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 19px;
+      .lockSection,
+      .researchGrid {
+        grid-template-columns: 1fr;
       }
 
-      .windowBody {
-        padding: 14px;
+      .topBar {
+        font-size: 10px;
+        gap: 8px;
+      }
+
+      .topBar span:nth-child(2) {
+        display: none;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <div class="glitch" id="glitch"></div>
-
-  <div class="computer">
-    <div class="monitorHeader">MI6 Secure Computer Terminal // Locked File Access</div>
-
-    <div class="screen">
-      <div class="topBar">
-        <div>
-          <span class="signalDot"></span>
-          <span id="topFileName">LOCKED FILE</span>
-        </div>
-        <div>STATUS: ENCRYPTED</div>
-      </div>
-
-      <section class="window">
-        <div class="windowTitle">
-          <span id="windowTitle">Locked File Access</span>
-          <div class="windowButtons">
-            <span class="winBtn"></span>
-            <span class="winBtn"></span>
-            <span class="winBtn"></span>
-          </div>
-        </div>
-
-        <div class="windowBody">
-          <h1 id="pageTitle">LOCKED FILE</h1>
-
-          <div class="intro" id="introText"></div>
-
-          <div class="accessGrid">
-            <div class="accessBox">
-              <div class="accessTitle">PASSWORD A</div>
-              <label for="passwordA">Enter first password:</label>
-              <input id="passwordA" type="text" placeholder="PASSWORD A">
-              <button id="buttonA" onclick="checkPasswordA()">CHECK</button>
-              <div id="statusA" class="miniStatus"></div>
-            </div>
-
-            <div class="accessBox">
-              <div class="accessTitle">PASSWORD B</div>
-              <label for="passwordB">Enter second password:</label>
-              <input id="passwordB" type="text" placeholder="PASSWORD B">
-              <button id="buttonB" onclick="checkPasswordB()">CHECK</button>
-              <div id="statusB" class="miniStatus"></div>
-            </div>
-
-            <div class="accessBox">
-              <div class="accessTitle">MINIGAME REQUIRED</div>
-              <label id="gameLabel">Complete required game:</label>
-              <a id="gameLink" class="buttonLink" href="#">OPEN GAME</a>
-              <br><br>
-              <label for="gameCode">Enter game code:</label>
-              <input id="gameCode" type="text" placeholder="GAME CODE">
-              <button id="buttonGame" onclick="checkGameCode()">CHECK</button>
-              <div id="statusGame" class="miniStatus"></div>
-            </div>
-          </div>
-
-          <div id="mainMessage">
-            File remains encrypted.
-          </div>
-
-          <div id="fileContent">
-            <div class="fileTitle" id="fileContentTitle"></div>
-            <div id="fileStory"></div>
-            <div class="videoBox" id="videoBox"></div>
-          </div>
-
-          <div class="bottomButtons">
-            <a class="buttonLink" href="terminal.html">RETURN TO DESKTOP</a>
-          </div>
-        </div>
-      </section>
-    </div>
+  <div class="glitchOverlay" id="glitchOverlay">
+    DECRYPTING THORNE ARCHIVE...
   </div>
 
+  <main class="screen">
+    <div class="topBar">
+      <span id="topLeft">THORNE PRIVATE ARCHIVE</span>
+      <span>BOTANICAL CHEMISTRY NODE</span>
+      <span id="topRight">USER: DR. N. THORNE</span>
+    </div>
+
+    <section class="mainLayout">
+      <aside class="sidePanel">
+        <div class="windowTitle">
+          <span>Folder Properties</span>
+          <div class="windowButtons">
+            <span class="winButton"></span>
+            <span class="winButton"></span>
+            <span class="winButton"></span>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="fileIconBig">
+            <span class="tab"></span>
+            <span class="back"></span>
+            <span class="front"></span>
+            <span class="lockBadge"></span>
+          </div>
+
+          <div class="metaBox" id="folderMeta"></div>
+
+          <a class="backLink" href="terminal.html">RETURN TO DESKTOP</a>
+        </div>
+      </aside>
+
+      <section class="mainPanel">
+        <div class="windowTitle">
+          <span id="windowTitle">Locked Archive</span>
+          <div class="windowButtons">
+            <span class="winButton"></span>
+            <span class="winButton"></span>
+            <span class="winButton"></span>
+          </div>
+        </div>
+
+        <div class="content">
+          <h1 id="fileTitle">LOCKED FILE</h1>
+          <h2 id="fileSubtitle">PRIVATE RESEARCH ARCHIVE</h2>
+
+          <p id="fileIntro"></p>
+
+          <div class="metaBox" id="labPreview"></div>
+
+          <section class="lockSection">
+            <div class="lockBox">
+              <h3>LOCK 01 // PASSWORD A</h3>
+              <label for="passwordA">Enter password A</label>
+              <input id="passwordA" type="text" autocomplete="off">
+              <button onclick="checkPasswordA()">CHECK</button>
+              <div class="status" id="statusA">Awaiting input.</div>
+            </div>
+
+            <div class="lockBox">
+              <h3>LOCK 02 // PASSWORD B</h3>
+              <label for="passwordB">Enter password B</label>
+              <input id="passwordB" type="text" autocomplete="off">
+              <button onclick="checkPasswordB()">CHECK</button>
+              <div class="status" id="statusB">Awaiting input.</div>
+            </div>
+
+            <div class="lockBox">
+              <h3>LOCK 03 // PROTOCOL CODE</h3>
+              <label for="gameCode">Recovered game code</label>
+              <input id="gameCode" type="text" autocomplete="off">
+              <button onclick="checkGameCode()">CHECK</button>
+              <a class="gameLink" id="gameLink" href="#">OPEN REQUIRED PROTOCOL</a>
+              <div class="status" id="statusGame">Protocol incomplete.</div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </section>
+
+    <section class="unlockedPanel" id="unlockedPanel">
+      <div class="windowTitle">
+        <span id="unlockedTitle">Recovered File</span>
+        <div class="windowButtons">
+          <span class="winButton"></span>
+          <span class="winButton"></span>
+          <span class="winButton"></span>
+        </div>
+      </div>
+
+      <div class="content" id="unlockedContent"></div>
+    </section>
+  </main>
+
   <script>
-    const fileConfigs = {
+    const pageName = window.location.pathname.split("/").pop().toLowerCase();
+
+    const files = {
       "lockedfile1.html": {
         title: "LOCKED FILE 1",
-        subtitle: "BOTANICAL CONTAINMENT FILE",
-        intro: "This file is protected by two archive passwords and one external simulation result. Complete the Snake protocol to recover the required minigame code.",
+        subtitle: "VOICEPRINT IRREGULARITY REPORT",
+        archiveType: "Recovered Transmission Cache",
+        owner: "Dr. Nessa Thorne",
+        source: "Private workstation / audio fragments",
         passwordA: "KRANE",
         passwordB: "GARDEN",
         gameCode: "NIGHTSHADE",
         gameName: "SNAKE PROTOCOL",
         gameUrl: "snake.html",
-        contentTitle: "RECOVERED FILE 1 // AUDIO TRACE",
-        story: "Recovered clip analysis:\n\nKrane's voice pattern does not match the original MI6 archive.\nThe transmission was staged.\nSomeone is using his identity to reopen old files.\n\nNote recovered from botanical archive:\n\"The garden remembers what the dead cannot say.\"",
-        video: "VIDEO / CLUE PLACEHOLDER\nYou can later place a video here.\nFor now, this file reveals that the Jason Krane messages may be fake."
+        intro:
+          "This folder does not look like an official agency file. It is a private analysis cache created by Dr. Nessa Thorne after the first Jason Krane transmission appeared.",
+        preview:
+`Preview:
+- Voice sample: Jason Krane
+- Match confidence: unstable
+- Botanical tag attached: NIGHTSHADE
+- Personal note detected
+- Archive owner: Dr. N. Thorne`,
+        unlockedTitle: "RECOVERED FILE 1 // TRANSMISSION ANALYSIS",
+        unlockedHtml: `
+          <h1>TRANSMISSION ANALYSIS</h1>
+          <h2>Private audio study by Dr. Nessa Thorne</h2>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Recovered Observation</h3>
+              <p>The voice in the first transmission resembles Jason Krane, but the rhythm is wrong. The pauses are too deliberate. The breathing pattern appears edited.</p>
+              <p class="handwriting">Personal annotation: “They will hear what they want to hear. A ghost is easier to follow than a woman.”</p>
+            </div>
+
+            <div class="researchCard">
+              <h3>Signal Pattern</h3>
+              <div class="analysisBars">
+                <div class="barRow"><span>Voice tone</span><div class="barTrack"><div class="barFill" style="width: 78%;"></div></div><span>78%</span></div>
+                <div class="barRow"><span>Breath</span><div class="barTrack"><div class="barFill" style="width: 41%;"></div></div><span>41%</span></div>
+                <div class="barRow"><span>Static</span><div class="barTrack"><div class="barFill" style="width: 91%;"></div></div><span>91%</span></div>
+                <div class="barRow"><span>Truth</span><div class="barTrack"><div class="barFill" style="width: 12%;"></div></div><span>12%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Attached Botanical Marker</h3>
+              <table class="specimenTable">
+                <tr><th>Specimen</th><th>Label</th><th>Archive Note</th></tr>
+                <tr><td>Atropa motif</td><td>Nightshade</td><td>Used as symbolic marker only</td></tr>
+                <tr><td>Garden audio tag</td><td>Krane</td><td>Appears manually inserted</td></tr>
+                <tr><td>Sender trace</td><td>Private node</td><td>Not an agency server</td></tr>
+              </table>
+            </div>
+
+            <div class="researchCard">
+              <h3>Specimen Sketch</h3>
+              <div class="photoFrame">
+                <div class="plantStem"></div>
+                <div class="leaf one"></div>
+                <div class="leaf two"></div>
+                <div class="flower">
+                  <div class="petal p1"></div>
+                  <div class="petal p2"></div>
+                  <div class="petal p3"></div>
+                  <div class="petal p4"></div>
+                  <div class="petal p5"></div>
+                  <div class="petalCenter"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
       },
 
       "lockedfile2.html": {
         title: "LOCKED FILE 2",
-        subtitle: "PIXEL STACK ARCHIVE",
-        intro: "This file is protected by two archive passwords and one external simulation result. Complete the Pixel Stack protocol to recover the required minigame code.",
-        passwordA: "VOSS",
-        passwordB: "BOTANY",
+        subtitle: "ST. BRIGID'S UNIVERSITY LAB NOTES",
+        archiveType: "Botanical Chemistry Notebook",
+        owner: "Dr. Nessa Thorne",
+        source: "St. Brigid's University, Dublin",
+        passwordA: "THORNE",
+        passwordB: "BRIGID",
         gameCode: "ROZENBOTTEL",
         gameName: "PIXEL STACK PROTOCOL",
         gameUrl: "tetris.html",
-        contentTitle: "RECOVERED FILE 2 // UNIVERSITY RECORD",
-        story: "Recovered university archive:\n\nDr. A. Voss worked in botanical biology.\nHer research access remained active after her official departure.\nA midnight login was recorded under a sealed department account.\n\nArchive note:\n\"Specimens were moved. Labels were changed. Someone knew the greenhouse system.\"",
-        video: "EVIDENCE PLACEHOLDER\nThis clue points toward Dr. A. Voss and the botanical archive."
+        intro:
+          "This folder contains copied university research notes from Nessa Thorne’s former department. The file structure suggests she continued using old academic templates after leaving the university.",
+        preview:
+`Preview:
+- Former lecturer: Dr. Nessa Thorne
+- Department: Botanical Chemistry
+- University: St. Brigid's University, Dublin
+- Research area: plant-derived compounds
+- Access status: removed, then restored manually`,
+        unlockedTitle: "RECOVERED FILE 2 // UNIVERSITY RESEARCH CACHE",
+        unlockedHtml: `
+          <h1>ST. BRIGID'S UNIVERSITY CACHE</h1>
+          <h2>Department of Botanical Chemistry</h2>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Recovered Staff Record</h3>
+              <p><strong>Name:</strong> Dr. Nessa Thorne</p>
+              <p><strong>Former role:</strong> Lecturer in Botanical Chemistry</p>
+              <p><strong>Research focus:</strong> plant-derived compounds, symbolic botany, historical plant folklore, and chemical classification of botanical samples.</p>
+              <p><strong>Status:</strong> access revoked after departure. Local copies remained on private workstation.</p>
+            </div>
+
+            <div class="researchCard">
+              <h3>Lab Notebook Fragment</h3>
+              <p class="handwriting">“Every plant has two names: the one written in the book, and the one whispered by people who are afraid of it.”</p>
+              <p class="handwriting">“Jason understood the garden before the others understood the mission.”</p>
+            </div>
+          </div>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Recovered Research Results</h3>
+              <table class="specimenTable">
+                <tr><th>Sample</th><th>Common Name</th><th>Thorne Classification</th></tr>
+                <tr><td>SB-17</td><td>Bloody Cranesbill</td><td>Memory anchor</td></tr>
+                <tr><td>SB-22</td><td>Rosehip</td><td>Archive key marker</td></tr>
+                <tr><td>SB-31</td><td>Nightshade</td><td>Warning symbol</td></tr>
+                <tr><td>SB-44</td><td>Blackthorn</td><td>Personal reference</td></tr>
+              </table>
+            </div>
+
+            <div class="researchCard">
+              <h3>Compound Family Scan</h3>
+              <p>No usable formulae recovered. Only symbolic chemical group labels remain.</p>
+              <div class="analysisBars">
+                <div class="barRow"><span>Alkaloid</span><div class="barTrack"><div class="barFill" style="width: 84%;"></div></div><span>84%</span></div>
+                <div class="barRow"><span>Tannin</span><div class="barTrack"><div class="barFill" style="width: 63%;"></div></div><span>63%</span></div>
+                <div class="barRow"><span>Pigment</span><div class="barTrack"><div class="barFill" style="width: 72%;"></div></div><span>72%</span></div>
+                <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width: 99%;"></div></div><span>99%</span></div>
+              </div>
+            </div>
+          </div>
+        `
       },
 
       "lockedfile3.html": {
         title: "LOCKED FILE 3",
-        subtitle: "TOP-DOWN LAB REPORT",
-        intro: "This file is protected by two archive passwords and one external simulation result. Complete the Top-Down Lab protocol to recover the required minigame code.",
+        subtitle: "PRIVATE CORRESPONDENCE TRACE",
+        archiveType: "Personal Relationship Archive",
+        owner: "Dr. Nessa Thorne",
+        source: "Deleted mail fragments / private notes",
         passwordA: "LOVER",
-        passwordB: "POISON",
+        passwordB: "DUBLIN",
         gameCode: "EYESONLY",
         gameName: "TOP-DOWN LAB PROTOCOL",
         gameUrl: "shoot.html",
-        contentTitle: "RECOVERED FILE 3 // PRIVATE CORRESPONDENCE",
-        story: "Private correspondence recovered:\n\nKrane and Voss were connected outside official records.\nThe relationship was hidden from MI6.\nThe attacks are not random.\nThey are personal.\n\nRecovered line:\n\"They left him buried in files. I will make them read every page.\"",
-        video: "CLUE PLACEHOLDER\nThis file reveals that the case is emotional revenge, not just a security breach."
+        intro:
+          "This folder is not scientific. It is personal. The recovered fragments suggest Jason Krane and Nessa Thorne were connected long before the fake transmissions began.",
+        preview:
+`Preview:
+- Sender fragment: N. Thorne
+- Recipient fragment: J. Krane
+- Relationship status: hidden
+- Emotional marker: unresolved
+- Archive warning: personal material`,
+        unlockedTitle: "RECOVERED FILE 3 // PERSONAL TRACE",
+        unlockedHtml: `
+          <h1>PRIVATE CORRESPONDENCE TRACE</h1>
+          <h2>The hidden link between Nessa Thorne and Jason Krane</h2>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Recovered Message Fragment</h3>
+              <p class="handwriting">“They only saw the agent. I saw the man who came back from every mission carrying more silence than victory.”</p>
+              <p class="handwriting">“If they erase him, I will make his ghost impossible to ignore.”</p>
+            </div>
+
+            <div class="researchCard">
+              <h3>Relationship Index</h3>
+              <table class="specimenTable">
+                <tr><th>Record</th><th>Status</th><th>Note</th></tr>
+                <tr><td>University meeting</td><td>confirmed</td><td>guest lecture incident</td></tr>
+                <tr><td>Private correspondence</td><td>fragmented</td><td>deleted repeatedly</td></tr>
+                <tr><td>Mission overlap</td><td>classified</td><td>Jason concealed contact</td></tr>
+                <tr><td>Final message</td><td>missing</td><td>manually removed</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Emotional Pattern Analysis</h3>
+              <p>This file does not behave like a formal archive. The folder names were changed multiple times. Some labels are scientific. Others are personal.</p>
+              <div class="analysisBars">
+                <div class="barRow"><span>Control</span><div class="barTrack"><div class="barFill" style="width: 35%;"></div></div><span>35%</span></div>
+                <div class="barRow"><span>Grief</span><div class="barTrack"><div class="barFill" style="width: 96%;"></div></div><span>96%</span></div>
+                <div class="barRow"><span>Anger</span><div class="barTrack"><div class="barFill" style="width: 88%;"></div></div><span>88%</span></div>
+                <div class="barRow"><span>Jason</span><div class="barTrack"><div class="barFill" style="width: 100%;"></div></div><span>100%</span></div>
+              </div>
+            </div>
+
+            <div class="researchCard">
+              <h3>Deleted Annotation</h3>
+              <p class="handwriting">“The garden remembers what the dead cannot say.”</p>
+              <p class="handwriting">“M and Q called it containment. I called it abandonment.”</p>
+              <p>This appears to be the first recovered text that directly connects the staged transmissions to revenge.</p>
+            </div>
+          </div>
+        `
       },
 
       "lockedfile4.html": {
         title: "LOCKED FILE 4",
-        subtitle: "FINAL MEMORY RECORD",
-        intro: "This final file is protected by two archive passwords and one external simulation result. Complete the Memory protocol to recover the final minigame code.",
+        subtitle: "FINAL THORNE ARCHIVE",
+        archiveType: "Identity-Sensitive Final File",
+        owner: "Dr. Nessa Thorne",
+        source: "Private workstation / sealed archive",
         passwordA: "DEAD",
         passwordB: "REVENGE",
         gameCode: "GOLDENEYE",
         gameName: "MEMORY PROTOCOL",
         gameUrl: "memory.html",
-        contentTitle: "RECOVERED FILE 4 // FINAL REVEAL",
-        story: "Jason Krane is dead.\nHe has been dead for over a year.\n\nThe messages were not sent by him.\nThey were staged.\n\nThe sender is Dr. A. Voss.\nFormer biology lecturer.\nBotanical specialist.\nKrane's hidden lover.\n\nShe does not want Bond dead first.\nShe wants M and Q to suffer.\n\nFinal instruction:\nFind the diary.",
-        video: "FINAL CLUE PLACEHOLDER\nThis is the ontknoping.\nReplace this block later with the final video or final diary clue."
+        intro:
+          "This is the final sealed archive on Nessa Thorne’s workstation. It is marked as identity-sensitive and appears to contain the truth behind the Jason Krane transmissions.",
+        preview:
+`Preview:
+- Jason Krane status: concealed
+- Sender identity: sealed
+- Archive purpose: confession / revenge chain
+- Botanical key: Bloody Cranesbill
+- Final warning: open only after full recovery`,
+        unlockedTitle: "RECOVERED FILE 4 // FINAL REVEAL",
+        unlockedHtml: `
+          <h1>FINAL REVEAL</h1>
+          <h2>The Jason Krane transmissions were staged</h2>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Recovered Truth</h3>
+              <p>Jason Krane is dead.</p>
+              <p>He has been dead for over a year.</p>
+              <p>The messages were not sent by him. They were constructed, edited, and staged from old recordings and private fragments.</p>
+            </div>
+
+            <div class="researchCard">
+              <h3>Sender Identity</h3>
+              <p><strong>Sender:</strong> Dr. Nessa Thorne</p>
+              <p><strong>Former role:</strong> Lecturer at St. Brigid's University, Dublin</p>
+              <p><strong>Specialism:</strong> Botanical chemistry and plant-derived compounds</p>
+              <p><strong>Connection:</strong> Jason Krane's hidden lover</p>
+            </div>
+          </div>
+
+          <div class="researchGrid">
+            <div class="researchCard">
+              <h3>Confession Fragment</h3>
+              <p class="handwriting">“They buried Jason in silence. So I gave him a voice.”</p>
+              <p class="handwriting">“They followed the ghost because guilt is easier to command than truth.”</p>
+              <p class="handwriting">“If M and Q want their agent back, they can start by admitting what they left behind.”</p>
+            </div>
+
+            <div class="researchCard">
+              <h3>Final Botanical Marker</h3>
+              <table class="specimenTable">
+                <tr><th>Plant</th><th>Common Name</th><th>Meaning in Archive</th></tr>
+                <tr><td>Geranium sanguineum</td><td>Bloody Cranesbill</td><td>Nessa's password memory</td></tr>
+                <tr><td>Nightshade</td><td>Warning symbol</td><td>False Jason transmission</td></tr>
+                <tr><td>Rosehip</td><td>Recovered key</td><td>University archive link</td></tr>
+                <tr><td>Thorne</td><td>Name marker</td><td>Revenge signature</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="researchCard">
+            <h3>Final Instruction</h3>
+            <p>The workstation has revealed the truth, but Nessa Thorne’s physical diary remains missing.</p>
+            <p><strong>Find the diary.</strong></p>
+          </div>
+        `
       }
     };
 
-    let currentConfig;
-    let solvedA = false;
-    let solvedB = false;
-    let solvedGame = false;
+    const currentFile = files[pageName] || files["lockedfile1.html"];
 
-    function getCurrentConfig() {
-      const fileName = window.location.pathname.split("/").pop().toLowerCase();
-      return fileConfigs[fileName] || fileConfigs["lockedfile1.html"];
+    let lockA = false;
+    let lockB = false;
+    let lockGame = false;
+
+    function normalize(value) {
+      return value
+        .trim()
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "");
     }
 
-    function clean(value) {
-      return value.trim().toUpperCase().replace(/\s+/g, "");
-    }
+    function loadFile() {
+      document.title = currentFile.title + " // Thorne Archive";
+      document.getElementById("fileTitle").textContent = currentFile.title;
+      document.getElementById("fileSubtitle").textContent = currentFile.subtitle;
+      document.getElementById("fileIntro").textContent = currentFile.intro;
+      document.getElementById("labPreview").textContent = currentFile.preview;
+      document.getElementById("windowTitle").textContent = currentFile.archiveType;
+      document.getElementById("unlockedTitle").textContent = currentFile.unlockedTitle;
+      document.getElementById("gameLink").href = currentFile.gameUrl;
+      document.getElementById("gameLink").textContent = "OPEN " + currentFile.gameName;
 
-    function setupPage() {
-      currentConfig = getCurrentConfig();
+      document.getElementById("folderMeta").textContent =
+`Folder:
+${currentFile.title}
 
-      document.title = currentConfig.title + " // MI6";
-      document.getElementById("topFileName").textContent = currentConfig.title + " // " + currentConfig.subtitle;
-      document.getElementById("windowTitle").textContent = currentConfig.title + " Access Console";
-      document.getElementById("pageTitle").textContent = currentConfig.title;
-      document.getElementById("introText").textContent = currentConfig.intro;
-      document.getElementById("gameLabel").textContent = "Complete required game: " + currentConfig.gameName;
-      document.getElementById("gameLink").href = currentConfig.gameUrl;
-      document.getElementById("gameLink").textContent = "OPEN " + currentConfig.gameName;
-      document.getElementById("fileContentTitle").textContent = currentConfig.contentTitle;
-      document.getElementById("fileStory").textContent = currentConfig.story;
-      document.getElementById("videoBox").textContent = currentConfig.video;
+Type:
+${currentFile.archiveType}
+
+Owner:
+${currentFile.owner}
+
+Source:
+${currentFile.source}
+
+Status:
+Encrypted`;
     }
 
     function checkPasswordA() {
-      const input = document.getElementById("passwordA");
-      const button = document.getElementById("buttonA");
+      const input = normalize(document.getElementById("passwordA").value);
       const status = document.getElementById("statusA");
 
-      if (clean(input.value) === currentConfig.passwordA) {
-        solvedA = true;
-        input.classList.remove("wrong");
-        input.classList.add("correct");
-        input.disabled = true;
-        button.disabled = true;
-        button.textContent = "LOCKED";
-        status.textContent = "PASSWORD A ACCEPTED";
-        status.className = "miniStatus ok";
-        checkComplete();
+      if (input === normalize(currentFile.passwordA)) {
+        lockA = true;
+        status.textContent = "Password A accepted.";
+        status.classList.add("ok");
+        tryUnlock();
       } else {
-        input.classList.remove("correct");
-        input.classList.add("wrong");
-        status.textContent = "PASSWORD A REJECTED";
-        status.className = "miniStatus bad";
-        showMessage("PASSWORD A REJECTED // Try again.", false);
+        status.textContent = "Incorrect password A.";
+        status.classList.remove("ok");
       }
     }
 
     function checkPasswordB() {
-      const input = document.getElementById("passwordB");
-      const button = document.getElementById("buttonB");
+      const input = normalize(document.getElementById("passwordB").value);
       const status = document.getElementById("statusB");
 
-      if (clean(input.value) === currentConfig.passwordB) {
-        solvedB = true;
-        input.classList.remove("wrong");
-        input.classList.add("correct");
-        input.disabled = true;
-        button.disabled = true;
-        button.textContent = "LOCKED";
-        status.textContent = "PASSWORD B ACCEPTED";
-        status.className = "miniStatus ok";
-        checkComplete();
+      if (input === normalize(currentFile.passwordB)) {
+        lockB = true;
+        status.textContent = "Password B accepted.";
+        status.classList.add("ok");
+        tryUnlock();
       } else {
-        input.classList.remove("correct");
-        input.classList.add("wrong");
-        status.textContent = "PASSWORD B REJECTED";
-        status.className = "miniStatus bad";
-        showMessage("PASSWORD B REJECTED // Try again.", false);
+        status.textContent = "Incorrect password B.";
+        status.classList.remove("ok");
       }
     }
 
     function checkGameCode() {
-      const input = document.getElementById("gameCode");
-      const button = document.getElementById("buttonGame");
+      const input = normalize(document.getElementById("gameCode").value);
       const status = document.getElementById("statusGame");
 
-      if (clean(input.value) === currentConfig.gameCode) {
-        solvedGame = true;
-        input.classList.remove("wrong");
-        input.classList.add("correct");
-        input.disabled = true;
-        button.disabled = true;
-        button.textContent = "LOCKED";
-        status.textContent = "MINIGAME CODE ACCEPTED";
-        status.className = "miniStatus ok";
-        checkComplete();
+      if (input === normalize(currentFile.gameCode)) {
+        lockGame = true;
+        status.textContent = "Protocol code accepted.";
+        status.classList.add("ok");
+        tryUnlock();
       } else {
-        input.classList.remove("correct");
-        input.classList.add("wrong");
-        status.textContent = "MINIGAME CODE REJECTED";
-        status.className = "miniStatus bad";
-        showMessage("MINIGAME CODE REJECTED // Complete the required game.", false);
+        status.textContent = "Incorrect protocol code.";
+        status.classList.remove("ok");
       }
     }
 
-    function showMessage(text, positive) {
-      const message = document.getElementById("mainMessage");
-      message.textContent = text;
-      message.style.color = positive ? "#00ff66" : "#ff5555";
-    }
-
-    function checkComplete() {
-      if (solvedA && solvedB && solvedGame) {
-        showMessage("ACCESS GRANTED // LOCKED FILE DECRYPTED.", true);
-
-        const glitch = document.getElementById("glitch");
-        glitch.style.display = "block";
+    function tryUnlock() {
+      if (lockA && lockB && lockGame) {
+        const overlay = document.getElementById("glitchOverlay");
+        overlay.style.display = "flex";
 
         setTimeout(function() {
-          glitch.style.display = "none";
-          document.getElementById("fileContent").style.display = "block";
-          document.getElementById("fileContent").scrollIntoView({ behavior: "smooth" });
-        }, 1800);
-      } else {
-        showMessage("PARTIAL ACCESS CONFIRMED // Remaining locks still active.", true);
+          overlay.style.display = "none";
+          document.getElementById("unlockedContent").innerHTML = currentFile.unlockedHtml;
+          document.getElementById("unlockedPanel").style.display = "block";
+          document.getElementById("unlockedPanel").scrollIntoView({ behavior: "smooth" });
+        }, 1300);
       }
     }
 
     document.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        const active = document.activeElement;
-
-        if (active.id === "passwordA") {
-          checkPasswordA();
-        }
-
-        if (active.id === "passwordB") {
-          checkPasswordB();
-        }
-
-        if (active.id === "gameCode") {
-          checkGameCode();
-        }
+        checkPasswordA();
+        checkPasswordB();
+        checkGameCode();
       }
     });
 
-    setupPage();
+    loadFile();
   </script>
-
 </body>
 </html>
