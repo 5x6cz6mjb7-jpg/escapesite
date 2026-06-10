@@ -83,7 +83,7 @@
 
     .screen {
       width: 100%;
-      max-width: 1280px;
+      max-width: 1320px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
       border: 5px solid #321515;
@@ -182,8 +182,8 @@
 
     .startScreen,
     .resultScreen {
-      max-width: 760px;
-      margin: 60px auto;
+      max-width: 780px;
+      margin: 54px auto;
     }
 
     .dangerBox {
@@ -240,6 +240,16 @@
       background: linear-gradient(180deg, #b63c3c 0%, #5a1111 100%);
     }
 
+    .resetButton {
+      background: linear-gradient(180deg, #786a10 0%, #3c3408 100%);
+      color: var(--yellow);
+    }
+
+    .muteButton {
+      background: linear-gradient(180deg, #0b4c22 0%, #062b13 100%);
+      color: var(--yellow);
+    }
+
     .gameArea {
       display: none;
       position: relative;
@@ -248,13 +258,13 @@
 
     .mainGrid {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1.12fr 0.88fr;
       gap: 14px;
     }
 
     .timerPanel {
       display: grid;
-      grid-template-columns: 1fr 280px;
+      grid-template-columns: 1fr 300px;
       gap: 14px;
       margin-bottom: 14px;
     }
@@ -277,7 +287,7 @@
     }
 
     .timer {
-      font-size: 58px;
+      font-size: 62px;
       color: var(--yellow);
       text-shadow:
         0 0 8px rgba(255,238,102,0.6),
@@ -317,7 +327,7 @@
     }
 
     .mapWrap {
-      min-height: 600px;
+      min-height: 650px;
     }
 
     .mapFrame {
@@ -325,9 +335,35 @@
       background:
         radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 70%),
         rgba(0,0,0,0.44);
-      min-height: 560px;
+      min-height: 612px;
       position: relative;
       overflow: hidden;
+    }
+
+    .mapFrame::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      top: -20%;
+      width: 140%;
+      height: 140%;
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          rgba(0,255,102,0.12) 18deg,
+          transparent 38deg,
+          transparent 360deg
+        );
+      animation: radarSweep 5s linear infinite;
+      pointer-events: none;
+      opacity: 0.45;
+      z-index: 1;
+    }
+
+    @keyframes radarSweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .mapHeader {
@@ -336,32 +372,70 @@
       padding: 10px;
       border-bottom: 1px solid rgba(0,255,102,0.28);
       background: rgba(0,255,102,0.04);
+      position: relative;
+      z-index: 2;
     }
 
     svg {
       width: 100%;
-      height: 500px;
+      height: 548px;
       display: block;
+      position: relative;
+      z-index: 2;
     }
 
-    .nlOutline {
-      fill: rgba(0,255,102,0.06);
-      stroke: rgba(0,255,102,0.55);
-      stroke-width: 2;
+    .seaLabel {
+      fill: rgba(125,252,255,0.55);
+      font-size: 13px;
+      font-family: "Courier New", monospace;
+    }
+
+    .land {
+      fill: rgba(0,255,102,0.08);
+      stroke: rgba(0,255,102,0.70);
+      stroke-width: 2.4;
+      filter: drop-shadow(0 0 5px rgba(0,255,102,0.25));
+    }
+
+    .provinceLine {
+      fill: none;
+      stroke: rgba(0,255,102,0.22);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+
+    .water {
+      fill: rgba(125,252,255,0.12);
+      stroke: rgba(125,252,255,0.36);
+      stroke-width: 1.2;
+    }
+
+    .island {
+      fill: rgba(0,255,102,0.08);
+      stroke: rgba(0,255,102,0.62);
+      stroke-width: 1.5;
     }
 
     .routeLine {
       fill: none;
       stroke: var(--yellow);
-      stroke-width: 3;
+      stroke-width: 3.5;
       stroke-dasharray: 8 8;
       animation: routeMove 1.2s linear infinite;
-      filter: drop-shadow(0 0 6px rgba(255,238,102,0.6));
+      filter: drop-shadow(0 0 6px rgba(255,238,102,0.75));
     }
 
     @keyframes routeMove {
       from { stroke-dashoffset: 0; }
       to { stroke-dashoffset: -16; }
+    }
+
+    .routeGlow {
+      fill: none;
+      stroke: rgba(255,85,85,0.32);
+      stroke-width: 10;
+      stroke-linecap: round;
+      filter: blur(1px);
     }
 
     .cityPulse {
@@ -384,6 +458,20 @@
       }
     }
 
+    .targetRing {
+      fill: none;
+      stroke: var(--red);
+      stroke-width: 2;
+      animation: targetRing 1.3s infinite;
+      transform-origin: center;
+      filter: drop-shadow(0 0 8px rgba(255,85,85,0.8));
+    }
+
+    @keyframes targetRing {
+      0% { r: 10; opacity: 0.95; }
+      100% { r: 25; opacity: 0; }
+    }
+
     .cityLabel {
       fill: var(--white);
       font-size: 13px;
@@ -391,10 +479,29 @@
       text-shadow: 0 0 4px #000;
     }
 
+    .cityLabel.red {
+      fill: #ffb8b8;
+    }
+
     .routeStep {
       fill: var(--yellow);
-      font-size: 10px;
+      font-size: 11px;
       font-family: "Courier New", monospace;
+      font-weight: bold;
+    }
+
+    .droneBody {
+      fill: var(--yellow);
+      stroke: #000;
+      stroke-width: 1;
+      filter: drop-shadow(0 0 8px rgba(255,238,102,0.8));
+    }
+
+    .droneArm {
+      stroke: var(--yellow);
+      stroke-width: 2;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(255,238,102,0.6));
     }
 
     .controlGrid {
@@ -618,7 +725,7 @@
       }
 
       svg {
-        height: 440px;
+        height: 500px;
       }
 
       .knobGrid {
@@ -656,7 +763,7 @@
       }
 
       svg {
-        height: 360px;
+        height: 390px;
       }
     }
   </style>
@@ -696,6 +803,8 @@
         </p>
 
         <button class="primaryButton" onclick="startFinalAttempt()">START FINAL OVERRIDE</button>
+        <button class="muteButton" onclick="toggleMusic()">MUSIC: ON/OFF</button>
+        <button class="resetButton" onclick="resetDroneAttempt()">TEST RESET</button>
         <a class="buttonLink" href="terminal.html">RETURN TO TERMINAL</a>
       </div>
     </section>
@@ -728,6 +837,9 @@
             <span>Attempt status</span>
             <span class="statusValue">ACTIVE</span>
           </div>
+
+          <button class="muteButton" onclick="toggleMusic()">MUSIC: ON/OFF</button>
+          <button class="resetButton" onclick="resetDroneAttempt()">TEST RESET</button>
         </div>
       </section>
 
@@ -735,7 +847,7 @@
         <section class="window mapWrap">
           <div class="windowTitle">
             <span>Route Map</span>
-            <span>NL GRID</span>
+            <span>NL GRID // LIVE TRACE</span>
           </div>
 
           <div class="content">
@@ -744,41 +856,107 @@
                 Route trace: IJmuiden → Soesterberg → Maastricht → Hardenberg
               </div>
 
-              <svg viewBox="0 0 360 500" role="img" aria-label="kaart van Nederland met routepunten">
-                <path class="nlOutline" d="
-                  M 150 28
-                  C 125 42, 106 63, 98 94
-                  C 80 104, 72 128, 82 150
-                  C 61 171, 64 202, 82 224
-                  C 65 251, 68 282, 92 304
-                  C 105 323, 100 354, 119 375
-                  C 135 392, 154 404, 162 432
-                  C 169 455, 193 465, 210 444
-                  C 224 426, 218 398, 232 377
-                  C 250 349, 276 331, 282 298
-                  C 288 263, 270 232, 282 198
-                  C 294 161, 284 128, 258 100
-                  C 232 72, 211 44, 178 33
-                  C 166 29, 158 26, 150 28
+              <svg viewBox="0 0 460 620" role="img" aria-label="kaart van Nederland met routepunten">
+                <text class="seaLabel" x="28" y="250">NOORDZEE</text>
+                <text class="seaLabel" x="260" y="98">WADDENZEE</text>
+                <text class="seaLabel" x="236" y="198">IJSSELMEER</text>
+                <text class="seaLabel" x="122" y="477">ZEELAND</text>
+                <text class="seaLabel" x="275" y="578">LIMBURG</text>
+
+                <path class="island" d="M171 57 C187 49, 203 50, 216 59 C201 65, 183 67, 171 57 Z"></path>
+                <path class="island" d="M222 48 C238 40, 258 42, 272 50 C254 58, 236 58, 222 48 Z"></path>
+                <path class="island" d="M282 47 C304 39, 330 41, 349 50 C325 60, 301 59, 282 47 Z"></path>
+                <path class="island" d="M357 55 C374 48, 391 49, 406 58 C391 65, 372 66, 357 55 Z"></path>
+
+                <path class="land" d="
+                  M 184 78
+                  C 169 83, 158 96, 153 112
+                  C 147 132, 154 152, 142 170
+                  C 132 185, 116 197, 114 218
+                  C 111 247, 131 267, 126 292
+                  C 121 319, 101 332, 108 360
+                  C 113 381, 134 394, 148 411
+                  C 160 426, 151 447, 132 454
+                  C 113 462, 98 472, 90 489
+                  C 109 500, 133 499, 152 490
+                  C 171 481, 185 463, 202 470
+                  C 218 477, 209 505, 220 525
+                  C 232 548, 243 569, 252 596
+                  C 258 615, 277 617, 286 598
+                  C 295 579, 282 560, 275 541
+                  C 265 515, 272 492, 292 473
+                  C 314 452, 340 434, 352 403
+                  C 366 367, 356 333, 365 304
+                  C 374 272, 397 250, 393 219
+                  C 390 191, 366 171, 354 146
+                  C 340 116, 315 96, 287 83
+                  C 262 72, 237 68, 217 72
+                  C 205 75, 194 74, 184 78
                   Z" />
 
-                <polyline class="routeLine" points="116,120 183,174 210,390 257,116" />
+                <path class="water" d="
+                  M 222 104
+                  C 250 95, 285 101, 309 121
+                  C 325 135, 325 166, 303 180
+                  C 281 194, 244 191, 224 175
+                  C 205 160, 202 123, 222 104
+                  Z" />
 
-                <text class="routeStep" x="128" y="142">1</text>
-                <text class="routeStep" x="189" y="205">2</text>
-                <text class="routeStep" x="222" y="360">3</text>
+                <path class="water" d="M 126 451 C 108 456, 92 466, 86 482 C 101 492, 123 490, 142 479 C 153 472, 150 459, 126 451 Z"></path>
+                <path class="water" d="M 163 444 C 149 450, 140 465, 151 477 C 170 476, 186 462, 181 449 C 177 441, 171 440, 163 444 Z"></path>
 
-                <circle class="cityPulse" cx="116" cy="120" r="6"></circle>
-                <text class="cityLabel" x="52" y="112">IJmuiden</text>
+                <path class="provinceLine" d="M 177 120 C 208 137, 245 146, 303 134"></path>
+                <path class="provinceLine" d="M 155 180 C 197 199, 252 206, 352 193"></path>
+                <path class="provinceLine" d="M 131 265 C 185 283, 256 286, 374 272"></path>
+                <path class="provinceLine" d="M 122 346 C 188 365, 253 363, 356 343"></path>
+                <path class="provinceLine" d="M 169 426 C 214 430, 266 426, 333 407"></path>
+                <path class="provinceLine" d="M 236 464 C 252 500, 262 535, 269 585"></path>
+                <path class="provinceLine" d="M 215 76 C 196 140, 184 225, 173 332"></path>
+                <path class="provinceLine" d="M 292 88 C 289 160, 300 252, 294 350"></path>
 
-                <circle class="cityPulse" cx="183" cy="174" r="6"></circle>
-                <text class="cityLabel" x="193" y="171">Soesterberg</text>
+                <path id="routePath" class="routeGlow" d="M 137 195 L 232 246 L 265 573 L 347 180"></path>
+                <path class="routeLine" d="M 137 195 L 232 246 L 265 573 L 347 180"></path>
 
-                <circle class="cityPulse" cx="210" cy="390" r="6"></circle>
-                <text class="cityLabel" x="221" y="393">Maastricht</text>
+                <g>
+                  <circle class="targetRing" cx="137" cy="195" r="12"></circle>
+                  <circle class="cityPulse" cx="137" cy="195" r="6"></circle>
+                  <text class="cityLabel" x="50" y="190">IJmuiden</text>
+                </g>
 
-                <circle class="cityPulse" cx="257" cy="116" r="6"></circle>
-                <text class="cityLabel" x="264" y="113">Hardenberg</text>
+                <g>
+                  <circle class="targetRing" cx="232" cy="246" r="12"></circle>
+                  <circle class="cityPulse" cx="232" cy="246" r="6"></circle>
+                  <text class="cityLabel" x="244" y="244">Soesterberg</text>
+                </g>
+
+                <g>
+                  <circle class="targetRing" cx="265" cy="573" r="12"></circle>
+                  <circle class="cityPulse" cx="265" cy="573" r="6"></circle>
+                  <text class="cityLabel" x="282" y="573">Maastricht</text>
+                </g>
+
+                <g>
+                  <circle class="targetRing" cx="347" cy="180" r="12"></circle>
+                  <circle class="cityPulse" cx="347" cy="180" r="6"></circle>
+                  <text class="cityLabel red" x="356" y="176">Hardenberg</text>
+                </g>
+
+                <text class="routeStep" x="172" y="212">1</text>
+                <text class="routeStep" x="242" y="398">2</text>
+                <text class="routeStep" x="308" y="383">3</text>
+
+                <g>
+                  <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
+                    <mpath href="#routePath"></mpath>
+                  </animateMotion>
+                  <line class="droneArm" x1="-9" y1="0" x2="9" y2="0"></line>
+                  <line class="droneArm" x1="0" y1="-9" x2="0" y2="9"></line>
+                  <circle class="droneBody" cx="0" cy="0" r="5"></circle>
+                  <circle class="droneBody" cx="-11" cy="0" r="3"></circle>
+                  <circle class="droneBody" cx="11" cy="0" r="3"></circle>
+                  <circle class="droneBody" cx="0" cy="-11" r="3"></circle>
+                  <circle class="droneBody" cx="0" cy="11" r="3"></circle>
+                </g>
               </svg>
             </div>
           </div>
@@ -870,6 +1048,7 @@
 
           <section class="executePanel">
             <button class="executeButton" onclick="executeOverride()">EXECUTE OVERRIDE</button>
+
             <div class="attemptNote">
               One execution only. Incorrect sequence will lock the override attempt.
             </div>
@@ -880,6 +1059,9 @@
 > awaiting route distance
 > awaiting calibration sequence
             </div>
+
+            <button class="muteButton" onclick="toggleMusic()">MUSIC: ON/OFF</button>
+            <button class="resetButton" onclick="resetDroneAttempt()">TEST RESET</button>
           </section>
         </section>
       </section>
@@ -897,6 +1079,7 @@
           Hardenberg risk zone cleared.
         </p>
 
+        <button class="resetButton" onclick="resetDroneAttempt()">TEST RESET</button>
         <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
       </div>
     </section>
@@ -913,6 +1096,7 @@
           This browser is now marked as failed for the final drone attempt.
         </p>
 
+        <button class="resetButton" onclick="resetDroneAttempt()">TEST RESET</button>
         <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
       </div>
     </section>
@@ -935,6 +1119,11 @@
 
     let timerInterval = null;
 
+    let musicMuted = false;
+    let audioContext = null;
+    let audioNodes = [];
+    let beepInterval = null;
+
     function cleanDistance(value) {
       return String(value)
         .toUpperCase()
@@ -944,6 +1133,95 @@
         .replaceAll(",", "")
         .replaceAll("-", "")
         .trim();
+    }
+
+    function startSuspenseMusic() {
+      if (musicMuted) return;
+      if (audioContext) return;
+
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      audioContext = new AudioContextClass();
+
+      const master = audioContext.createGain();
+      master.gain.value = 0.045;
+      master.connect(audioContext.destination);
+
+      const lowDrone = audioContext.createOscillator();
+      const lowGain = audioContext.createGain();
+      lowDrone.type = "sawtooth";
+      lowDrone.frequency.value = 55;
+      lowGain.gain.value = 0.42;
+      lowDrone.connect(lowGain);
+      lowGain.connect(master);
+      lowDrone.start();
+
+      const pulse = audioContext.createOscillator();
+      const pulseGain = audioContext.createGain();
+      pulse.type = "triangle";
+      pulse.frequency.value = 110;
+      pulseGain.gain.value = 0.18;
+      pulse.connect(pulseGain);
+      pulseGain.connect(master);
+      pulse.start();
+
+      audioNodes.push(lowDrone, pulse, master);
+
+      beepInterval = setInterval(function() {
+        if (!audioContext || musicMuted) return;
+
+        const beep = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        beep.type = "square";
+        beep.frequency.value = 440 + Math.random() * 80;
+
+        gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.055, audioContext.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.18);
+
+        beep.connect(gain);
+        gain.connect(audioContext.destination);
+
+        beep.start();
+        beep.stop(audioContext.currentTime + 0.2);
+      }, 780);
+    }
+
+    function stopSuspenseMusic() {
+      if (beepInterval) {
+        clearInterval(beepInterval);
+        beepInterval = null;
+      }
+
+      audioNodes.forEach(function(node) {
+        try {
+          if (node.stop) {
+            node.stop();
+          }
+        } catch (error) {}
+      });
+
+      audioNodes = [];
+
+      if (audioContext) {
+        try {
+          audioContext.close();
+        } catch (error) {}
+      }
+
+      audioContext = null;
+    }
+
+    function toggleMusic() {
+      musicMuted = !musicMuted;
+
+      if (musicMuted) {
+        stopSuspenseMusic();
+      } else {
+        startSuspenseMusic();
+      }
     }
 
     function startFinalAttempt() {
@@ -964,6 +1242,7 @@
 
       showGame();
       startTimer();
+      startSuspenseMusic();
     }
 
     function showGame() {
@@ -976,6 +1255,8 @@
 
     function showWin() {
       clearInterval(timerInterval);
+      stopSuspenseMusic();
+
       document.getElementById("startScreen").style.display = "none";
       document.getElementById("gameArea").style.display = "none";
       document.getElementById("loseScreen").style.display = "none";
@@ -984,6 +1265,8 @@
 
     function showLose(reason) {
       clearInterval(timerInterval);
+      stopSuspenseMusic();
+
       document.getElementById("startScreen").style.display = "none";
       document.getElementById("gameArea").style.display = "none";
       document.getElementById("winScreen").style.display = "none";
@@ -1074,6 +1357,7 @@
         log.textContent += "\n> route distance accepted";
         log.textContent += "\n> calibration accepted";
         log.textContent += "\n> drone command chain terminated";
+        log.scrollTop = log.scrollHeight;
 
         setTimeout(function() {
           showWin();
@@ -1088,6 +1372,39 @@
       localStorage.removeItem("droneFinalWon");
 
       showLose(reason);
+    }
+
+    function resetDroneAttempt() {
+      clearInterval(timerInterval);
+      stopSuspenseMusic();
+
+      localStorage.removeItem("droneFinalStarted");
+      localStorage.removeItem("droneFinalEndTime");
+      localStorage.removeItem("droneFinalWon");
+      localStorage.removeItem("droneFinalLost");
+
+      document.getElementById("distanceInput").value = "";
+
+      document.getElementById("sliderA").value = 50;
+      document.getElementById("sliderB").value = 50;
+      document.getElementById("sliderC").value = 50;
+
+      document.getElementById("knobA").value = 0;
+      document.getElementById("knobB").value = 0;
+      document.getElementById("knobC").value = 0;
+
+      document.getElementById("logBox").textContent =
+`> override interface reset
+> one-attempt lock cleared for testing
+> awaiting route distance
+> awaiting calibration sequence`;
+
+      document.getElementById("startScreen").style.display = "block";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("loseScreen").style.display = "none";
+
+      updateControls();
     }
 
     function loadState() {
@@ -1107,6 +1424,7 @@
         if (endTime > Date.now()) {
           showGame();
           startTimer();
+          startSuspenseMusic();
         } else {
           failAttempt("Timer expired. Drone release sequence continued.");
         }
