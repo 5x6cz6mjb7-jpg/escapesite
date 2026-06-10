@@ -8,14 +8,12 @@
     :root {
       --green: #00ff66;
       --green2: #00aa44;
-      --dark: #020802;
-      --text: #caffd7;
+      --dark: #001100;
+      --text: #baffc9;
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
-      --winBlue: #003b7a;
-      --winGrey: #b8c0b8;
-      --winDark: #202820;
+      --purple: #d48cff;
     }
 
     * {
@@ -26,11 +24,14 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #163016 0%, #030803 62%, #000 100%);
-      color: var(--green);
+        radial-gradient(circle at center, #1b2b1b 0%, #050805 58%, #000 100%);
       font-family: "Courier New", monospace;
+      color: var(--green);
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 18px;
-      overflow: hidden;
+      overflow: auto;
     }
 
     body::before {
@@ -41,13 +42,223 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,102,0.05),
-          rgba(0,255,102,0.05) 1px,
+          rgba(0, 255, 100, 0.055),
+          rgba(0, 255, 100, 0.055) 1px,
           transparent 1px,
           transparent 4px
         );
-      z-index: 50;
+      z-index: 1;
+    }
+
+    .computerShell {
+      width: 100%;
+      max-width: 1420px;
+      background:
+        linear-gradient(180deg, #242b24 0%, #141a14 45%, #0b100b 100%);
+      border: 4px solid #3c4a3c;
+      border-radius: 22px;
+      padding: 22px 22px 34px;
+      box-shadow:
+        0 0 0 3px #050805,
+        0 22px 50px rgba(0, 0, 0, 0.78),
+        inset 0 0 18px rgba(255, 255, 255, 0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .computerShell::before {
+      content: "";
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      top: 12px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .computerShell::after {
+      content: "";
+      display: block;
+      width: 210px;
+      height: 20px;
+      background: #090d09;
+      border: 2px solid #273527;
+      border-radius: 0 0 18px 18px;
+      position: absolute;
+      left: 50%;
+      bottom: 5px;
+      transform: translateX(-50%);
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
+    }
+
+    .monitorLabel {
+      text-align: center;
+      color: #9fc29f;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .monitorScreen {
+      min-height: 790px;
+      background:
+        radial-gradient(circle at center, rgba(0, 255, 102, 0.16), transparent 48%),
+        linear-gradient(180deg, #052005 0%, #020b02 100%);
+      border: 7px solid #0c140c;
+      border-radius: 28px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        inset 0 0 0 2px #324532,
+        inset 0 0 55px rgba(0, 255, 100, 0.12),
+        inset 0 0 135px rgba(0, 0, 0, 0.78),
+        0 0 22px rgba(0, 0, 0, 0.8);
+    }
+
+    .monitorScreen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.026),
+          rgba(255, 255, 255, 0.026) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+      pointer-events: none;
+      z-index: 45;
+      mix-blend-mode: screen;
       animation: scanMove 7s linear infinite;
+    }
+
+    .monitorScreen::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      background:
+        radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.58) 100%),
+        radial-gradient(ellipse at center, transparent 58%, rgba(0, 255, 102, 0.08) 70%, rgba(0, 0, 0, 0.45) 100%);
+      pointer-events: none;
+      z-index: 48;
+    }
+
+    .glassReflection {
+      position: absolute;
+      inset: 0;
+      z-index: 47;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          115deg,
+          rgba(255, 255, 255, 0.10) 0%,
+          rgba(255, 255, 255, 0.045) 13%,
+          transparent 30%
+        ),
+        radial-gradient(
+          ellipse at 32% 18%,
+          rgba(255, 255, 255, 0.09),
+          transparent 28%
+        );
+      mix-blend-mode: screen;
+      opacity: 0.58;
+    }
+
+    .crtGlow {
+      position: absolute;
+      inset: -20%;
+      pointer-events: none;
+      z-index: 35;
+      background:
+        radial-gradient(circle at 28% 32%, rgba(0, 255, 102, 0.24), transparent 26%),
+        radial-gradient(circle at 72% 62%, rgba(0, 255, 102, 0.14), transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.12), transparent 54%);
+      mix-blend-mode: screen;
+      opacity: 0.62;
+      animation: greenWaas 9s ease-in-out infinite alternate;
+    }
+
+    .crtFlicker {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 36;
+      background: rgba(0, 255, 102, 0.025);
+      animation: flicker 4.2s infinite;
+    }
+
+    .crtSweep {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 130px;
+      top: -150px;
+      pointer-events: none;
+      z-index: 37;
+      background: linear-gradient(
+        180deg,
+        transparent,
+        rgba(0, 255, 102, 0.10),
+        transparent
+      );
+      animation: sweep 6.8s linear infinite;
+    }
+
+    .crtNoise {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 38;
+      opacity: 0.12;
+      background-image:
+        radial-gradient(rgba(0,255,102,0.45) 1px, transparent 1px);
+      background-size: 7px 7px;
+      animation: noiseShift 0.35s steps(2) infinite;
+    }
+
+    @keyframes greenWaas {
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.44;
+      }
+
+      35% {
+        transform: translate(2%, 1%) scale(1.04);
+        opacity: 0.66;
+      }
+
+      70% {
+        transform: translate(-1%, 3%) scale(1.02);
+        opacity: 0.53;
+      }
+
+      100% {
+        transform: translate(3%, -2%) scale(1.06);
+        opacity: 0.72;
+      }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 0.05; }
+      8% { opacity: 0.13; }
+      9% { opacity: 0.02; }
+      10% { opacity: 0.18; }
+      11% { opacity: 0.04; }
+      38% { opacity: 0.07; }
+      39% { opacity: 0.15; }
+      40% { opacity: 0.03; }
+      72% { opacity: 0.11; }
+      73% { opacity: 0.04; }
+    }
+
+    @keyframes sweep {
+      0% { top: -150px; }
+      100% { top: 100%; }
     }
 
     @keyframes scanMove {
@@ -55,104 +266,116 @@
       100% { transform: translateY(12px); }
     }
 
-    .crt {
-      max-width: 1240px;
-      height: calc(100vh - 36px);
-      margin: 0 auto;
-      border: 5px solid #132313;
-      border-radius: 18px;
-      background:
-        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 62%),
-        linear-gradient(180deg, #061906 0%, #010801 100%);
-      box-shadow:
-        inset 0 0 80px rgba(0,0,0,0.86),
-        inset 0 0 30px rgba(0,255,102,0.13),
-        0 0 35px rgba(0,0,0,0.82);
-      padding: 14px;
-      position: relative;
-      overflow: hidden;
+    @keyframes noiseShift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(3px, -2px); }
+      100% { transform: translate(-2px, 2px); }
     }
 
-    .topBar {
-      height: 30px;
-      background: linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
-      border: 2px solid #d8ffe6;
-      color: var(--white);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 10px;
-      font-size: 12px;
-      margin-bottom: 10px;
+    .loginScreen,
+    .desktop {
+      height: 100%;
+      min-height: 748px;
       position: relative;
-      z-index: 3;
+      border: 2px solid var(--green2);
+      background:
+        linear-gradient(90deg, rgba(0,255,102,0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.035) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 68%),
+        linear-gradient(180deg, #082308 0%, #031203 100%);
+      background-size: 32px 32px, 32px 32px, auto, auto;
+      box-shadow:
+        inset 0 0 18px rgba(0, 255, 100, 0.09),
+        inset 0 0 90px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      border-radius: 12px;
+      animation: desktopPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes desktopPulse {
+      0%, 100% {
+        filter: brightness(1) contrast(1);
+        transform: scale(1);
+      }
+
+      50% {
+        filter: brightness(1.08) contrast(1.05);
+        transform: scale(1.002);
+      }
     }
 
     .loginScreen {
-      width: 620px;
-      max-width: calc(100% - 20px);
-      margin: 70px auto;
-      border: 2px solid #d8ffe6;
-      background: rgba(0, 10, 0, 0.9);
-      box-shadow: 4px 4px 0 rgba(0,0,0,0.7);
-      position: relative;
-      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
     }
 
-    .windowTitle {
+    .loginWindow {
+      width: 100%;
+      max-width: 540px;
+      border: 2px solid #d8ffe6;
+      background: #031203;
+      box-shadow:
+        6px 6px 0 rgba(0, 0, 0, 0.72),
+        0 0 28px rgba(0,255,100,0.22);
+      position: relative;
+      z-index: 10;
+    }
+
+    .loginTitleBar,
+    .windowTitleBar {
       height: 30px;
-      background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
-      border-bottom: 2px solid #d8ffe6;
+      background:
+        linear-gradient(180deg, #12a046 0%, #0a4c22 100%);
       color: var(--white);
+      border-bottom: 2px solid #d8ffe6;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 8px;
+      align-items: center;
+      padding: 0 7px;
       font-size: 12px;
       font-weight: bold;
     }
 
-    .windowContent {
-      padding: 16px;
+    .loginBody {
+      padding: 22px;
+      color: var(--text);
     }
 
-    h1 {
-      color: var(--yellow);
-      font-size: 25px;
+    .loginHeader {
+      text-align: center;
+      border: 1px dashed rgba(0,255,102,0.35);
+      padding: 14px;
+      margin-bottom: 18px;
+      background: rgba(0,0,0,0.28);
+    }
+
+    .loginHeader h1 {
       margin: 0 0 8px;
+      color: var(--yellow);
+      font-size: 21px;
       letter-spacing: 2px;
     }
 
-    h2 {
-      color: var(--green);
-      font-size: 16px;
-      margin: 0 0 10px;
-    }
-
-    p {
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .loginNote {
-      border: 1px dashed rgba(255,238,102,0.45);
-      background: rgba(255,238,102,0.06);
-      color: var(--yellow);
-      padding: 12px;
-      font-size: 13px;
-      line-height: 1.5;
-      margin: 14px 0;
-    }
-
-    label {
-      display: block;
-      color: var(--white);
+    .loginHeader p {
+      margin: 4px 0;
       font-size: 12px;
-      margin-top: 12px;
+      color: #9dffbd;
     }
 
-    input {
+    .loginField {
+      margin-bottom: 14px;
+    }
+
+    .loginField label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--white);
+    }
+
+    .loginField input {
       width: 100%;
       background: #000;
       color: var(--green);
@@ -161,181 +384,722 @@
       font-family: "Courier New", monospace;
       font-size: 15px;
       outline: none;
-      margin-top: 6px;
+      box-shadow: inset 0 0 12px rgba(0,255,100,0.08);
     }
 
-    input:focus {
+    .loginField input:focus {
       border-color: var(--yellow);
+      box-shadow:
+        inset 0 0 12px rgba(0,255,100,0.13),
+        0 0 12px rgba(255,238,102,0.16);
     }
 
-    input.correctInput {
-      border-color: var(--yellow);
-      box-shadow: 0 0 12px rgba(255,238,102,0.24);
+    .loginButtons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
     }
 
-    input.wrongInput {
-      border-color: var(--red);
-      box-shadow: 0 0 12px rgba(255,85,85,0.22);
-    }
-
-    button {
+    .oldButton {
       color: var(--white);
-      background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      background:
+        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
       border-top: 2px solid #d8ffe6;
       border-left: 2px solid #d8ffe6;
       border-right: 2px solid #052b13;
       border-bottom: 2px solid #052b13;
-      padding: 9px 12px;
+      padding: 10px 14px;
       font-family: "Courier New", monospace;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
+      text-decoration: none;
     }
 
-    button:hover {
+    .oldButton:hover {
       filter: brightness(1.18);
     }
 
-    .status {
-      min-height: 22px;
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--red);
-      line-height: 1.4;
+    .oldButton.secondary {
+      background:
+        linear-gradient(180deg, #0b4c22 0%, #062b13 100%);
+      color: var(--yellow);
     }
 
-    .status.ok {
-      color: var(--yellow);
+    .loginMessage {
+      min-height: 22px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--red);
     }
 
     .hintBox {
       display: none;
-      margin-top: 14px;
-      border: 2px solid var(--yellow);
-      background: rgba(255,238,102,0.06);
+      border: 1px dashed var(--green2);
+      background: rgba(0,255,102,0.045);
       padding: 12px;
-      color: var(--text);
+      margin-top: 14px;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    .hintBox h2 {
+    .hintBox strong {
       color: var(--yellow);
-      margin-top: 0;
     }
 
     .desktop {
       display: none;
-      height: calc(100% - 42px);
-      position: relative;
-      background:
-        radial-gradient(circle at center, rgba(0,255,102,0.07), transparent 65%),
-        linear-gradient(180deg, rgba(0,30,0,0.92), rgba(0,10,0,0.96));
-      border: 2px solid rgba(216,255,230,0.6);
-      overflow: hidden;
+      padding-bottom: 46px;
     }
 
-    .desktopArea {
-      position: absolute;
-      inset: 0 0 36px 0;
-      padding: 18px;
+    .desktopTopStrip {
+      height: 28px;
+      background:
+        linear-gradient(180deg, #107535 0%, #0b3c1c 100%);
+      border-bottom: 2px solid #d8ffe6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      color: var(--white);
+      font-size: 12px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .desktopTopStrip span {
+      white-space: nowrap;
+    }
+
+    .desktopMain {
+      display: grid;
+      grid-template-columns: 350px 1fr 390px;
+      gap: 14px;
+      height: calc(100% - 28px);
+      min-height: 674px;
+      padding: 18px 14px 14px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .iconColumn {
+      display: grid;
+      grid-template-columns: repeat(3, 92px);
+      grid-auto-rows: 108px;
+      gap: 16px 12px;
+      align-content: start;
+      padding: 8px;
     }
 
     .desktopIcon {
-      width: 98px;
-      min-height: 92px;
+      width: 86px;
+      min-height: 100px;
       color: var(--white);
-      text-align: center;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 7px;
+      padding: 5px 4px;
+      border: 1px solid transparent;
       cursor: pointer;
       user-select: none;
-      position: absolute;
-      text-decoration: none;
+      background: transparent;
       font-family: "Courier New", monospace;
     }
 
-    .desktopIcon:hover .iconBox,
-    .desktopIcon.active .iconBox {
-      border-color: var(--yellow);
-      background: rgba(255,238,102,0.08);
-      box-shadow: 0 0 12px rgba(255,238,102,0.2);
+    button.desktopIcon {
+      appearance: none;
+      border: 1px solid transparent;
     }
 
-    .desktopIcon:hover .iconLabel {
-      color: var(--yellow);
-      background: rgba(0,0,0,0.75);
+    .desktopIcon:hover {
+      background: rgba(0, 255, 102, 0.08);
+      border: 1px dotted #d8ffe6;
     }
 
-    .iconBox {
-      width: 58px;
-      height: 50px;
-      margin: 0 auto 6px;
-      border: 1px solid rgba(0,255,102,0.4);
-      background: rgba(0,0,0,0.38);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      color: var(--yellow);
-      box-shadow: inset 0 0 10px rgba(0,255,102,0.08);
+    .desktopIcon:hover .iconName {
+      background: rgba(0, 255, 102, 0.22);
+      border: 1px dotted #d8ffe6;
     }
 
-    .iconLabel {
-      display: inline-block;
-      padding: 2px 4px;
+    .iconName {
       color: var(--white);
-      font-size: 12px;
-      line-height: 1.2;
+      font-size: 11px;
+      line-height: 1.18;
+      text-align: center;
+      padding: 2px 4px;
+      min-height: 28px;
       text-shadow: 1px 1px #000;
-      background: rgba(0,0,0,0.35);
     }
 
-    .iconStatus {
-      font-size: 9px;
-      color: var(--yellow);
+    .folder95 {
+      width: 50px;
+      height: 42px;
+      position: relative;
+      margin-top: 4px;
+      animation: folderFloat 3.2s ease-in-out infinite;
+    }
+
+    .folder95.chemistry {
+      animation-delay: 0s;
+    }
+
+    .folder95.botany {
+      animation-delay: 0.4s;
+    }
+
+    .folder95.private {
+      animation-delay: 0.8s;
+    }
+
+    @keyframes folderFloat {
+      0%, 100% {
+        transform: translateY(0);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: translateY(-2px);
+        filter: brightness(1.18);
+      }
+    }
+
+    .folder95 .tab {
+      position: absolute;
+      left: 3px;
+      top: 2px;
+      width: 22px;
+      height: 10px;
+      background: #34e878;
+      border-left: 2px solid #d8ffe6;
+      border-top: 2px solid #d8ffe6;
+      border-right: 2px solid #0a5c28;
+    }
+
+    .folder95 .back {
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 50px;
+      height: 29px;
+      background: #0d7a34;
+      border: 2px solid #d8ffe6;
+    }
+
+    .folder95 .front {
+      position: absolute;
+      left: 2px;
+      top: 17px;
+      width: 48px;
+      height: 24px;
+      background:
+        linear-gradient(180deg, #2bdd70 0%, #0d8a3a 100%);
+      border-left: 2px solid #d8ffe6;
+      border-bottom: 2px solid #052b13;
+      border-right: 2px solid #052b13;
+      border-top: 2px solid rgba(255,255,255,0.45);
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.26),
+        0 0 10px rgba(0,255,100,0.18);
+    }
+
+    .folder95.private .front::before {
+      content: "";
+      position: absolute;
+      left: 17px;
+      top: 4px;
+      width: 12px;
+      height: 10px;
+      border: 2px solid #ffee66;
+      border-bottom: none;
+      border-radius: 7px 7px 0 0;
+    }
+
+    .folder95.private .front::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      width: 18px;
+      height: 12px;
+      background: #ffee66;
+      border: 1px solid #001100;
+      box-shadow: 0 0 7px rgba(255,238,102,0.5);
+    }
+
+    .oldIcon {
+      width: 46px;
+      height: 46px;
+      position: relative;
       margin-top: 3px;
     }
 
-    .iconChemistry { left: 28px; top: 24px; }
-    .iconBotany { left: 28px; top: 136px; }
-    .iconPrivate { left: 28px; top: 248px; }
-    .iconReadme { left: 156px; top: 24px; }
-    .iconRecycle { left: 156px; top: 136px; }
-    .iconComputer { left: 156px; top: 248px; }
-
-    .hiddenDroneFolder {
-      position: absolute;
-      right: 34px;
-      bottom: 54px;
-      width: 58px;
-      min-height: 58px;
-      opacity: 0.24;
-      color: rgba(0,255,102,0.35);
-      text-align: center;
-      cursor: pointer;
-      border: 1px solid rgba(0,255,102,0.12);
-      background: rgba(0,0,0,0.08);
-      font-family: "Courier New", monospace;
-      transition: 0.2s;
-    }
-
-    .hiddenDroneFolder:hover {
-      opacity: 1;
-      border-color: var(--yellow);
-      background: rgba(255,238,102,0.06);
-      color: var(--yellow);
-      box-shadow: 0 0 18px rgba(255,238,102,0.20);
-    }
-
-    .hiddenDroneIcon {
-      font-size: 25px;
-      line-height: 30px;
+    .computerIcon {
+      border: 2px solid #d8ffe6;
+      background: #071b07;
+      width: 44px;
+      height: 34px;
       margin-top: 4px;
+      box-shadow: 0 0 9px rgba(0,255,100,0.15);
     }
 
-    .hiddenDroneText {
-      font-size: 8px;
-      margin-top: 1px;
+    .computerIcon::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 9px;
+      width: 28px;
+      height: 18px;
+      background: #00ff66;
+      opacity: 0.75;
+    }
+
+    .computerIcon::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 38px;
+      width: 18px;
+      height: 5px;
+      background: #d8ffe6;
+      box-shadow: 0 5px 0 #d8ffe6;
+    }
+
+    .diskIcon {
+      width: 40px;
+      height: 42px;
+      background: #0b310b;
+      border: 2px solid #d8ffe6;
+      box-shadow: 0 0 9px rgba(0,255,100,0.15);
+    }
+
+    .diskIcon::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 5px;
+      width: 24px;
+      height: 11px;
+      background: #00ff66;
+      border: 1px solid #001100;
+    }
+
+    .diskIcon::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 24px;
+      width: 20px;
+      height: 12px;
+      background: #d8ffe6;
+      border: 1px solid #001100;
+    }
+
+    .trashIcon {
+      width: 38px;
+      height: 42px;
+    }
+
+    .trashIcon::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 13px;
+      width: 24px;
+      height: 25px;
+      border: 2px solid #d8ffe6;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(0,255,102,0.18),
+          rgba(0,255,102,0.18) 3px,
+          transparent 3px,
+          transparent 7px
+        );
+    }
+
+    .trashIcon::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 7px;
+      width: 30px;
+      height: 6px;
+      background: #d8ffe6;
+      border: 1px solid #001100;
+    }
+
+    .textIcon {
+      width: 36px;
+      height: 44px;
+      background: #d8ffe6;
+      border: 2px solid #001100;
+      box-shadow:
+        0 0 0 2px #d8ffe6,
+        0 0 9px rgba(0,255,100,0.15);
+    }
+
+    .textIcon::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 12px;
+      height: 12px;
+      background: #00aa44;
+      clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    .textIcon::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 18px;
+      width: 20px;
+      height: 2px;
+      background: #001100;
+      box-shadow:
+        0 6px 0 #001100,
+        0 12px 0 #001100;
+    }
+
+    .centerArea {
+      position: relative;
+      min-height: 620px;
+      border: 1px dashed rgba(0,255,102,0.18);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.05), transparent 60%);
+    }
+
+    .desktopStamp {
+      position: absolute;
+      left: 28px;
+      top: 30px;
+      border: 2px solid rgba(0,255,102,0.24);
+      color: rgba(186,255,201,0.35);
+      padding: 18px 22px;
+      font-size: 24px;
+      letter-spacing: 3px;
+      transform: rotate(-8deg);
+      text-align: center;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+
+    .warningNote {
+      position: absolute;
+      left: 28px;
+      bottom: 30px;
+      width: 350px;
+      border: 2px solid var(--green2);
+      background: rgba(0, 0, 0, 0.35);
+      box-shadow: 0 0 14px rgba(0,255,100,0.12);
+    }
+
+    .warningTitle {
+      background: #0c3a16;
+      border-bottom: 2px solid var(--green2);
+      color: var(--yellow);
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    .warningBody {
+      padding: 10px;
+      color: #9dffbd;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .hiddenDroneFile {
+      position: absolute;
+      right: 22%;
+      top: 34%;
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(0,255,102,0.025);
+      background: rgba(0,255,102,0.018);
+      color: rgba(0,255,102,0.04);
+      cursor: default;
+      z-index: 21;
+      opacity: 0.08;
+      padding: 0;
+      font-family: "Courier New", monospace;
+      overflow: visible;
+    }
+
+    .hiddenDroneFile::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 7px;
+      width: 3px;
+      height: 3px;
+      background: rgba(0,255,102,0.13);
+      box-shadow:
+        0 0 4px rgba(0,255,102,0.08),
+        7px 4px 0 rgba(0,255,102,0.045),
+        -6px 8px 0 rgba(0,255,102,0.035);
+    }
+
+    .hiddenDroneFile:hover {
+      width: 72px;
+      height: 74px;
+      right: calc(22% - 27px);
+      top: calc(34% - 28px);
+      opacity: 1;
+      border: 1px dotted rgba(216,255,230,0.55);
+      background: rgba(0,0,0,0.32);
+      color: var(--yellow);
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(255,238,102,0.16);
+    }
+
+    .hiddenDroneFile:hover::before {
+      display: none;
+    }
+
+    .hiddenDroneFile:hover .droneFileIcon,
+    .hiddenDroneFile:hover .hiddenDroneName {
+      display: block;
+    }
+
+    .droneFileIcon {
+      display: none;
+      width: 34px;
+      height: 42px;
+      background: rgba(216,255,230,0.72);
+      border: 2px solid #001100;
+      box-shadow:
+        0 0 0 2px rgba(216,255,230,0.55),
+        0 0 9px rgba(255,238,102,0.15);
+      position: absolute;
+      left: 18px;
+      top: 7px;
+    }
+
+    .droneFileIcon::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 11px;
+      height: 11px;
+      background: rgba(255,85,85,0.85);
+      clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    .droneFileIcon::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 17px;
+      width: 18px;
+      height: 2px;
+      background: #001100;
+      box-shadow:
+        0 6px 0 #001100,
+        0 12px 0 #001100;
+    }
+
+    .hiddenDroneName {
+      display: none;
+      position: absolute;
+      left: 3px;
+      bottom: 3px;
+      width: 64px;
+      color: var(--yellow);
+      font-size: 9px;
+      line-height: 1.1;
+      text-align: center;
+      padding: 2px 3px;
+      text-shadow: 1px 1px #000;
+      background: rgba(0, 255, 102, 0.16);
+      border: 1px dotted rgba(216,255,230,0.45);
+    }
+
+    .systemWindow,
+    .readmeWindow,
+    .recycleWindow,
+    .easterEggWindow {
+      border: 2px solid #d8ffe6;
+      background: #031203;
+      box-shadow:
+        4px 4px 0 rgba(0, 0, 0, 0.65),
+        0 0 18px rgba(0,255,100,0.16);
+    }
+
+    .systemWindow {
+      align-self: start;
+    }
+
+    .readmeWindow,
+    .recycleWindow,
+    .easterEggWindow {
+      display: none;
+      position: absolute;
+      width: 480px;
+      max-width: calc(100% - 40px);
+      z-index: 30;
+    }
+
+    .readmeWindow {
+      left: 42%;
+      top: 104px;
+    }
+
+    .recycleWindow {
+      left: 35%;
+      top: 150px;
+    }
+
+    .easterEggWindow {
+      left: 40%;
+      top: 245px;
+      z-index: 31;
+    }
+
+    .windowButtons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .winButton {
+      width: 16px;
+      height: 16px;
+      background: #0b2a0b;
+      border: 1px solid #d8ffe6;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .winButton.close::before {
+      content: "x";
+      position: absolute;
+      inset: 0;
+      color: #d8ffe6;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+    }
+
+    .systemBody,
+    .readmeBody,
+    .recycleBody,
+    .easterEggBody {
+      padding: 14px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .systemBox,
+    .readmeBox,
+    .recycleBox,
+    .easterEggBox {
+      border: 1px dashed var(--green2);
+      background: rgba(0,255,102,0.045);
+      padding: 10px;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+
+    .readmeBox strong,
+    .recycleBox strong,
+    .easterEggBox strong {
+      color: var(--yellow);
+    }
+
+    .statusGrid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      border: 1px solid rgba(0,255,102,0.25);
+      background: rgba(0,0,0,0.25);
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .statusGrid div:nth-child(even) {
+      color: var(--yellow);
+      text-align: right;
+    }
+
+    .miniLog {
+      height: 150px;
+      overflow: hidden;
+      border: 1px solid rgba(0,255,102,0.25);
+      background: rgba(0,0,0,0.28);
+      padding: 8px;
+      color: #8dffb0;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .miniLog div {
+      margin-bottom: 5px;
+    }
+
+    .hintLine {
+      color: var(--yellow);
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .deletedItem {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: center;
+      border: 1px dotted rgba(0,255,102,0.28);
+      padding: 8px;
+      background: rgba(0,0,0,0.22);
+      margin-bottom: 8px;
+      color: var(--text);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .deletedItem:hover {
+      background: rgba(0,255,102,0.11);
+      color: var(--yellow);
+    }
+
+    .tinyTextIcon {
+      width: 20px;
+      height: 24px;
+      background: #d8ffe6;
+      border: 1px solid #001100;
+      position: relative;
+    }
+
+    .tinyTextIcon::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 8px;
+      width: 12px;
+      height: 2px;
+      background: #001100;
+      box-shadow: 0 5px 0 #001100;
+    }
+
+    .joke {
+      color: var(--yellow);
+      margin-top: 10px;
+    }
+
+    .easterEggText {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #caffd7;
+      white-space: pre-line;
     }
 
     .taskbar {
@@ -343,161 +1107,95 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 36px;
-      background: linear-gradient(180deg, #b8c0b8, #707870);
-      border-top: 2px solid #e8ffe8;
-      display: flex;
+      height: 46px;
+      background:
+        linear-gradient(180deg, #107535 0%, #063516 100%);
+      border-top: 2px solid #d8ffe6;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      padding: 4px;
-      gap: 6px;
-      color: #001100;
-      font-family: "Courier New", monospace;
+      gap: 8px;
+      padding: 5px 7px;
       z-index: 10;
     }
 
     .startButton {
-      height: 27px;
-      min-width: 82px;
-      padding: 3px 10px;
-      margin: 0;
-      background: linear-gradient(180deg, #e8f0e8, #889088);
-      border-top: 2px solid #fff;
-      border-left: 2px solid #fff;
-      border-right: 2px solid #303830;
-      border-bottom: 2px solid #303830;
-      color: #001100;
+      height: 31px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      border-top: 2px solid #d8ffe6;
+      border-left: 2px solid #d8ffe6;
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      padding: 0 12px;
+      font-size: 13px;
       font-weight: bold;
+      text-decoration: none;
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.25);
     }
 
-    .taskItem {
-      height: 27px;
-      min-width: 190px;
-      border-top: 2px solid #303830;
-      border-left: 2px solid #303830;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      background: #98a098;
-      color: #001100;
+    .startLogo {
+      width: 16px;
+      height: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .startLogo span {
+      background: var(--green);
+      border: 1px solid #d8ffe6;
+      box-shadow: 0 0 5px rgba(0,255,102,0.4);
+    }
+
+    .taskButtons {
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    .taskButton {
+      height: 30px;
+      min-width: 150px;
+      max-width: 190px;
+      color: #d8ffe6;
+      border-top: 2px solid rgba(255,255,255,0.5);
+      border-left: 2px solid rgba(255,255,255,0.5);
+      border-right: 2px solid #052b13;
+      border-bottom: 2px solid #052b13;
+      background: rgba(0,0,0,0.2);
       display: flex;
       align-items: center;
-      padding: 0 8px;
+      padding: 0 9px;
       font-size: 12px;
+      white-space: nowrap;
     }
 
     .clock {
-      margin-left: auto;
-      height: 27px;
-      min-width: 78px;
-      border-top: 2px solid #303830;
-      border-left: 2px solid #303830;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      background: #98a098;
+      height: 31px;
+      min-width: 96px;
+      border-top: 2px solid #052b13;
+      border-left: 2px solid #052b13;
+      border-right: 2px solid rgba(255,255,255,0.55);
+      border-bottom: 2px solid rgba(255,255,255,0.55);
+      background: rgba(0,0,0,0.28);
+      color: var(--yellow);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #001100;
-      font-size: 12px;
-    }
-
-    .desktopWindow {
-      display: none;
-      position: absolute;
-      left: 300px;
-      top: 54px;
-      width: 560px;
-      max-width: calc(100% - 330px);
-      min-height: 330px;
-      border: 2px solid #d8ffe6;
-      background: rgba(0, 10, 0, 0.95);
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.7);
-      z-index: 20;
-    }
-
-    .desktopWindow.small {
-      width: 460px;
-      min-height: 250px;
-    }
-
-    .desktopWindowTitle {
-      height: 30px;
-      background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
-      border-bottom: 2px solid #d8ffe6;
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .closeButton {
-      width: 22px;
-      height: 22px;
-      margin: 0;
-      padding: 0;
-      background: #b8c0b8;
-      color: #000;
-      border-top: 2px solid #fff;
-      border-left: 2px solid #fff;
-      border-right: 2px solid #303830;
-      border-bottom: 2px solid #303830;
-      font-size: 12px;
-      line-height: 16px;
-    }
-
-    .desktopWindowContent {
-      padding: 14px;
-      color: var(--text);
       font-size: 13px;
-      line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    .desktopWindowContent strong {
-      color: var(--yellow);
-    }
-
-    .terminalLog {
-      min-height: 210px;
-      border: 1px solid rgba(0,255,102,0.32);
-      background: rgba(0,0,0,0.42);
-      padding: 12px;
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.5;
-      white-space: pre-line;
-    }
-
-    .progressLine {
-      display: grid;
-      grid-template-columns: 1fr 76px;
-      gap: 8px;
-      align-items: center;
-      border: 1px solid rgba(0,255,102,0.26);
-      background: rgba(0,0,0,0.26);
-      padding: 8px;
-      margin-bottom: 8px;
-      color: var(--text);
-      font-size: 12px;
-    }
-
-    .progressState {
-      text-align: right;
-      color: var(--red);
-    }
-
-    .progressState.ok {
-      color: var(--yellow);
     }
 
     .droneModalOverlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.78);
-      z-index: 100;
+      background: rgba(0,0,0,0.82);
+      z-index: 200;
       align-items: center;
       justify-content: center;
       padding: 18px;
@@ -505,29 +1203,40 @@
 
     .droneModal {
       width: 100%;
-      max-width: 680px;
+      max-width: 650px;
       border: 2px solid #ffd8d8;
       background:
         radial-gradient(circle at center, rgba(255,85,85,0.10), transparent 62%),
         #120606;
       color: var(--text);
-      box-shadow: 0 0 30px rgba(255,85,85,0.25);
+      box-shadow:
+        6px 6px 0 rgba(0,0,0,0.75),
+        0 0 30px rgba(255,85,85,0.25);
+      font-family: "Courier New", monospace;
     }
 
     .droneModalTitle {
-      min-height: 32px;
+      height: 30px;
       background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
       border-bottom: 2px solid #ffd8d8;
       color: var(--white);
-      padding: 8px;
-      font-size: 12px;
-      font-weight: bold;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      padding: 0 7px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
-    .droneModalContent {
-      padding: 16px;
+    .droneModalBody {
+      padding: 18px;
+    }
+
+    .droneModalBody h1 {
+      margin: 0 0 10px;
+      color: var(--yellow);
+      font-size: 21px;
+      letter-spacing: 2px;
     }
 
     .droneWarning {
@@ -535,67 +1244,212 @@
       background: rgba(255,85,85,0.08);
       color: #ffb8b8;
       padding: 12px;
-      margin: 12px 0;
-      line-height: 1.5;
+      margin: 14px 0;
+      line-height: 1.55;
       font-size: 13px;
     }
 
-    .shake {
-      animation: shake 0.25s;
+    .droneModalBody label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--white);
     }
 
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-4px); }
-      50% { transform: translateX(4px); }
-      75% { transform: translateX(-3px); }
-      100% { transform: translateX(0); }
+    .droneModalBody input {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid #7b2424;
+      padding: 11px;
+      font-family: "Courier New", monospace;
+      font-size: 15px;
+      outline: none;
+      box-shadow: inset 0 0 12px rgba(255,85,85,0.08);
     }
 
-    @media (max-width: 800px) {
+    .droneModalBody input:focus {
+      border-color: var(--yellow);
+    }
+
+    .droneModalBody input.correctInput {
+      border-color: var(--yellow);
+      box-shadow:
+        inset 0 0 12px rgba(255,238,102,0.10),
+        0 0 12px rgba(255,238,102,0.22);
+    }
+
+    .droneModalBody input.wrongInput {
+      border-color: var(--red);
+      box-shadow:
+        inset 0 0 12px rgba(255,85,85,0.12),
+        0 0 12px rgba(255,85,85,0.22);
+    }
+
+    .droneStatus {
+      min-height: 22px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--red);
+    }
+
+    .droneStatus.ok {
+      color: var(--yellow);
+    }
+
+    @media (max-width: 1180px) {
+      .desktopMain {
+        grid-template-columns: 330px 1fr;
+      }
+
+      .systemWindow {
+        grid-column: 1 / -1;
+      }
+
+      .centerArea {
+        min-height: 420px;
+      }
+
+      .readmeWindow,
+      .recycleWindow,
+      .easterEggWindow {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .readmeWindow {
+        top: 120px;
+      }
+
+      .recycleWindow {
+        top: 190px;
+      }
+
+      .easterEggWindow {
+        top: 330px;
+      }
+
+      .hiddenDroneFile {
+        right: 10%;
+        top: 38%;
+      }
+
+      .hiddenDroneFile:hover {
+        right: calc(10% - 27px);
+        top: calc(38% - 28px);
+      }
+    }
+
+    @media (max-width: 760px) {
       body {
         padding: 8px;
       }
 
-      .crt {
-        height: calc(100vh - 16px);
+      .computerShell {
+        padding: 12px 12px 24px;
       }
 
-      .topBar {
+      .monitorScreen {
+        padding: 8px;
+        min-height: auto;
+        border-radius: 18px;
+      }
+
+      .loginScreen,
+      .desktop {
+        min-height: 1040px;
+      }
+
+      .desktopTopStrip {
         font-size: 10px;
+        gap: 8px;
       }
 
-      .desktopWindow {
-        left: 14px;
-        top: 58px;
+      .desktopTopStrip span:last-child {
+        display: none;
+      }
+
+      .desktopMain {
+        grid-template-columns: 1fr;
+        padding: 12px 8px 54px;
+      }
+
+      .iconColumn {
+        grid-template-columns: repeat(3, 88px);
+        justify-content: center;
+      }
+
+      .centerArea {
+        display: block;
+        min-height: 260px;
+      }
+
+      .taskButtons {
+        display: none;
+      }
+
+      .clock {
+        min-width: 78px;
+      }
+
+      .readmeWindow,
+      .recycleWindow,
+      .easterEggWindow {
         width: calc(100% - 28px);
-        max-width: none;
+        top: 150px;
       }
 
-      .iconReadme { left: 132px; top: 24px; }
-      .iconRecycle { left: 132px; top: 136px; }
-      .iconComputer { left: 132px; top: 248px; }
+      .recycleWindow {
+        top: 220px;
+      }
 
-      .hiddenDroneFolder {
-        right: 18px;
-        bottom: 50px;
+      .easterEggWindow {
+        top: 410px;
+      }
+
+      .hiddenDroneFile {
+        right: 18%;
+        top: 44%;
+      }
+
+      .hiddenDroneFile:hover {
+        right: calc(18% - 27px);
+        top: calc(44% - 28px);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .iconColumn {
+        grid-template-columns: repeat(2, 88px);
+      }
+
+      .loginScreen,
+      .desktop {
+        min-height: 1220px;
       }
     }
   </style>
 </head>
 
 <body>
+
   <div class="droneModalOverlay" id="droneModal">
     <section class="droneModal">
       <div class="droneModalTitle">
         <span>DRONE_OVERRIDE.lock</span>
-        <span>ENCRYPTED</span>
+        <div class="windowButtons">
+          <span class="winButton"></span>
+          <span class="winButton"></span>
+          <span class="winButton close" onclick="closeDroneModal()"></span>
+        </div>
       </div>
 
-      <div class="droneModalContent">
+      <div class="droneModalBody">
         <h1>DRONE OVERRIDE</h1>
 
-        <p>Encrypted file recovered.</p>
+        <p>
+          Encrypted file recovered.
+        </p>
 
         <div class="droneWarning">
           WARNING:<br>
@@ -607,176 +1461,318 @@
         <label for="droneCodeInput">OVERRIDE FILE CODE</label>
         <input id="droneCodeInput" type="password" autocomplete="off" placeholder="enter recovered memory code">
 
-        <button onclick="checkDroneCode()">DECRYPT OVERRIDE FILE</button>
-        <button onclick="closeDroneModal()">CANCEL</button>
+        <div class="loginButtons">
+          <button class="oldButton" onclick="checkDroneCode()">DECRYPT OVERRIDE FILE</button>
+          <button class="oldButton secondary" onclick="closeDroneModal()">CANCEL</button>
+        </div>
 
-        <div class="status" id="droneStatus">Awaiting encrypted file code.</div>
+        <div class="droneStatus" id="droneStatus">Awaiting encrypted file code.</div>
       </div>
     </section>
   </div>
 
-  <main class="crt">
-    <div class="topBar">
-      <span>THORNE PRIVATE WORKSTATION</span>
-      <span>BOTANICAL CHEMISTRY ARCHIVE</span>
-      <span>USER: DR. N. THORNE</span>
-    </div>
+  <main class="computerShell">
+    <div class="monitorLabel">Thorne Private Workstation // Botanical Chemistry Archive</div>
 
-    <section class="loginScreen" id="loginScreen">
-      <div class="windowTitle">
-        <span>Private Workstation Login</span>
-        <span>LOCKED</span>
-      </div>
+    <section class="monitorScreen">
+      <div class="crtGlow"></div>
+      <div class="crtFlicker"></div>
+      <div class="crtSweep"></div>
+      <div class="crtNoise"></div>
+      <div class="glassReflection"></div>
 
-      <div class="windowContent">
-        <h1>THORNE OS</h1>
-        <h2>Recovered private workstation</h2>
-
-        <div class="loginNote">
-          LAST EXTERNAL CONTACT: JASON KRANE<br>
-          LOCAL CACHE: PARTIALLY RESTORED<br>
-          PASSWORD RECOVERY: BOTANICAL MEMORY ACTIVE
-        </div>
-
-        <label for="emailInput">EMAIL</label>
-        <input id="emailInput" type="email" autocomplete="off" placeholder="email">
-
-        <label for="passwordInput">PASSWORD</label>
-        <input id="passwordInput" type="password" autocomplete="off" placeholder="password">
-
-        <button onclick="login()">LOGIN</button>
-        <button onclick="showPasswordHint()">FORGOT PASSWORD</button>
-
-        <div class="status" id="loginStatus">Awaiting credentials.</div>
-
-        <div class="hintBox" id="passwordHint">
-          <h2>PASSWORD RECOVERY QUESTION</h2>
-          What is my favourite flower?<br><br>
-          Botanical file hint:<br>
-          <strong>Geranium sanguineum</strong><br><br>
-          Common name required.<br>
-          Spaces are not required.
-        </div>
-      </div>
-    </section>
-
-    <section class="desktop" id="desktop">
-      <div class="desktopArea">
-        <a class="desktopIcon iconChemistry" href="chemistry.html">
-          <div class="iconBox">⚗</div>
-          <div class="iconLabel">Chemistry</div>
-          <div class="iconStatus" id="chemistryIconStatus">OPEN</div>
-        </a>
-
-        <a class="desktopIcon iconBotany" href="botany.html">
-          <div class="iconBox">✿</div>
-          <div class="iconLabel">Botany</div>
-          <div class="iconStatus" id="botanyIconStatus">OPEN</div>
-        </a>
-
-        <a class="desktopIcon iconPrivate" href="private.html">
-          <div class="iconBox">▣</div>
-          <div class="iconLabel">Private</div>
-          <div class="iconStatus" id="privateIconStatus">LOCKED</div>
-        </a>
-
-        <button class="desktopIcon iconReadme" onclick="openWindow('readmeWindow')">
-          <div class="iconBox">▤</div>
-          <div class="iconLabel">Readme.txt</div>
-        </button>
-
-        <button class="desktopIcon iconRecycle" onclick="openWindow('recycleWindow')">
-          <div class="iconBox">♻</div>
-          <div class="iconLabel">Recycle Bin</div>
-        </button>
-
-        <button class="desktopIcon iconComputer" onclick="openWindow('computerWindow')">
-          <div class="iconBox">▧</div>
-          <div class="iconLabel">My Computer</div>
-        </button>
-
-        <button class="hiddenDroneFolder" onclick="openDroneModal()" title="corrupted cache">
-          <div class="hiddenDroneIcon">▥</div>
-          <div class="hiddenDroneText">tmp</div>
-        </button>
-
-        <section class="desktopWindow" id="readmeWindow">
-          <div class="desktopWindowTitle">
-            <span>Readme.txt</span>
-            <button class="closeButton" onclick="closeWindow('readmeWindow')">X</button>
+      <section class="loginScreen" id="loginScreen">
+        <div class="loginWindow">
+          <div class="loginTitleBar">
+            <span>Private Workstation Login</span>
+            <div class="windowButtons">
+              <span class="winButton"></span>
+              <span class="winButton"></span>
+              <span class="winButton close"></span>
+            </div>
           </div>
-          <div class="desktopWindowContent">
-PRIVATE WORKSTATION RECOVERY INSTRUCTIONS
 
-This workstation belongs to:
-<strong>Dr. Nessa Thorne</strong>
+          <div class="loginBody">
+            <div class="loginHeader">
+              <h1>THORNE PRIVATE WORKSTATION</h1>
+              <p>Botanical Chemistry Archive</p>
+              <p>Owner: Dr. Nessa Thorne</p>
+              <p>St. Brigid's University, Dublin</p>
+            </div>
+
+            <div class="loginField">
+              <label for="emailInput">EMAIL ADDRESS</label>
+              <input id="emailInput" type="text" autocomplete="off" placeholder="enter email address">
+            </div>
+
+            <div class="loginField">
+              <label for="passwordInput">PASSWORD</label>
+              <input id="passwordInput" type="password" autocomplete="off" placeholder="enter password">
+            </div>
+
+            <div class="loginButtons">
+              <button class="oldButton" onclick="attemptLogin()">LOGIN</button>
+              <button class="oldButton secondary" onclick="showPasswordHint()">FORGOT PASSWORD?</button>
+            </div>
+
+            <div class="loginMessage" id="loginMessage"></div>
+
+            <div class="hintBox" id="hintBox">
+              <strong>PASSWORD RECOVERY QUESTION</strong><br><br>
+              What is my favourite flower?<br><br>
+              Botanical file hint:<br>
+              <em>Geranium sanguineum</em><br><br>
+              Common name required.<br>
+              Spaces are not required.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="desktop" id="desktop">
+        <div class="desktopTopStrip">
+          <span>THORNE OS // PRIVATE LAB DESKTOP</span>
+          <span>ARCHIVE NODE: BOTANICAL-CHEMISTRY</span>
+          <span>USER: DR. N. THORNE</span>
+        </div>
+
+        <div class="desktopMain">
+          <nav class="iconColumn">
+            <a class="desktopIcon" href="chemistry.html">
+              <span class="folder95 chemistry">
+                <span class="tab"></span>
+                <span class="back"></span>
+                <span class="front"></span>
+              </span>
+              <span class="iconName">Chemistry</span>
+            </a>
+
+            <a class="desktopIcon" href="botany.html">
+              <span class="folder95 botany">
+                <span class="tab"></span>
+                <span class="back"></span>
+                <span class="front"></span>
+              </span>
+              <span class="iconName">Botany</span>
+            </a>
+
+            <a class="desktopIcon" href="private.html">
+              <span class="folder95 private">
+                <span class="tab"></span>
+                <span class="back"></span>
+                <span class="front"></span>
+              </span>
+              <span class="iconName">Private</span>
+            </a>
+
+            <div class="desktopIcon">
+              <span class="oldIcon computerIcon"></span>
+              <span class="iconName">My Computer</span>
+            </div>
+
+            <div class="desktopIcon">
+              <span class="oldIcon diskIcon"></span>
+              <span class="iconName">Backup Disk</span>
+            </div>
+
+            <button class="desktopIcon" onclick="openReadme()">
+              <span class="oldIcon textIcon"></span>
+              <span class="iconName">Readme.txt</span>
+            </button>
+
+            <button class="desktopIcon" onclick="openRecycle()">
+              <span class="oldIcon trashIcon"></span>
+              <span class="iconName">Recycle Bin</span>
+            </button>
+          </nav>
+
+          <section class="centerArea">
+            <div class="desktopStamp">
+              thorne<br>
+              private<br>
+              workstation
+            </div>
+
+            <div class="warningNote">
+              <div class="warningTitle">Local System Warning</div>
+              <div class="warningBody">
+                Three main directories remain accessible:
+                Chemistry, Botany and Private.
+                The Private folder appears to contain personal material connected to Jason Krane.
+              </div>
+            </div>
+
+            <button class="hiddenDroneFile" onclick="openDroneModal()" title="">
+              <span class="droneFileIcon"></span>
+              <span class="hiddenDroneName">sys_tmp</span>
+            </button>
+          </section>
+
+          <aside class="systemWindow">
+            <div class="windowTitleBar">
+              <span>System Monitor</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close"></span>
+              </div>
+            </div>
+
+            <div class="systemBody">
+              <div class="systemBox">THORNE BOTANICAL CHEMISTRY NODE
+Signal source: private workstation
+Local cache: partially restored
+Operator: DR. N. THORNE
+Last external contact: JASON KRANE</div>
+
+              <div class="statusGrid">
+                <div>Main folders</div>
+                <div>3</div>
+
+                <div>Chemistry records</div>
+                <div>unstable</div>
+
+                <div>Botany records</div>
+                <div>fragmented</div>
+
+                <div>Private records</div>
+                <div>locked</div>
+
+                <div>Diary reference</div>
+                <div>hidden</div>
+              </div>
+
+              <div class="miniLog">
+                <div>&gt; booting private recovery shell...</div>
+                <div>&gt; scanning chemical notebooks...</div>
+                <div>&gt; botanical index partially restored</div>
+                <div>&gt; private correspondence detected</div>
+                <div>&gt; Jason Krane reference count: abnormal</div>
+                <div>&gt; warning: staged transmission residue found</div>
+                <div>&gt; open Readme.txt for recovery order</div>
+              </div>
+
+              <div class="hintLine">
+                Recommended order: Chemistry → Botany → Private.
+              </div>
+            </div>
+          </aside>
+
+          <section class="readmeWindow" id="readmeWindow">
+            <div class="windowTitleBar">
+              <span>Readme.txt</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeReadme()"></span>
+              </div>
+            </div>
+
+            <div class="readmeBody">
+              <div class="readmeBox"><strong>PRIVATE WORKSTATION RECOVERY INSTRUCTIONS</strong>
+
+This workstation belongs to Dr. Nessa Thorne.
 
 Three main directories are available:
 
 1. Chemistry
 2. Botany
-3. Private
+3. Private</div>
 
-The Private archive requires recovered fragments from the first two directories.
+              <div class="readmeBox"><strong>RECOMMENDED RECOVERY ORDER</strong>
 
-WARNING:
+Open Chemistry first.
+
+Then open Botany.
+
+Only open Private after recovering enough context from the first two folders.
+
+The Private folder may contain personal material connected to Jason Krane.</div>
+
+              <div class="readmeBox"><strong>WARNING</strong>
+
 Do not assume Jason Krane is the sender.
 
 Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
+
+Find the diary.</div>
+            </div>
+          </section>
+
+          <section class="recycleWindow" id="recycleWindow">
+            <div class="windowTitleBar">
+              <span>Recycle Bin</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeRecycle()"></span>
+              </div>
+            </div>
+
+            <div class="recycleBody">
+              <div class="recycleBox"><strong>RECYCLE BIN CONTENTS</strong>
+
+3 deleted items found.
+Click an item to recover readable text.</div>
+
+              <button class="deletedItem" onclick="openEasterEgg('poem')">
+                <span class="tinyTextIcon"></span>
+                <span>krane_love_poem_final_FINAL2.txt</span>
+              </button>
+
+              <button class="deletedItem" onclick="openEasterEgg('revenge')">
+                <span class="tinyTextIcon"></span>
+                <span>definitely_not_a_revenge_plan.txt</span>
+              </button>
+
+              <button class="deletedItem" onclick="openEasterEgg('plants')">
+                <span class="tinyTextIcon"></span>
+                <span>plants_that_understand_me.xls</span>
+              </button>
+
+              <div class="joke">
+                Deleted note recovered:<br><br>
+                “Reminder: stop naming suspicious folders suspicious names.”
+              </div>
+            </div>
+          </section>
+
+          <section class="easterEggWindow" id="easterEggWindow">
+            <div class="windowTitleBar">
+              <span id="easterEggTitle">Recovered File</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeEasterEgg()"></span>
+              </div>
+            </div>
+
+            <div class="easterEggBody">
+              <div class="easterEggBox">
+                <strong id="easterEggHeader">RECOVERED TEXT</strong>
+
+                <div class="easterEggText" id="easterEggText"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer class="taskbar">
+          <a class="startButton" href="#">
+            <span class="startLogo">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>Start</span>
+          </a>
+
+          <div class="taskButtons">
+            <div class="taskButton">System Monitor</div>
+            <div class="taskButton">Desktop</div>
+            <div class="taskButton">Thorne Archive</div>
           </div>
-        </section>
 
-        <section class="desktopWindow small" id="recycleWindow">
-          <div class="desktopWindowTitle">
-            <span>Recycle Bin</span>
-            <button class="closeButton" onclick="closeWindow('recycleWindow')">X</button>
-          </div>
-          <div class="desktopWindowContent">
-Deleted fragments recovered:
-
-krane_love_poem_final_FINAL2.txt
-definitely_not_a_revenge_plan.txt
-plants_that_understand_me.xls
-old_voice_splices.tmp
-
-Recycle cache unstable.
-          </div>
-        </section>
-
-        <section class="desktopWindow" id="computerWindow">
-          <div class="desktopWindowTitle">
-            <span>My Computer</span>
-            <button class="closeButton" onclick="closeWindow('computerWindow')">X</button>
-          </div>
-          <div class="desktopWindowContent">
-<div class="terminalLog" id="terminalLog">
-> THORNE BOTANICAL CHEMISTRY NODE
-> Signal source: private workstation
-> Local cache: partially restored
-> Operator: DR. N. THORNE
-> Last external contact: JASON KRANE
-
-Main directories:
-Chemistry
-Botany
-Private
-
-Status:
-Chemistry: <span id="chemistryState">OPEN</span>
-Botany: <span id="botanyState">OPEN</span>
-Private: <span id="privateState">LOCKED</span>
-</div>
-
-<button onclick="resetProgress()">RESET LOCAL PROGRESS</button>
-<button onclick="logout()">LOG OUT</button>
-          </div>
-        </section>
-      </div>
-
-      <div class="taskbar">
-        <button class="startButton" onclick="openWindow('computerWindow')">Start</button>
-        <div class="taskItem">THORNE OS // Private Workstation</div>
-        <div class="clock" id="clock">--:--</div>
+          <div class="clock" id="clockBox">00:00</div>
+        </footer>
       </div>
     </section>
   </main>
@@ -786,7 +1782,81 @@ Private: <span id="privateState">LOCKED</span>
     const correctPassword = "BLOODYCRANESBILL";
     const droneOverrideCode = "GOLDENEYE";
 
-    function normalize(value) {
+    const easterEggs = {
+      poem: {
+        title: "krane_love_poem_final_FINAL2.txt",
+        header: "RECOVERED ROMANTIC DOCUMENT",
+        text:
+`Jason,
+
+Roses are red.
+Violets are blue.
+Your cover was terrible,
+but I still covered for you.
+
+I tried to write something romantic.
+The rhododendron judged me.
+
+Delete this before anyone from the department finds it.
+
+- N.`
+      },
+
+      revenge: {
+        title: "definitely_not_a_revenge_plan.txt",
+        header: "RECOVERED SUSPICIOUS DOCUMENT",
+        text:
+`This is absolutely not a revenge plan.
+
+Step 1:
+Do not fake a Jason transmission.
+
+Step 2:
+Do not lure agents into following emotional clues.
+
+Step 3:
+Do not leave obvious files on your desktop.
+
+Step 4:
+Do not name this file definitely_not_a_revenge_plan.txt.
+
+Note to self:
+Rename file later.`
+      },
+
+      plants: {
+        title: "plants_that_understand_me.xls",
+        header: "RECOVERED BOTANICAL SPREADSHEET",
+        text:
+`Plants That Understand Me:
+
+1. Bloody Cranesbill
+Reason: dramatic, loyal, excellent name.
+
+2. Nightshade
+Reason: never asks unnecessary questions.
+
+3. Rosehip
+Reason: looks harmless, keeps secrets.
+
+4. Office fern
+Reason: emotionally unavailable, but consistent.
+
+5. Jason
+Reason: technically not a plant.
+Moved to archive.`
+      }
+    };
+
+    function normalizePassword(value) {
+      return value
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "");
+    }
+
+    function normalizeCode(value) {
       return value
         .toUpperCase()
         .replaceAll(" ", "")
@@ -797,85 +1867,94 @@ Private: <span id="privateState">LOCKED</span>
         .trim();
     }
 
-    function login() {
-      const email = document.getElementById("emailInput").value.trim().toLowerCase();
-      const password = normalize(document.getElementById("passwordInput").value);
-      const status = document.getElementById("loginStatus");
+    function openDesktop() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("desktop").style.display = "block";
+    }
 
-      if (email === correctEmail && password === normalize(correctPassword)) {
-        status.textContent = "Login accepted. Opening workstation...";
-        status.classList.add("ok");
+    function attemptLogin() {
+      const emailInput = document.getElementById("emailInput").value.trim().toLowerCase();
+      const passwordInput = normalizePassword(document.getElementById("passwordInput").value);
+      const message = document.getElementById("loginMessage");
+
+      if (emailInput === correctEmail && passwordInput === correctPassword) {
+        message.style.color = "#ffee66";
+        message.textContent = "ACCESS GRANTED // opening private workstation...";
 
         localStorage.setItem("thorneLoggedIn", "yes");
 
         setTimeout(function() {
           openDesktop();
-        }, 650);
+        }, 900);
       } else {
-        status.textContent = "Login rejected.";
-        status.classList.remove("ok");
-
-        const loginScreen = document.getElementById("loginScreen");
-        loginScreen.classList.remove("shake");
-
-        setTimeout(function() {
-          loginScreen.classList.add("shake");
-        }, 10);
+        message.style.color = "#ff5555";
+        message.textContent = "ACCESS DENIED // invalid email or password.";
       }
     }
 
     function showPasswordHint() {
-      const hint = document.getElementById("passwordHint");
-      hint.style.display = hint.style.display === "block" ? "none" : "block";
+      const hintBox = document.getElementById("hintBox");
+      const message = document.getElementById("loginMessage");
+
+      hintBox.style.display = "block";
+      message.style.color = "#ffee66";
+      message.textContent = "PASSWORD RECOVERY HINT LOADED.";
     }
 
-    function openDesktop() {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("desktop").style.display = "block";
-      updateDesktopStatus();
-      updateClock();
+    function updateClock() {
+      const clock = document.getElementById("clockBox");
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      clock.textContent = hours + ":" + minutes;
     }
 
-    function openWindow(id) {
-      const win = document.getElementById(id);
-      win.style.display = "block";
-      updateDesktopStatus();
+    function openReadme() {
+      document.getElementById("readmeWindow").style.display = "block";
+      document.getElementById("recycleWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
-    function closeWindow(id) {
-      document.getElementById(id).style.display = "none";
+    function closeReadme() {
+      document.getElementById("readmeWindow").style.display = "none";
     }
 
-    function updateDesktopStatus() {
-      const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
-      const botanySolved = localStorage.getItem("botanicalSolved") === "yes";
-      const privateOpened = localStorage.getItem("privateOpened") === "yes";
-
-      setText("chemistryIconStatus", chemistrySolved ? "RESTORED" : "OPEN");
-      setText("botanyIconStatus", botanySolved ? "RESTORED" : "OPEN");
-      setText("privateIconStatus", privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED");
-
-      setText("chemistryState", chemistrySolved ? "RESTORED" : "OPEN");
-      setText("botanyState", botanySolved ? "RESTORED" : "OPEN");
-      setText("privateState", privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED");
+    function openRecycle() {
+      document.getElementById("recycleWindow").style.display = "block";
+      document.getElementById("readmeWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
-    function setText(id, text) {
-      const element = document.getElementById(id);
-      if (element) {
-        element.textContent = text;
-      }
+    function closeRecycle() {
+      document.getElementById("recycleWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
+    }
+
+    function openEasterEgg(type) {
+      const file = easterEggs[type];
+
+      document.getElementById("easterEggTitle").textContent = file.title;
+      document.getElementById("easterEggHeader").textContent = file.header;
+      document.getElementById("easterEggText").textContent = file.text;
+      document.getElementById("easterEggWindow").style.display = "block";
+    }
+
+    function closeEasterEgg() {
+      document.getElementById("easterEggWindow").style.display = "none";
     }
 
     function openDroneModal() {
-      document.getElementById("droneModal").style.display = "flex";
-      document.getElementById("droneStatus").textContent = "Awaiting encrypted file code.";
-      document.getElementById("droneStatus").classList.remove("ok");
-
+      const modal = document.getElementById("droneModal");
       const input = document.getElementById("droneCodeInput");
-      input.classList.remove("wrongInput");
-      input.classList.remove("correctInput");
+      const status = document.getElementById("droneStatus");
+
+      modal.style.display = "flex";
       input.value = "";
+      input.classList.remove("correctInput");
+      input.classList.remove("wrongInput");
+
+      status.textContent = "Awaiting encrypted file code.";
+      status.classList.remove("ok");
 
       setTimeout(function() {
         input.focus();
@@ -889,14 +1968,14 @@ Private: <span id="privateState">LOCKED</span>
     function checkDroneCode() {
       const input = document.getElementById("droneCodeInput");
       const status = document.getElementById("droneStatus");
-      const value = normalize(input.value);
+      const value = normalizeCode(input.value);
 
-      input.classList.remove("wrongInput");
       input.classList.remove("correctInput");
+      input.classList.remove("wrongInput");
 
-      if (value === normalize(droneOverrideCode)) {
+      if (value === normalizeCode(droneOverrideCode)) {
         input.classList.add("correctInput");
-        status.textContent = "Override file decrypted. Loading final program...";
+        status.textContent = "OVERRIDE FILE DECRYPTED // loading final program...";
         status.classList.add("ok");
 
         localStorage.setItem("droneOverrideUnlocked", "yes");
@@ -906,65 +1985,20 @@ Private: <span id="privateState">LOCKED</span>
         }, 900);
       } else {
         input.classList.add("wrongInput");
-        status.textContent = "Decryption failed.";
+        status.textContent = "DECRYPTION FAILED // invalid memory code.";
         status.classList.remove("ok");
-
-        const modal = document.querySelector(".droneModal");
-        modal.classList.remove("shake");
-
-        setTimeout(function() {
-          modal.classList.add("shake");
-        }, 10);
       }
     }
-
-    function resetProgress() {
-      localStorage.removeItem("chemistryA");
-      localStorage.removeItem("chemistryB");
-      localStorage.removeItem("chemistryGame");
-      localStorage.removeItem("chemistrySolved");
-
-      localStorage.removeItem("botanicalA");
-      localStorage.removeItem("botanicalB");
-      localStorage.removeItem("botanicalGame");
-      localStorage.removeItem("botanicalSolved");
-
-      localStorage.removeItem("privateOpened");
-      localStorage.removeItem("droneOverrideUnlocked");
-      localStorage.removeItem("droneFinalStarted");
-      localStorage.removeItem("droneFinalWon");
-      localStorage.removeItem("droneFinalLost");
-
-      updateDesktopStatus();
-    }
-
-    function logout() {
-      localStorage.removeItem("thorneLoggedIn");
-      location.reload();
-    }
-
-    function updateClock() {
-      const clock = document.getElementById("clock");
-      if (!clock) return;
-
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-
-      clock.textContent = hours + ":" + minutes;
-    }
-
-    setInterval(updateClock, 10000);
-
-    document.getElementById("emailInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        login();
-      }
-    });
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        login();
+        attemptLogin();
+      }
+    });
+
+    document.getElementById("emailInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        document.getElementById("passwordInput").focus();
       }
     });
 
@@ -983,6 +2017,10 @@ Private: <span id="privateState">LOCKED</span>
     if (localStorage.getItem("thorneLoggedIn") === "yes") {
       openDesktop();
     }
+
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
+
 </body>
 </html>
