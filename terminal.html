@@ -67,19 +67,12 @@
     }
 
     @keyframes glowMove {
-      0% {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
-      }
-
-      100% {
-        transform: translate(3%, 2%) scale(1.06);
-        opacity: 0.72;
-      }
+      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
+      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
     }
 
     .screen {
-      max-width: 1220px;
+      max-width: 1240px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
       border: 5px solid #132313;
@@ -213,8 +206,17 @@
       border-color: var(--yellow);
     }
 
+    input.wrongInput {
+      border-color: var(--red);
+      box-shadow: 0 0 12px rgba(255,85,85,0.22);
+    }
+
+    input.correctInput {
+      border-color: var(--yellow);
+      box-shadow: 0 0 12px rgba(255,238,102,0.24);
+    }
+
     button,
-    .desktopLink,
     .smallButton {
       color: var(--white);
       background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
@@ -233,7 +235,6 @@
     }
 
     button:hover,
-    .desktopLink:hover,
     .smallButton:hover {
       filter: brightness(1.18);
     }
@@ -283,6 +284,8 @@
       transition: 0.15s;
       cursor: pointer;
       display: block;
+      font-family: "Courier New", monospace;
+      text-align: left;
     }
 
     .desktopIcon:hover {
@@ -335,6 +338,19 @@
       box-shadow: 0 0 18px rgba(255,85,85,0.16);
     }
 
+    .dangerIcon {
+      border-color: rgba(255,85,85,0.65);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.16), transparent 65%),
+        rgba(0,0,0,0.46);
+      animation: dangerPulse 1.6s infinite;
+    }
+
+    @keyframes dangerPulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(255,85,85,0); }
+      50% { box-shadow: 0 0 24px rgba(255,85,85,0.24); }
+    }
+
     .sidePanel {
       display: grid;
       gap: 14px;
@@ -353,7 +369,7 @@
 
     .progressLine {
       display: grid;
-      grid-template-columns: 1fr 70px;
+      grid-template-columns: 1fr 76px;
       gap: 8px;
       align-items: center;
       border: 1px solid rgba(0,255,102,0.26);
@@ -389,6 +405,54 @@
       margin-top: 0;
     }
 
+    .modalOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 720px;
+      border: 2px solid #ffd8d8;
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.10), transparent 62%),
+        #120606;
+      color: var(--text);
+      box-shadow: 0 0 30px rgba(255,85,85,0.25);
+    }
+
+    .modalTitle {
+      min-height: 32px;
+      background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
+      border-bottom: 2px solid #ffd8d8;
+      color: var(--white);
+      padding: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .modalContent {
+      padding: 16px;
+    }
+
+    .dangerText {
+      border: 1px dashed var(--red);
+      background: rgba(255,85,85,0.08);
+      color: #ffb8b8;
+      padding: 12px;
+      margin: 12px 0;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
     .shake {
       animation: shake 0.25s;
     }
@@ -419,6 +483,38 @@
 </head>
 
 <body>
+  <div class="modalOverlay" id="droneModal">
+    <section class="modal">
+      <div class="modalTitle">
+        <span>DRONE_OVERRIDE.lock</span>
+        <span>ENCRYPTED</span>
+      </div>
+
+      <div class="modalContent">
+        <h1>DRONE OVERRIDE</h1>
+
+        <p>
+          Encrypted endgame file detected.
+        </p>
+
+        <div class="dangerText">
+          WARNING:<br>
+          The override program can only be executed once.<br>
+          One failed run may leave the drone active.<br><br>
+          Confirm only when the recovered memory code is known.
+        </div>
+
+        <label for="droneCodeInput">OVERRIDE FILE CODE</label>
+        <input id="droneCodeInput" type="password" autocomplete="off" placeholder="enter recovered memory code">
+
+        <button onclick="checkDroneCode()">DECRYPT OVERRIDE FILE</button>
+        <button onclick="closeDroneModal()">CANCEL</button>
+
+        <div class="status" id="droneStatus">Awaiting encrypted file code.</div>
+      </div>
+    </section>
+  </div>
+
   <main class="screen">
     <div class="topBar">
       <span>THORNE PRIVATE WORKSTATION</span>
@@ -509,6 +605,17 @@
                 <div class="iconStatus" id="privateIconStatus">LOCKED</div>
               </a>
 
+              <button class="desktopIcon dangerIcon" onclick="openDroneModal()">
+                <div class="iconSymbol">⌁</div>
+                <div class="iconTitle">DRONE_OVERRIDE.lock</div>
+                <div class="iconSub">
+                  Encrypted file<br>
+                  One execution only<br>
+                  Hardenberg risk zone
+                </div>
+                <div class="iconStatus" id="droneIconStatus">ENCRYPTED</div>
+              </button>
+
               <button class="desktopIcon" onclick="openReadme()">
                 <div class="iconSymbol">▤</div>
                 <div class="iconTitle">Readme.txt</div>
@@ -518,17 +625,6 @@
                   System warning
                 </div>
                 <div class="iconStatus">TEXT</div>
-              </button>
-
-              <button class="desktopIcon" onclick="openRecycleBin()">
-                <div class="iconSymbol">♻</div>
-                <div class="iconTitle">Recycle Bin</div>
-                <div class="iconSub">
-                  Deleted fragments<br>
-                  Corrupted jokes<br>
-                  Unstable residue
-                </div>
-                <div class="iconStatus">CACHE</div>
               </button>
 
               <button class="desktopIcon" onclick="openSystemInfo()">
@@ -549,18 +645,18 @@
               This workstation belongs to:<br>
               <strong>Dr. Nessa Thorne</strong><br><br>
 
-              Three main directories are available:<br><br>
-
+              Main directories:<br>
               1. Chemistry<br>
               2. Botany<br>
               3. Private<br><br>
 
-              The Private archive requires recovered fragments from the first two directories.<br><br>
+              Additional encrypted object detected:<br>
+              <strong>DRONE_OVERRIDE.lock</strong><br><br>
+
+              The override file requires a recovered memory code.<br><br>
 
               WARNING:<br>
-              Do not assume Jason Krane is the sender.<br><br>
-
-              Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
+              Once the override program starts, it cannot be restarted.
             </div>
           </div>
         </section>
@@ -589,8 +685,13 @@
               </div>
 
               <div class="progressLine">
-                <span>Krane reference count</span>
-                <span class="progressState ok">ABNORMAL</span>
+                <span>Drone override</span>
+                <span class="progressState" id="droneState">ENCRYPTED</span>
+              </div>
+
+              <div class="progressLine">
+                <span>Hardenberg zone</span>
+                <span class="progressState">ACTIVE</span>
               </div>
             </div>
           </section>
@@ -609,7 +710,7 @@
 > private correspondence detected
 > Jason Krane reference count: abnormal
 > staged transmission residue found
-> open Readme.txt for recovery note
+> encrypted drone file detected
               </div>
 
               <button class="smallButton" onclick="resetProgress()">RESET LOCAL PROGRESS</button>
@@ -624,6 +725,7 @@
   <script>
     const correctEmail = "n.thorne@stbrigid-lab.ie";
     const correctPassword = "BLOODYCRANESBILL";
+    const droneOverrideCode = "GOLDENEYE";
 
     function normalize(value) {
       return value
@@ -665,12 +767,7 @@
 
     function showPasswordHint() {
       const hint = document.getElementById("passwordHint");
-
-      if (hint.style.display === "block") {
-        hint.style.display = "none";
-      } else {
-        hint.style.display = "block";
-      }
+      hint.style.display = hint.style.display === "block" ? "none" : "block";
     }
 
     function openDesktop() {
@@ -683,79 +780,41 @@
       const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
       const botanySolved = localStorage.getItem("botanicalSolved") === "yes";
       const privateOpened = localStorage.getItem("privateOpened") === "yes";
+      const droneUnlocked = localStorage.getItem("droneOverrideUnlocked") === "yes";
 
-      const chemistryState = document.getElementById("chemistryState");
-      const botanyState = document.getElementById("botanyState");
-      const privateState = document.getElementById("privateState");
+      setState("chemistryState", chemistrySolved ? "RESTORED" : "OPEN", chemistrySolved);
+      setState("botanyState", botanySolved ? "RESTORED" : "OPEN", botanySolved);
+      setState("privateState", privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED", privateOpened || (chemistrySolved && botanySolved));
+      setState("droneState", droneUnlocked ? "DECRYPTED" : "ENCRYPTED", droneUnlocked);
 
-      const chemistryIconStatus = document.getElementById("chemistryIconStatus");
-      const botanyIconStatus = document.getElementById("botanyIconStatus");
-      const privateIconStatus = document.getElementById("privateIconStatus");
+      document.getElementById("chemistryIconStatus").textContent = chemistrySolved ? "RESTORED" : "OPEN";
+      document.getElementById("botanyIconStatus").textContent = botanySolved ? "RESTORED" : "OPEN";
+      document.getElementById("privateIconStatus").textContent = privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED";
+      document.getElementById("droneIconStatus").textContent = droneUnlocked ? "DECRYPTED" : "ENCRYPTED";
+    }
 
-      if (chemistrySolved) {
-        chemistryState.textContent = "RESTORED";
-        chemistryState.classList.add("ok");
-        chemistryIconStatus.textContent = "RESTORED";
+    function setState(id, text, ok) {
+      const element = document.getElementById(id);
+      element.textContent = text;
+
+      if (ok) {
+        element.classList.add("ok");
       } else {
-        chemistryState.textContent = "OPEN";
-        chemistryState.classList.remove("ok");
-        chemistryIconStatus.textContent = "OPEN";
-      }
-
-      if (botanySolved) {
-        botanyState.textContent = "RESTORED";
-        botanyState.classList.add("ok");
-        botanyIconStatus.textContent = "RESTORED";
-      } else {
-        botanyState.textContent = "OPEN";
-        botanyState.classList.remove("ok");
-        botanyIconStatus.textContent = "OPEN";
-      }
-
-      if (privateOpened) {
-        privateState.textContent = "OPENED";
-        privateState.classList.add("ok");
-        privateIconStatus.textContent = "OPENED";
-      } else if (chemistrySolved && botanySolved) {
-        privateState.textContent = "KEY READY";
-        privateState.classList.add("ok");
-        privateIconStatus.textContent = "KEY READY";
-      } else {
-        privateState.textContent = "LOCKED";
-        privateState.classList.remove("ok");
-        privateIconStatus.textContent = "LOCKED";
+        element.classList.remove("ok");
       }
     }
 
     function openReadme() {
       const box = document.getElementById("readmeBox");
-
-      if (box.style.display === "block") {
-        box.style.display = "none";
-      } else {
-        box.style.display = "block";
-      }
+      box.style.display = box.style.display === "block" ? "none" : "block";
 
       document.getElementById("terminalLog").textContent =
 `> opening Readme.txt...
-> recovery order loaded
 > Chemistry directory available
 > Botany directory available
 > Private directory restricted
-> warning: staged transmission residue found`;
-    }
-
-    function openRecycleBin() {
-      document.getElementById("terminalLog").textContent =
-`> opening Recycle Bin...
-> recovered deleted fragments:
-
-krane_love_poem_final_FINAL2.txt
-definitely_not_a_revenge_plan.txt
-plants_that_understand_me.xls
-old_voice_splices.tmp
-
-> recycle cache unstable`;
+> DRONE_OVERRIDE.lock encrypted
+> warning: one execution only`;
     }
 
     function openSystemInfo() {
@@ -768,10 +827,57 @@ Local cache: partially restored
 Operator: DR. N. THORNE
 Last external contact: JASON KRANE
 
-Main directories:
-Chemistry
-Botany
-Private`;
+Additional encrypted object:
+DRONE_OVERRIDE.lock
+
+Risk zone:
+HARDENBERG`;
+    }
+
+    function openDroneModal() {
+      document.getElementById("droneModal").style.display = "flex";
+      document.getElementById("droneStatus").textContent = "Awaiting encrypted file code.";
+      document.getElementById("droneStatus").classList.remove("ok");
+      document.getElementById("droneCodeInput").classList.remove("wrongInput");
+      document.getElementById("droneCodeInput").classList.remove("correctInput");
+      document.getElementById("droneCodeInput").focus();
+    }
+
+    function closeDroneModal() {
+      document.getElementById("droneModal").style.display = "none";
+    }
+
+    function checkDroneCode() {
+      const input = document.getElementById("droneCodeInput");
+      const status = document.getElementById("droneStatus");
+      const value = normalize(input.value);
+
+      input.classList.remove("wrongInput");
+      input.classList.remove("correctInput");
+
+      if (value === normalize(droneOverrideCode)) {
+        input.classList.add("correctInput");
+        status.textContent = "Override file decrypted. Loading endgame program...";
+        status.classList.add("ok");
+
+        localStorage.setItem("droneOverrideUnlocked", "yes");
+        updateDesktopStatus();
+
+        setTimeout(function() {
+          window.location.href = "drone.html";
+        }, 900);
+      } else {
+        input.classList.add("wrongInput");
+        status.textContent = "Decryption failed.";
+        status.classList.remove("ok");
+
+        const modal = document.querySelector(".modal");
+        modal.classList.remove("shake");
+
+        setTimeout(function() {
+          modal.classList.add("shake");
+        }, 10);
+      }
     }
 
     function resetProgress() {
@@ -786,6 +892,10 @@ Private`;
       localStorage.removeItem("botanicalSolved");
 
       localStorage.removeItem("privateOpened");
+      localStorage.removeItem("droneOverrideUnlocked");
+      localStorage.removeItem("droneFinalStarted");
+      localStorage.removeItem("droneFinalWon");
+      localStorage.removeItem("droneFinalLost");
 
       updateDesktopStatus();
 
@@ -793,7 +903,8 @@ Private`;
 `> local progress reset
 > Chemistry layer cleared
 > Botany layer cleared
-> Private layer locked`;
+> Private layer locked
+> Drone override encrypted`;
     }
 
     function logout() {
@@ -802,15 +913,15 @@ Private`;
     }
 
     document.getElementById("emailInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        login();
-      }
+      if (event.key === "Enter") login();
     });
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        login();
-      }
+      if (event.key === "Enter") login();
+    });
+
+    document.getElementById("droneCodeInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") checkDroneCode();
     });
 
     if (localStorage.getItem("thorneLoggedIn") === "yes") {
