@@ -814,113 +814,6 @@
       line-height: 1.55;
     }
 
-    .hiddenDroneFile {
-      position: absolute;
-      right: 22%;
-      top: 34%;
-      width: 18px;
-      height: 18px;
-      border: 1px solid rgba(0,255,102,0.025);
-      background: rgba(0,255,102,0.018);
-      color: rgba(0,255,102,0.04);
-      cursor: default;
-      z-index: 21;
-      opacity: 0.08;
-      padding: 0;
-      font-family: "Courier New", monospace;
-      overflow: visible;
-    }
-
-    .hiddenDroneFile::before {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 7px;
-      width: 3px;
-      height: 3px;
-      background: rgba(0,255,102,0.13);
-      box-shadow:
-        0 0 4px rgba(0,255,102,0.08),
-        7px 4px 0 rgba(0,255,102,0.045),
-        -6px 8px 0 rgba(0,255,102,0.035);
-    }
-
-    .hiddenDroneFile:hover {
-      width: 72px;
-      height: 74px;
-      right: calc(22% - 27px);
-      top: calc(34% - 28px);
-      opacity: 1;
-      border: 1px dotted rgba(216,255,230,0.55);
-      background: rgba(0,0,0,0.32);
-      color: var(--yellow);
-      cursor: pointer;
-      box-shadow: 0 0 18px rgba(255,238,102,0.16);
-    }
-
-    .hiddenDroneFile:hover::before {
-      display: none;
-    }
-
-    .hiddenDroneFile:hover .droneFileIcon,
-    .hiddenDroneFile:hover .hiddenDroneName {
-      display: block;
-    }
-
-    .droneFileIcon {
-      display: none;
-      width: 34px;
-      height: 42px;
-      background: rgba(216,255,230,0.72);
-      border: 2px solid #001100;
-      box-shadow:
-        0 0 0 2px rgba(216,255,230,0.55),
-        0 0 9px rgba(255,238,102,0.15);
-      position: absolute;
-      left: 18px;
-      top: 7px;
-    }
-
-    .droneFileIcon::before {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 11px;
-      height: 11px;
-      background: rgba(255,85,85,0.85);
-      clip-path: polygon(0 0, 100% 100%, 0 100%);
-    }
-
-    .droneFileIcon::after {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 17px;
-      width: 18px;
-      height: 2px;
-      background: #001100;
-      box-shadow:
-        0 6px 0 #001100,
-        0 12px 0 #001100;
-    }
-
-    .hiddenDroneName {
-      display: none;
-      position: absolute;
-      left: 3px;
-      bottom: 3px;
-      width: 64px;
-      color: var(--yellow);
-      font-size: 9px;
-      line-height: 1.1;
-      text-align: center;
-      padding: 2px 3px;
-      text-shadow: 1px 1px #000;
-      background: rgba(0, 255, 102, 0.16);
-      border: 1px dotted rgba(216,255,230,0.45);
-    }
-
     .systemWindow,
     .readmeWindow,
     .recycleWindow,
@@ -1029,7 +922,7 @@
     }
 
     .miniLog {
-      height: 150px;
+      height: 130px;
       overflow: hidden;
       border: 1px solid rgba(0,255,102,0.25);
       background: rgba(0,0,0,0.28);
@@ -1047,6 +940,67 @@
       color: var(--yellow);
       font-size: 12px;
       margin-top: 12px;
+    }
+
+    .commandTerminal {
+      margin-top: 12px;
+      border: 1px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.34);
+      box-shadow:
+        inset 0 0 18px rgba(0,255,102,0.06),
+        0 0 12px rgba(0,255,102,0.08);
+    }
+
+    .commandHeader {
+      height: 24px;
+      background: rgba(0,255,102,0.10);
+      border-bottom: 1px solid rgba(0,255,102,0.35);
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .commandOutput {
+      height: 124px;
+      overflow-y: auto;
+      padding: 8px;
+      color: #8dffb0;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .commandInputRow {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px;
+      align-items: center;
+      border-top: 1px solid rgba(0,255,102,0.25);
+      padding: 7px;
+      background: rgba(0,0,0,0.28);
+    }
+
+    .commandPrompt {
+      color: var(--yellow);
+      font-size: 12px;
+    }
+
+    .commandInput {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      outline: none;
+      padding: 4px;
+    }
+
+    .commandInput::placeholder {
+      color: rgba(186,255,201,0.35);
     }
 
     .deletedItem {
@@ -1328,16 +1282,6 @@
       .easterEggWindow {
         top: 330px;
       }
-
-      .hiddenDroneFile {
-        right: 10%;
-        top: 38%;
-      }
-
-      .hiddenDroneFile:hover {
-        right: calc(10% - 27px);
-        top: calc(38% - 28px);
-      }
     }
 
     @media (max-width: 760px) {
@@ -1357,7 +1301,7 @@
 
       .loginScreen,
       .desktop {
-        min-height: 1040px;
+        min-height: 1120px;
       }
 
       .desktopTopStrip {
@@ -1380,8 +1324,7 @@
       }
 
       .centerArea {
-        display: block;
-        min-height: 260px;
+        display: none;
       }
 
       .taskButtons {
@@ -1406,16 +1349,6 @@
       .easterEggWindow {
         top: 410px;
       }
-
-      .hiddenDroneFile {
-        right: 18%;
-        top: 44%;
-      }
-
-      .hiddenDroneFile:hover {
-        right: calc(18% - 27px);
-        top: calc(44% - 28px);
-      }
     }
 
     @media (max-width: 420px) {
@@ -1425,7 +1358,7 @@
 
       .loginScreen,
       .desktop {
-        min-height: 1220px;
+        min-height: 1300px;
       }
     }
   </style>
@@ -1601,11 +1534,6 @@
                 The Private folder appears to contain personal material connected to Jason Krane.
               </div>
             </div>
-
-            <button class="hiddenDroneFile" onclick="openDroneModal()" title="">
-              <span class="droneFileIcon"></span>
-              <span class="hiddenDroneName">sys_tmp</span>
-            </button>
           </section>
 
           <aside class="systemWindow">
@@ -1638,8 +1566,8 @@ Last external contact: JASON KRANE</div>
                 <div>Private records</div>
                 <div>locked</div>
 
-                <div>Diary reference</div>
-                <div>hidden</div>
+                <div>Drone reference</div>
+                <div>unknown</div>
               </div>
 
               <div class="miniLog">
@@ -1649,11 +1577,29 @@ Last external contact: JASON KRANE</div>
                 <div>&gt; private correspondence detected</div>
                 <div>&gt; Jason Krane reference count: abnormal</div>
                 <div>&gt; warning: staged transmission residue found</div>
-                <div>&gt; open Readme.txt for recovery order</div>
               </div>
 
               <div class="hintLine">
                 Recommended order: Chemistry → Botany → Private.
+              </div>
+
+              <div class="commandTerminal">
+                <div class="commandHeader">Command Terminal</div>
+
+                <div class="commandOutput" id="commandOutput">&gt; command channel restored
+&gt; type command and press ENTER
+&gt; unknown commands may return corrupted output</div>
+
+                <div class="commandInputRow">
+                  <span class="commandPrompt">C:\THORNE&gt;</span>
+                  <input
+                    id="commandInput"
+                    class="commandInput"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="type command"
+                  >
+                </div>
               </div>
             </div>
           </aside>
@@ -1848,6 +1794,29 @@ Moved to archive.`
       }
     };
 
+    const randomTerminalResponses = [
+      "> command not recognized",
+      "> archive path unavailable",
+      "> corrupted instruction ignored",
+      "> access route unstable",
+      "> botanical cache returned no match",
+      "> chemical index did not respond",
+      "> unknown command",
+      "> private shell waiting",
+      "> no executable file found",
+      "> memory residue detected but unreadable",
+      "> Jason Krane reference count unchanged",
+      "> N. Thorne user trace remains active",
+      "> warning: command may have been staged",
+      "> system refuses that instruction",
+      "> dead route",
+      "> invalid recovery phrase",
+      "> directory not indexed",
+      "> hidden route not available from this command",
+      "> fragmented command returned no object",
+      "> old Krane file refused connection"
+    ];
+
     function normalizePassword(value) {
       return value
         .toUpperCase()
@@ -1870,6 +1839,13 @@ Moved to archive.`
     function openDesktop() {
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("desktop").style.display = "block";
+
+      setTimeout(function() {
+        const commandInput = document.getElementById("commandInput");
+        if (commandInput) {
+          commandInput.focus();
+        }
+      }, 300);
     }
 
     function attemptLogin() {
@@ -1943,6 +1919,41 @@ Moved to archive.`
       document.getElementById("easterEggWindow").style.display = "none";
     }
 
+    function handleCommandInput() {
+      const input = document.getElementById("commandInput");
+      const output = document.getElementById("commandOutput");
+
+      if (!input || !output) return;
+
+      const rawCommand = input.value.trim();
+      const command = rawCommand.toLowerCase();
+
+      if (rawCommand === "") {
+        return;
+      }
+
+      output.textContent += "\nC:\\THORNE> " + rawCommand;
+
+      if (command === "drone") {
+        output.textContent += "\n> hidden executable found";
+        output.textContent += "\n> opening DRONE_OVERRIDE.lock";
+        input.value = "";
+        output.scrollTop = output.scrollHeight;
+
+        setTimeout(function() {
+          openDroneModal();
+        }, 650);
+
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * randomTerminalResponses.length);
+      output.textContent += "\n" + randomTerminalResponses[randomIndex];
+
+      input.value = "";
+      output.scrollTop = output.scrollHeight;
+    }
+
     function openDroneModal() {
       const modal = document.getElementById("droneModal");
       const input = document.getElementById("droneCodeInput");
@@ -1963,6 +1974,13 @@ Moved to archive.`
 
     function closeDroneModal() {
       document.getElementById("droneModal").style.display = "none";
+
+      setTimeout(function() {
+        const commandInput = document.getElementById("commandInput");
+        if (commandInput) {
+          commandInput.focus();
+        }
+      }, 100);
     }
 
     function checkDroneCode() {
@@ -1999,6 +2017,12 @@ Moved to archive.`
     document.getElementById("emailInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         document.getElementById("passwordInput").focus();
+      }
+    });
+
+    document.getElementById("commandInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        handleCommandInput();
       }
     });
 
