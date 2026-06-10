@@ -16,6 +16,7 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -32,6 +33,20 @@
           transparent 4px
         );
       animation: scanMove 6s linear infinite;
+      z-index: 1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,0,0,0.22), transparent 30%),
+        radial-gradient(circle at 70% 65%, rgba(255,255,255,0.05), transparent 32%);
+      mix-blend-mode: screen;
+      animation: glowMove 7s ease-in-out infinite alternate;
+      z-index: 1;
     }
 
     @keyframes scanMove {
@@ -39,17 +54,49 @@
       100% { transform: translateY(10px); }
     }
 
+    @keyframes glowMove {
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.45;
+      }
+
+      100% {
+        transform: translate(2%, 2%) scale(1.05);
+        opacity: 0.75;
+      }
+    }
+
     .screen {
       width: 100%;
       max-width: 1200px;
       border: 3px solid #ff4444;
-      background: rgba(0,0,0,0.86);
+      background:
+        radial-gradient(circle at center, rgba(255,0,0,0.08), transparent 65%),
+        rgba(0,0,0,0.88);
       box-shadow:
         0 0 30px rgba(255,0,0,0.35),
         inset 0 0 40px rgba(255,0,0,0.12);
       padding: 18px;
       position: relative;
       z-index: 2;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: -120px;
+      height: 90px;
+      background: linear-gradient(180deg, transparent, rgba(255,68,68,0.15), transparent);
+      animation: sweep 4.8s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+      0% { top: -120px; }
+      100% { top: 100%; }
     }
 
     .topBar {
@@ -61,6 +108,8 @@
       margin-bottom: 16px;
       font-size: 13px;
       letter-spacing: 1px;
+      position: relative;
+      z-index: 3;
     }
 
     .warning {
@@ -69,6 +118,9 @@
       font-size: 14px;
       text-align: center;
       animation: blink 1.2s infinite;
+      line-height: 1.5;
+      position: relative;
+      z-index: 3;
     }
 
     @keyframes blink {
@@ -84,6 +136,7 @@
       background: #000;
       box-shadow: 0 0 22px rgba(255,0,0,0.25);
       overflow: hidden;
+      z-index: 3;
     }
 
     .videoWrap iframe {
@@ -100,31 +153,34 @@
       font-size: 13px;
       line-height: 1.5;
       text-align: center;
+      position: relative;
+      z-index: 3;
     }
 
-    .buttonRow {
-      text-align: center;
-      margin-top: 18px;
-    }
-
-    a {
-      display: inline-block;
-      color: #ffee66;
-      border: 2px solid #ff4444;
-      padding: 12px 16px;
-      text-decoration: none;
-      background: rgba(255,0,0,0.12);
-      font-weight: bold;
-    }
-
-    a:hover {
-      background: rgba(255,0,0,0.25);
+    .signalText {
+      color: #ff4444;
+      text-shadow:
+        0 0 6px rgba(255,68,68,0.7),
+        0 0 16px rgba(255,0,0,0.35);
     }
 
     @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+
       .topBar {
         flex-direction: column;
         text-align: center;
+        font-size: 11px;
+      }
+
+      .warning {
+        font-size: 12px;
+      }
+
+      .bottomText {
+        font-size: 12px;
       }
     }
   </style>
@@ -139,26 +195,24 @@
     </div>
 
     <div class="warning">
-      INCOMING VIDEO SIGNAL // PLAYBACK UNLOCKED
+      INCOMING VIDEO SIGNAL // PLAYBACK UNLOCKED<br>
+      If playback does not start automatically, press play.
     </div>
 
     <div class="videoWrap">
       <iframe
-        src="https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=c0ec4679-578f-4e3b-bbde-a7c9a9d428da&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%7D&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create"
+        src="https://proceon-my.sharepoint.com/personal/j_vanmaarseveen_proceon_nl/_layouts/15/embed.aspx?UniqueId=c0ec4679-578f-4e3b-bbde-a7c9a9d428da&embed=%7B%22af%22%3Atrue%2C%22hvm%22%3Atrue%2C%22ust%22%3Atrue%2C%22autoplay%22%3Atrue%7D&autoplay=1&referrer=StreamWebApp&referrerScenario=EmbedDialog.Create"
         frameborder="0"
         scrolling="no"
+        allow="autoplay; fullscreen"
         allowfullscreen
         title="JasonKraneisalive.mp4">
       </iframe>
     </div>
 
     <div class="bottomText">
-      Transmission source unknown.<br>
+      <span class="signalText">Transmission source unknown.</span><br>
       Identity confirmation pending.
-    </div>
-
-    <div class="buttonRow">
-      <a href="terminal.html">OPEN RECOVERED DEVICE LINK</a>
     </div>
   </main>
 </body>
