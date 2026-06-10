@@ -13,7 +13,9 @@
       --white: #eaffef;
       --yellow: #ffee66;
       --red: #ff5555;
-      --blue: #7dfcff;
+      --winBlue: #003b7a;
+      --winGrey: #b8c0b8;
+      --winDark: #202820;
     }
 
     * {
@@ -24,11 +26,11 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #173217 0%, #030803 62%, #000 100%);
+        radial-gradient(circle at center, #163016 0%, #030803 62%, #000 100%);
       color: var(--green);
       font-family: "Courier New", monospace;
       padding: 18px;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     body::before {
@@ -39,26 +41,13 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,102,0.055),
-          rgba(0,255,102,0.055) 1px,
+          rgba(0,255,102,0.05),
+          rgba(0,255,102,0.05) 1px,
           transparent 1px,
           transparent 4px
         );
-      z-index: 20;
+      z-index: 50;
       animation: scanMove 7s linear infinite;
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: -20%;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 25% 30%, rgba(0,255,102,0.18), transparent 28%),
-        radial-gradient(circle at 75% 64%, rgba(255,238,102,0.09), transparent 32%);
-      mix-blend-mode: screen;
-      animation: glowMove 8s ease-in-out infinite alternate;
-      z-index: 19;
     }
 
     @keyframes scanMove {
@@ -66,56 +55,26 @@
       100% { transform: translateY(12px); }
     }
 
-    @keyframes glowMove {
-      0% {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
-      }
-
-      100% {
-        transform: translate(3%, 2%) scale(1.06);
-        opacity: 0.72;
-      }
-    }
-
-    .screen {
-      max-width: 1220px;
+    .crt {
+      max-width: 1240px;
+      height: calc(100vh - 36px);
       margin: 0 auto;
-      min-height: calc(100vh - 36px);
       border: 5px solid #132313;
       border-radius: 18px;
       background:
-        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 60%),
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 62%),
         linear-gradient(180deg, #061906 0%, #010801 100%);
       box-shadow:
-        inset 0 0 80px rgba(0,0,0,0.82),
+        inset 0 0 80px rgba(0,0,0,0.86),
         inset 0 0 30px rgba(0,255,102,0.13),
         0 0 35px rgba(0,0,0,0.82);
       padding: 14px;
       position: relative;
-      z-index: 2;
       overflow: hidden;
     }
 
-    .screen::before {
-      content: "";
-      position: absolute;
-      left: -20%;
-      right: -20%;
-      top: -150px;
-      height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.11), transparent);
-      animation: sweep 6.5s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes sweep {
-      0% { top: -150px; }
-      100% { top: 100%; }
-    }
-
     .topBar {
-      height: 34px;
+      height: 30px;
       background: linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
       border: 2px solid #d8ffe6;
       color: var(--white);
@@ -124,23 +83,24 @@
       align-items: center;
       padding: 0 10px;
       font-size: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       position: relative;
       z-index: 3;
     }
 
-    .window {
+    .loginScreen {
+      width: 620px;
+      max-width: calc(100% - 20px);
+      margin: 70px auto;
       border: 2px solid #d8ffe6;
-      background: rgba(0, 10, 0, 0.84);
-      box-shadow:
-        4px 4px 0 rgba(0,0,0,0.7),
-        0 0 18px rgba(0,255,102,0.13);
+      background: rgba(0, 10, 0, 0.9);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.7);
       position: relative;
       z-index: 3;
     }
 
     .windowTitle {
-      min-height: 30px;
+      height: 30px;
       background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
       border-bottom: 2px solid #d8ffe6;
       color: var(--white);
@@ -152,8 +112,8 @@
       font-weight: bold;
     }
 
-    .content {
-      padding: 14px;
+    .windowContent {
+      padding: 16px;
     }
 
     h1 {
@@ -173,11 +133,6 @@
       color: var(--text);
       font-size: 14px;
       line-height: 1.45;
-    }
-
-    .loginWrapper {
-      max-width: 640px;
-      margin: 64px auto;
     }
 
     .loginNote {
@@ -202,9 +157,9 @@
       background: #000;
       color: var(--green);
       border: 2px solid var(--green2);
-      padding: 12px;
+      padding: 11px;
       font-family: "Courier New", monospace;
-      font-size: 16px;
+      font-size: 15px;
       outline: none;
       margin-top: 6px;
     }
@@ -223,26 +178,22 @@
       box-shadow: 0 0 12px rgba(255,85,85,0.22);
     }
 
-    button,
-    .smallButton {
+    button {
       color: var(--white);
       background: linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
       border-top: 2px solid #d8ffe6;
       border-left: 2px solid #d8ffe6;
       border-right: 2px solid #052b13;
       border-bottom: 2px solid #052b13;
-      padding: 10px 13px;
+      padding: 9px 12px;
       font-family: "Courier New", monospace;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
       margin-top: 10px;
     }
 
-    button:hover,
-    .smallButton:hover {
+    button:hover {
       filter: brightness(1.18);
     }
 
@@ -258,100 +209,258 @@
       color: var(--yellow);
     }
 
+    .hintBox {
+      display: none;
+      margin-top: 14px;
+      border: 2px solid var(--yellow);
+      background: rgba(255,238,102,0.06);
+      padding: 12px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .hintBox h2 {
+      color: var(--yellow);
+      margin-top: 0;
+    }
+
     .desktop {
       display: none;
-      min-height: calc(100vh - 92px);
+      height: calc(100% - 42px);
       position: relative;
-      z-index: 3;
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.07), transparent 65%),
+        linear-gradient(180deg, rgba(0,30,0,0.92), rgba(0,10,0,0.96));
+      border: 2px solid rgba(216,255,230,0.6);
+      overflow: hidden;
     }
 
-    .desktopGrid {
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 14px;
-    }
-
-    .iconGrid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
-      gap: 14px;
+    .desktopArea {
+      position: absolute;
+      inset: 0 0 36px 0;
+      padding: 18px;
     }
 
     .desktopIcon {
-      min-height: 150px;
-      border: 2px solid rgba(0,255,102,0.42);
-      background:
-        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 65%),
-        rgba(0,0,0,0.36);
-      padding: 12px;
-      text-decoration: none;
-      color: var(--text);
-      position: relative;
-      overflow: hidden;
-      transition: 0.15s;
+      width: 98px;
+      min-height: 92px;
+      color: var(--white);
+      text-align: center;
       cursor: pointer;
-      display: block;
+      user-select: none;
+      position: absolute;
+      text-decoration: none;
       font-family: "Courier New", monospace;
-      text-align: left;
     }
 
-    .desktopIcon:hover {
+    .desktopIcon:hover .iconBox,
+    .desktopIcon.active .iconBox {
       border-color: var(--yellow);
-      transform: translateY(-2px);
+      background: rgba(255,238,102,0.08);
+      box-shadow: 0 0 12px rgba(255,238,102,0.2);
+    }
+
+    .desktopIcon:hover .iconLabel {
       color: var(--yellow);
-      box-shadow: 0 0 18px rgba(255,238,102,0.16);
+      background: rgba(0,0,0,0.75);
     }
 
-    .iconSymbol {
-      font-size: 42px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 8px rgba(0,255,102,0.35));
-    }
-
-    .iconTitle {
+    .iconBox {
+      width: 58px;
+      height: 50px;
+      margin: 0 auto 6px;
+      border: 1px solid rgba(0,255,102,0.4);
+      background: rgba(0,0,0,0.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
       color: var(--yellow);
-      font-weight: bold;
-      font-size: 15px;
-      margin-bottom: 6px;
+      box-shadow: inset 0 0 10px rgba(0,255,102,0.08);
     }
 
-    .iconSub {
-      color: #9dffbd;
+    .iconLabel {
+      display: inline-block;
+      padding: 2px 4px;
+      color: var(--white);
       font-size: 12px;
-      line-height: 1.35;
+      line-height: 1.2;
+      text-shadow: 1px 1px #000;
+      background: rgba(0,0,0,0.35);
     }
 
     .iconStatus {
-      position: absolute;
-      right: 8px;
-      bottom: 8px;
-      border: 1px solid rgba(255,238,102,0.55);
+      font-size: 9px;
       color: var(--yellow);
-      background: rgba(0,0,0,0.65);
-      padding: 4px 6px;
-      font-size: 10px;
+      margin-top: 3px;
     }
 
-    .lockedIcon {
-      border-color: rgba(255,85,85,0.45);
-      background:
-        radial-gradient(circle at center, rgba(255,85,85,0.08), transparent 65%),
-        rgba(0,0,0,0.36);
+    .iconChemistry { left: 28px; top: 24px; }
+    .iconBotany { left: 28px; top: 136px; }
+    .iconPrivate { left: 28px; top: 248px; }
+    .iconReadme { left: 156px; top: 24px; }
+    .iconRecycle { left: 156px; top: 136px; }
+    .iconComputer { left: 156px; top: 248px; }
+
+    .hiddenDroneFolder {
+      position: absolute;
+      right: 34px;
+      bottom: 54px;
+      width: 58px;
+      min-height: 58px;
+      opacity: 0.24;
+      color: rgba(0,255,102,0.35);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid rgba(0,255,102,0.12);
+      background: rgba(0,0,0,0.08);
+      font-family: "Courier New", monospace;
+      transition: 0.2s;
     }
 
-    .lockedIcon:hover {
-      border-color: var(--red);
-      color: #ffb8b8;
-      box-shadow: 0 0 18px rgba(255,85,85,0.16);
+    .hiddenDroneFolder:hover {
+      opacity: 1;
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
+      color: var(--yellow);
+      box-shadow: 0 0 18px rgba(255,238,102,0.20);
     }
 
-    .sidePanel {
-      display: grid;
-      gap: 14px;
+    .hiddenDroneIcon {
+      font-size: 25px;
+      line-height: 30px;
+      margin-top: 4px;
+    }
+
+    .hiddenDroneText {
+      font-size: 8px;
+      margin-top: 1px;
+    }
+
+    .taskbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 36px;
+      background: linear-gradient(180deg, #b8c0b8, #707870);
+      border-top: 2px solid #e8ffe8;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      gap: 6px;
+      color: #001100;
+      font-family: "Courier New", monospace;
+      z-index: 10;
+    }
+
+    .startButton {
+      height: 27px;
+      min-width: 82px;
+      padding: 3px 10px;
+      margin: 0;
+      background: linear-gradient(180deg, #e8f0e8, #889088);
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-right: 2px solid #303830;
+      border-bottom: 2px solid #303830;
+      color: #001100;
+      font-weight: bold;
+    }
+
+    .taskItem {
+      height: 27px;
+      min-width: 190px;
+      border-top: 2px solid #303830;
+      border-left: 2px solid #303830;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      background: #98a098;
+      color: #001100;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+
+    .clock {
+      margin-left: auto;
+      height: 27px;
+      min-width: 78px;
+      border-top: 2px solid #303830;
+      border-left: 2px solid #303830;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      background: #98a098;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #001100;
+      font-size: 12px;
+    }
+
+    .desktopWindow {
+      display: none;
+      position: absolute;
+      left: 300px;
+      top: 54px;
+      width: 560px;
+      max-width: calc(100% - 330px);
+      min-height: 330px;
+      border: 2px solid #d8ffe6;
+      background: rgba(0, 10, 0, 0.95);
+      box-shadow: 5px 5px 0 rgba(0,0,0,0.7);
+      z-index: 20;
+    }
+
+    .desktopWindow.small {
+      width: 460px;
+      min-height: 250px;
+    }
+
+    .desktopWindowTitle {
+      height: 30px;
+      background: linear-gradient(180deg, #13a84b 0%, #0a4a22 100%);
+      border-bottom: 2px solid #d8ffe6;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .closeButton {
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      padding: 0;
+      background: #b8c0b8;
+      color: #000;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-right: 2px solid #303830;
+      border-bottom: 2px solid #303830;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .desktopWindowContent {
+      padding: 14px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .desktopWindowContent strong {
+      color: var(--yellow);
     }
 
     .terminalLog {
-      min-height: 230px;
+      min-height: 210px;
       border: 1px solid rgba(0,255,102,0.32);
       background: rgba(0,0,0,0.42);
       padding: 12px;
@@ -381,60 +490,6 @@
 
     .progressState.ok {
       color: var(--yellow);
-    }
-
-    .readmeBox {
-      display: none;
-      margin-top: 14px;
-      border: 2px solid var(--yellow);
-      background: rgba(255,238,102,0.06);
-      padding: 12px;
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .readmeBox h2 {
-      color: var(--yellow);
-      margin-top: 0;
-    }
-
-    .hiddenDroneFolder {
-      position: absolute;
-      right: 26px;
-      bottom: 24px;
-      width: 54px;
-      height: 48px;
-      border: 1px solid rgba(0,255,102,0.16);
-      background: rgba(0,0,0,0.12);
-      color: rgba(0,255,102,0.28);
-      font-family: "Courier New", monospace;
-      font-size: 10px;
-      cursor: pointer;
-      z-index: 8;
-      opacity: 0.38;
-      transition: 0.2s;
-    }
-
-    .hiddenDroneFolder:hover {
-      opacity: 1;
-      border-color: var(--yellow);
-      color: var(--yellow);
-      background: rgba(255,238,102,0.06);
-      box-shadow: 0 0 18px rgba(255,238,102,0.2);
-    }
-
-    .hiddenDroneIcon {
-      font-size: 24px;
-      text-align: center;
-      line-height: 24px;
-      margin-top: 4px;
-    }
-
-    .hiddenDroneText {
-      text-align: center;
-      font-size: 8px;
-      margin-top: 2px;
     }
 
     .droneModalOverlay {
@@ -497,23 +552,33 @@
       100% { transform: translateX(0); }
     }
 
-    @media (max-width: 950px) {
-      .desktopGrid,
-      .iconGrid {
-        grid-template-columns: 1fr;
+    @media (max-width: 800px) {
+      body {
+        padding: 8px;
       }
 
-      .loginWrapper {
-        margin: 24px auto;
+      .crt {
+        height: calc(100vh - 16px);
       }
 
       .topBar {
         font-size: 10px;
       }
 
+      .desktopWindow {
+        left: 14px;
+        top: 58px;
+        width: calc(100% - 28px);
+        max-width: none;
+      }
+
+      .iconReadme { left: 132px; top: 24px; }
+      .iconRecycle { left: 132px; top: 136px; }
+      .iconComputer { left: 132px; top: 248px; }
+
       .hiddenDroneFolder {
-        right: 16px;
-        bottom: 16px;
+        right: 18px;
+        bottom: 50px;
       }
     }
   </style>
@@ -530,9 +595,7 @@
       <div class="droneModalContent">
         <h1>DRONE OVERRIDE</h1>
 
-        <p>
-          Encrypted file recovered.
-        </p>
+        <p>Encrypted file recovered.</p>
 
         <div class="droneWarning">
           WARNING:<br>
@@ -552,20 +615,20 @@
     </section>
   </div>
 
-  <main class="screen">
+  <main class="crt">
     <div class="topBar">
       <span>THORNE PRIVATE WORKSTATION</span>
       <span>BOTANICAL CHEMISTRY ARCHIVE</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
-    <section class="window loginWrapper" id="loginScreen">
+    <section class="loginScreen" id="loginScreen">
       <div class="windowTitle">
         <span>Private Workstation Login</span>
         <span>LOCKED</span>
       </div>
 
-      <div class="content">
+      <div class="windowContent">
         <h1>THORNE OS</h1>
         <h2>Recovered private workstation</h2>
 
@@ -586,7 +649,7 @@
 
         <div class="status" id="loginStatus">Awaiting credentials.</div>
 
-        <div class="readmeBox" id="passwordHint">
+        <div class="hintBox" id="passwordHint">
           <h2>PASSWORD RECOVERY QUESTION</h2>
           What is my favourite flower?<br><br>
           Botanical file hint:<br>
@@ -598,164 +661,123 @@
     </section>
 
     <section class="desktop" id="desktop">
-      <section class="desktopGrid">
-        <section class="window">
-          <div class="windowTitle">
-            <span>Desktop</span>
-            <span>MAIN DIRECTORIES</span>
+      <div class="desktopArea">
+        <a class="desktopIcon iconChemistry" href="chemistry.html">
+          <div class="iconBox">⚗</div>
+          <div class="iconLabel">Chemistry</div>
+          <div class="iconStatus" id="chemistryIconStatus">OPEN</div>
+        </a>
+
+        <a class="desktopIcon iconBotany" href="botany.html">
+          <div class="iconBox">✿</div>
+          <div class="iconLabel">Botany</div>
+          <div class="iconStatus" id="botanyIconStatus">OPEN</div>
+        </a>
+
+        <a class="desktopIcon iconPrivate" href="private.html">
+          <div class="iconBox">▣</div>
+          <div class="iconLabel">Private</div>
+          <div class="iconStatus" id="privateIconStatus">LOCKED</div>
+        </a>
+
+        <button class="desktopIcon iconReadme" onclick="openWindow('readmeWindow')">
+          <div class="iconBox">▤</div>
+          <div class="iconLabel">Readme.txt</div>
+        </button>
+
+        <button class="desktopIcon iconRecycle" onclick="openWindow('recycleWindow')">
+          <div class="iconBox">♻</div>
+          <div class="iconLabel">Recycle Bin</div>
+        </button>
+
+        <button class="desktopIcon iconComputer" onclick="openWindow('computerWindow')">
+          <div class="iconBox">▧</div>
+          <div class="iconLabel">My Computer</div>
+        </button>
+
+        <button class="hiddenDroneFolder" onclick="openDroneModal()" title="corrupted cache">
+          <div class="hiddenDroneIcon">▥</div>
+          <div class="hiddenDroneText">tmp</div>
+        </button>
+
+        <section class="desktopWindow" id="readmeWindow">
+          <div class="desktopWindowTitle">
+            <span>Readme.txt</span>
+            <button class="closeButton" onclick="closeWindow('readmeWindow')">X</button>
           </div>
+          <div class="desktopWindowContent">
+PRIVATE WORKSTATION RECOVERY INSTRUCTIONS
 
-          <div class="content">
-            <h1>RECOVERED DESKTOP</h1>
+This workstation belongs to:
+<strong>Dr. Nessa Thorne</strong>
 
-            <div class="iconGrid">
-              <a class="desktopIcon" href="chemistry.html">
-                <div class="iconSymbol">⚗</div>
-                <div class="iconTitle">Chemistry</div>
-                <div class="iconSub">
-                  Compound archive<br>
-                  Reagent cache<br>
-                  Periodic stack protocol
-                </div>
-                <div class="iconStatus" id="chemistryIconStatus">OPEN</div>
-              </a>
+Three main directories are available:
 
-              <a class="desktopIcon" href="botany.html">
-                <div class="iconSymbol">✿</div>
-                <div class="iconTitle">Botany</div>
-                <div class="iconSub">
-                  Greenhouse archive<br>
-                  Specimen cache<br>
-                  Botanical growth protocol
-                </div>
-                <div class="iconStatus" id="botanyIconStatus">OPEN</div>
-              </a>
+1. Chemistry
+2. Botany
+3. Private
 
-              <a class="desktopIcon lockedIcon" href="private.html">
-                <div class="iconSymbol">▣</div>
-                <div class="iconTitle">Private</div>
-                <div class="iconSub">
-                  Personal files<br>
-                  Krane references<br>
-                  Restricted archive
-                </div>
-                <div class="iconStatus" id="privateIconStatus">LOCKED</div>
-              </a>
+The Private archive requires recovered fragments from the first two directories.
 
-              <button class="desktopIcon" onclick="openReadme()">
-                <div class="iconSymbol">▤</div>
-                <div class="iconTitle">Readme.txt</div>
-                <div class="iconSub">
-                  Recovery note<br>
-                  Archive order<br>
-                  System warning
-                </div>
-                <div class="iconStatus">TEXT</div>
-              </button>
+WARNING:
+Do not assume Jason Krane is the sender.
 
-              <button class="desktopIcon" onclick="openRecycleBin()">
-                <div class="iconSymbol">♻</div>
-                <div class="iconTitle">Recycle Bin</div>
-                <div class="iconSub">
-                  Deleted fragments<br>
-                  Corrupted jokes<br>
-                  Unstable residue
-                </div>
-                <div class="iconStatus">CACHE</div>
-              </button>
-
-              <button class="desktopIcon" onclick="openSystemInfo()">
-                <div class="iconSymbol">▧</div>
-                <div class="iconTitle">My Computer</div>
-                <div class="iconSub">
-                  Local node<br>
-                  User profile<br>
-                  Archive status
-                </div>
-                <div class="iconStatus">SYS</div>
-              </button>
-            </div>
-
-            <div class="readmeBox" id="readmeBox">
-              <h2>PRIVATE WORKSTATION RECOVERY INSTRUCTIONS</h2>
-
-              This workstation belongs to:<br>
-              <strong>Dr. Nessa Thorne</strong><br><br>
-
-              Three main directories are available:<br><br>
-
-              1. Chemistry<br>
-              2. Botany<br>
-              3. Private<br><br>
-
-              The Private archive requires recovered fragments from the first two directories.<br><br>
-
-              WARNING:<br>
-              Do not assume Jason Krane is the sender.<br><br>
-
-              Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
-            </div>
+Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
           </div>
         </section>
 
-        <aside class="sidePanel">
-          <section class="window">
-            <div class="windowTitle">
-              <span>System Monitor</span>
-              <span>LIVE</span>
-            </div>
+        <section class="desktopWindow small" id="recycleWindow">
+          <div class="desktopWindowTitle">
+            <span>Recycle Bin</span>
+            <button class="closeButton" onclick="closeWindow('recycleWindow')">X</button>
+          </div>
+          <div class="desktopWindowContent">
+Deleted fragments recovered:
 
-            <div class="content">
-              <div class="progressLine">
-                <span>Chemistry layer</span>
-                <span class="progressState" id="chemistryState">OPEN</span>
-              </div>
+krane_love_poem_final_FINAL2.txt
+definitely_not_a_revenge_plan.txt
+plants_that_understand_me.xls
+old_voice_splices.tmp
 
-              <div class="progressLine">
-                <span>Botany layer</span>
-                <span class="progressState" id="botanyState">OPEN</span>
-              </div>
+Recycle cache unstable.
+          </div>
+        </section>
 
-              <div class="progressLine">
-                <span>Private layer</span>
-                <span class="progressState" id="privateState">LOCKED</span>
-              </div>
+        <section class="desktopWindow" id="computerWindow">
+          <div class="desktopWindowTitle">
+            <span>My Computer</span>
+            <button class="closeButton" onclick="closeWindow('computerWindow')">X</button>
+          </div>
+          <div class="desktopWindowContent">
+<div class="terminalLog" id="terminalLog">
+> THORNE BOTANICAL CHEMISTRY NODE
+> Signal source: private workstation
+> Local cache: partially restored
+> Operator: DR. N. THORNE
+> Last external contact: JASON KRANE
 
-              <div class="progressLine">
-                <span>Krane reference count</span>
-                <span class="progressState ok">ABNORMAL</span>
-              </div>
-            </div>
-          </section>
+Main directories:
+Chemistry
+Botany
+Private
 
-          <section class="window">
-            <div class="windowTitle">
-              <span>Terminal Log</span>
-              <span>RECOVERED</span>
-            </div>
+Status:
+Chemistry: <span id="chemistryState">OPEN</span>
+Botany: <span id="botanyState">OPEN</span>
+Private: <span id="privateState">LOCKED</span>
+</div>
 
-            <div class="content">
-              <div class="terminalLog" id="terminalLog">
-> booting private recovery shell...
-> scanning chemical notebooks...
-> botanical index partially restored
-> private correspondence detected
-> Jason Krane reference count: abnormal
-> staged transmission residue found
-> open Readme.txt for recovery note
-              </div>
+<button onclick="resetProgress()">RESET LOCAL PROGRESS</button>
+<button onclick="logout()">LOG OUT</button>
+          </div>
+        </section>
+      </div>
 
-              <button class="smallButton" onclick="resetProgress()">RESET LOCAL PROGRESS</button>
-              <button class="smallButton" onclick="logout()">LOG OUT</button>
-            </div>
-          </section>
-        </aside>
-      </section>
-
-      <button class="hiddenDroneFolder" onclick="openDroneModal()" title="corrupted cache">
-        <div class="hiddenDroneIcon">▥</div>
-        <div class="hiddenDroneText">tmp</div>
-      </button>
+      <div class="taskbar">
+        <button class="startButton" onclick="openWindow('computerWindow')">Start</button>
+        <div class="taskItem">THORNE OS // Private Workstation</div>
+        <div class="clock" id="clock">--:--</div>
+      </div>
     </section>
   </main>
 
@@ -804,18 +826,24 @@
 
     function showPasswordHint() {
       const hint = document.getElementById("passwordHint");
-
-      if (hint.style.display === "block") {
-        hint.style.display = "none";
-      } else {
-        hint.style.display = "block";
-      }
+      hint.style.display = hint.style.display === "block" ? "none" : "block";
     }
 
     function openDesktop() {
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("desktop").style.display = "block";
       updateDesktopStatus();
+      updateClock();
+    }
+
+    function openWindow(id) {
+      const win = document.getElementById(id);
+      win.style.display = "block";
+      updateDesktopStatus();
+    }
+
+    function closeWindow(id) {
+      document.getElementById(id).style.display = "none";
     }
 
     function updateDesktopStatus() {
@@ -823,94 +851,20 @@
       const botanySolved = localStorage.getItem("botanicalSolved") === "yes";
       const privateOpened = localStorage.getItem("privateOpened") === "yes";
 
-      const chemistryState = document.getElementById("chemistryState");
-      const botanyState = document.getElementById("botanyState");
-      const privateState = document.getElementById("privateState");
+      setText("chemistryIconStatus", chemistrySolved ? "RESTORED" : "OPEN");
+      setText("botanyIconStatus", botanySolved ? "RESTORED" : "OPEN");
+      setText("privateIconStatus", privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED");
 
-      const chemistryIconStatus = document.getElementById("chemistryIconStatus");
-      const botanyIconStatus = document.getElementById("botanyIconStatus");
-      const privateIconStatus = document.getElementById("privateIconStatus");
-
-      if (chemistrySolved) {
-        chemistryState.textContent = "RESTORED";
-        chemistryState.classList.add("ok");
-        chemistryIconStatus.textContent = "RESTORED";
-      } else {
-        chemistryState.textContent = "OPEN";
-        chemistryState.classList.remove("ok");
-        chemistryIconStatus.textContent = "OPEN";
-      }
-
-      if (botanySolved) {
-        botanyState.textContent = "RESTORED";
-        botanyState.classList.add("ok");
-        botanyIconStatus.textContent = "RESTORED";
-      } else {
-        botanyState.textContent = "OPEN";
-        botanyState.classList.remove("ok");
-        botanyIconStatus.textContent = "OPEN";
-      }
-
-      if (privateOpened) {
-        privateState.textContent = "OPENED";
-        privateState.classList.add("ok");
-        privateIconStatus.textContent = "OPENED";
-      } else if (chemistrySolved && botanySolved) {
-        privateState.textContent = "KEY READY";
-        privateState.classList.add("ok");
-        privateIconStatus.textContent = "KEY READY";
-      } else {
-        privateState.textContent = "LOCKED";
-        privateState.classList.remove("ok");
-        privateIconStatus.textContent = "LOCKED";
-      }
+      setText("chemistryState", chemistrySolved ? "RESTORED" : "OPEN");
+      setText("botanyState", botanySolved ? "RESTORED" : "OPEN");
+      setText("privateState", privateOpened ? "OPENED" : chemistrySolved && botanySolved ? "KEY READY" : "LOCKED");
     }
 
-    function openReadme() {
-      const box = document.getElementById("readmeBox");
-
-      if (box.style.display === "block") {
-        box.style.display = "none";
-      } else {
-        box.style.display = "block";
+    function setText(id, text) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = text;
       }
-
-      document.getElementById("terminalLog").textContent =
-`> opening Readme.txt...
-> recovery order loaded
-> Chemistry directory available
-> Botany directory available
-> Private directory restricted
-> warning: staged transmission residue found`;
-    }
-
-    function openRecycleBin() {
-      document.getElementById("terminalLog").textContent =
-`> opening Recycle Bin...
-> recovered deleted fragments:
-
-krane_love_poem_final_FINAL2.txt
-definitely_not_a_revenge_plan.txt
-plants_that_understand_me.xls
-old_voice_splices.tmp
-
-> recycle cache unstable`;
-    }
-
-    function openSystemInfo() {
-      document.getElementById("terminalLog").textContent =
-`> opening My Computer...
-
-THORNE BOTANICAL CHEMISTRY NODE
-Signal source: private workstation
-Local cache: partially restored
-Operator: DR. N. THORNE
-Last external contact: JASON KRANE
-
-Main directories:
-Chemistry
-Botany
-Private`;
     }
 
     function openDroneModal() {
@@ -982,19 +936,25 @@ Private`;
       localStorage.removeItem("droneFinalLost");
 
       updateDesktopStatus();
-
-      document.getElementById("terminalLog").textContent =
-`> local progress reset
-> Chemistry layer cleared
-> Botany layer cleared
-> Private layer locked
-> hidden cache restored`;
     }
 
     function logout() {
       localStorage.removeItem("thorneLoggedIn");
       location.reload();
     }
+
+    function updateClock() {
+      const clock = document.getElementById("clock");
+      if (!clock) return;
+
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+
+      clock.textContent = hours + ":" + minutes;
+    }
+
+    setInterval(updateClock, 10000);
 
     document.getElementById("emailInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
