@@ -2,12 +2,13 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Thorne Private Folder</title>
+  <title>Thorne Private Archive</title>
 
   <style>
     :root {
       --green: #00ff66;
       --green2: #00aa44;
+      --dark: #020802;
       --text: #caffd7;
       --white: #eaffef;
       --yellow: #ffee66;
@@ -23,10 +24,11 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #301616 0%, #030803 62%, #000 100%);
+        radial-gradient(circle at center, #301616 0%, #060303 58%, #000 100%);
       color: var(--green);
       font-family: "Courier New", monospace;
       padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -37,13 +39,13 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0,255,102,0.055),
-          rgba(0,255,102,0.055) 1px,
+          rgba(255,85,85,0.05),
+          rgba(255,85,85,0.05) 1px,
           transparent 1px,
           transparent 4px
         );
-      animation: scanMove 7s linear infinite;
       z-index: 20;
+      animation: scanMove 7s linear infinite;
     }
 
     body::after {
@@ -53,7 +55,7 @@
       pointer-events: none;
       background:
         radial-gradient(circle at 25% 30%, rgba(255,85,85,0.14), transparent 28%),
-        radial-gradient(circle at 75% 64%, rgba(0,255,102,0.12), transparent 32%);
+        radial-gradient(circle at 75% 64%, rgba(0,255,102,0.10), transparent 32%);
       mix-blend-mode: screen;
       animation: glowMove 8s ease-in-out infinite alternate;
       z-index: 19;
@@ -65,23 +67,30 @@
     }
 
     @keyframes glowMove {
-      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
-      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
     }
 
     .screen {
-      max-width: 1180px;
+      max-width: 1220px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
-      border: 5px solid #231313;
+      border: 5px solid #321515;
       border-radius: 18px;
       background:
         radial-gradient(circle at center, rgba(255,85,85,0.08), transparent 45%),
-        radial-gradient(circle at center, rgba(0,255,102,0.06), transparent 68%),
-        linear-gradient(180deg, #110606 0%, #010801 100%);
+        radial-gradient(circle at center, rgba(0,255,102,0.05), transparent 68%),
+        linear-gradient(180deg, #120606 0%, #010801 100%);
       box-shadow:
         inset 0 0 80px rgba(0,0,0,0.82),
-        inset 0 0 30px rgba(255,85,85,0.12),
+        inset 0 0 30px rgba(255,85,85,0.13),
         0 0 35px rgba(0,0,0,0.82);
       padding: 14px;
       position: relative;
@@ -100,6 +109,8 @@
       padding: 0 10px;
       font-size: 12px;
       margin-bottom: 14px;
+      position: relative;
+      z-index: 3;
     }
 
     .window {
@@ -108,6 +119,8 @@
       box-shadow:
         4px 4px 0 rgba(0,0,0,0.7),
         0 0 18px rgba(255,85,85,0.13);
+      position: relative;
+      z-index: 3;
     }
 
     .windowTitle {
@@ -117,19 +130,20 @@
       color: var(--white);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       padding: 0 8px;
       font-size: 12px;
       font-weight: bold;
     }
 
     .content {
-      padding: 16px;
+      padding: 14px;
     }
 
     h1 {
       color: var(--yellow);
       font-size: 25px;
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       letter-spacing: 2px;
     }
 
@@ -142,22 +156,78 @@
     p {
       color: var(--text);
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.45;
     }
 
     .gate {
-      max-width: 620px;
-      margin: 70px auto;
+      max-width: 720px;
+      margin: 58px auto;
     }
 
-    .progressBox {
-      border: 1px dashed var(--yellow);
-      background: rgba(255,238,102,0.06);
-      padding: 12px;
+    .fragmentGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       margin: 14px 0;
+    }
+
+    .fragmentBox {
+      border: 1px solid rgba(255,85,85,0.45);
+      background: rgba(255,85,85,0.05);
+      padding: 12px;
+      min-height: 92px;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fragmentBox::before {
+      content: "";
+      position: absolute;
+      left: -40%;
+      top: 0;
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,238,102,0.18), transparent);
+      animation: fragmentSweep 3s linear infinite;
+    }
+
+    @keyframes fragmentSweep {
+      0% { left: -40%; }
+      100% { left: 120%; }
+    }
+
+    .fragmentBox.found {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
       color: var(--yellow);
-      line-height: 1.6;
-      font-size: 14px;
+      box-shadow: 0 0 16px rgba(255,238,102,0.12);
+    }
+
+    .fragmentTitle {
+      font-size: 12px;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .fragmentValue {
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: var(--red);
+    }
+
+    .fragmentBox.found .fragmentValue {
+      color: var(--yellow);
+    }
+
+    .lockedLine {
+      border: 1px dashed rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.05);
+      padding: 10px;
+      color: var(--yellow);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 12px 0;
     }
 
     label {
@@ -176,14 +246,26 @@
       font-family: "Courier New", monospace;
       font-size: 16px;
       outline: none;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     input:focus {
       border-color: var(--yellow);
     }
 
-    button, .backLink, .gameLink {
+    input.correctInput {
+      border-color: var(--yellow);
+      box-shadow: 0 0 12px rgba(255,238,102,0.24);
+    }
+
+    input.wrongInput {
+      border-color: var(--red);
+      box-shadow: 0 0 12px rgba(255,85,85,0.22);
+    }
+
+    button,
+    .backLink,
+    .protocolLink {
       color: var(--white);
       background: linear-gradient(180deg, #9f3d3d 0%, #561515 100%);
       border-top: 2px solid #ffd8d8;
@@ -200,9 +282,10 @@
       margin-top: 10px;
     }
 
-    .gameLink {
-      background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
-      color: var(--yellow);
+    button:hover,
+    .backLink:hover,
+    .protocolLink:hover {
+      filter: brightness(1.18);
     }
 
     .status {
@@ -210,6 +293,7 @@
       margin-top: 10px;
       font-size: 13px;
       color: var(--red);
+      line-height: 1.4;
     }
 
     .status.ok {
@@ -220,49 +304,86 @@
       display: none;
     }
 
-    .fileGrid {
+    .archiveLayout {
       display: grid;
-      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      grid-template-columns: 310px 1fr;
+      gap: 14px;
+    }
+
+    .fileList {
+      display: grid;
       gap: 10px;
-      margin-top: 14px;
     }
 
     .fileButton {
-      background: rgba(0,0,0,0.35);
-      border: 1px dotted rgba(255,216,216,0.35);
+      border: 1px solid rgba(255,216,216,0.35);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.10), transparent 70%),
+        rgba(0,0,0,0.35);
       color: var(--text);
       padding: 12px;
-      min-height: 95px;
+      min-height: 72px;
       font-family: "Courier New", monospace;
       cursor: pointer;
       text-align: left;
+      transition: 0.15s;
+      position: relative;
+      overflow: hidden;
     }
 
     .fileButton:hover {
-      background: rgba(255,85,85,0.10);
+      border-color: var(--yellow);
       color: var(--yellow);
+      transform: translateX(3px);
+    }
+
+    .fileButton.active {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      box-shadow: 0 0 14px rgba(255,238,102,0.16);
+    }
+
+    .fileName {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .fileMeta {
+      font-size: 11px;
+      color: #ffb8b8;
     }
 
     .viewer {
-      margin-top: 14px;
-      min-height: 300px;
-      border: 1px solid rgba(255,216,216,0.32);
-      background: rgba(0,0,0,0.34);
-      padding: 12px;
+      min-height: 520px;
+      border: 2px solid rgba(255,216,216,0.32);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.04), transparent 65%),
+        rgba(0,0,0,0.46);
+      padding: 14px;
       color: var(--text);
-      line-height: 1.55;
-      font-size: 13px;
-      white-space: pre-line;
+      line-height: 1.5;
+      font-size: 14px;
+      white-space: normal;
     }
 
     .viewer h3 {
+      margin: 0 0 10px;
       color: var(--yellow);
-      margin-top: 0;
+      font-size: 17px;
     }
 
-    .hand {
+    .viewer strong {
+      color: var(--yellow);
+    }
+
+    .viewer .hand {
       color: var(--purple);
       font-style: italic;
+    }
+
+    .viewer .warning {
+      color: var(--red);
     }
 
     .finalBox {
@@ -272,15 +393,43 @@
       padding: 12px;
       margin-top: 14px;
       line-height: 1.6;
+      font-size: 15px;
     }
 
-    @media (max-width: 900px) {
-      .fileGrid {
+    .memoryPanel {
+      border: 1px dashed rgba(255,238,102,0.45);
+      background: rgba(255,238,102,0.05);
+      padding: 12px;
+      color: var(--yellow);
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .protocolLink {
+      background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
+      color: var(--yellow);
+    }
+
+    .shake {
+      animation: shake 0.25s;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 950px) {
+      .archiveLayout,
+      .fragmentGrid {
         grid-template-columns: 1fr;
       }
 
       .gate {
-        margin: 30px auto;
+        margin: 24px auto;
       }
 
       .topBar {
@@ -293,32 +442,46 @@
 <body>
   <main class="screen">
     <div class="topBar">
-      <span>THORNE OS // PRIVATE DIRECTORY</span>
+      <span>THORNE OS // PRIVATE ARCHIVE</span>
       <span>ACCESS RESTRICTED</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
     <section class="window gate" id="gate">
-      <div class="windowTitle">Private Folder Password</div>
+      <div class="windowTitle">
+        <span>Private Archive Gate</span>
+        <span>LOCKED</span>
+      </div>
+
       <div class="content">
         <h1>PRIVATE</h1>
-        <h2>Restricted personal archive</h2>
 
         <p>
-          This folder requires the private access code.
-          The code is assembled from the recovered Chemistry and Botany environments.
+          Two recovered fragments detected.
         </p>
 
-        <div class="progressBox" id="progressBox">
-          Checking recovered code fragments...
+        <div class="fragmentGrid">
+          <div class="fragmentBox" id="chemistryFragmentBox">
+            <div class="fragmentTitle">CHEMISTRY FRAGMENT</div>
+            <div class="fragmentValue" id="chemistryFragment">MISSING</div>
+          </div>
+
+          <div class="fragmentBox" id="botanicalFragmentBox">
+            <div class="fragmentTitle">BOTANICAL FRAGMENT</div>
+            <div class="fragmentValue" id="botanicalFragment">MISSING</div>
+          </div>
         </div>
 
-        <label for="passwordInput">Private folder password</label>
-        <input id="passwordInput" type="password" autocomplete="off" placeholder="enter private folder password">
+        <div class="lockedLine" id="lockedLine">
+          Private archive sealed.
+        </div>
 
-        <button onclick="checkPassword()">OPEN PRIVATE FOLDER</button>
+        <label for="passwordInput">PRIVATE ACCESS KEY</label>
+        <input id="passwordInput" type="password" autocomplete="off" placeholder="combined access key">
 
-        <div class="status" id="status">Awaiting access code.</div>
+        <button onclick="checkPrivatePassword()">OPEN PRIVATE ARCHIVE</button>
+
+        <div class="status" id="status">Awaiting private access key.</div>
 
         <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
       </div>
@@ -326,29 +489,67 @@
 
     <section class="privateContent" id="privateContent">
       <section class="window">
-        <div class="windowTitle">Private Folder Opened</div>
+        <div class="windowTitle">
+          <span>Private Archive Opened</span>
+          <span>PERSONAL FILES</span>
+        </div>
+
         <div class="content">
           <h1>PRIVATE ARCHIVE</h1>
-          <h2>Personal files of Dr. Nessa Thorne</h2>
 
-          <p>
-            The private folder is now open.
-            The files are personal, damaged and partially deleted.
-            They connect Nessa Thorne to Jason Krane.
-          </p>
+          <div class="archiveLayout">
+            <aside class="fileList">
+              <button class="fileButton active" onclick="openFile('overview', this)">
+                <div class="fileName">archive_overview.sys</div>
+                <div class="fileMeta">restored / unstable</div>
+              </button>
 
-          <div class="fileGrid">
-            <button class="fileButton" onclick="openFile('mail')">unsent_mail_to_jason.eml</button>
-            <button class="fileButton" onclick="openFile('photo')">photo_index.db</button>
-            <button class="fileButton" onclick="openFile('diary')">diary_reference.tmp</button>
-            <button class="fileButton" onclick="openFile('transmission')">fake_transmission_notes.txt</button>
-            <button class="fileButton" onclick="openFile('final')">final_instruction.lock</button>
-            <a class="gameLink" href="memory.html">OPEN MEMORY PROTOCOL</a>
-          </div>
+              <button class="fileButton" onclick="openFile('jason', this)">
+                <div class="fileName">krane_status.log</div>
+                <div class="fileMeta">heavily corrupted</div>
+              </button>
 
-          <div class="viewer" id="viewer">
-            <h3>No file selected</h3>
-            Open Nessa's private files.
+              <button class="fileButton" onclick="openFile('mail', this)">
+                <div class="fileName">unsent_mail_to_jason.eml</div>
+                <div class="fileMeta">never sent</div>
+              </button>
+
+              <button class="fileButton" onclick="openFile('transmission', this)">
+                <div class="fileName">transmission_edits.txt</div>
+                <div class="fileMeta">staged material</div>
+              </button>
+
+              <button class="fileButton" onclick="openFile('diary', this)">
+                <div class="fileName">diary_reference.tmp</div>
+                <div class="fileMeta">physical object missing</div>
+              </button>
+
+              <button class="fileButton" onclick="openFile('final', this)">
+                <div class="fileName">final_instruction.lock</div>
+                <div class="fileMeta">priority file</div>
+              </button>
+
+              <a class="protocolLink" href="memory.html">OPEN MEMORY PROTOCOL</a>
+            </aside>
+
+            <section class="viewer" id="viewer">
+              <h3>archive_overview.sys</h3>
+
+              Private archive restored.<br><br>
+
+              Owner:<br>
+              <strong>Dr. Nessa Thorne</strong><br><br>
+
+              Recovered links:<br>
+              Chemistry archive<br>
+              Botanical archive<br>
+              Jason Krane reference cluster<br>
+              Unsent messages<br>
+              Staged transmission notes<br><br>
+
+              System note:<br>
+              <span class="warning">Krane activity does not match a living sender.</span>
+            </section>
           </div>
         </div>
       </section>
@@ -356,72 +557,122 @@
   </main>
 
   <script>
-    const privatePassword = "THORNEGARDEN";
+    const privatePassword = "THORNENESSA";
 
     const files = {
+      overview:
+`<h3>archive_overview.sys</h3>
+
+Private archive restored.<br><br>
+
+Owner:<br>
+<strong>Dr. Nessa Thorne</strong><br><br>
+
+Recovered links:<br>
+Chemistry archive<br>
+Botanical archive<br>
+Jason Krane reference cluster<br>
+Unsent messages<br>
+Staged transmission notes<br><br>
+
+System note:<br>
+<span class="warning">Krane activity does not match a living sender.</span>`,
+
+      jason:
+`<h3>krane_status.log</h3>
+
+Recovered status file:<br><br>
+
+Subject:<br>
+<strong>Jason Krane</strong><br><br>
+
+Last verified living record:<br>
+more than one year before the first new transmission.<br><br>
+
+System conclusion:<br>
+<span class="warning">Jason Krane is not the sender.</span><br><br>
+
+Archive note:<br>
+Old voice material and visual fragments were reused.`,
+
       mail:
 `<h3>unsent_mail_to_jason.eml</h3>
-FROM: N. Thorne
-TO: J. Krane
-STATUS: unsent / recovered
 
-<span class="hand">They only saw the agent.
-I saw the man who came back from every mission carrying more silence than victory.</span>
+FROM: N. Thorne<br>
+TO: J. Krane<br>
+STATUS: unsent / recovered<br><br>
 
-<span class="hand">If they erase you, I will make your ghost impossible to ignore.</span>`,
+<span class="hand">
+They only saw the agent.<br>
+I saw the man who came back from every mission carrying more silence than victory.
+</span><br><br>
 
-      photo:
-`<h3>photo_index.db</h3>
-Recovered image index:
+<span class="hand">
+If they erase you, I will make your ghost impossible to ignore.
+</span>`,
 
-IMG_0421: greenhouse corridor
-IMG_0430: lecture hall, St. Brigid's
-IMG_0444: Jason outside east gate
-IMG_0499: black notebook, missing
+      transmission:
+`<h3>transmission_edits.txt</h3>
 
-Note:
-The black notebook is tagged repeatedly as "diary".`,
+Recovered edit markers:<br><br>
+
+Voice source:<br>
+old Krane recordings<br><br>
+
+Video source:<br>
+archived material<br><br>
+
+Purpose:<br>
+create belief that Jason Krane survived<br><br>
+
+Sender marker:<br>
+<strong>N. THORNE</strong><br><br>
+
+<span class="warning">
+Transmission was staged.
+</span>`,
 
       diary:
 `<h3>diary_reference.tmp</h3>
-<span class="hand">The diary is still out there.</span>
 
-<span class="hand">If they find it before I do, they will know Jason was already gone.</span>
+Recovered references:<br><br>
 
-<span class="hand">If I find it first, I decide what truth survives.</span>`,
+black notebook<br>
+green ribbon<br>
+pressed flower between pages<br>
+last known object connected to Krane<br><br>
 
-      transmission:
-`<h3>fake_transmission_notes.txt</h3>
-Voice sample source:
-Old Krane recordings.
+<span class="hand">
+The diary is still out there.
+</span><br><br>
 
-Transmission purpose:
-Create the impression that Jason Krane is alive.
-
-Visible note:
-"They will follow him because they failed him."
-
-Sender:
-N. Thorne`,
+<span class="hand">
+If they find it before I do, they will know Jason was already gone.
+</span>`,
 
       final:
 `<h3>final_instruction.lock</h3>
-Jason Krane is dead.
 
-The messages were staged.
+<strong>Jason Krane is dead.</strong><br><br>
 
-The sender is Dr. Nessa Thorne.
+The messages were staged.<br><br>
 
-She was not trying to bring Jason back.
-She was trying to make everyone follow his ghost.
+The sender is:<br>
+<strong>Dr. Nessa Thorne</strong><br><br>
+
+She was not trying to bring Jason back.<br>
+She was trying to make everyone follow his ghost.<br><br>
 
 <div class="finalBox">
-FINAL INSTRUCTION:
-
-The workstation has revealed the truth,
-but Nessa Thorne's physical diary remains missing.
-
+FINAL INSTRUCTION:<br><br>
+The workstation has revealed the truth,<br>
+but Nessa Thorne's physical diary remains missing.<br><br>
 Find the diary.
+</div>
+
+<div class="memoryPanel">
+Optional recovered protocol:<br>
+Open the memory protocol if another confirmation code is required.
 </div>`
     };
 
@@ -434,50 +685,79 @@ Find the diary.
         .trim();
     }
 
-    function updateProgressBox() {
+    function updateFragments() {
       const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
-      const botanySolved = localStorage.getItem("botanySolved") === "yes";
-      const box = document.getElementById("progressBox");
+      const botanicalSolved = localStorage.getItem("botanicalSolved") === "yes";
 
-      if (chemistrySolved && botanySolved) {
-        box.innerHTML =
-          "Recovered code fragments:<br><br>" +
-          "Chemistry environment: <strong>THORNE</strong><br>" +
-          "Botany environment: <strong>GARDEN</strong><br><br>" +
-          "Combine both fragments to open this folder.";
-      } else if (chemistrySolved && !botanySolved) {
-        box.innerHTML =
-          "Recovered code fragments:<br><br>" +
-          "Chemistry environment: <strong>THORNE</strong><br>" +
-          "Botany environment: missing<br><br>" +
-          "Open the Botany folder and complete both physical answers plus the game code.";
-      } else if (!chemistrySolved && botanySolved) {
-        box.innerHTML =
-          "Recovered code fragments:<br><br>" +
-          "Chemistry environment: missing<br>" +
-          "Botany environment: <strong>GARDEN</strong><br><br>" +
-          "Open the Chemistry folder and complete both physical answers plus the game code.";
+      const chemistryBox = document.getElementById("chemistryFragmentBox");
+      const botanicalBox = document.getElementById("botanicalFragmentBox");
+      const chemistryFragment = document.getElementById("chemistryFragment");
+      const botanicalFragment = document.getElementById("botanicalFragment");
+      const lockedLine = document.getElementById("lockedLine");
+
+      if (chemistrySolved) {
+        chemistryBox.classList.add("found");
+        chemistryFragment.textContent = "THORNE";
       } else {
-        box.innerHTML =
-          "No private code fragments recovered yet.<br><br>" +
-          "Complete Chemistry and Botany first.<br><br>" +
-          "Each folder requires:<br>" +
-          "1. Physical answer A<br>" +
-          "2. Physical answer B<br>" +
-          "3. Game protocol code";
+        chemistryBox.classList.remove("found");
+        chemistryFragment.textContent = "MISSING";
+      }
+
+      if (botanicalSolved) {
+        botanicalBox.classList.add("found");
+        botanicalFragment.textContent = "NESSA";
+      } else {
+        botanicalBox.classList.remove("found");
+        botanicalFragment.textContent = "MISSING";
+      }
+
+      if (chemistrySolved && botanicalSolved) {
+        lockedLine.innerHTML =
+          "Fragments restored:<br>" +
+          "<strong>THORNE</strong> + <strong>NESSA</strong>";
+      } else if (chemistrySolved && !botanicalSolved) {
+        lockedLine.innerHTML =
+          "One fragment restored.<br>" +
+          "Second fragment still missing.";
+      } else if (!chemistrySolved && botanicalSolved) {
+        lockedLine.innerHTML =
+          "One fragment restored.<br>" +
+          "Second fragment still missing.";
+      } else {
+        lockedLine.innerHTML =
+          "No private fragments restored.";
       }
     }
 
-    function checkPassword() {
-      const input = normalize(document.getElementById("passwordInput").value);
+    function checkPrivatePassword() {
+      const input = document.getElementById("passwordInput");
       const status = document.getElementById("status");
+      const value = normalize(input.value);
 
-      if (input === normalize(privatePassword)) {
+      input.classList.remove("correctInput");
+      input.classList.remove("wrongInput");
+
+      if (value === normalize(privatePassword)) {
+        input.classList.add("correctInput");
+        status.textContent = "Private archive opened.";
+        status.classList.add("ok");
+
         localStorage.setItem("privateOpened", "yes");
-        openPrivate();
+
+        setTimeout(function() {
+          openPrivate();
+        }, 450);
       } else {
-        status.textContent = "Incorrect private folder password.";
+        input.classList.add("wrongInput");
+        status.textContent = "Access denied.";
         status.classList.remove("ok");
+
+        const gate = document.getElementById("gate");
+        gate.classList.remove("shake");
+
+        setTimeout(function() {
+          gate.classList.add("shake");
+        }, 10);
       }
     }
 
@@ -486,17 +766,24 @@ Find the diary.
       document.getElementById("privateContent").style.display = "block";
     }
 
-    function openFile(id) {
+    function openFile(id, button) {
+      const buttons = document.querySelectorAll(".fileButton");
+
+      buttons.forEach(function(item) {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
       document.getElementById("viewer").innerHTML = files[id];
     }
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        checkPassword();
+        checkPrivatePassword();
       }
     });
 
-    updateProgressBox();
+    updateFragments();
 
     if (localStorage.getItem("privateOpened") === "yes") {
       openPrivate();
