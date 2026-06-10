@@ -333,8 +333,11 @@
     .mapFrame {
       border: 2px solid rgba(0,255,102,0.44);
       background:
+        linear-gradient(90deg, rgba(0,255,102,0.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.05) 1px, transparent 1px),
         radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 70%),
         rgba(0,0,0,0.44);
+      background-size: 20px 20px, 20px 20px, auto, auto;
       min-height: 612px;
       position: relative;
       overflow: hidden;
@@ -378,10 +381,14 @@
 
     svg {
       width: 100%;
-      height: 548px;
+      height: 560px;
       display: block;
       position: relative;
       z-index: 2;
+    }
+
+    .pixelMap * {
+      shape-rendering: crispEdges;
     }
 
     .seaLabel {
@@ -390,36 +397,34 @@
       font-family: "Courier New", monospace;
     }
 
-    .land {
-      fill: rgba(0,255,102,0.08);
-      stroke: rgba(0,255,102,0.70);
-      stroke-width: 2.4;
-      filter: drop-shadow(0 0 5px rgba(0,255,102,0.25));
+    .pixelLand {
+      fill: rgba(0,255,102,0.10);
+      stroke: rgba(0,255,102,0.78);
+      stroke-width: 2;
     }
 
-    .provinceLine {
-      fill: none;
-      stroke: rgba(0,255,102,0.22);
-      stroke-width: 1;
-      stroke-dasharray: 4 4;
+    .pixelIsland {
+      fill: rgba(0,255,102,0.10);
+      stroke: rgba(0,255,102,0.72);
+      stroke-width: 2;
     }
 
-    .water {
-      fill: rgba(125,252,255,0.12);
-      stroke: rgba(125,252,255,0.36);
-      stroke-width: 1.2;
-    }
-
-    .island {
-      fill: rgba(0,255,102,0.08);
-      stroke: rgba(0,255,102,0.62);
+    .pixelWater {
+      fill: rgba(125,252,255,0.14);
+      stroke: rgba(125,252,255,0.45);
       stroke-width: 1.5;
+    }
+
+    .routeGlow {
+      fill: none;
+      stroke: rgba(255,85,85,0.28);
+      stroke-width: 12;
     }
 
     .routeLine {
       fill: none;
-      stroke: var(--yellow);
-      stroke-width: 3.5;
+      stroke: #ffee66;
+      stroke-width: 4;
       stroke-dasharray: 8 8;
       animation: routeMove 1.2s linear infinite;
       filter: drop-shadow(0 0 6px rgba(255,238,102,0.75));
@@ -430,17 +435,9 @@
       to { stroke-dashoffset: -16; }
     }
 
-    .routeGlow {
-      fill: none;
-      stroke: rgba(255,85,85,0.32);
-      stroke-width: 10;
-      stroke-linecap: round;
-      filter: blur(1px);
-    }
-
     .cityPulse {
-      fill: var(--red);
-      stroke: var(--yellow);
+      fill: #ff5555;
+      stroke: #ffee66;
       stroke-width: 2;
       animation: cityBlink 1s infinite;
       filter: drop-shadow(0 0 8px rgba(255,85,85,0.9));
@@ -460,10 +457,9 @@
 
     .targetRing {
       fill: none;
-      stroke: var(--red);
+      stroke: #ff5555;
       stroke-width: 2;
       animation: targetRing 1.3s infinite;
-      transform-origin: center;
       filter: drop-shadow(0 0 8px rgba(255,85,85,0.8));
     }
 
@@ -473,10 +469,9 @@
     }
 
     .cityLabel {
-      fill: var(--white);
+      fill: #eaffef;
       font-size: 13px;
       font-family: "Courier New", monospace;
-      text-shadow: 0 0 4px #000;
     }
 
     .cityLabel.red {
@@ -484,21 +479,21 @@
     }
 
     .routeStep {
-      fill: var(--yellow);
+      fill: #ffee66;
       font-size: 11px;
       font-family: "Courier New", monospace;
       font-weight: bold;
     }
 
     .droneBody {
-      fill: var(--yellow);
+      fill: #ffee66;
       stroke: #000;
       stroke-width: 1;
       filter: drop-shadow(0 0 8px rgba(255,238,102,0.8));
     }
 
     .droneArm {
-      stroke: var(--yellow);
+      stroke: #ffee66;
       stroke-width: 2;
       stroke-linecap: round;
       filter: drop-shadow(0 0 6px rgba(255,238,102,0.6));
@@ -799,7 +794,7 @@
         </div>
 
         <p>
-          Controleer de fysieke routepuzzel, de handleiding en alle gevonden informatie voordat de override wordt gestart.
+          Controleer de fysieke routepuzzel, de dronehandleiding en alle gevonden informatie voordat de override wordt gestart.
         </p>
 
         <button class="primaryButton" onclick="startFinalAttempt()">START FINAL OVERRIDE</button>
@@ -856,94 +851,88 @@
                 Route trace: IJmuiden → Soesterberg → Maastricht → Hardenberg
               </div>
 
-              <svg viewBox="0 0 460 620" role="img" aria-label="kaart van Nederland met routepunten">
-                <text class="seaLabel" x="28" y="250">NOORDZEE</text>
-                <text class="seaLabel" x="260" y="98">WADDENZEE</text>
-                <text class="seaLabel" x="236" y="198">IJSSELMEER</text>
-                <text class="seaLabel" x="122" y="477">ZEELAND</text>
-                <text class="seaLabel" x="275" y="578">LIMBURG</text>
+              <svg class="pixelMap" viewBox="0 0 480 620" role="img" aria-label="pixelkaart van Nederland met routepunten">
+                <text class="seaLabel" x="24" y="270">NOORDZEE</text>
+                <text class="seaLabel" x="286" y="84">WADDENZEE</text>
+                <text class="seaLabel" x="255" y="205">IJSSELMEER</text>
+                <text class="seaLabel" x="88" y="474">ZEELAND</text>
+                <text class="seaLabel" x="300" y="596">LIMBURG</text>
 
-                <path class="island" d="M171 57 C187 49, 203 50, 216 59 C201 65, 183 67, 171 57 Z"></path>
-                <path class="island" d="M222 48 C238 40, 258 42, 272 50 C254 58, 236 58, 222 48 Z"></path>
-                <path class="island" d="M282 47 C304 39, 330 41, 349 50 C325 60, 301 59, 282 47 Z"></path>
-                <path class="island" d="M357 55 C374 48, 391 49, 406 58 C391 65, 372 66, 357 55 Z"></path>
+                <rect class="pixelIsland" x="190" y="56" width="28" height="14"></rect>
+                <rect class="pixelIsland" x="228" y="48" width="36" height="14"></rect>
+                <rect class="pixelIsland" x="276" y="48" width="42" height="14"></rect>
+                <rect class="pixelIsland" x="330" y="56" width="34" height="14"></rect>
+                <rect class="pixelIsland" x="374" y="60" width="22" height="12"></rect>
 
-                <path class="land" d="
-                  M 184 78
-                  C 169 83, 158 96, 153 112
-                  C 147 132, 154 152, 142 170
-                  C 132 185, 116 197, 114 218
-                  C 111 247, 131 267, 126 292
-                  C 121 319, 101 332, 108 360
-                  C 113 381, 134 394, 148 411
-                  C 160 426, 151 447, 132 454
-                  C 113 462, 98 472, 90 489
-                  C 109 500, 133 499, 152 490
-                  C 171 481, 185 463, 202 470
-                  C 218 477, 209 505, 220 525
-                  C 232 548, 243 569, 252 596
-                  C 258 615, 277 617, 286 598
-                  C 295 579, 282 560, 275 541
-                  C 265 515, 272 492, 292 473
-                  C 314 452, 340 434, 352 403
-                  C 366 367, 356 333, 365 304
-                  C 374 272, 397 250, 393 219
-                  C 390 191, 366 171, 354 146
-                  C 340 116, 315 96, 287 83
-                  C 262 72, 237 68, 217 72
-                  C 205 75, 194 74, 184 78
-                  Z" />
-
-                <path class="water" d="
-                  M 222 104
-                  C 250 95, 285 101, 309 121
-                  C 325 135, 325 166, 303 180
-                  C 281 194, 244 191, 224 175
-                  C 205 160, 202 123, 222 104
-                  Z" />
-
-                <path class="water" d="M 126 451 C 108 456, 92 466, 86 482 C 101 492, 123 490, 142 479 C 153 472, 150 459, 126 451 Z"></path>
-                <path class="water" d="M 163 444 C 149 450, 140 465, 151 477 C 170 476, 186 462, 181 449 C 177 441, 171 440, 163 444 Z"></path>
-
-                <path class="provinceLine" d="M 177 120 C 208 137, 245 146, 303 134"></path>
-                <path class="provinceLine" d="M 155 180 C 197 199, 252 206, 352 193"></path>
-                <path class="provinceLine" d="M 131 265 C 185 283, 256 286, 374 272"></path>
-                <path class="provinceLine" d="M 122 346 C 188 365, 253 363, 356 343"></path>
-                <path class="provinceLine" d="M 169 426 C 214 430, 266 426, 333 407"></path>
-                <path class="provinceLine" d="M 236 464 C 252 500, 262 535, 269 585"></path>
-                <path class="provinceLine" d="M 215 76 C 196 140, 184 225, 173 332"></path>
-                <path class="provinceLine" d="M 292 88 C 289 160, 300 252, 294 350"></path>
-
-                <path id="routePath" class="routeGlow" d="M 137 195 L 232 246 L 265 573 L 347 180"></path>
-                <path class="routeLine" d="M 137 195 L 232 246 L 265 573 L 347 180"></path>
+                <rect class="pixelIsland" x="86" y="430" width="36" height="20"></rect>
+                <rect class="pixelIsland" x="122" y="420" width="28" height="20"></rect>
+                <rect class="pixelIsland" x="100" y="452" width="44" height="20"></rect>
+                <rect class="pixelIsland" x="142" y="446" width="24" height="18"></rect>
 
                 <g>
-                  <circle class="targetRing" cx="137" cy="195" r="12"></circle>
-                  <circle class="cityPulse" cx="137" cy="195" r="6"></circle>
-                  <text class="cityLabel" x="50" y="190">IJmuiden</text>
+                  <rect class="pixelLand" x="220" y="80" width="80" height="20"></rect>
+                  <rect class="pixelLand" x="200" y="100" width="140" height="20"></rect>
+                  <rect class="pixelLand" x="180" y="120" width="180" height="20"></rect>
+                  <rect class="pixelLand" x="180" y="140" width="200" height="20"></rect>
+                  <rect class="pixelLand" x="160" y="160" width="220" height="20"></rect>
+                  <rect class="pixelLand" x="160" y="180" width="240" height="20"></rect>
+                  <rect class="pixelLand" x="160" y="200" width="240" height="20"></rect>
+                  <rect class="pixelLand" x="160" y="220" width="240" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="240" width="240" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="260" width="240" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="280" width="220" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="300" width="220" height="20"></rect>
+                  <rect class="pixelLand" x="120" y="320" width="220" height="20"></rect>
+                  <rect class="pixelLand" x="120" y="340" width="220" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="360" width="200" height="20"></rect>
+                  <rect class="pixelLand" x="140" y="380" width="180" height="20"></rect>
+
+                  <rect class="pixelLand" x="180" y="400" width="160" height="20"></rect>
+                  <rect class="pixelLand" x="200" y="420" width="140" height="20"></rect>
+                  <rect class="pixelLand" x="220" y="440" width="120" height="20"></rect>
+
+                  <rect class="pixelLand" x="220" y="460" width="100" height="20"></rect>
+                  <rect class="pixelLand" x="240" y="480" width="80" height="20"></rect>
+                  <rect class="pixelLand" x="240" y="500" width="80" height="20"></rect>
+                  <rect class="pixelLand" x="260" y="520" width="60" height="20"></rect>
+                  <rect class="pixelLand" x="260" y="540" width="60" height="20"></rect>
+                  <rect class="pixelLand" x="260" y="560" width="40" height="20"></rect>
+                  <rect class="pixelLand" x="260" y="580" width="40" height="20"></rect>
+                </g>
+
+                <rect class="pixelWater" x="254" y="134" width="48" height="86"></rect>
+                <rect class="pixelWater" x="244" y="220" width="34" height="28"></rect>
+
+                <path id="routePath" class="routeGlow" d="M 150 176 L 234 242 L 280 590 L 346 176"></path>
+                <path class="routeLine" d="M 150 176 L 234 242 L 280 590 L 346 176"></path>
+
+                <text class="routeStep" x="182" y="199">1</text>
+                <text class="routeStep" x="250" y="406">2</text>
+                <text class="routeStep" x="308" y="392">3</text>
+
+                <g>
+                  <circle class="targetRing" cx="150" cy="176" r="12"></circle>
+                  <circle class="cityPulse" cx="150" cy="176" r="6"></circle>
+                  <text class="cityLabel" x="64" y="172">IJmuiden</text>
                 </g>
 
                 <g>
-                  <circle class="targetRing" cx="232" cy="246" r="12"></circle>
-                  <circle class="cityPulse" cx="232" cy="246" r="6"></circle>
-                  <text class="cityLabel" x="244" y="244">Soesterberg</text>
+                  <circle class="targetRing" cx="234" cy="242" r="12"></circle>
+                  <circle class="cityPulse" cx="234" cy="242" r="6"></circle>
+                  <text class="cityLabel" x="246" y="239">Soesterberg</text>
                 </g>
 
                 <g>
-                  <circle class="targetRing" cx="265" cy="573" r="12"></circle>
-                  <circle class="cityPulse" cx="265" cy="573" r="6"></circle>
-                  <text class="cityLabel" x="282" y="573">Maastricht</text>
+                  <circle class="targetRing" cx="280" cy="590" r="12"></circle>
+                  <circle class="cityPulse" cx="280" cy="590" r="6"></circle>
+                  <text class="cityLabel" x="292" y="590">Maastricht</text>
                 </g>
 
                 <g>
-                  <circle class="targetRing" cx="347" cy="180" r="12"></circle>
-                  <circle class="cityPulse" cx="347" cy="180" r="6"></circle>
-                  <text class="cityLabel red" x="356" y="176">Hardenberg</text>
+                  <circle class="targetRing" cx="346" cy="176" r="12"></circle>
+                  <circle class="cityPulse" cx="346" cy="176" r="6"></circle>
+                  <text class="cityLabel red" x="356" y="172">Hardenberg</text>
                 </g>
-
-                <text class="routeStep" x="172" y="212">1</text>
-                <text class="routeStep" x="242" y="398">2</text>
-                <text class="routeStep" x="308" y="383">3</text>
 
                 <g>
                   <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
