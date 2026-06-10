@@ -1,1 +1,1127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Drone Override Protocol</title>
 
+  <style>
+    :root {
+      --green: #00ff66;
+      --green2: #00aa44;
+      --dark: #020802;
+      --black: #000;
+      --text: #caffd7;
+      --white: #eaffef;
+      --yellow: #ffee66;
+      --red: #ff5555;
+      --blue: #7dfcff;
+      --orange: #ffb347;
+      --purple: #d48cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, #2b1010 0%, #060303 58%, #000 100%);
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      padding: 18px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,85,85,0.045),
+          rgba(255,85,85,0.045) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      z-index: 30;
+      animation: scanMove 7s linear infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,85,85,0.18), transparent 28%),
+        radial-gradient(circle at 75% 64%, rgba(0,255,102,0.10), transparent 32%);
+      mix-blend-mode: screen;
+      animation: glowMove 8s ease-in-out infinite alternate;
+      z-index: 20;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(12px); }
+    }
+
+    @keyframes glowMove {
+      0% {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      100% {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.72;
+      }
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      min-height: calc(100vh - 36px);
+      border: 5px solid #321515;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.08), transparent 45%),
+        radial-gradient(circle at center, rgba(0,255,102,0.05), transparent 68%),
+        linear-gradient(180deg, #130606 0%, #010801 100%);
+      box-shadow:
+        inset 0 0 80px rgba(0,0,0,0.85),
+        inset 0 0 30px rgba(255,85,85,0.13),
+        0 0 35px rgba(0,0,0,0.82);
+      padding: 14px;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: "";
+      position: absolute;
+      left: -20%;
+      right: -20%;
+      top: -150px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(255,85,85,0.12), transparent);
+      animation: sweep 5.8s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sweep {
+      0% { top: -150px; }
+      100% { top: 100%; }
+    }
+
+    .topBar {
+      height: 36px;
+      background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
+      border: 2px solid #ffd8d8;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .window {
+      border: 2px solid #ffd8d8;
+      background: rgba(10, 0, 0, 0.86);
+      box-shadow:
+        4px 4px 0 rgba(0,0,0,0.7),
+        0 0 18px rgba(255,85,85,0.14);
+      position: relative;
+      z-index: 3;
+    }
+
+    .windowTitle {
+      min-height: 30px;
+      background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
+      border-bottom: 2px solid #ffd8d8;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 14px;
+    }
+
+    h1 {
+      color: var(--yellow);
+      font-size: 26px;
+      margin: 0 0 8px;
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      color: var(--green);
+      font-size: 16px;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .startScreen,
+    .resultScreen {
+      max-width: 760px;
+      margin: 60px auto;
+    }
+
+    .dangerBox {
+      border: 2px solid var(--red);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.12), transparent 70%),
+        rgba(255,85,85,0.08);
+      color: #ffb8b8;
+      padding: 14px;
+      margin: 14px 0;
+      line-height: 1.55;
+      font-size: 14px;
+      animation: dangerPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes dangerPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(255,85,85,0);
+      }
+
+      50% {
+        box-shadow: 0 0 22px rgba(255,85,85,0.25);
+      }
+    }
+
+    button,
+    .buttonLink {
+      color: var(--white);
+      background: linear-gradient(180deg, #9f3d3d 0%, #561515 100%);
+      border-top: 2px solid #ffd8d8;
+      border-left: 2px solid #ffd8d8;
+      border-right: 2px solid #2b0505;
+      border-bottom: 2px solid #2b0505;
+      padding: 11px 14px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    button:hover,
+    .buttonLink:hover {
+      filter: brightness(1.18);
+    }
+
+    .primaryButton {
+      width: 100%;
+      font-size: 16px;
+      padding: 14px;
+      color: var(--yellow);
+      background: linear-gradient(180deg, #b63c3c 0%, #5a1111 100%);
+    }
+
+    .gameArea {
+      display: none;
+      position: relative;
+      z-index: 3;
+    }
+
+    .mainGrid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+    }
+
+    .timerPanel {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .timerBox {
+      border: 2px solid var(--red);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.12), transparent 65%),
+        rgba(0,0,0,0.48);
+      padding: 14px;
+      text-align: center;
+      color: var(--red);
+    }
+
+    .timerLabel {
+      font-size: 12px;
+      color: #ffb8b8;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .timer {
+      font-size: 58px;
+      color: var(--yellow);
+      text-shadow:
+        0 0 8px rgba(255,238,102,0.6),
+        0 0 18px rgba(255,85,85,0.35);
+      letter-spacing: 4px;
+      animation: timerFlicker 1s infinite;
+    }
+
+    @keyframes timerFlicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.88; }
+    }
+
+    .statusBox {
+      border: 2px solid rgba(255,216,216,0.55);
+      background: rgba(0,0,0,0.42);
+      padding: 14px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .statusLine {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      border-bottom: 1px dotted rgba(255,216,216,0.24);
+      padding: 5px 0;
+    }
+
+    .statusLine:last-child {
+      border-bottom: none;
+    }
+
+    .statusValue {
+      color: var(--yellow);
+    }
+
+    .mapWrap {
+      min-height: 600px;
+    }
+
+    .mapFrame {
+      border: 2px solid rgba(0,255,102,0.44);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 70%),
+        rgba(0,0,0,0.44);
+      min-height: 560px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mapHeader {
+      color: var(--yellow);
+      font-size: 13px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(0,255,102,0.28);
+      background: rgba(0,255,102,0.04);
+    }
+
+    svg {
+      width: 100%;
+      height: 500px;
+      display: block;
+    }
+
+    .nlOutline {
+      fill: rgba(0,255,102,0.06);
+      stroke: rgba(0,255,102,0.55);
+      stroke-width: 2;
+    }
+
+    .routeLine {
+      fill: none;
+      stroke: var(--yellow);
+      stroke-width: 3;
+      stroke-dasharray: 8 8;
+      animation: routeMove 1.2s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(255,238,102,0.6));
+    }
+
+    @keyframes routeMove {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -16; }
+    }
+
+    .cityPulse {
+      fill: var(--red);
+      stroke: var(--yellow);
+      stroke-width: 2;
+      animation: cityBlink 1s infinite;
+      filter: drop-shadow(0 0 8px rgba(255,85,85,0.9));
+    }
+
+    @keyframes cityBlink {
+      0%, 100% {
+        r: 6;
+        opacity: 1;
+      }
+
+      50% {
+        r: 10;
+        opacity: 0.45;
+      }
+    }
+
+    .cityLabel {
+      fill: var(--white);
+      font-size: 13px;
+      font-family: "Courier New", monospace;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .routeStep {
+      fill: var(--yellow);
+      font-size: 10px;
+      font-family: "Courier New", monospace;
+    }
+
+    .controlGrid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .inputPanel {
+      border: 2px solid rgba(255,216,216,0.45);
+      background: rgba(0,0,0,0.42);
+      padding: 14px;
+    }
+
+    label {
+      display: block;
+      color: var(--white);
+      font-size: 12px;
+      margin-top: 12px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      background: #000;
+      color: var(--green);
+      border: 2px solid #7b2424;
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: var(--yellow);
+    }
+
+    .fieldHint {
+      color: #ffb8b8;
+      font-size: 12px;
+      line-height: 1.4;
+      margin-top: 6px;
+    }
+
+    .sliderGroup {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sliderBlock {
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.28);
+      padding: 10px;
+    }
+
+    .sliderTop {
+      display: flex;
+      justify-content: space-between;
+      color: var(--yellow);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ffee66;
+      cursor: pointer;
+    }
+
+    .knobGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .knobBlock {
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.28);
+      padding: 10px;
+      text-align: center;
+      min-height: 150px;
+    }
+
+    .knobTitle {
+      color: var(--yellow);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .knob {
+      width: 74px;
+      height: 74px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      position: relative;
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.14), transparent 54%),
+        rgba(0,0,0,0.55);
+      box-shadow:
+        inset 0 0 14px rgba(0,255,102,0.10),
+        0 0 14px rgba(0,255,102,0.16);
+    }
+
+    .knob::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      width: 4px;
+      height: 28px;
+      background: var(--yellow);
+      transform-origin: center 27px;
+      transform: translateX(-50%) rotate(var(--rotation));
+      box-shadow: 0 0 8px rgba(255,238,102,0.6);
+    }
+
+    .knobValue {
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .executePanel {
+      border: 2px solid var(--red);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.10), transparent 65%),
+        rgba(0,0,0,0.52);
+      padding: 14px;
+    }
+
+    .executeButton {
+      width: 100%;
+      color: var(--yellow);
+      background: linear-gradient(180deg, #b63c3c 0%, #5a1111 100%);
+      font-size: 16px;
+      padding: 14px;
+      animation: executePulse 1.8s infinite;
+    }
+
+    @keyframes executePulse {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(255,85,85,0);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(255,85,85,0.28);
+      }
+    }
+
+    .attemptNote {
+      color: #ffb8b8;
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .logBox {
+      height: 156px;
+      overflow-y: auto;
+      border: 1px solid rgba(0,255,102,0.3);
+      background: rgba(0,0,0,0.42);
+      padding: 10px;
+      color: #8dffb0;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+      margin-top: 10px;
+    }
+
+    .winScreen,
+    .loseScreen {
+      display: none;
+    }
+
+    .winBox {
+      border: 2px solid var(--green);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.12), transparent 65%),
+        rgba(0,0,0,0.48);
+      padding: 18px;
+      color: var(--text);
+    }
+
+    .loseBox {
+      border: 2px solid var(--red);
+      background:
+        radial-gradient(circle at center, rgba(255,85,85,0.14), transparent 65%),
+        rgba(0,0,0,0.50);
+      padding: 18px;
+      color: #ffb8b8;
+    }
+
+    .bigResult {
+      font-size: 34px;
+      letter-spacing: 3px;
+      color: var(--yellow);
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .glitch {
+      animation: glitch 0.14s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translateX(0); opacity: 1; }
+      50% { transform: translateX(3px); opacity: 0.75; }
+      100% { transform: translateX(-2px); opacity: 0.95; }
+    }
+
+    @media (max-width: 1050px) {
+      .mainGrid,
+      .timerPanel {
+        grid-template-columns: 1fr;
+      }
+
+      .mapFrame {
+        min-height: auto;
+      }
+
+      svg {
+        height: 440px;
+      }
+
+      .knobGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .timer {
+        font-size: 46px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 8px;
+      }
+
+      .screen {
+        min-height: calc(100vh - 16px);
+      }
+
+      .topBar {
+        font-size: 10px;
+      }
+
+      .topBar span:nth-child(2) {
+        display: none;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+
+      .timer {
+        font-size: 38px;
+      }
+
+      svg {
+        height: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="screen">
+    <div class="topBar">
+      <span>THORNE OS // DRONE OVERRIDE</span>
+      <span>HARDENBERG RISK ZONE</span>
+      <span>ONE EXECUTION ONLY</span>
+    </div>
+
+    <section class="window startScreen" id="startScreen">
+      <div class="windowTitle">
+        <span>DRONE_OVERRIDE.exe</span>
+        <span>ARMED</span>
+      </div>
+
+      <div class="content">
+        <h1>DRONE OVERRIDE PROGRAM</h1>
+        <h2>Final deactivation sequence</h2>
+
+        <p>
+          Encrypted override program loaded.
+        </p>
+
+        <div class="dangerBox">
+          WAARSCHUWING:<br>
+          Dit programma kan maar één keer worden uitgevoerd.<br>
+          Na het starten loopt een timer van 5 minuten.<br><br>
+          Als de timer op nul komt of de override verkeerd wordt uitgevoerd, blijft de drone actief.
+        </div>
+
+        <p>
+          Controleer de fysieke routepuzzel, de handleiding en alle gevonden informatie voordat de override wordt gestart.
+        </p>
+
+        <button class="primaryButton" onclick="startFinalAttempt()">START FINAL OVERRIDE</button>
+        <a class="buttonLink" href="terminal.html">RETURN TO TERMINAL</a>
+      </div>
+    </section>
+
+    <section class="gameArea" id="gameArea">
+      <section class="timerPanel">
+        <div class="timerBox">
+          <div class="timerLabel">TIME UNTIL DRONE RELEASE</div>
+          <div class="timer" id="timer">05:00</div>
+        </div>
+
+        <div class="statusBox">
+          <div class="statusLine">
+            <span>Drone origin</span>
+            <span class="statusValue">IJmuiden</span>
+          </div>
+          <div class="statusLine">
+            <span>Load point</span>
+            <span class="statusValue">Soesterberg</span>
+          </div>
+          <div class="statusLine">
+            <span>Fluid point</span>
+            <span class="statusValue">Maastricht</span>
+          </div>
+          <div class="statusLine">
+            <span>Target zone</span>
+            <span class="statusValue">Hardenberg</span>
+          </div>
+          <div class="statusLine">
+            <span>Attempt status</span>
+            <span class="statusValue">ACTIVE</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="mainGrid">
+        <section class="window mapWrap">
+          <div class="windowTitle">
+            <span>Route Map</span>
+            <span>NL GRID</span>
+          </div>
+
+          <div class="content">
+            <div class="mapFrame">
+              <div class="mapHeader">
+                Route trace: IJmuiden → Soesterberg → Maastricht → Hardenberg
+              </div>
+
+              <svg viewBox="0 0 360 500" role="img" aria-label="kaart van Nederland met routepunten">
+                <path class="nlOutline" d="
+                  M 150 28
+                  C 125 42, 106 63, 98 94
+                  C 80 104, 72 128, 82 150
+                  C 61 171, 64 202, 82 224
+                  C 65 251, 68 282, 92 304
+                  C 105 323, 100 354, 119 375
+                  C 135 392, 154 404, 162 432
+                  C 169 455, 193 465, 210 444
+                  C 224 426, 218 398, 232 377
+                  C 250 349, 276 331, 282 298
+                  C 288 263, 270 232, 282 198
+                  C 294 161, 284 128, 258 100
+                  C 232 72, 211 44, 178 33
+                  C 166 29, 158 26, 150 28
+                  Z" />
+
+                <polyline class="routeLine" points="116,120 183,174 210,390 257,116" />
+
+                <text class="routeStep" x="128" y="142">1</text>
+                <text class="routeStep" x="189" y="205">2</text>
+                <text class="routeStep" x="222" y="360">3</text>
+
+                <circle class="cityPulse" cx="116" cy="120" r="6"></circle>
+                <text class="cityLabel" x="52" y="112">IJmuiden</text>
+
+                <circle class="cityPulse" cx="183" cy="174" r="6"></circle>
+                <text class="cityLabel" x="193" y="171">Soesterberg</text>
+
+                <circle class="cityPulse" cx="210" cy="390" r="6"></circle>
+                <text class="cityLabel" x="221" y="393">Maastricht</text>
+
+                <circle class="cityPulse" cx="257" cy="116" r="6"></circle>
+                <text class="cityLabel" x="264" y="113">Hardenberg</text>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="controlGrid">
+          <section class="window">
+            <div class="windowTitle">
+              <span>Route Calculation</span>
+              <span>PHYSICAL MAP REQUIRED</span>
+            </div>
+
+            <div class="content">
+              <label for="distanceInput">TOTAL ROUTE DISTANCE</label>
+              <input id="distanceInput" type="text" autocomplete="off" placeholder="enter total distance">
+
+              <div class="fieldHint">
+                Route order locked: IJmuiden → Soesterberg → Maastricht → Hardenberg
+              </div>
+            </div>
+          </section>
+
+          <section class="window">
+            <div class="windowTitle">
+              <span>Calibration Sliders</span>
+              <span>MANUAL CONTROL</span>
+            </div>
+
+            <div class="content">
+              <div class="sliderGroup">
+                <div class="sliderBlock">
+                  <div class="sliderTop">
+                    <span>SIGNAL LOCK</span>
+                    <span id="sliderAValue">50</span>
+                  </div>
+                  <input id="sliderA" type="range" min="0" max="100" value="50" oninput="updateControls()">
+                </div>
+
+                <div class="sliderBlock">
+                  <div class="sliderTop">
+                    <span>ROUTE SYNC</span>
+                    <span id="sliderBValue">50</span>
+                  </div>
+                  <input id="sliderB" type="range" min="0" max="100" value="50" oninput="updateControls()">
+                </div>
+
+                <div class="sliderBlock">
+                  <div class="sliderTop">
+                    <span>PAYLOAD SEAL</span>
+                    <span id="sliderCValue">50</span>
+                  </div>
+                  <input id="sliderC" type="range" min="0" max="100" value="50" oninput="updateControls()">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="window">
+            <div class="windowTitle">
+              <span>Rotary Locks</span>
+              <span>DIAL CONTROL</span>
+            </div>
+
+            <div class="content">
+              <div class="knobGrid">
+                <div class="knobBlock">
+                  <div class="knobTitle">ROTOR</div>
+                  <div class="knob" id="knobAVisual"></div>
+                  <input id="knobA" type="range" min="0" max="9" value="0" oninput="updateControls()">
+                  <div class="knobValue" id="knobAValue">0</div>
+                </div>
+
+                <div class="knobBlock">
+                  <div class="knobTitle">ANTENNA</div>
+                  <div class="knob" id="knobBVisual"></div>
+                  <input id="knobB" type="range" min="0" max="9" value="0" oninput="updateControls()">
+                  <div class="knobValue" id="knobBValue">0</div>
+                </div>
+
+                <div class="knobBlock">
+                  <div class="knobTitle">FAILSAFE</div>
+                  <div class="knob" id="knobCVisual"></div>
+                  <input id="knobC" type="range" min="0" max="9" value="0" oninput="updateControls()">
+                  <div class="knobValue" id="knobCValue">0</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="executePanel">
+            <button class="executeButton" onclick="executeOverride()">EXECUTE OVERRIDE</button>
+            <div class="attemptNote">
+              One execution only. Incorrect sequence will lock the override attempt.
+            </div>
+
+            <div class="logBox" id="logBox">
+> override interface active
+> timer started
+> awaiting route distance
+> awaiting calibration sequence
+            </div>
+          </section>
+        </section>
+      </section>
+    </section>
+
+    <section class="resultScreen winScreen" id="winScreen">
+      <div class="winBox">
+        <div class="bigResult">DRONE DEACTIVATED</div>
+
+        <p>
+          Route lock broken. Payload seal closed. Drone command chain terminated.
+        </p>
+
+        <p>
+          Hardenberg risk zone cleared.
+        </p>
+
+        <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
+      </div>
+    </section>
+
+    <section class="resultScreen loseScreen" id="loseScreen">
+      <div class="loseBox">
+        <div class="bigResult glitch">OVERRIDE FAILED</div>
+
+        <p id="loseReason">
+          The drone override attempt has been locked.
+        </p>
+
+        <p>
+          This browser is now marked as failed for the final drone attempt.
+        </p>
+
+        <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CONFIG = {
+      timeLimitSeconds: 300,
+
+      correctDistance: "416",
+
+      sliderA: 72,
+      sliderB: 38,
+      sliderC: 91,
+
+      knobA: 7,
+      knobB: 3,
+      knobC: 5
+    };
+
+    let timerInterval = null;
+
+    function cleanDistance(value) {
+      return String(value)
+        .toUpperCase()
+        .replaceAll("KM", "")
+        .replaceAll(" ", "")
+        .replaceAll(".", "")
+        .replaceAll(",", "")
+        .replaceAll("-", "")
+        .trim();
+    }
+
+    function startFinalAttempt() {
+      if (localStorage.getItem("droneFinalWon") === "yes") {
+        showWin();
+        return;
+      }
+
+      if (localStorage.getItem("droneFinalLost") === "yes") {
+        showLose("The previous override attempt has already failed.");
+        return;
+      }
+
+      const endTime = Date.now() + CONFIG.timeLimitSeconds * 1000;
+
+      localStorage.setItem("droneFinalStarted", "yes");
+      localStorage.setItem("droneFinalEndTime", String(endTime));
+
+      showGame();
+      startTimer();
+    }
+
+    function showGame() {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("loseScreen").style.display = "none";
+      document.getElementById("gameArea").style.display = "block";
+      updateControls();
+    }
+
+    function showWin() {
+      clearInterval(timerInterval);
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("loseScreen").style.display = "none";
+      document.getElementById("winScreen").style.display = "block";
+    }
+
+    function showLose(reason) {
+      clearInterval(timerInterval);
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("loseScreen").style.display = "block";
+      document.getElementById("loseReason").textContent = reason;
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+
+      function tick() {
+        const endTime = Number(localStorage.getItem("droneFinalEndTime") || "0");
+        const remaining = Math.max(0, endTime - Date.now());
+
+        const totalSeconds = Math.ceil(remaining / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        document.getElementById("timer").textContent =
+          String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+
+        if (remaining <= 0) {
+          failAttempt("Timer expired. Drone release sequence continued.");
+        }
+      }
+
+      tick();
+      timerInterval = setInterval(tick, 250);
+    }
+
+    function updateControls() {
+      const sliderA = document.getElementById("sliderA").value;
+      const sliderB = document.getElementById("sliderB").value;
+      const sliderC = document.getElementById("sliderC").value;
+
+      document.getElementById("sliderAValue").textContent = sliderA;
+      document.getElementById("sliderBValue").textContent = sliderB;
+      document.getElementById("sliderCValue").textContent = sliderC;
+
+      updateKnob("knobA", "knobAVisual", "knobAValue");
+      updateKnob("knobB", "knobBVisual", "knobBValue");
+      updateKnob("knobC", "knobCVisual", "knobCValue");
+    }
+
+    function updateKnob(inputId, visualId, valueId) {
+      const value = Number(document.getElementById(inputId).value);
+      const rotation = -135 + value * 30;
+
+      document.getElementById(visualId).style.setProperty("--rotation", rotation + "deg");
+      document.getElementById(valueId).textContent = value;
+    }
+
+    function executeOverride() {
+      if (localStorage.getItem("droneFinalLost") === "yes") {
+        showLose("The previous override attempt has already failed.");
+        return;
+      }
+
+      if (localStorage.getItem("droneFinalWon") === "yes") {
+        showWin();
+        return;
+      }
+
+      const distance = cleanDistance(document.getElementById("distanceInput").value);
+
+      const sliderA = Number(document.getElementById("sliderA").value);
+      const sliderB = Number(document.getElementById("sliderB").value);
+      const sliderC = Number(document.getElementById("sliderC").value);
+
+      const knobA = Number(document.getElementById("knobA").value);
+      const knobB = Number(document.getElementById("knobB").value);
+      const knobC = Number(document.getElementById("knobC").value);
+
+      const correct =
+        distance === cleanDistance(CONFIG.correctDistance) &&
+        sliderA === CONFIG.sliderA &&
+        sliderB === CONFIG.sliderB &&
+        sliderC === CONFIG.sliderC &&
+        knobA === CONFIG.knobA &&
+        knobB === CONFIG.knobB &&
+        knobC === CONFIG.knobC;
+
+      if (correct) {
+        localStorage.setItem("droneFinalWon", "yes");
+        localStorage.removeItem("droneFinalLost");
+
+        const log = document.getElementById("logBox");
+        log.textContent += "\n> route distance accepted";
+        log.textContent += "\n> calibration accepted";
+        log.textContent += "\n> drone command chain terminated";
+
+        setTimeout(function() {
+          showWin();
+        }, 800);
+      } else {
+        failAttempt("Incorrect override sequence. Drone command chain remained active.");
+      }
+    }
+
+    function failAttempt(reason) {
+      localStorage.setItem("droneFinalLost", "yes");
+      localStorage.removeItem("droneFinalWon");
+
+      showLose(reason);
+    }
+
+    function loadState() {
+      if (localStorage.getItem("droneFinalWon") === "yes") {
+        showWin();
+        return;
+      }
+
+      if (localStorage.getItem("droneFinalLost") === "yes") {
+        showLose("The previous override attempt has already failed.");
+        return;
+      }
+
+      if (localStorage.getItem("droneFinalStarted") === "yes") {
+        const endTime = Number(localStorage.getItem("droneFinalEndTime") || "0");
+
+        if (endTime > Date.now()) {
+          showGame();
+          startTimer();
+        } else {
+          failAttempt("Timer expired. Drone release sequence continued.");
+        }
+
+        return;
+      }
+
+      document.getElementById("startScreen").style.display = "block";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("loseScreen").style.display = "none";
+      updateControls();
+    }
+
+    loadState();
+  </script>
+</body>
+</html>
