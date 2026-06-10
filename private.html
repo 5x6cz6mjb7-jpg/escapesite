@@ -8,7 +8,6 @@
     :root {
       --green: #00ff66;
       --green2: #00aa44;
-      --dark: #020802;
       --text: #caffd7;
       --white: #eaffef;
       --yellow: #ffee66;
@@ -67,15 +66,8 @@
     }
 
     @keyframes glowMove {
-      0% {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
-      }
-
-      100% {
-        transform: translate(3%, 2%) scale(1.06);
-        opacity: 0.72;
-      }
+      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
+      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.72; }
     }
 
     .screen {
@@ -179,22 +171,6 @@
       color: var(--text);
       position: relative;
       overflow: hidden;
-    }
-
-    .fragmentBox::before {
-      content: "";
-      position: absolute;
-      left: -40%;
-      top: 0;
-      width: 35%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,238,102,0.18), transparent);
-      animation: fragmentSweep 3s linear infinite;
-    }
-
-    @keyframes fragmentSweep {
-      0% { left: -40%; }
-      100% { left: 120%; }
     }
 
     .fragmentBox.found {
@@ -355,7 +331,7 @@
     }
 
     .viewer {
-      min-height: 520px;
+      min-height: 540px;
       border: 2px solid rgba(255,216,216,0.32);
       background:
         radial-gradient(circle at center, rgba(255,85,85,0.04), transparent 65%),
@@ -386,28 +362,29 @@
       color: var(--red);
     }
 
-    .finalBox {
+    .finalBox,
+    .droneBox,
+    .memoryPanel {
       border: 1px dashed var(--yellow);
       background: rgba(255,238,102,0.06);
       color: var(--yellow);
       padding: 12px;
       margin-top: 14px;
       line-height: 1.6;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    .memoryPanel {
-      border: 1px dashed rgba(255,238,102,0.45);
-      background: rgba(255,238,102,0.05);
-      padding: 12px;
-      color: var(--yellow);
-      margin-top: 12px;
-      line-height: 1.5;
+    .droneBox {
+      border-color: var(--red);
+      color: #ffb8b8;
+      background: rgba(255,85,85,0.08);
     }
 
     .protocolLink {
       background: linear-gradient(180deg, #776510 0%, #3c3308 100%);
       color: var(--yellow);
+      width: 100%;
+      text-align: center;
     }
 
     .shake {
@@ -519,9 +496,14 @@
                 <div class="fileMeta">staged material</div>
               </button>
 
-              <button class="fileButton" onclick="openFile('diary', this)">
-                <div class="fileName">diary_reference.tmp</div>
-                <div class="fileMeta">physical object missing</div>
+              <button class="fileButton" onclick="openFile('drone', this)">
+                <div class="fileName">drone_manifest.tmp</div>
+                <div class="fileMeta">Hardenberg risk zone</div>
+              </button>
+
+              <button class="fileButton" onclick="openFile('memory', this)">
+                <div class="fileName">memory_protocol.note</div>
+                <div class="fileMeta">code recovery</div>
               </button>
 
               <button class="fileButton" onclick="openFile('final', this)">
@@ -545,7 +527,8 @@
               Botanical archive<br>
               Jason Krane reference cluster<br>
               Unsent messages<br>
-              Staged transmission notes<br><br>
+              Staged transmission notes<br>
+              Drone override reference<br><br>
 
               System note:<br>
               <span class="warning">Krane activity does not match a living sender.</span>
@@ -573,7 +556,8 @@ Chemistry archive<br>
 Botanical archive<br>
 Jason Krane reference cluster<br>
 Unsent messages<br>
-Staged transmission notes<br><br>
+Staged transmission notes<br>
+Drone override reference<br><br>
 
 System note:<br>
 <span class="warning">Krane activity does not match a living sender.</span>`,
@@ -632,23 +616,47 @@ Sender marker:<br>
 Transmission was staged.
 </span>`,
 
-      diary:
-`<h3>diary_reference.tmp</h3>
+      drone:
+`<h3>drone_manifest.tmp</h3>
 
-Recovered references:<br><br>
+Recovered object:<br>
+<strong>autonomous dispersal drone</strong><br><br>
 
-black notebook<br>
-green ribbon<br>
-pressed flower between pages<br>
-last known object connected to Krane<br><br>
+Registered risk zone:<br>
+<strong>HARDENBERG</strong><br><br>
 
-<span class="hand">
-The diary is still out there.
-</span><br><br>
+Linked names:<br>
+Bart<br>
+Willemijn<br><br>
 
-<span class="hand">
-If they find it before I do, they will know Jason was already gone.
-</span>`,
+Payload description:<br>
+<span class="warning">botanical aerosol compound</span><br><br>
+
+Status:<br>
+active route pending<br><br>
+
+<div class="droneBox">
+OVERRIDE WARNING:<br><br>
+The drone can only be stopped through the encrypted terminal file:<br>
+<strong>DRONE_OVERRIDE.lock</strong><br><br>
+The override sequence can only be attempted once.
+</div>`,
+
+      memory:
+`<h3>memory_protocol.note</h3>
+
+Recovered note:<br><br>
+
+The override file is encrypted.<br>
+The key is not stored in this folder.<br><br>
+
+Memory protocol link detected.<br><br>
+
+<div class="memoryPanel">
+Run the Memory Protocol.<br><br>
+A completed memory sequence reveals the code needed to decrypt:<br>
+<strong>DRONE_OVERRIDE.lock</strong>
+</div>`,
 
       final:
 `<h3>final_instruction.lock</h3>
@@ -664,15 +672,11 @@ She was not trying to bring Jason back.<br>
 She was trying to make everyone follow his ghost.<br><br>
 
 <div class="finalBox">
-FINAL INSTRUCTION:<br><br>
-The workstation has revealed the truth,<br>
-but Nessa Thorne's physical diary remains missing.<br><br>
-Find the diary.
-</div>
-
-<div class="memoryPanel">
-Optional recovered protocol:<br>
-Open the memory protocol if another confirmation code is required.
+FINAL OBJECTIVE:<br><br>
+Return to the terminal.<br>
+Open <strong>DRONE_OVERRIDE.lock</strong>.<br>
+Use the recovered memory code.<br><br>
+Once the override program starts, there is only one chance.
 </div>`
     };
 
@@ -715,11 +719,7 @@ Open the memory protocol if another confirmation code is required.
         lockedLine.innerHTML =
           "Fragments restored:<br>" +
           "<strong>THORNE</strong> + <strong>NESSA</strong>";
-      } else if (chemistrySolved && !botanicalSolved) {
-        lockedLine.innerHTML =
-          "One fragment restored.<br>" +
-          "Second fragment still missing.";
-      } else if (!chemistrySolved && botanicalSolved) {
+      } else if (chemistrySolved || botanicalSolved) {
         lockedLine.innerHTML =
           "One fragment restored.<br>" +
           "Second fragment still missing.";
