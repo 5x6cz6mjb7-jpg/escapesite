@@ -212,13 +212,13 @@
     .crtNoise {
       position: absolute;
       inset: 0;
-      pointer-events: none;
       z-index: 38;
-      opacity: 0.12;
-      background-image:
-        radial-gradient(rgba(0,255,102,0.45) 1px, transparent 1px);
+      opacity: 0.055;
+      pointer-events: none;
+      background:
+        radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px);
       background-size: 7px 7px;
-      animation: noiseShift 0.35s steps(2) infinite;
+      animation: noiseShift 0.45s steps(2) infinite;
     }
 
     @keyframes greenWaas {
@@ -290,6 +290,7 @@
       overflow: hidden;
       border-radius: 12px;
       animation: desktopPulse 6s ease-in-out infinite;
+      z-index: 10;
     }
 
     @keyframes desktopPulse {
@@ -311,16 +312,20 @@
       padding: 22px;
     }
 
+    .desktop {
+      display: none;
+    }
+
     .loginWindow {
-      width: 100%;
-      max-width: 540px;
+      width: 520px;
+      max-width: 100%;
       border: 2px solid #d8ffe6;
       background: #031203;
       box-shadow:
-        6px 6px 0 rgba(0, 0, 0, 0.72),
-        0 0 28px rgba(0,255,100,0.22);
+        4px 4px 0 rgba(0,0,0,0.65),
+        0 0 28px rgba(0,255,100,0.18);
       position: relative;
-      z-index: 10;
+      z-index: 12;
     }
 
     .loginTitleBar,
@@ -436,78 +441,66 @@
 
     .hintBox {
       display: none;
-      border: 1px dashed var(--green2);
-      background: rgba(0,255,102,0.045);
-      padding: 12px;
       margin-top: 14px;
+      border: 1px dashed var(--green2);
+      background: rgba(0,0,0,0.32);
+      padding: 12px;
+      color: #9dffbd;
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     .hintBox strong {
       color: var(--yellow);
     }
 
-    .desktop {
-      display: none;
-      padding-bottom: 46px;
-    }
-
     .desktopTopStrip {
-      height: 28px;
+      min-height: 34px;
       background:
-        linear-gradient(180deg, #107535 0%, #0b3c1c 100%);
+        linear-gradient(180deg, #0e642c 0%, #062b13 100%);
       border-bottom: 2px solid #d8ffe6;
+      color: var(--white);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       padding: 0 10px;
-      color: var(--white);
       font-size: 12px;
-      position: relative;
-      z-index: 5;
-    }
-
-    .desktopTopStrip span {
-      white-space: nowrap;
+      text-transform: uppercase;
     }
 
     .desktopMain {
       display: grid;
-      grid-template-columns: 350px 1fr 390px;
+      grid-template-columns: 132px 1fr 390px;
       gap: 14px;
-      height: calc(100% - 28px);
-      min-height: 674px;
-      padding: 18px 14px 14px;
+      padding: 16px 14px 58px;
       position: relative;
-      z-index: 4;
+      min-height: 674px;
     }
 
     .iconColumn {
       display: grid;
-      grid-template-columns: repeat(3, 92px);
-      grid-auto-rows: 108px;
-      gap: 16px 12px;
+      grid-template-columns: 1fr;
       align-content: start;
-      padding: 8px;
+      gap: 12px;
     }
 
     .desktopIcon {
-      width: 86px;
-      min-height: 100px;
+      width: 92px;
+      min-height: 74px;
       color: var(--white);
       text-decoration: none;
+      background: transparent;
+      border: 1px solid transparent;
+      font-family: "Courier New", monospace;
+      cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      gap: 7px;
       padding: 5px 4px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      user-select: none;
-      background: transparent;
-      font-family: "Courier New", monospace;
+      gap: 5px;
+      text-align: center;
     }
 
     button.desktopIcon {
@@ -922,7 +915,7 @@
     }
 
     .miniLog {
-      height: 130px;
+      height: 136px;
       overflow: hidden;
       border: 1px solid rgba(0,255,102,0.25);
       background: rgba(0,0,0,0.28);
@@ -930,41 +923,37 @@
       color: #8dffb0;
       font-size: 12px;
       line-height: 1.45;
-    }
-
-    .miniLog div {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     .hintLine {
       color: var(--yellow);
       font-size: 12px;
-      margin-top: 12px;
+      border: 1px solid rgba(255,238,102,0.28);
+      background: rgba(255,238,102,0.055);
+      padding: 8px;
+      margin-bottom: 10px;
     }
 
     .commandTerminal {
-      margin-top: 12px;
-      border: 1px solid rgba(0,255,102,0.35);
-      background: rgba(0,0,0,0.34);
+      border: 1px solid rgba(0,255,102,0.38);
+      background: rgba(0,0,0,0.42);
       box-shadow:
-        inset 0 0 18px rgba(0,255,102,0.06),
+        inset 0 0 16px rgba(0,255,102,0.06),
         0 0 12px rgba(0,255,102,0.08);
     }
 
     .commandHeader {
-      height: 24px;
-      background: rgba(0,255,102,0.10);
-      border-bottom: 1px solid rgba(0,255,102,0.35);
+      background: #0c3a16;
       color: var(--yellow);
-      display: flex;
-      align-items: center;
-      padding: 0 8px;
-      font-size: 11px;
-      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0,255,102,0.38);
+      padding: 6px 8px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .commandOutput {
-      height: 124px;
+      height: 118px;
       overflow-y: auto;
       padding: 8px;
       color: #8dffb0;
@@ -974,60 +963,54 @@
     }
 
     .commandInputRow {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 6px;
+      display: flex;
       align-items: center;
-      border-top: 1px solid rgba(0,255,102,0.25);
-      padding: 7px;
-      background: rgba(0,0,0,0.28);
+      border-top: 1px solid rgba(0,255,102,0.22);
+      padding: 7px 8px;
+      gap: 6px;
     }
 
     .commandPrompt {
       color: var(--yellow);
       font-size: 12px;
+      white-space: nowrap;
     }
 
     .commandInput {
-      width: 100%;
+      flex: 1;
+      min-width: 0;
       background: transparent;
       border: none;
       color: var(--green);
-      font-family: "Courier New", monospace;
-      font-size: 13px;
       outline: none;
-      padding: 4px;
-    }
-
-    .commandInput::placeholder {
-      color: rgba(186,255,201,0.35);
+      font-family: "Courier New", monospace;
+      font-size: 12px;
     }
 
     .deletedItem {
       width: 100%;
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      align-items: center;
-      border: 1px dotted rgba(0,255,102,0.28);
-      padding: 8px;
-      background: rgba(0,0,0,0.22);
-      margin-bottom: 8px;
-      color: var(--text);
-      font-family: "Courier New", monospace;
-      font-size: 13px;
       text-align: left;
+      border: 1px solid rgba(0,255,102,0.24);
+      background: rgba(0,0,0,0.22);
+      color: var(--white);
+      padding: 8px;
+      margin: 6px 0;
+      font-family: "Courier New", monospace;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .deletedItem:hover {
-      background: rgba(0,255,102,0.11);
-      color: var(--yellow);
+      background: rgba(0,255,102,0.10);
+      border-color: var(--yellow);
     }
 
     .tinyTextIcon {
-      width: 20px;
-      height: 24px;
+      width: 16px;
+      height: 20px;
+      display: inline-block;
       background: #d8ffe6;
       border: 1px solid #001100;
       position: relative;
@@ -1036,22 +1019,26 @@
     .tinyTextIcon::after {
       content: "";
       position: absolute;
-      left: 4px;
-      top: 8px;
-      width: 12px;
-      height: 2px;
+      left: 3px;
+      top: 7px;
+      width: 9px;
+      height: 1px;
       background: #001100;
-      box-shadow: 0 5px 0 #001100;
+      box-shadow:
+        0 4px 0 #001100,
+        0 8px 0 #001100;
     }
 
     .joke {
-      color: var(--yellow);
-      margin-top: 10px;
+      margin-top: 12px;
+      color: #9dffbd;
+      font-size: 12px;
+      border-top: 1px dotted rgba(0,255,102,0.25);
+      padding-top: 10px;
     }
 
     .easterEggText {
-      font-size: 14px;
-      line-height: 1.65;
+      margin-top: 10px;
       color: #caffd7;
       white-space: pre-line;
     }
@@ -1061,40 +1048,36 @@
       left: 0;
       right: 0;
       bottom: 0;
-      height: 46px;
+      height: 42px;
       background:
-        linear-gradient(180deg, #107535 0%, #063516 100%);
+        linear-gradient(180deg, #0e642c 0%, #062b13 100%);
       border-top: 2px solid #d8ffe6;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
+      display: flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 7px;
-      z-index: 10;
+      padding: 5px 8px;
     }
 
     .startButton {
-      height: 31px;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 82px;
       color: var(--white);
-      background:
-        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
+      text-decoration: none;
       border-top: 2px solid #d8ffe6;
       border-left: 2px solid #d8ffe6;
       border-right: 2px solid #052b13;
       border-bottom: 2px solid #052b13;
-      padding: 0 12px;
-      font-size: 13px;
+      background: #0b4c22;
+      padding: 5px 8px;
       font-weight: bold;
-      text-decoration: none;
-      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.25);
+      font-size: 12px;
     }
 
     .startLogo {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2px;
@@ -1102,158 +1085,42 @@
 
     .startLogo span {
       background: var(--green);
-      border: 1px solid #d8ffe6;
-      box-shadow: 0 0 5px rgba(0,255,102,0.4);
+      box-shadow: 0 0 5px rgba(0,255,102,0.45);
     }
 
     .taskButtons {
       display: flex;
       gap: 6px;
-      overflow: hidden;
+      flex: 1;
+      min-width: 0;
     }
 
     .taskButton {
-      height: 30px;
-      min-width: 150px;
-      max-width: 190px;
+      min-width: 120px;
+      max-width: 180px;
+      padding: 6px 8px;
+      border: 1px solid rgba(216,255,230,0.55);
+      background: rgba(0,0,0,0.18);
       color: #d8ffe6;
-      border-top: 2px solid rgba(255,255,255,0.5);
-      border-left: 2px solid rgba(255,255,255,0.5);
-      border-right: 2px solid #052b13;
-      border-bottom: 2px solid #052b13;
-      background: rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      padding: 0 9px;
       font-size: 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .clock {
-      height: 31px;
-      min-width: 96px;
-      border-top: 2px solid #052b13;
-      border-left: 2px solid #052b13;
-      border-right: 2px solid rgba(255,255,255,0.55);
-      border-bottom: 2px solid rgba(255,255,255,0.55);
-      background: rgba(0,0,0,0.28);
+      min-width: 72px;
+      text-align: center;
       color: var(--yellow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-    }
-
-    .droneModalOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.82);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .droneModal {
-      width: 100%;
-      max-width: 650px;
-      border: 2px solid #ffd8d8;
-      background:
-        radial-gradient(circle at center, rgba(255,85,85,0.10), transparent 62%),
-        #120606;
-      color: var(--text);
-      box-shadow:
-        6px 6px 0 rgba(0,0,0,0.75),
-        0 0 30px rgba(255,85,85,0.25);
-      font-family: "Courier New", monospace;
-    }
-
-    .droneModalTitle {
-      height: 30px;
-      background: linear-gradient(180deg, #a83a3a 0%, #4a0a0a 100%);
-      border-bottom: 2px solid #ffd8d8;
-      color: var(--white);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 7px;
+      border: 1px inset rgba(216,255,230,0.65);
+      background: rgba(0,0,0,0.24);
+      padding: 5px 8px;
       font-size: 12px;
-      font-weight: bold;
     }
 
-    .droneModalBody {
-      padding: 18px;
-    }
-
-    .droneModalBody h1 {
-      margin: 0 0 10px;
-      color: var(--yellow);
-      font-size: 21px;
-      letter-spacing: 2px;
-    }
-
-    .droneWarning {
-      border: 1px dashed var(--red);
-      background: rgba(255,85,85,0.08);
-      color: #ffb8b8;
-      padding: 12px;
-      margin: 14px 0;
-      line-height: 1.55;
-      font-size: 13px;
-    }
-
-    .droneModalBody label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 12px;
-      color: var(--white);
-    }
-
-    .droneModalBody input {
-      width: 100%;
-      background: #000;
-      color: var(--green);
-      border: 2px solid #7b2424;
-      padding: 11px;
-      font-family: "Courier New", monospace;
-      font-size: 15px;
-      outline: none;
-      box-shadow: inset 0 0 12px rgba(255,85,85,0.08);
-    }
-
-    .droneModalBody input:focus {
-      border-color: var(--yellow);
-    }
-
-    .droneModalBody input.correctInput {
-      border-color: var(--yellow);
-      box-shadow:
-        inset 0 0 12px rgba(255,238,102,0.10),
-        0 0 12px rgba(255,238,102,0.22);
-    }
-
-    .droneModalBody input.wrongInput {
-      border-color: var(--red);
-      box-shadow:
-        inset 0 0 12px rgba(255,85,85,0.12),
-        0 0 12px rgba(255,85,85,0.22);
-    }
-
-    .droneStatus {
-      min-height: 22px;
-      margin-top: 14px;
-      font-size: 13px;
-      color: var(--red);
-    }
-
-    .droneStatus.ok {
-      color: var(--yellow);
-    }
-
-    @media (max-width: 1180px) {
+    @media (max-width: 1120px) {
       .desktopMain {
-        grid-template-columns: 330px 1fr;
+        grid-template-columns: 120px 1fr;
       }
 
       .systemWindow {
@@ -1262,13 +1129,6 @@
 
       .centerArea {
         min-height: 420px;
-      }
-
-      .readmeWindow,
-      .recycleWindow,
-      .easterEggWindow {
-        left: 50%;
-        transform: translateX(-50%);
       }
 
       .readmeWindow {
@@ -1340,6 +1200,7 @@
       .easterEggWindow {
         width: calc(100% - 28px);
         top: 150px;
+        left: 14px;
       }
 
       .recycleWindow {
@@ -1358,51 +1219,13 @@
 
       .loginScreen,
       .desktop {
-        min-height: 1300px;
+        min-height: 1280px;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <div class="droneModalOverlay" id="droneModal">
-    <section class="droneModal">
-      <div class="droneModalTitle">
-        <span>DRONE_OVERRIDE.lock</span>
-        <div class="windowButtons">
-          <span class="winButton"></span>
-          <span class="winButton"></span>
-          <span class="winButton close" onclick="closeDroneModal()"></span>
-        </div>
-      </div>
-
-      <div class="droneModalBody">
-        <h1>DRONE OVERRIDE</h1>
-
-        <p>
-          Encrypted file recovered.
-        </p>
-
-        <div class="droneWarning">
-          WARNING:<br>
-          This override program can only be executed once.<br>
-          One failed run may leave the drone active.<br><br>
-          Confirm only when the recovered memory code is known.
-        </div>
-
-        <label for="droneCodeInput">OVERRIDE FILE CODE</label>
-        <input id="droneCodeInput" type="password" autocomplete="off" placeholder="enter recovered memory code">
-
-        <div class="loginButtons">
-          <button class="oldButton" onclick="checkDroneCode()">DECRYPT OVERRIDE FILE</button>
-          <button class="oldButton secondary" onclick="closeDroneModal()">CANCEL</button>
-        </div>
-
-        <div class="droneStatus" id="droneStatus">Awaiting encrypted file code.</div>
-      </div>
-    </section>
-  </div>
 
   <main class="computerShell">
     <div class="monitorLabel">Thorne Private Workstation // Botanical Chemistry Archive</div>
@@ -1566,8 +1389,8 @@ Last external contact: JASON KRANE</div>
                 <div>Private records</div>
                 <div>locked</div>
 
-                <div>Drone reference</div>
-                <div>unknown</div>
+                <div>Diary reference</div>
+                <div>hidden</div>
               </div>
 
               <div class="miniLog">
@@ -1577,6 +1400,7 @@ Last external contact: JASON KRANE</div>
                 <div>&gt; private correspondence detected</div>
                 <div>&gt; Jason Krane reference count: abnormal</div>
                 <div>&gt; warning: staged transmission residue found</div>
+                <div>&gt; open Readme.txt for recovery order</div>
               </div>
 
               <div class="hintLine">
@@ -1585,20 +1409,14 @@ Last external contact: JASON KRANE</div>
 
               <div class="commandTerminal">
                 <div class="commandHeader">Command Terminal</div>
-
-                <div class="commandOutput" id="commandOutput">&gt; command channel restored
+                <div class="commandOutput" id="commandOutput">
+&gt; command channel restored
 &gt; type command and press ENTER
-&gt; unknown commands may return corrupted output</div>
-
+&gt; unknown commands may return corrupted output
+                </div>
                 <div class="commandInputRow">
                   <span class="commandPrompt">C:\THORNE&gt;</span>
-                  <input
-                    id="commandInput"
-                    class="commandInput"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="type command"
-                  >
+                  <input id="commandInput" class="commandInput" type="text" autocomplete="off" placeholder="type command">
                 </div>
               </div>
             </div>
@@ -1726,7 +1544,6 @@ Click an item to recover readable text.</div>
   <script>
     const correctEmail = "n.thorne@stbrigid-lab.ie";
     const correctPassword = "BLOODYCRANESBILL";
-    const droneOverrideCode = "GOLDENEYE";
 
     const easterEggs = {
       poem: {
@@ -1795,26 +1612,20 @@ Moved to archive.`
     };
 
     const randomTerminalResponses = [
-      "> command not recognized",
-      "> archive path unavailable",
-      "> corrupted instruction ignored",
-      "> access route unstable",
-      "> botanical cache returned no match",
-      "> chemical index did not respond",
-      "> unknown command",
-      "> private shell waiting",
-      "> no executable file found",
-      "> memory residue detected but unreadable",
-      "> Jason Krane reference count unchanged",
-      "> N. Thorne user trace remains active",
-      "> warning: command may have been staged",
-      "> system refuses that instruction",
-      "> dead route",
-      "> invalid recovery phrase",
-      "> directory not indexed",
-      "> hidden route not available from this command",
-      "> fragmented command returned no object",
-      "> old Krane file refused connection"
+      "> command rejected // damaged registry path",
+      "> local archive returned no readable file",
+      "> memory sector unstable // retry not recommended",
+      "> access denied // personal correspondence layer locked",
+      "> cache fragment found // content unreadable",
+      "> botanical index returned malformed result",
+      "> chemistry log checksum failed",
+      "> private note reference detected // open folders manually",
+      "> invalid command // recovery shell limited",
+      "> system response delayed // archive corruption increasing",
+      "> no executable found for that command",
+      "> command channel active // no matching file",
+      "> warning: reconstructed data may be misleading",
+      "> directory access must be performed through desktop icons"
     ];
 
     function normalizePassword(value) {
@@ -1822,18 +1633,9 @@ Moved to archive.`
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
-        .replaceAll("_", "");
-    }
-
-    function normalizeCode(value) {
-      return value
-        .toUpperCase()
-        .replaceAll(" ", "")
-        .replaceAll("-", "")
         .replaceAll("_", "")
-        .replaceAll("’", "")
         .replaceAll("'", "")
-        .trim();
+        .replaceAll("’", "");
     }
 
     function openDesktop() {
@@ -1845,7 +1647,7 @@ Moved to archive.`
         if (commandInput) {
           commandInput.focus();
         }
-      }, 300);
+      }, 400);
     }
 
     function attemptLogin() {
@@ -1919,93 +1721,66 @@ Moved to archive.`
       document.getElementById("easterEggWindow").style.display = "none";
     }
 
-    function handleCommandInput() {
-      const input = document.getElementById("commandInput");
+    function appendCommandLine(text) {
       const output = document.getElementById("commandOutput");
-
-      if (!input || !output) return;
-
-      const rawCommand = input.value.trim();
-      const command = rawCommand.toLowerCase();
-
-      if (rawCommand === "") {
-        return;
-      }
-
-      output.textContent += "\nC:\\THORNE> " + rawCommand;
-
-      if (command === "drone") {
-        output.textContent += "\n> hidden executable found";
-        output.textContent += "\n> opening DRONE_OVERRIDE.lock";
-        input.value = "";
-        output.scrollTop = output.scrollHeight;
-
-        setTimeout(function() {
-          openDroneModal();
-        }, 650);
-
-        return;
-      }
-
-      const randomIndex = Math.floor(Math.random() * randomTerminalResponses.length);
-      output.textContent += "\n" + randomTerminalResponses[randomIndex];
-
-      input.value = "";
+      output.textContent += "\n" + text;
       output.scrollTop = output.scrollHeight;
     }
 
-    function openDroneModal() {
-      const modal = document.getElementById("droneModal");
-      const input = document.getElementById("droneCodeInput");
-      const status = document.getElementById("droneStatus");
+    function handleCommandInput() {
+      const input = document.getElementById("commandInput");
+      const rawCommand = input.value.trim();
 
-      modal.style.display = "flex";
-      input.value = "";
-      input.classList.remove("correctInput");
-      input.classList.remove("wrongInput");
-
-      status.textContent = "Awaiting encrypted file code.";
-      status.classList.remove("ok");
-
-      setTimeout(function() {
-        input.focus();
-      }, 100);
-    }
-
-    function closeDroneModal() {
-      document.getElementById("droneModal").style.display = "none";
-
-      setTimeout(function() {
-        const commandInput = document.getElementById("commandInput");
-        if (commandInput) {
-          commandInput.focus();
-        }
-      }, 100);
-    }
-
-    function checkDroneCode() {
-      const input = document.getElementById("droneCodeInput");
-      const status = document.getElementById("droneStatus");
-      const value = normalizeCode(input.value);
-
-      input.classList.remove("correctInput");
-      input.classList.remove("wrongInput");
-
-      if (value === normalizeCode(droneOverrideCode)) {
-        input.classList.add("correctInput");
-        status.textContent = "OVERRIDE FILE DECRYPTED // loading final program...";
-        status.classList.add("ok");
-
-        localStorage.setItem("droneOverrideUnlocked", "yes");
-
-        setTimeout(function() {
-          window.location.href = "drone.html";
-        }, 900);
-      } else {
-        input.classList.add("wrongInput");
-        status.textContent = "DECRYPTION FAILED // invalid memory code.";
-        status.classList.remove("ok");
+      if (!rawCommand) {
+        return;
       }
+
+      const command = rawCommand.toLowerCase();
+      input.value = "";
+
+      appendCommandLine("C:\\THORNE> " + rawCommand);
+
+      if (command === "help") {
+        appendCommandLine("> available actions: open desktop folders manually");
+        appendCommandLine("> readable directories: Chemistry, Botany, Private");
+        appendCommandLine("> recovery shell is damaged and cannot open folders directly");
+        return;
+      }
+
+      if (command === "clear" || command === "cls") {
+        document.getElementById("commandOutput").textContent =
+`> command channel restored
+> type command and press ENTER
+> unknown commands may return corrupted output`;
+        return;
+      }
+
+      if (command === "dir" || command === "ls") {
+        appendCommandLine("> DIRECTORY LIST");
+        appendCommandLine("> Chemistry");
+        appendCommandLine("> Botany");
+        appendCommandLine("> Private");
+        appendCommandLine("> Readme.txt");
+        appendCommandLine("> Recycle Bin");
+        return;
+      }
+
+      if (command.includes("jason")) {
+        appendCommandLine("> Jason Krane reference found");
+        appendCommandLine("> reference count abnormal");
+        appendCommandLine("> open Private folder after recovering both archive fragments");
+        return;
+      }
+
+      if (command.includes("nessa") || command.includes("thorne")) {
+        appendCommandLine("> user profile: DR. N. THORNE");
+        appendCommandLine("> former lecturer // botanical chemistry");
+        appendCommandLine("> private archive integrity: unstable");
+        return;
+      }
+
+      const response = randomTerminalResponses[Math.floor(Math.random() * randomTerminalResponses.length)];
+      appendCommandLine(response);
     }
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
@@ -2023,18 +1798,6 @@ Moved to archive.`
     document.getElementById("commandInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         handleCommandInput();
-      }
-    });
-
-    document.getElementById("droneCodeInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        checkDroneCode();
-      }
-    });
-
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "Escape") {
-        closeDroneModal();
       }
     });
 
