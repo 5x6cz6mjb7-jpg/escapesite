@@ -1740,6 +1740,18 @@ Moved to archive.`
 
       appendCommandLine("C:\\THORNE> " + rawCommand);
 
+      if (command === "drone") {
+        appendCommandLine("> hidden command accepted");
+        appendCommandLine("> final environment unlocked");
+        appendCommandLine("> opening external control interface...");
+
+        setTimeout(function() {
+          window.location.href = "drone.html";
+        }, 1200);
+
+        return;
+      }
+
       if (command === "help") {
         appendCommandLine("> available actions: open desktop folders manually");
         appendCommandLine("> readable directories: Chemistry, Botany, Private");
