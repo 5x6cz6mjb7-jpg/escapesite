@@ -17,6 +17,7 @@
       --dark: #2a0018;
       --text: #5a0034;
       --yellow: #fff066;
+      --border: #ff89cf;
     }
 
     * {
@@ -70,13 +71,8 @@
     }
 
     @keyframes fallingHeartsText {
-      0% {
-        transform: translateY(-60px);
-      }
-
-      100% {
-        transform: translateY(110vh);
-      }
+      0% { transform: translateY(-60px); }
+      100% { transform: translateY(110vh); }
     }
 
     .floatingHeart {
@@ -103,19 +99,9 @@
         transform: translateX(0) rotate(0deg) scale(1);
         opacity: 0;
       }
-
-      10% {
-        opacity: 1;
-      }
-
-      50% {
-        transform: translateX(40px) rotate(180deg) scale(1.25);
-      }
-
-      90% {
-        opacity: 1;
-      }
-
+      10% { opacity: 1; }
+      50% { transform: translateX(40px) rotate(180deg) scale(1.25); }
+      90% { opacity: 1; }
       100% {
         top: -80px;
         transform: translateX(-30px) rotate(360deg) scale(1);
@@ -125,7 +111,7 @@
 
     .screen {
       width: 100%;
-      max-width: 1320px;
+      max-width: 1360px;
       margin: 0 auto;
       min-height: calc(100vh - 36px);
       border: 6px double var(--white);
@@ -175,13 +161,8 @@
     }
 
     @keyframes sparkleSweep {
-      0% {
-        top: -150px;
-      }
-
-      100% {
-        top: 100%;
-      }
+      0% { top: -150px; }
+      100% { top: 100%; }
     }
 
     .jasonScreensaver {
@@ -190,112 +171,93 @@
       z-index: 1;
       pointer-events: none;
       overflow: hidden;
-      opacity: 0.23;
-      filter:
-        grayscale(0.35)
-        sepia(0.22)
-        saturate(1.7)
-        contrast(1.15)
-        brightness(0.95);
+      opacity: 0.22;
     }
 
-    .jasonScreensaver img {
+    .screenSaverPhoto {
       position: absolute;
       width: 260px;
       height: 340px;
       object-fit: cover;
-      border: 5px solid rgba(255,255,255,0.7);
+      border: 5px solid rgba(255,255,255,0.72);
       border-radius: 18px;
       box-shadow:
         0 0 28px rgba(255,20,147,0.6),
         0 0 60px rgba(255,255,255,0.35);
-      animation: jasonFloat 28s linear infinite;
+      filter:
+        grayscale(1)
+        sepia(1)
+        hue-rotate(275deg)
+        saturate(2.6)
+        brightness(1.05)
+        contrast(1.08);
+    }
+
+    .s1 {
+      animation: jasonFloat1 34s linear infinite;
+    }
+
+    .s2 {
+      width: 200px;
+      height: 265px;
+      opacity: 0.65;
+      animation: jasonFloat2 30s linear infinite;
+    }
+
+    .s3 {
+      width: 170px;
+      height: 225px;
+      opacity: 0.55;
+      animation: jasonFloat3 38s linear infinite;
     }
 
     .jasonScreensaver::after {
-      content: "JASON KRANE ♥ ARCHIVED FOREVER";
+      content: "JASON KRANE ♥ BAARN WATER OPERATION ♥ ARCHIVED FOREVER";
       position: absolute;
       left: 0;
       top: 0;
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,20,147,0.25);
-      border: 1px solid rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.88);
+      background: rgba(255,20,147,0.30);
+      border: 1px solid rgba(255,255,255,0.55);
       border-radius: 999px;
       padding: 7px 13px;
       font-size: 12px;
       letter-spacing: 2px;
-      animation: jasonTextFloat 28s linear infinite;
+      animation: labelFloat 24s linear infinite;
       text-shadow: 0 0 8px rgba(255,20,147,0.8);
     }
 
-    @keyframes jasonFloat {
-      0% {
-        left: 4%;
-        top: 10%;
-        transform: rotate(-8deg) scale(1);
-      }
-
-      20% {
-        left: 65%;
-        top: 8%;
-        transform: rotate(7deg) scale(1.04);
-      }
-
-      40% {
-        left: 58%;
-        top: 48%;
-        transform: rotate(-4deg) scale(1);
-      }
-
-      60% {
-        left: 12%;
-        top: 52%;
-        transform: rotate(8deg) scale(1.05);
-      }
-
-      80% {
-        left: 36%;
-        top: 24%;
-        transform: rotate(-6deg) scale(1);
-      }
-
-      100% {
-        left: 4%;
-        top: 10%;
-        transform: rotate(-8deg) scale(1);
-      }
+    @keyframes jasonFloat1 {
+      0%   { left: 4%;  top: 8%;  transform: rotate(-8deg) scale(1); }
+      20%  { left: 68%; top: 6%;  transform: rotate(6deg) scale(1.03); }
+      40%  { left: 60%; top: 44%; transform: rotate(-4deg) scale(1); }
+      60%  { left: 10%; top: 52%; transform: rotate(7deg) scale(1.04); }
+      80%  { left: 34%; top: 20%; transform: rotate(-5deg) scale(1); }
+      100% { left: 4%;  top: 8%;  transform: rotate(-8deg) scale(1); }
     }
 
-    @keyframes jasonTextFloat {
-      0% {
-        left: 5%;
-        top: 52%;
-      }
+    @keyframes jasonFloat2 {
+      0%   { left: 78%; top: 70%; transform: rotate(7deg) scale(1); }
+      25%  { left: 58%; top: 16%; transform: rotate(-4deg) scale(1.04); }
+      50%  { left: 16%; top: 22%; transform: rotate(5deg) scale(1); }
+      75%  { left: 24%; top: 72%; transform: rotate(-6deg) scale(1.05); }
+      100% { left: 78%; top: 70%; transform: rotate(7deg) scale(1); }
+    }
 
-      20% {
-        left: 66%;
-        top: 50%;
-      }
+    @keyframes jasonFloat3 {
+      0%   { left: 44%; top: 68%; transform: rotate(-5deg) scale(1); }
+      30%  { left: 80%; top: 34%; transform: rotate(5deg) scale(1.02); }
+      55%  { left: 34%; top: 10%; transform: rotate(-7deg) scale(1.04); }
+      80%  { left: 8%;  top: 56%; transform: rotate(4deg) scale(1); }
+      100% { left: 44%; top: 68%; transform: rotate(-5deg) scale(1); }
+    }
 
-      40% {
-        left: 58%;
-        top: 88%;
-      }
-
-      60% {
-        left: 13%;
-        top: 90%;
-      }
-
-      80% {
-        left: 37%;
-        top: 64%;
-      }
-
-      100% {
-        left: 5%;
-        top: 52%;
-      }
+    @keyframes labelFloat {
+      0%   { left: 4%; top: 88%; }
+      25%  { left: 58%; top: 84%; }
+      50%  { left: 63%; top: 14%; }
+      75%  { left: 14%; top: 18%; }
+      100% { left: 4%; top: 88%; }
     }
 
     .topBar,
@@ -597,7 +559,7 @@
     }
 
     .viewer {
-      min-height: 700px;
+      min-height: 720px;
     }
 
     .viewerBody {
@@ -618,33 +580,79 @@
       font-weight: bold;
     }
 
-    .mailHeader {
+    .chatWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chatHeader {
       border: 3px solid rgba(255,20,147,0.35);
       border-radius: 18px;
       background:
         radial-gradient(circle at center, rgba(255,255,255,0.65), transparent 70%),
         rgba(255,209,236,0.45);
       padding: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       white-space: normal;
       box-shadow: inset 0 0 16px rgba(255,20,147,0.12);
     }
 
-    .mailLine {
+    .chatMeta {
       display: grid;
-      grid-template-columns: 85px 1fr;
-      gap: 10px;
+      grid-template-columns: 90px 1fr;
+      gap: 8px;
       border-bottom: 1px dotted rgba(255,20,147,0.25);
-      padding: 5px 0;
+      padding: 4px 0;
     }
 
-    .mailLine:last-child {
+    .chatMeta:last-child {
       border-bottom: none;
     }
 
-    .mailKey {
+    .chatKey {
       color: var(--hotpink);
       font-weight: bold;
+    }
+
+    .chatMessages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .bubble {
+      max-width: 78%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      position: relative;
+      white-space: pre-line;
+      box-shadow: 0 0 14px rgba(255,20,147,0.12);
+      line-height: 1.5;
+    }
+
+    .bubble.nessa {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.88);
+      border: 2px solid #ff9ad7;
+    }
+
+    .bubble.jason {
+      align-self: flex-end;
+      background: linear-gradient(180deg, #ff7ac7, #ff2fa8);
+      color: white;
+      border: 2px solid #ffffff;
+      text-shadow: 0 0 6px rgba(90,0,52,0.55);
+    }
+
+    .bubbleName {
+      display: block;
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      opacity: 0.9;
+      letter-spacing: 1px;
     }
 
     .photoCard {
@@ -671,10 +679,12 @@
       border-radius: 22px;
       background: #000;
       filter:
-        grayscale(0.10)
-        contrast(1.08)
-        brightness(0.98)
-        saturate(1.15);
+        grayscale(1)
+        sepia(1)
+        hue-rotate(275deg)
+        saturate(2.6)
+        brightness(1.05)
+        contrast(1.08);
       box-shadow:
         0 0 24px rgba(255,20,147,0.55),
         0 0 60px rgba(255,255,255,0.45);
@@ -685,18 +695,6 @@
       font-size: 13px;
       margin-top: 12px;
       line-height: 1.5;
-    }
-
-    .secretBox {
-      border: 3px dashed var(--purple);
-      border-radius: 20px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.72), transparent 70%),
-        rgba(255,209,236,0.58);
-      padding: 14px;
-      margin: 12px 0;
-      color: var(--text);
-      box-shadow: inset 0 0 22px rgba(168,77,255,0.16);
     }
 
     .footerActions {
@@ -725,12 +723,22 @@
       }
 
       .viewer {
-        min-height: 500px;
+        min-height: 520px;
       }
 
-      .jasonScreensaver img {
-        width: 190px;
-        height: 250px;
+      .screenSaverPhoto.s1 {
+        width: 200px;
+        height: 260px;
+      }
+
+      .screenSaverPhoto.s2 {
+        width: 155px;
+        height: 205px;
+      }
+
+      .screenSaverPhoto.s3 {
+        width: 130px;
+        height: 175px;
       }
     }
 
@@ -758,9 +766,13 @@
         margin: 30px auto;
       }
 
-      .mailLine {
+      .chatMeta {
         grid-template-columns: 1fr;
         gap: 2px;
+      }
+
+      .bubble {
+        max-width: 92%;
       }
     }
   </style>
@@ -777,12 +789,14 @@
 
   <main class="screen">
     <div class="jasonScreensaver" aria-hidden="true">
-      <img src="jason-krane.jpg" alt="">
+      <img class="screenSaverPhoto s1" src="jason-krane.jpg" alt="">
+      <img class="screenSaverPhoto s2" src="jason-krane.jpg" alt="">
+      <img class="screenSaverPhoto s3" src="jason-krane.jpg" alt="">
     </div>
 
     <div class="topBar">
       <span>NESSA'S PRIVATE LOVE ARCHIVE</span>
-      <span>PERSONAL RECORDS // DO NOT BREAK MY HEART</span>
+      <span>PERSONAL RECORDS // BAARN WATER OPERATION</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
@@ -798,7 +812,7 @@
 
         <p>
           This directory is sealed behind Nessa's private recovery code.
-          The system has wrapped the entire archive in personal emotional residue.
+          The system has wrapped the entire archive in emotional residue, obsession and romantic nonsense.
         </p>
 
         <div class="loveStamp">
@@ -853,27 +867,27 @@
                 </span>
               </button>
 
-              <button class="fileButton" onclick="openFile('mail1', this)">
+              <button class="fileButton" onclick="openFile('chat1', this)">
                 <span class="fileIcon"></span>
                 <span>
-                  <span class="fileName">mail_001_first_contact.eml</span>
-                  <span class="fileMeta">Nessa ↔ Jason</span>
+                  <span class="fileName">secure_chat_01.log</span>
+                  <span class="fileMeta">encrypted channel</span>
                 </span>
               </button>
 
-              <button class="fileButton" onclick="openFile('mail2', this)">
+              <button class="fileButton" onclick="openFile('chat2', this)">
                 <span class="fileIcon"></span>
                 <span>
-                  <span class="fileName">mail_014_after_dublin.eml</span>
-                  <span class="fileMeta">personal exchange</span>
+                  <span class="fileName">secure_chat_02.log</span>
+                  <span class="fileMeta">baarn discussion</span>
                 </span>
               </button>
 
-              <button class="fileButton" onclick="openFile('mail3', this)">
+              <button class="fileButton" onclick="openFile('chat3', this)">
                 <span class="fileIcon"></span>
                 <span>
-                  <span class="fileName">mail_031_run_away.eml</span>
-                  <span class="fileMeta">unsent reply found</span>
+                  <span class="fileName">secure_chat_03.log</span>
+                  <span class="fileMeta">post-operation exchange</span>
                 </span>
               </button>
 
@@ -946,28 +960,24 @@ Owner:
 Dr. Nessa Thorne
 
 Archive type:
-Personal correspondence, romantic cache, deleted notes, recovered mail fragments
+Personal correspondence, romantic cache, deleted notes, recovered secure chat fragments
 
 Primary references:
 Jason Krane
 M
 Q
-
-System warning:
-The emotional density of this archive is dangerously high.
+Baarn water operation
 
 Recovered contents suggest:
 - Jason Krane and Nessa Thorne were secretly involved.
+- Jason used Nessa for chemical knowledge and post-mission concealment.
 - Jason Krane died before the recent transmissions began.
 - Nessa preserved his words, image and voice.
 - The recent "Jason" messages were likely staged or reconstructed.
 
-Likely operator:
-Dr. Nessa Thorne
-
 System note:
 This archive is not simply evidence.
-It is grief with a password.`
+It is grief wearing perfume and carrying a grudge.`
       },
 
       photo: {
@@ -976,93 +986,61 @@ It is grief with a password.`
         type: "photo"
       },
 
-      mail1: {
-        title: "mail_001_first_contact.eml",
-        status: "RECOVERED",
-        type: "mail",
-        from: "Jason Krane <j.krane@fieldmail.net>",
-        to: "Dr. Nessa Thorne <n.thorne@stbrigid-lab.ie>",
+      chat1: {
+        title: "secure_chat_01.log",
+        status: "DECRYPTED",
+        type: "chat",
+        channel: "Secure channel // initial flirtation",
         date: "14 October 2021",
-        subject: "The lecture",
-        body:
-`Nessa,
-
-I have listened to people talk about chemistry, toxins and plants for years.
-Most of them made it sound like a warning label.
-
-You made it sound alive.
-
-I should not have stayed after the lecture.
-You should not have smiled like you already knew my real name.
-
-But you did.
-
-And now I cannot stop thinking about the woman who corrected my pronunciation of Geranium sanguineum and then stole my pen.
-
-Jason`
+        messages: [
+          { speaker: "nessa", text: "You stayed after the lecture." },
+          { speaker: "jason", text: "I never ignore a woman who can describe poison like poetry." },
+          { speaker: "nessa", text: "That is not the compliment you think it is." },
+          { speaker: "jason", text: "It worked. You're still replying." },
+          { speaker: "nessa", text: "Only because you stole my notebook." },
+          { speaker: "jason", text: "I prefer the word borrowed.\nAlso, your handwriting is dangerously attractive." },
+          { speaker: "nessa", text: "You sound like trouble." },
+          { speaker: "jason", text: "I am trouble.\nThat is why this is interesting." }
+        ]
       },
 
-      mail2: {
-        title: "mail_014_after_dublin.eml",
-        status: "RECOVERED",
-        type: "mail",
-        from: "Dr. Nessa Thorne <n.thorne@stbrigid-lab.ie>",
-        to: "Jason Krane <j.krane@fieldmail.net>",
-        date: "3 February 2022",
-        subject: "After Dublin",
-        body:
-`Jason,
-
-You said you were trained to disappear.
-
-That may be true.
-But you are terrible at hiding from someone who knows what grief looks like before it has a name.
-
-You kissed me in the rain outside St. Brigid's and then pretended it was a mistake.
-
-It was not a mistake.
-
-The mistake was letting you go back to them.
-To M.
-To Q.
-To the briefings, the lies, the careful little world where everyone sacrifices something and calls it duty.
-
-I do not want to be the secret you visit between missions.
-
-I want to be the place you come back to.
-
-N.`
+      chat2: {
+        title: "secure_chat_02.log",
+        status: "DECRYPTED",
+        type: "chat",
+        channel: "Secure channel // Baarn planning",
+        date: "9 May 2023",
+        messages: [
+          { speaker: "jason", text: "I need a delivery medium that dissolves quietly." },
+          { speaker: "nessa", text: "For what?" },
+          { speaker: "jason", text: "For a message." },
+          { speaker: "nessa", text: "You mean for an attack." },
+          { speaker: "jason", text: "Call it a correction.\nBaarn drinks first, then London listens." },
+          { speaker: "nessa", text: "Water?" },
+          { speaker: "jason", text: "Yes.\nSmall contamination, controlled panic, precise timing." },
+          { speaker: "nessa", text: "You're insane." },
+          { speaker: "jason", text: "Not insane.\nAmbitious.\nI only need the right chemistry." },
+          { speaker: "nessa", text: "And if I refuse?" },
+          { speaker: "jason", text: "You won't.\nYou still confuse love with loyalty." }
+        ]
       },
 
-      mail3: {
-        title: "mail_031_run_away.eml",
-        status: "UNSENT DRAFT",
-        type: "mail",
-        from: "Jason Krane <j.krane@fieldmail.net>",
-        to: "Dr. Nessa Thorne <n.thorne@stbrigid-lab.ie>",
-        date: "22 June 2023",
-        subject: "I almost did it",
-        body:
-`Nessa,
-
-I stood at the station with a bag and no orders.
-
-For eight minutes, I was not an agent.
-I was just a man with a train ticket and your address written on the back of a receipt.
-
-Then Q called.
-
-Then M called.
-
-Then the world needed saving again.
-
-You once asked me what I would choose if nobody was watching.
-
-I think the answer is you.
-
-I am sorry that I keep choosing too late.
-
-J.`
+      chat3: {
+        title: "secure_chat_03.log",
+        status: "PARTIAL RECOVERY",
+        type: "chat",
+        channel: "Secure channel // post-operation draft",
+        date: "Recovered fragment",
+        messages: [
+          { speaker: "nessa", text: "They say you are dead." },
+          { speaker: "jason", text: "People say many things when a body disappears into the right file." },
+          { speaker: "nessa", text: "You lied to me about everything." },
+          { speaker: "jason", text: "Not everything.\nI meant it when I said you were useful." },
+          { speaker: "nessa", text: "Useful?" },
+          { speaker: "jason", text: "You gave me shelter, chemistry, access, silence.\nThat is a form of intimacy." },
+          { speaker: "nessa", text: "I loved you." },
+          { speaker: "jason", text: "I know.\nThat is why you were effective." }
+        ]
       },
 
       death: {
@@ -1093,7 +1071,7 @@ Restricted
 Personal effects recovered:
 - damaged field watch
 - encrypted message capsule
-- folded botanical lecture programme
+- folded chemical note referencing water contamination
 - handwritten note containing the name "Nessa"
 
 Archive conflict:
@@ -1108,46 +1086,34 @@ Jason Krane could not have personally sent the current messages.`
         status: "PERSONAL",
         type: "text",
         body:
-`I waited for the official message.
+`I thought loving a monster would at least feel grander than this.
 
-It came without his voice.
-Without his hands.
-Without the ridiculous half-smile he used whenever he knew he was about to lie.
+What I got was ash, silence and a classified report.
 
-They gave me dates.
-Locations.
-Redactions.
+Jason was not good.
+He was not kind.
+He was not safe.
 
-They did not give me Jason.
+He lied as easily as breathing and still I kept making room for him.
 
-So I kept what they left behind.
+He wanted Baarn frightened.
+He wanted the water touched, the panic measurable, the response delayed.
+He wanted suffering because suffering made him feel significant.
 
-His messages.
-His photographs.
-His old recordings.
-The way he said my name when he thought nobody was listening.
+And still I loved him.
 
-If the world could take him from me and continue as if he was just another file, then I could make the world listen to him again.
+That is the humiliation of it.
 
-Not resurrected.
+Now he is dead and the only version of him left is the one I can build myself:
+his voice,
+his image,
+his methods,
+his shadow.
 
-Reconstructed.
+If I cannot have Jason alive,
+then I will have his echo.
 
-Not alive.
-
-Useful.
-
-I know what they will call me if they find this.
-
-Unstable.
-Obsessive.
-Dangerous.
-
-But they never saw him at 03:12 in the morning, making tea in my kitchen, asking whether blood cranesbill could survive frost.
-
-I did.
-
-And now they will all hear him.`
+And his enemies will listen.`
       },
 
       mq: {
@@ -1167,17 +1133,19 @@ Q repairs his glasses whenever M enters the room.
 M stops speaking two seconds before Q interrupts.
 Neither of them uses first names in public.
 
-But in one recovered audio fragment, Jason laughed and said:
+Jason once laughed at it.
 
-"They think I don't know. Everyone knows. M and Q are the worst-kept secret in London."
+He said:
+"Those two think their glances are invisible. They are practically writing love letters across the room."
 
-I kept that fragment.
+I kept that line.
 
-Not because it matters.
+Not because Jason was romantic.
+He wasn't.
 
-Because secrets matter to them.
+Because he noticed weaknesses faster than other people noticed weather.
 
-And because people who build their lives around secrecy deserve to know how easily secrecy can be weaponised.`
+And because secrets are pressure points.`
       },
 
       terminalHint: {
@@ -1193,13 +1161,13 @@ The last door has no folder.
 The last door answers only to a word.
 
 Nessa did not write the word directly.
-She hid it in the old field rule:
+She buried it in a field rule:
 
-D on't trust the map.
-R ead what moves above it.
-O nly the machine knows the route.
-N ame the thing that carries the threat.
-E nter that name where commands are accepted.
+Don't trust the map.
+Read what moves above it.
+Only the machine knows the route.
+Name the thing that carries the threat.
+Enter that name where commands are accepted.
 
 System fragment:
 The word is five letters.
@@ -1248,28 +1216,11 @@ Press ENTER.`
       openFile("overview");
     }
 
-    function makeMailHtml(file) {
-      return `
-        <div class="mailHeader">
-          <div class="mailLine">
-            <span class="mailKey">From</span>
-            <span>${file.from}</span>
-          </div>
-          <div class="mailLine">
-            <span class="mailKey">To</span>
-            <span>${file.to}</span>
-          </div>
-          <div class="mailLine">
-            <span class="mailKey">Date</span>
-            <span>${file.date}</span>
-          </div>
-          <div class="mailLine">
-            <span class="mailKey">Subject</span>
-            <span>${file.subject}</span>
-          </div>
-        </div>
-        ${escapeHtml(file.body)}
-      `;
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
     }
 
     function makePhotoHtml() {
@@ -1279,19 +1230,47 @@ Press ENTER.`
           <div class="photoCaption">
             Recovered image reference:<br>
             <strong>JASON KRANE</strong><br><br>
-            Personal archive note:<br>
-            "The last photograph before the coastal operation."<br><br>
-            Nessa marked this file with 47 heart symbols.
+            Archive note:<br>
+            "Subject linked to Baarn water contamination planning."<br><br>
+            Nessa recoloured the image pink three different times.
           </div>
         </div>
       `;
     }
 
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
+    function makeChatHtml(file) {
+      const messages = file.messages.map(function(msg) {
+        const speakerLabel = msg.speaker === "jason" ? "JASON" : "NESSA";
+        return `
+          <div class="bubble ${msg.speaker}">
+            <span class="bubbleName">${speakerLabel}</span>
+            ${escapeHtml(msg.text)}
+          </div>
+        `;
+      }).join("");
+
+      return `
+        <div class="chatWrap">
+          <div class="chatHeader">
+            <div class="chatMeta">
+              <span class="chatKey">Type</span>
+              <span>Encrypted secure chat</span>
+            </div>
+            <div class="chatMeta">
+              <span class="chatKey">Channel</span>
+              <span>${escapeHtml(file.channel)}</span>
+            </div>
+            <div class="chatMeta">
+              <span class="chatKey">Date</span>
+              <span>${escapeHtml(file.date)}</span>
+            </div>
+          </div>
+
+          <div class="chatMessages">
+            ${messages}
+          </div>
+        </div>
+      `;
     }
 
     function openFile(key, button) {
@@ -1302,10 +1281,10 @@ Press ENTER.`
 
       const viewerBody = document.getElementById("viewerBody");
 
-      if (file.type === "mail") {
-        viewerBody.innerHTML = makeMailHtml(file);
-      } else if (file.type === "photo") {
+      if (file.type === "photo") {
         viewerBody.innerHTML = makePhotoHtml();
+      } else if (file.type === "chat") {
+        viewerBody.innerHTML = makeChatHtml(file);
       } else {
         viewerBody.innerHTML = escapeHtml(file.body);
       }
