@@ -17,7 +17,7 @@
       --dark: #2a0018;
       --text: #5a0034;
       --yellow: #fff066;
-      --border: #ff89cf;
+      --shadow: rgba(90, 0, 52, 0.34);
     }
 
     * {
@@ -29,27 +29,27 @@
       min-height: 100vh;
       font-family: "Courier New", monospace;
       color: var(--text);
-      padding: 18px;
-      overflow-x: hidden;
       background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), transparent 18%),
-        radial-gradient(circle at 80% 15%, rgba(255,79,184,0.45), transparent 22%),
-        radial-gradient(circle at 50% 80%, rgba(168,77,255,0.25), transparent 32%),
-        linear-gradient(135deg, #ffb3dc 0%, #ff72c6 35%, #ff2fa8 65%, #7a004a 100%);
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.85), transparent 16%),
+        radial-gradient(circle at 78% 18%, rgba(255,20,147,0.45), transparent 24%),
+        radial-gradient(circle at 48% 78%, rgba(168,77,255,0.30), transparent 34%),
+        linear-gradient(135deg, #ffb3dc 0%, #ff72c6 34%, #ff2fa8 66%, #7a004a 100%);
+      padding: 16px;
+      overflow-x: hidden;
     }
 
     body::before {
-      content: "♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥";
+      content: "♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥";
       position: fixed;
       left: 0;
       top: -40px;
       width: 100%;
       color: rgba(255,255,255,0.35);
-      font-size: 28px;
-      letter-spacing: 14px;
+      font-size: 30px;
+      letter-spacing: 18px;
       white-space: nowrap;
       pointer-events: none;
-      animation: fallingHeartsText 9s linear infinite;
+      animation: fallingHeartsText 10s linear infinite;
       z-index: 1;
     }
 
@@ -66,12 +66,12 @@
           transparent 1px,
           transparent 5px
         );
-      z-index: 30;
+      z-index: 50;
       mix-blend-mode: screen;
     }
 
     @keyframes fallingHeartsText {
-      0% { transform: translateY(-60px); }
+      0% { transform: translateY(-70px); }
       100% { transform: translateY(110vh); }
     }
 
@@ -79,183 +79,169 @@
       position: fixed;
       pointer-events: none;
       z-index: 2;
-      color: rgba(255,255,255,0.55);
-      font-size: 28px;
+      color: rgba(255,255,255,0.6);
+      text-shadow: 0 0 18px rgba(255,20,147,0.8);
       animation: floatHeart 12s linear infinite;
-      text-shadow: 0 0 12px rgba(255,20,147,0.6);
     }
 
-    .h1 { left: 8%; animation-delay: 0s; }
-    .h2 { left: 18%; animation-delay: 2s; font-size: 42px; }
-    .h3 { left: 32%; animation-delay: 5s; font-size: 22px; }
-    .h4 { left: 50%; animation-delay: 1s; font-size: 36px; }
-    .h5 { left: 66%; animation-delay: 4s; font-size: 26px; }
-    .h6 { left: 82%; animation-delay: 7s; font-size: 44px; }
-    .h7 { left: 93%; animation-delay: 3s; font-size: 24px; }
+    .h1 { left: 7%; font-size: 34px; animation-delay: 0s; }
+    .h2 { left: 18%; font-size: 48px; animation-delay: 2s; }
+    .h3 { left: 34%; font-size: 24px; animation-delay: 5s; }
+    .h4 { left: 51%; font-size: 40px; animation-delay: 1s; }
+    .h5 { left: 68%; font-size: 28px; animation-delay: 4s; }
+    .h6 { left: 83%; font-size: 50px; animation-delay: 7s; }
+    .h7 { left: 94%; font-size: 26px; animation-delay: 3s; }
 
     @keyframes floatHeart {
       0% {
         top: 110vh;
-        transform: translateX(0) rotate(0deg) scale(1);
         opacity: 0;
+        transform: rotate(0deg) scale(1);
       }
-      10% { opacity: 1; }
-      50% { transform: translateX(40px) rotate(180deg) scale(1.25); }
-      90% { opacity: 1; }
+
+      12% {
+        opacity: 1;
+      }
+
+      50% {
+        transform: translateX(42px) rotate(180deg) scale(1.25);
+      }
+
+      90% {
+        opacity: 1;
+      }
+
       100% {
-        top: -80px;
-        transform: translateX(-30px) rotate(360deg) scale(1);
+        top: -90px;
         opacity: 0;
+        transform: translateX(-28px) rotate(360deg) scale(1);
       }
     }
 
     .screen {
       width: 100%;
       max-width: 1360px;
+      min-height: calc(100vh - 32px);
       margin: 0 auto;
-      min-height: calc(100vh - 36px);
       border: 6px double var(--white);
-      border-radius: 30px;
+      border-radius: 32px;
       background:
-        radial-gradient(circle at center, rgba(255,255,255,0.65), transparent 45%),
-        radial-gradient(circle at 20% 20%, rgba(255,20,147,0.24), transparent 25%),
-        radial-gradient(circle at 80% 75%, rgba(168,77,255,0.22), transparent 32%),
-        rgba(255,209,236,0.92);
+        radial-gradient(circle at center, rgba(255,255,255,0.58), transparent 45%),
+        linear-gradient(180deg, rgba(255,247,251,0.84), rgba(255,209,236,0.84));
       box-shadow:
-        0 0 45px rgba(255,20,147,0.65),
-        inset 0 0 50px rgba(255,255,255,0.55),
-        inset 0 0 100px rgba(255,79,184,0.20);
-      padding: 16px;
+        0 0 48px rgba(255,20,147,0.68),
+        inset 0 0 50px rgba(255,255,255,0.62),
+        inset 0 0 100px rgba(255,79,184,0.22);
       position: relative;
-      z-index: 3;
       overflow: hidden;
+      z-index: 3;
+      padding: 16px;
     }
 
     .screen::before {
-      content: "LOVE ARCHIVE ♥ LOVE ARCHIVE ♥ LOVE ARCHIVE ♥ LOVE ARCHIVE ♥";
+      content: "NESSA ♥ JASON ♥ NESSA ♥ JASON ♥ NESSA ♥ JASON ♥";
       position: absolute;
       left: -5%;
-      right: -5%;
-      top: 52px;
+      top: 72px;
       color: rgba(255,20,147,0.12);
-      font-size: 52px;
+      font-size: 58px;
       font-weight: bold;
-      letter-spacing: 4px;
-      transform: rotate(-7deg);
-      pointer-events: none;
-      z-index: 1;
+      letter-spacing: 5px;
       white-space: nowrap;
-    }
-
-    .screen::after {
-      content: "";
-      position: absolute;
-      left: -20%;
-      right: -20%;
-      top: -150px;
-      height: 130px;
-      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.45), transparent);
-      animation: sparkleSweep 4.8s linear infinite;
+      transform: rotate(-7deg);
+      z-index: 1;
       pointer-events: none;
-      z-index: 2;
-    }
-
-    @keyframes sparkleSweep {
-      0% { top: -150px; }
-      100% { top: 100%; }
     }
 
     .jasonScreensaver {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
       overflow: hidden;
-      opacity: 0.22;
     }
 
     .screenSaverPhoto {
       position: absolute;
-      width: 260px;
-      height: 340px;
       object-fit: cover;
-      border: 5px solid rgba(255,255,255,0.72);
-      border-radius: 18px;
+      border: 5px solid rgba(255,255,255,0.82);
+      border-radius: 24px;
       box-shadow:
-        0 0 28px rgba(255,20,147,0.6),
-        0 0 60px rgba(255,255,255,0.35);
+        0 0 30px rgba(255,20,147,0.75),
+        0 0 70px rgba(255,255,255,0.38);
       filter:
         grayscale(1)
         sepia(1)
         hue-rotate(275deg)
-        saturate(2.6)
+        saturate(3.1)
         brightness(1.05)
-        contrast(1.08);
+        contrast(1.12);
+      opacity: 0.34;
     }
 
     .s1 {
-      animation: jasonFloat1 34s linear infinite;
+      width: 330px;
+      height: 430px;
+      animation: jasonFloat1 32s linear infinite;
     }
 
     .s2 {
-      width: 200px;
-      height: 265px;
-      opacity: 0.65;
-      animation: jasonFloat2 30s linear infinite;
+      width: 240px;
+      height: 315px;
+      opacity: 0.26;
+      animation: jasonFloat2 28s linear infinite;
     }
 
     .s3 {
-      width: 170px;
-      height: 225px;
-      opacity: 0.55;
-      animation: jasonFloat3 38s linear infinite;
+      width: 190px;
+      height: 255px;
+      opacity: 0.22;
+      animation: jasonFloat3 36s linear infinite;
     }
 
     .jasonScreensaver::after {
-      content: "JASON KRANE ♥ BAARN WATER OPERATION ♥ ARCHIVED FOREVER";
+      content: "JASON KRANE // BAARN WATER FILE // LOVE ARCHIVE";
       position: absolute;
-      left: 0;
-      top: 0;
-      color: rgba(255,255,255,0.88);
-      background: rgba(255,20,147,0.30);
-      border: 1px solid rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.92);
+      background: rgba(255,20,147,0.34);
+      border: 1px solid rgba(255,255,255,0.68);
       border-radius: 999px;
-      padding: 7px 13px;
+      padding: 7px 14px;
       font-size: 12px;
       letter-spacing: 2px;
       animation: labelFloat 24s linear infinite;
-      text-shadow: 0 0 8px rgba(255,20,147,0.8);
+      text-shadow: 0 0 8px rgba(255,20,147,0.9);
     }
 
     @keyframes jasonFloat1 {
-      0%   { left: 4%;  top: 8%;  transform: rotate(-8deg) scale(1); }
-      20%  { left: 68%; top: 6%;  transform: rotate(6deg) scale(1.03); }
-      40%  { left: 60%; top: 44%; transform: rotate(-4deg) scale(1); }
-      60%  { left: 10%; top: 52%; transform: rotate(7deg) scale(1.04); }
-      80%  { left: 34%; top: 20%; transform: rotate(-5deg) scale(1); }
-      100% { left: 4%;  top: 8%;  transform: rotate(-8deg) scale(1); }
+      0%   { left: 3%;  top: 8%;  transform: rotate(-7deg) scale(1); }
+      20%  { left: 70%; top: 7%;  transform: rotate(6deg) scale(1.03); }
+      42%  { left: 58%; top: 46%; transform: rotate(-4deg) scale(1); }
+      63%  { left: 8%;  top: 50%; transform: rotate(7deg) scale(1.04); }
+      82%  { left: 36%; top: 18%; transform: rotate(-5deg) scale(1); }
+      100% { left: 3%;  top: 8%;  transform: rotate(-7deg) scale(1); }
     }
 
     @keyframes jasonFloat2 {
-      0%   { left: 78%; top: 70%; transform: rotate(7deg) scale(1); }
+      0%   { left: 77%; top: 67%; transform: rotate(7deg) scale(1); }
       25%  { left: 58%; top: 16%; transform: rotate(-4deg) scale(1.04); }
-      50%  { left: 16%; top: 22%; transform: rotate(5deg) scale(1); }
-      75%  { left: 24%; top: 72%; transform: rotate(-6deg) scale(1.05); }
-      100% { left: 78%; top: 70%; transform: rotate(7deg) scale(1); }
+      50%  { left: 15%; top: 24%; transform: rotate(5deg) scale(1); }
+      75%  { left: 24%; top: 70%; transform: rotate(-6deg) scale(1.05); }
+      100% { left: 77%; top: 67%; transform: rotate(7deg) scale(1); }
     }
 
     @keyframes jasonFloat3 {
-      0%   { left: 44%; top: 68%; transform: rotate(-5deg) scale(1); }
-      30%  { left: 80%; top: 34%; transform: rotate(5deg) scale(1.02); }
-      55%  { left: 34%; top: 10%; transform: rotate(-7deg) scale(1.04); }
+      0%   { left: 44%; top: 70%; transform: rotate(-5deg) scale(1); }
+      30%  { left: 82%; top: 34%; transform: rotate(5deg) scale(1.02); }
+      55%  { left: 34%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
       80%  { left: 8%;  top: 56%; transform: rotate(4deg) scale(1); }
-      100% { left: 44%; top: 68%; transform: rotate(-5deg) scale(1); }
+      100% { left: 44%; top: 70%; transform: rotate(-5deg) scale(1); }
     }
 
     @keyframes labelFloat {
       0%   { left: 4%; top: 88%; }
       25%  { left: 58%; top: 84%; }
-      50%  { left: 63%; top: 14%; }
+      50%  { left: 62%; top: 14%; }
       75%  { left: 14%; top: 18%; }
       100% { left: 4%; top: 88%; }
     }
@@ -264,51 +250,51 @@
     .loginScreen,
     .archiveScreen {
       position: relative;
-      z-index: 5;
+      z-index: 10;
     }
 
     .topBar {
-      min-height: 40px;
-      background:
-        linear-gradient(180deg, #ff8fd8 0%, #ff1493 100%);
+      min-height: 44px;
       border: 3px solid var(--white);
+      border-radius: 22px;
+      background: linear-gradient(180deg, #ff9fdd 0%, #ff1493 100%);
       color: var(--white);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
-      padding: 0 12px;
-      font-size: 12px;
+      padding: 0 14px;
       margin-bottom: 14px;
-      border-radius: 18px;
+      font-size: 12px;
       box-shadow:
-        0 0 20px rgba(255,20,147,0.5),
-        inset 0 0 20px rgba(255,255,255,0.25);
-      text-shadow: 0 0 8px rgba(90,0,52,0.6);
+        0 0 22px rgba(255,20,147,0.55),
+        inset 0 0 20px rgba(255,255,255,0.28);
+      text-shadow: 0 0 8px rgba(90,0,52,0.65);
     }
 
     .window {
       border: 4px solid var(--white);
-      border-radius: 24px;
+      border-radius: 28px;
       background:
-        linear-gradient(180deg, rgba(255,247,251,0.96), rgba(255,209,236,0.94));
+        linear-gradient(180deg, rgba(255,247,251,0.94), rgba(255,209,236,0.92));
       box-shadow:
-        6px 6px 0 rgba(122,0,74,0.22),
-        0 0 30px rgba(255,20,147,0.35),
-        inset 0 0 24px rgba(255,255,255,0.55);
+        6px 6px 0 rgba(122,0,74,0.20),
+        0 0 32px rgba(255,20,147,0.36),
+        inset 0 0 24px rgba(255,255,255,0.62);
       overflow: hidden;
+      backdrop-filter: blur(3px);
     }
 
     .windowTitle {
-      min-height: 34px;
-      background:
-        linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 45%, #ff1493 100%);
+      min-height: 36px;
       border-bottom: 3px solid var(--white);
+      background: linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 48%, #ff1493 100%);
       color: var(--white);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 0 10px;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 12px;
       font-size: 12px;
       font-weight: bold;
       text-shadow: 0 0 8px rgba(90,0,52,0.65);
@@ -328,12 +314,12 @@
 
     h1 {
       color: var(--hotpink);
-      font-size: 32px;
+      font-size: 34px;
       margin: 0 0 8px;
       letter-spacing: 3px;
       text-shadow:
-        0 0 8px rgba(255,255,255,0.8),
-        0 0 18px rgba(255,20,147,0.35);
+        0 0 8px rgba(255,255,255,0.88),
+        0 0 18px rgba(255,20,147,0.42);
     }
 
     h1::before,
@@ -345,7 +331,7 @@
     h2 {
       color: var(--purple);
       font-size: 16px;
-      margin: 0 0 10px;
+      margin: 0 0 12px;
     }
 
     p {
@@ -469,97 +455,33 @@
       font-weight: bold;
     }
 
-    .archiveScreen {
-      display: none;
+    .loveStamp {
+      display: inline-block;
+      color: var(--white);
+      background: var(--hotpink);
+      border: 3px solid var(--white);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      transform: rotate(-4deg);
+      box-shadow: 0 0 18px rgba(255,20,147,0.4);
+      margin: 8px 0;
     }
 
-    .archiveGrid {
+    .archiveScreen {
+      display: none;
+      min-height: 760px;
+      padding-bottom: 118px;
+    }
+
+    .archiveLayout {
       display: grid;
-      grid-template-columns: 340px 1fr;
+      grid-template-columns: minmax(0, 1fr) 340px;
       gap: 14px;
     }
 
-    .fileList {
-      display: grid;
-      gap: 8px;
-    }
-
-    .fileButton {
-      width: 100%;
-      text-align: left;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,209,236,0.65));
-      color: var(--text);
-      border: 2px solid rgba(255,20,147,0.35);
-      border-radius: 18px;
-      padding: 10px;
-      margin: 0;
-      font-family: "Courier New", monospace;
-      cursor: pointer;
-      display: grid;
-      grid-template-columns: 32px 1fr;
-      gap: 8px;
-      align-items: start;
-      box-shadow: inset 0 0 12px rgba(255,255,255,0.4);
-    }
-
-    .fileButton:hover,
-    .fileButton.active {
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,143,216,0.80));
-      border-color: var(--purple);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
-    .fileIcon {
-      width: 25px;
-      height: 29px;
-      background: #fff7fb;
-      border: 2px solid var(--pink);
-      border-radius: 6px;
-      position: relative;
-      margin-top: 2px;
-      box-shadow: 0 0 8px rgba(255,20,147,0.25);
-    }
-
-    .fileIcon::before {
-      content: "♥";
-      position: absolute;
-      left: 4px;
-      top: 4px;
-      color: var(--hotpink);
-      font-size: 14px;
-    }
-
-    .fileIcon::after {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 19px;
-      width: 13px;
-      height: 1px;
-      background: var(--pink);
-      box-shadow: 0 4px 0 var(--pink);
-    }
-
-    .fileName {
-      display: block;
-      color: #7a004a;
-      font-size: 13px;
-      line-height: 1.25;
-      font-weight: bold;
-    }
-
-    .fileMeta {
-      display: block;
-      color: var(--hotpink);
-      font-size: 11px;
-      margin-top: 3px;
-    }
-
     .viewer {
-      min-height: 720px;
+      min-height: 640px;
     }
 
     .viewerBody {
@@ -568,6 +490,9 @@
       font-size: 14px;
       line-height: 1.6;
       white-space: pre-line;
+      min-height: 580px;
+      max-height: 680px;
+      overflow-y: auto;
     }
 
     .viewerBody strong {
@@ -580,90 +505,29 @@
       font-weight: bold;
     }
 
-    .chatWrap {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .sidePanel .content {
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .chatHeader {
-      border: 3px solid rgba(255,20,147,0.35);
-      border-radius: 18px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.65), transparent 70%),
-        rgba(255,209,236,0.45);
+    .dangerLove {
+      border: 3px dashed var(--red);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.58);
       padding: 12px;
-      margin-bottom: 10px;
-      white-space: normal;
-      box-shadow: inset 0 0 16px rgba(255,20,147,0.12);
-    }
-
-    .chatMeta {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 8px;
-      border-bottom: 1px dotted rgba(255,20,147,0.25);
-      padding: 4px 0;
-    }
-
-    .chatMeta:last-child {
-      border-bottom: none;
-    }
-
-    .chatKey {
-      color: var(--hotpink);
-      font-weight: bold;
-    }
-
-    .chatMessages {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .bubble {
-      max-width: 78%;
-      padding: 12px 14px;
-      border-radius: 18px;
-      position: relative;
-      white-space: pre-line;
-      box-shadow: 0 0 14px rgba(255,20,147,0.12);
-      line-height: 1.5;
-    }
-
-    .bubble.nessa {
-      align-self: flex-start;
-      background: rgba(255,255,255,0.88);
-      border: 2px solid #ff9ad7;
-    }
-
-    .bubble.jason {
-      align-self: flex-end;
-      background: linear-gradient(180deg, #ff7ac7, #ff2fa8);
-      color: white;
-      border: 2px solid #ffffff;
-      text-shadow: 0 0 6px rgba(90,0,52,0.55);
-    }
-
-    .bubbleName {
-      display: block;
-      font-size: 11px;
-      font-weight: bold;
-      margin-bottom: 6px;
-      opacity: 0.9;
-      letter-spacing: 1px;
+      color: #8a0029;
+      margin-bottom: 12px;
     }
 
     .photoCard {
-      max-width: 520px;
+      max-width: 560px;
+      margin: 0 auto;
       border: 5px double var(--pink);
       border-radius: 26px;
       background:
         radial-gradient(circle at center, rgba(255,255,255,0.8), transparent 72%),
         rgba(255,209,236,0.72);
       padding: 16px;
-      margin: 0 auto;
       text-align: center;
       white-space: normal;
       box-shadow:
@@ -682,12 +546,22 @@
         grayscale(1)
         sepia(1)
         hue-rotate(275deg)
-        saturate(2.6)
+        saturate(3)
         brightness(1.05)
         contrast(1.08);
       box-shadow:
         0 0 24px rgba(255,20,147,0.55),
         0 0 60px rgba(255,255,255,0.45);
+    }
+
+    .photoCard.wedding img {
+      max-height: 520px;
+      filter:
+        sepia(0.18)
+        hue-rotate(295deg)
+        saturate(1.7)
+        brightness(1.04)
+        contrast(1.05);
     }
 
     .photoCaption {
@@ -697,6 +571,249 @@
       line-height: 1.5;
     }
 
+    .phoneShell {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      border: 7px solid #7a004a;
+      border-radius: 34px;
+      background: #2a0018;
+      box-shadow:
+        0 0 30px rgba(255,20,147,0.38),
+        inset 0 0 20px rgba(0,0,0,0.65);
+      overflow: hidden;
+      white-space: normal;
+    }
+
+    .phoneTop {
+      min-height: 56px;
+      background: linear-gradient(180deg, #ff89cf, #ff1493);
+      color: white;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-shadow: 0 0 8px rgba(90,0,52,0.75);
+    }
+
+    .phoneContact {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .phoneName {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .phoneSub {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .phoneHeart {
+      font-size: 26px;
+      animation: phoneBeat 1.2s infinite;
+    }
+
+    @keyframes phoneBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+
+    .chatMessages {
+      height: 470px;
+      overflow-y: auto;
+      padding: 14px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.7), transparent 70%),
+        linear-gradient(180deg, #ffeaf7, #ffd1ec);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 9px 11px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.35;
+      box-shadow: 0 0 10px rgba(90,0,52,0.12);
+      position: relative;
+    }
+
+    .bubble.nessa {
+      align-self: flex-start;
+      background: #ffffff;
+      border: 2px solid #ff9ad7;
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .bubble.jason {
+      align-self: flex-end;
+      background: linear-gradient(180deg, #ff70c5, #ff1493);
+      border: 2px solid #ffffff;
+      color: white;
+      border-bottom-right-radius: 4px;
+      text-shadow: 0 0 4px rgba(90,0,52,0.5);
+    }
+
+    .bubbleName {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1px;
+      font-weight: bold;
+      opacity: 0.72;
+      margin-bottom: 3px;
+    }
+
+    .chatTime {
+      display: block;
+      font-size: 10px;
+      opacity: 0.68;
+      text-align: right;
+      margin-top: 5px;
+    }
+
+    .phoneInputFake {
+      background: #fff7fb;
+      border-top: 2px solid #ff89cf;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .fakeInput {
+      flex: 1;
+      background: white;
+      border: 2px solid #ff9ad7;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: rgba(90,0,52,0.55);
+      font-size: 12px;
+    }
+
+    .fakeSend {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--hotpink);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+    }
+
+    .bottomDock {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 12;
+      border: 4px solid white;
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,209,236,0.86));
+      box-shadow:
+        0 0 24px rgba(255,20,147,0.42),
+        inset 0 0 18px rgba(255,255,255,0.52);
+      padding: 10px;
+      overflow-x: auto;
+      display: none;
+    }
+
+    .dockInner {
+      display: flex;
+      gap: 12px;
+      min-width: max-content;
+      align-items: center;
+    }
+
+    .heartIconButton {
+      width: 92px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-family: "Courier New", monospace;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      box-shadow: none;
+      text-shadow: none;
+      display: grid;
+      gap: 4px;
+      justify-items: center;
+    }
+
+    .heartIconButton::before,
+    .heartIconButton::after {
+      content: "";
+    }
+
+    .heartIconButton:hover {
+      transform: translateY(-3px);
+      filter: none;
+    }
+
+    .heartShape {
+      width: 42px;
+      height: 38px;
+      position: relative;
+      transform: rotate(-45deg);
+      background: linear-gradient(135deg, #ff1493, #ff89cf);
+      box-shadow:
+        0 0 14px rgba(255,20,147,0.45),
+        inset 0 0 8px rgba(255,255,255,0.35);
+      border: 2px solid white;
+    }
+
+    .heartShape::before,
+    .heartShape::after {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 38px;
+      background: inherit;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: inherit;
+    }
+
+    .heartShape::before {
+      top: -21px;
+      left: -2px;
+    }
+
+    .heartShape::after {
+      left: 21px;
+      top: -2px;
+    }
+
+    .heartIconButton.active .heartShape {
+      background: linear-gradient(135deg, #a84dff, #ff1493);
+      animation: activeHeart 0.9s infinite;
+    }
+
+    @keyframes activeHeart {
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.12); }
+    }
+
+    .heartLabel {
+      font-size: 10px;
+      line-height: 1.15;
+      color: #7a004a;
+      font-weight: bold;
+      width: 90px;
+      text-shadow: 0 0 8px rgba(255,255,255,0.7);
+    }
+
     .footerActions {
       margin-top: 14px;
       display: flex;
@@ -704,61 +821,39 @@
       flex-wrap: wrap;
     }
 
-    .loveStamp {
-      display: inline-block;
-      color: var(--white);
-      background: var(--hotpink);
-      border: 3px solid var(--white);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      transform: rotate(-4deg);
-      box-shadow: 0 0 18px rgba(255,20,147,0.4);
-      margin: 8px 0;
-    }
-
-    @media (max-width: 900px) {
-      .archiveGrid {
+    @media (max-width: 1000px) {
+      .archiveLayout {
         grid-template-columns: 1fr;
       }
 
-      .viewer {
-        min-height: 520px;
+      .viewerBody {
+        max-height: none;
       }
 
-      .screenSaverPhoto.s1 {
-        width: 200px;
-        height: 260px;
-      }
-
-      .screenSaverPhoto.s2 {
-        width: 155px;
-        height: 205px;
-      }
-
-      .screenSaverPhoto.s3 {
-        width: 130px;
-        height: 175px;
+      .sidePanel {
+        display: none;
       }
     }
 
-    @media (max-width: 620px) {
+    @media (max-width: 680px) {
       body {
         padding: 8px;
       }
 
       .screen {
-        border-radius: 18px;
+        min-height: calc(100vh - 16px);
+        border-radius: 20px;
+        padding: 10px;
       }
 
       .topBar {
-        font-size: 10px;
         flex-direction: column;
-        padding: 8px;
+        padding: 9px;
+        font-size: 10px;
       }
 
       h1 {
-        font-size: 23px;
+        font-size: 24px;
         letter-spacing: 1px;
       }
 
@@ -766,13 +861,31 @@
         margin: 30px auto;
       }
 
-      .chatMeta {
-        grid-template-columns: 1fr;
-        gap: 2px;
+      .archiveScreen {
+        padding-bottom: 140px;
       }
 
-      .bubble {
-        max-width: 92%;
+      .viewerBody {
+        min-height: 460px;
+      }
+
+      .chatMessages {
+        height: 390px;
+      }
+
+      .screenSaverPhoto.s1 {
+        width: 220px;
+        height: 285px;
+      }
+
+      .screenSaverPhoto.s2 {
+        width: 160px;
+        height: 210px;
+      }
+
+      .screenSaverPhoto.s3 {
+        width: 130px;
+        height: 170px;
       }
     }
   </style>
@@ -796,7 +909,7 @@
 
     <div class="topBar">
       <span>NESSA'S PRIVATE LOVE ARCHIVE</span>
-      <span>PERSONAL RECORDS // BAARN WATER OPERATION</span>
+      <span>REAL LOVE // REAL BETRAYAL // REAL DAMAGE</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
@@ -812,7 +925,7 @@
 
         <p>
           This directory is sealed behind Nessa's private recovery code.
-          The system has wrapped the entire archive in emotional residue, obsession and romantic nonsense.
+          The archive contains romantic material, operational evidence and emotional contamination.
         </p>
 
         <div class="loveStamp">
@@ -842,95 +955,7 @@
     </section>
 
     <section class="archiveScreen" id="archiveScreen">
-      <section class="archiveGrid">
-        <aside class="window">
-          <div class="windowTitle">
-            <span>Recovered Love Files</span>
-            <span>9 ITEMS</span>
-          </div>
-
-          <div class="content">
-            <div class="fileList">
-              <button class="fileButton active" onclick="openFile('overview', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">archive_overview.sys</span>
-                  <span class="fileMeta">romantic system summary</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('photo', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">jason_krane_photo.jpg</span>
-                  <span class="fileMeta">beloved image recovered</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('chat1', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">secure_chat_01.log</span>
-                  <span class="fileMeta">encrypted channel</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('chat2', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">secure_chat_02.log</span>
-                  <span class="fileMeta">baarn discussion</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('chat3', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">secure_chat_03.log</span>
-                  <span class="fileMeta">post-operation exchange</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('death', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">krane_death_notice.pdf.txt</span>
-                  <span class="fileMeta">death record</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('grief', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">nessa_private_note.txt</span>
-                  <span class="fileMeta">heartbroken personal note</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('mq', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">observation_m_and_q.txt</span>
-                  <span class="fileMeta">restricted personal note</span>
-                </span>
-              </button>
-
-              <button class="fileButton" onclick="openFile('terminalHint', this)">
-                <span class="fileIcon"></span>
-                <span>
-                  <span class="fileName">last_environment_hint.tmp</span>
-                  <span class="fileMeta">corrupted hidden clue</span>
-                </span>
-              </button>
-            </div>
-
-            <div class="footerActions">
-              <a href="memory.html" class="buttonLink">OPEN MEMORY PROTOCOL</a>
-              <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
-            </div>
-          </div>
-        </aside>
-
+      <section class="archiveLayout">
         <section class="window viewer">
           <div class="windowTitle">
             <span id="viewerTitle">archive_overview.sys</span>
@@ -939,8 +964,100 @@
 
           <div class="viewerBody" id="viewerBody"></div>
         </section>
+
+        <aside class="window sidePanel">
+          <div class="windowTitle">
+            <span>Archive Notes</span>
+            <span>PRIVATE</span>
+          </div>
+
+          <div class="content">
+            <div class="dangerLove">
+              <strong>Assessment:</strong><br><br>
+              Jason and Nessa were genuinely in love, but neither of them was innocent.
+              Jason used fear as a weapon. Nessa used grief as fuel.
+            </div>
+
+            <p>
+              Klik op de hartjes onderaan om bestanden, chats, foto’s en notities te openen.
+            </p>
+
+            <p>
+              De laatste omgeving is verborgen. De juiste aanwijzing staat ergens in deze privémap.
+            </p>
+
+            <div class="footerActions">
+              <a href="memory.html" class="buttonLink">OPEN MEMORY PROTOCOL</a>
+              <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
+            </div>
+          </div>
+        </aside>
       </section>
     </section>
+
+    <nav class="bottomDock" id="bottomDock">
+      <div class="dockInner">
+        <button class="heartIconButton active" onclick="openFile('overview', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Overview</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('photo', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Jason Photo</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('chat1', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Chat 01</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('chat2', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Baarn Chat</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('chat3', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Betrayal Chat</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('death', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Death Notice</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('grief', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Nessa Note</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('mq', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">M & Q Note</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('mqPhoto', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Wedding Proof</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('terminalHint', this)">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Last Hint</span>
+        </button>
+
+        <a href="memory.html" class="heartIconButton">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Memory</span>
+        </a>
+
+        <a href="terminal.html" class="heartIconButton">
+          <span class="heartShape"></span>
+          <span class="heartLabel">Terminal</span>
+        </a>
+      </div>
+    </nav>
   </main>
 
   <script>
@@ -964,20 +1081,26 @@ Personal correspondence, romantic cache, deleted notes, recovered secure chat fr
 
 Primary references:
 Jason Krane
+Nessa Thorne
 M
 Q
 Baarn water operation
 
 Recovered contents suggest:
-- Jason Krane and Nessa Thorne were secretly involved.
-- Jason used Nessa for chemical knowledge and post-mission concealment.
+- Jason Krane and Nessa Thorne were genuinely in love.
+- Their relationship was real, secret and emotionally intense.
+- Jason was not innocent. He planned harm and used people.
+- Nessa was not innocent. She protected him, studied his methods and later reconstructed his presence.
 - Jason Krane died before the recent transmissions began.
-- Nessa preserved his words, image and voice.
-- The recent "Jason" messages were likely staged or reconstructed.
+- The recent "Jason" messages were likely staged or reconstructed by Nessa.
+- Nessa also collected leverage against M and Q.
 
-System note:
-This archive is not simply evidence.
-It is grief wearing perfume and carrying a grudge.`
+System interpretation:
+This is not a simple love story.
+It is a love story between two dangerous people.
+
+Jason weaponised fear.
+Nessa weaponised grief.`
       },
 
       photo: {
@@ -988,58 +1111,71 @@ It is grief wearing perfume and carrying a grudge.`
 
       chat1: {
         title: "secure_chat_01.log",
-        status: "DECRYPTED",
+        status: "DECRYPTED CHAT",
         type: "chat",
-        channel: "Secure channel // initial flirtation",
+        contact: "Jason Krane",
+        subtitle: "Encrypted chat // early relationship",
         date: "14 October 2021",
         messages: [
-          { speaker: "nessa", text: "You stayed after the lecture." },
-          { speaker: "jason", text: "I never ignore a woman who can describe poison like poetry." },
-          { speaker: "nessa", text: "That is not the compliment you think it is." },
-          { speaker: "jason", text: "It worked. You're still replying." },
-          { speaker: "nessa", text: "Only because you stole my notebook." },
-          { speaker: "jason", text: "I prefer the word borrowed.\nAlso, your handwriting is dangerously attractive." },
-          { speaker: "nessa", text: "You sound like trouble." },
-          { speaker: "jason", text: "I am trouble.\nThat is why this is interesting." }
+          { speaker: "nessa", time: "22:13", text: "You stayed after the lecture." },
+          { speaker: "jason", time: "22:14", text: "You noticed." },
+          { speaker: "nessa", time: "22:15", text: "You made sure I would." },
+          { speaker: "jason", time: "22:17", text: "Maybe. You were the only person in the room who spoke about poison like it was alive." },
+          { speaker: "nessa", time: "22:19", text: "That should worry you." },
+          { speaker: "jason", time: "22:20", text: "It did. That is why I came back." },
+          { speaker: "nessa", time: "22:22", text: "You are trouble." },
+          { speaker: "jason", time: "22:23", text: "So are you. You just hide it under academic language." },
+          { speaker: "nessa", time: "22:26", text: "Careful, Mr. Krane." },
+          { speaker: "jason", time: "22:27", text: "Too late, Dr. Thorne." }
         ]
       },
 
       chat2: {
-        title: "secure_chat_02.log",
-        status: "DECRYPTED",
+        title: "secure_chat_02_baarn.log",
+        status: "DECRYPTED CHAT",
         type: "chat",
-        channel: "Secure channel // Baarn planning",
+        contact: "Jason Krane",
+        subtitle: "Encrypted chat // Baarn water operation",
         date: "9 May 2023",
         messages: [
-          { speaker: "jason", text: "I need a delivery medium that dissolves quietly." },
-          { speaker: "nessa", text: "For what?" },
-          { speaker: "jason", text: "For a message." },
-          { speaker: "nessa", text: "You mean for an attack." },
-          { speaker: "jason", text: "Call it a correction.\nBaarn drinks first, then London listens." },
-          { speaker: "nessa", text: "Water?" },
-          { speaker: "jason", text: "Yes.\nSmall contamination, controlled panic, precise timing." },
-          { speaker: "nessa", text: "You're insane." },
-          { speaker: "jason", text: "Not insane.\nAmbitious.\nI only need the right chemistry." },
-          { speaker: "nessa", text: "And if I refuse?" },
-          { speaker: "jason", text: "You won't.\nYou still confuse love with loyalty." }
+          { speaker: "jason", time: "01:02", text: "I need a compound that disperses in water without announcing itself." },
+          { speaker: "nessa", time: "01:04", text: "That is not a romantic opening." },
+          { speaker: "jason", time: "01:05", text: "I can be romantic after the problem is solved." },
+          { speaker: "nessa", time: "01:07", text: "Where?" },
+          { speaker: "jason", time: "01:09", text: "Baarn." },
+          { speaker: "nessa", time: "01:10", text: "Drinking water?" },
+          { speaker: "jason", time: "01:11", text: "A controlled scare. A signal. A message." },
+          { speaker: "nessa", time: "01:13", text: "Do not soften it for me. You mean poison." },
+          { speaker: "jason", time: "01:14", text: "I mean leverage." },
+          { speaker: "nessa", time: "01:17", text: "You always make cruelty sound strategic." },
+          { speaker: "jason", time: "01:19", text: "And you always understand me faster than anyone else." },
+          { speaker: "nessa", time: "01:21", text: "That does not make me good." },
+          { speaker: "jason", time: "01:22", text: "I never loved you because you were good." }
         ]
       },
 
       chat3: {
-        title: "secure_chat_03.log",
-        status: "PARTIAL RECOVERY",
+        title: "secure_chat_03_after_baarn.log",
+        status: "PARTIAL CHAT",
         type: "chat",
-        channel: "Secure channel // post-operation draft",
+        contact: "Jason Krane",
+        subtitle: "Encrypted chat // love and betrayal",
         date: "Recovered fragment",
         messages: [
-          { speaker: "nessa", text: "They say you are dead." },
-          { speaker: "jason", text: "People say many things when a body disappears into the right file." },
-          { speaker: "nessa", text: "You lied to me about everything." },
-          { speaker: "jason", text: "Not everything.\nI meant it when I said you were useful." },
-          { speaker: "nessa", text: "Useful?" },
-          { speaker: "jason", text: "You gave me shelter, chemistry, access, silence.\nThat is a form of intimacy." },
-          { speaker: "nessa", text: "I loved you." },
-          { speaker: "jason", text: "I know.\nThat is why you were effective." }
+          { speaker: "nessa", time: "03:12", text: "You used my research." },
+          { speaker: "jason", time: "03:13", text: "I trusted your research." },
+          { speaker: "nessa", time: "03:14", text: "That is not the same thing." },
+          { speaker: "jason", time: "03:15", text: "No. But it sounded better." },
+          { speaker: "nessa", time: "03:17", text: "Did you love me?" },
+          { speaker: "jason", time: "03:19", text: "Yes." },
+          { speaker: "nessa", time: "03:20", text: "Did you use me?" },
+          { speaker: "jason", time: "03:21", text: "Yes." },
+          { speaker: "nessa", time: "03:24", text: "You do not even pretend to be ashamed." },
+          { speaker: "jason", time: "03:25", text: "You never wanted a harmless man, Nessa." },
+          { speaker: "nessa", time: "03:27", text: "No. I wanted someone who would choose me." },
+          { speaker: "jason", time: "03:28", text: "I did. In my way." },
+          { speaker: "nessa", time: "03:31", text: "Your way destroys everything it touches." },
+          { speaker: "jason", time: "03:32", text: "And still you kept replying." }
         ]
       },
 
@@ -1078,42 +1214,55 @@ Archive conflict:
 Recent transmissions claiming to originate from Jason Krane were created after this date.
 
 System conclusion:
-Jason Krane could not have personally sent the current messages.`
+Jason Krane could not have personally sent the current messages.
+
+Secondary conclusion:
+Someone with access to his words, image, recordings and emotional history reconstructed him.`
       },
 
       grief: {
         title: "nessa_private_note.txt",
-        status: "PERSONAL",
+        status: "PERSONAL NOTE",
         type: "text",
         body:
-`I thought loving a monster would at least feel grander than this.
+`I know what he was.
 
-What I got was ash, silence and a classified report.
+I need that written plainly, because grief tries to edit the dead into saints.
 
-Jason was not good.
-He was not kind.
-He was not safe.
-
-He lied as easily as breathing and still I kept making room for him.
+Jason was not a saint.
+Jason was not even close.
 
 He wanted Baarn frightened.
-He wanted the water touched, the panic measurable, the response delayed.
-He wanted suffering because suffering made him feel significant.
+He wanted the water touched.
+He wanted panic measured like a laboratory result.
 
-And still I loved him.
+And still, I loved him.
 
-That is the humiliation of it.
+That is the ugliest part.
 
-Now he is dead and the only version of him left is the one I can build myself:
-his voice,
-his image,
-his methods,
-his shadow.
+Not that he lied.
+Not that he used me.
+Not that I helped more than I should have.
 
-If I cannot have Jason alive,
-then I will have his echo.
+The ugliest part is that I knew enough to stop and did not.
 
-And his enemies will listen.`
+They took him from the world.
+The world became quieter.
+Safer, perhaps.
+
+But I did not want safe.
+I wanted him.
+
+So I kept his voice.
+His face.
+His old words.
+His cruelty.
+His charm.
+
+If Jason cannot return, then I will build an echo sharp enough to hurt them.
+
+He weaponised fear.
+I will weaponise memory.`
       },
 
       mq: {
@@ -1141,11 +1290,26 @@ He said:
 I kept that line.
 
 Not because Jason was romantic.
-He wasn't.
+He was not.
 
 Because he noticed weaknesses faster than other people noticed weather.
 
-And because secrets are pressure points.`
+And because secrets are pressure points.
+
+Later I found the photograph.
+
+A ceremony.
+Two rings.
+One private archive.
+One foolish attempt to pretend that love leaves no evidence.
+
+It always leaves evidence.`
+      },
+
+      mqPhoto: {
+        title: "m_q_wedding_photo.jpg",
+        status: "IMAGE EVIDENCE",
+        type: "mqPhoto"
       },
 
       terminalHint: {
@@ -1213,6 +1377,7 @@ Press ENTER.`
     function showArchive() {
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("archiveScreen").style.display = "block";
+      document.getElementById("bottomDock").style.display = "block";
       openFile("overview");
     }
 
@@ -1232,7 +1397,22 @@ Press ENTER.`
             <strong>JASON KRANE</strong><br><br>
             Archive note:<br>
             "Subject linked to Baarn water contamination planning."<br><br>
-            Nessa recoloured the image pink three different times.
+            Nessa kept the image running behind the archive like a screensaver.
+          </div>
+        </div>
+      `;
+    }
+
+    function makeMqPhotoHtml() {
+      return `
+        <div class="photoCard wedding">
+          <img src="m-q-wedding.jpg" alt="Recovered wedding photograph of M and Q">
+          <div class="photoCaption">
+            Recovered image evidence:<br>
+            <strong>M + Q</strong><br><br>
+            Archive note:<br>
+            "Ceremony photograph recovered from encrypted personal cache."<br><br>
+            Nessa marked this file as leverage material.
           </div>
         </div>
       `;
@@ -1241,33 +1421,33 @@ Press ENTER.`
     function makeChatHtml(file) {
       const messages = file.messages.map(function(msg) {
         const speakerLabel = msg.speaker === "jason" ? "JASON" : "NESSA";
+
         return `
           <div class="bubble ${msg.speaker}">
             <span class="bubbleName">${speakerLabel}</span>
             ${escapeHtml(msg.text)}
+            <span class="chatTime">${escapeHtml(msg.time)}</span>
           </div>
         `;
       }).join("");
 
       return `
-        <div class="chatWrap">
-          <div class="chatHeader">
-            <div class="chatMeta">
-              <span class="chatKey">Type</span>
-              <span>Encrypted secure chat</span>
+        <div class="phoneShell">
+          <div class="phoneTop">
+            <div class="phoneContact">
+              <span class="phoneName">${escapeHtml(file.contact)}</span>
+              <span class="phoneSub">${escapeHtml(file.subtitle)} // ${escapeHtml(file.date)}</span>
             </div>
-            <div class="chatMeta">
-              <span class="chatKey">Channel</span>
-              <span>${escapeHtml(file.channel)}</span>
-            </div>
-            <div class="chatMeta">
-              <span class="chatKey">Date</span>
-              <span>${escapeHtml(file.date)}</span>
-            </div>
+            <div class="phoneHeart">♥</div>
           </div>
 
           <div class="chatMessages">
             ${messages}
+          </div>
+
+          <div class="phoneInputFake">
+            <div class="fakeInput">encrypted reply disabled...</div>
+            <div class="fakeSend">♥</div>
           </div>
         </div>
       `;
@@ -1283,13 +1463,15 @@ Press ENTER.`
 
       if (file.type === "photo") {
         viewerBody.innerHTML = makePhotoHtml();
+      } else if (file.type === "mqPhoto") {
+        viewerBody.innerHTML = makeMqPhotoHtml();
       } else if (file.type === "chat") {
         viewerBody.innerHTML = makeChatHtml(file);
       } else {
         viewerBody.innerHTML = escapeHtml(file.body);
       }
 
-      const buttons = document.querySelectorAll(".fileButton");
+      const buttons = document.querySelectorAll(".heartIconButton");
       buttons.forEach(function(btn) {
         btn.classList.remove("active");
       });
@@ -1297,7 +1479,7 @@ Press ENTER.`
       if (button) {
         button.classList.add("active");
       } else {
-        const firstButton = document.querySelector(".fileButton");
+        const firstButton = document.querySelector(".heartIconButton");
         if (firstButton) {
           firstButton.classList.add("active");
         }
