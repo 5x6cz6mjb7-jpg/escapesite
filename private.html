@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Nessa's Private Love Archive</title>
@@ -17,8 +17,8 @@
       --dark: #2a0018;
       --text: #5a0034;
       --yellow: #fff066;
-      --glass: rgba(255, 247, 251, 0.68);
-      --glassStrong: rgba(255, 247, 251, 0.78);
+      --glass: rgba(255, 247, 251, 0.58);
+      --glassStrong: rgba(255, 247, 251, 0.72);
     }
 
     * {
@@ -106,10 +106,10 @@
       margin: 0 auto;
       border: 6px double rgba(255,255,255,0.88);
       border-radius: 32px;
-      background: rgba(255, 209, 236, 0.22);
+      background: rgba(255, 209, 236, 0.10);
       box-shadow:
         0 0 48px rgba(255,20,147,0.68),
-        inset 0 0 60px rgba(255,255,255,0.18);
+        inset 0 0 60px rgba(255,255,255,0.12);
       position: relative;
       overflow: hidden;
       z-index: 3;
@@ -157,23 +157,23 @@
     }
 
     .s1 {
-      width: 380px;
-      height: 500px;
-      opacity: 0.52;
+      width: 430px;
+      height: 560px;
+      opacity: 0.66;
       animation: jasonFloat1 31s linear infinite;
     }
 
     .s2 {
-      width: 280px;
-      height: 365px;
-      opacity: 0.36;
+      width: 310px;
+      height: 405px;
+      opacity: 0.48;
       animation: jasonFloat2 27s linear infinite;
     }
 
     .s3 {
-      width: 220px;
-      height: 295px;
-      opacity: 0.30;
+      width: 250px;
+      height: 330px;
+      opacity: 0.40;
       animation: jasonFloat3 35s linear infinite;
     }
 
@@ -193,27 +193,27 @@
 
     @keyframes jasonFloat1 {
       0%   { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
-      20%  { left: 66%; top: 6%;  transform: rotate(6deg) scale(1.03); }
-      42%  { left: 54%; top: 40%; transform: rotate(-4deg) scale(1); }
-      63%  { left: 7%;  top: 44%; transform: rotate(7deg) scale(1.04); }
-      82%  { left: 34%; top: 15%; transform: rotate(-5deg) scale(1); }
+      20%  { left: 62%; top: 6%;  transform: rotate(6deg) scale(1.03); }
+      42%  { left: 50%; top: 36%; transform: rotate(-4deg) scale(1); }
+      63%  { left: 7%;  top: 40%; transform: rotate(7deg) scale(1.04); }
+      82%  { left: 34%; top: 13%; transform: rotate(-5deg) scale(1); }
       100% { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
     }
 
     @keyframes jasonFloat2 {
-      0%   { left: 76%; top: 62%; transform: rotate(7deg) scale(1); }
-      25%  { left: 55%; top: 14%; transform: rotate(-4deg) scale(1.04); }
-      50%  { left: 12%; top: 22%; transform: rotate(5deg) scale(1); }
-      75%  { left: 22%; top: 66%; transform: rotate(-6deg) scale(1.05); }
-      100% { left: 76%; top: 62%; transform: rotate(7deg) scale(1); }
+      0%   { left: 74%; top: 58%; transform: rotate(7deg) scale(1); }
+      25%  { left: 54%; top: 14%; transform: rotate(-4deg) scale(1.04); }
+      50%  { left: 12%; top: 20%; transform: rotate(5deg) scale(1); }
+      75%  { left: 22%; top: 62%; transform: rotate(-6deg) scale(1.05); }
+      100% { left: 74%; top: 58%; transform: rotate(7deg) scale(1); }
     }
 
     @keyframes jasonFloat3 {
-      0%   { left: 42%; top: 68%; transform: rotate(-5deg) scale(1); }
-      30%  { left: 80%; top: 32%; transform: rotate(5deg) scale(1.02); }
+      0%   { left: 42%; top: 64%; transform: rotate(-5deg) scale(1); }
+      30%  { left: 78%; top: 30%; transform: rotate(5deg) scale(1.02); }
       55%  { left: 32%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
-      80%  { left: 8%;  top: 54%; transform: rotate(4deg) scale(1); }
-      100% { left: 42%; top: 68%; transform: rotate(-5deg) scale(1); }
+      80%  { left: 8%;  top: 50%; transform: rotate(4deg) scale(1); }
+      100% { left: 42%; top: 64%; transform: rotate(-5deg) scale(1); }
     }
 
     @keyframes labelFloat {
@@ -236,7 +236,7 @@
       min-height: 44px;
       border: 3px solid rgba(255,255,255,0.9);
       border-radius: 22px;
-      background: rgba(255,20,147,0.76);
+      background: rgba(255,20,147,0.72);
       color: var(--white);
       display: flex;
       align-items: center;
@@ -322,7 +322,7 @@
     .loginScreen {
       max-width: 660px;
       margin: 70px auto;
-      background: rgba(255, 247, 251, 0.74);
+      background: rgba(255, 247, 251, 0.72);
     }
 
     label {
@@ -449,6 +449,7 @@
     }
 
     .viewer {
+      display: none;
       min-height: 640px;
     }
 
@@ -461,7 +462,7 @@
       min-height: 580px;
       max-height: 680px;
       overflow-y: auto;
-      background: rgba(255, 247, 251, 0.18);
+      background: rgba(255, 247, 251, 0.12);
     }
 
     .viewerBody strong {
@@ -474,6 +475,22 @@
       font-weight: bold;
     }
 
+    .emptyStage {
+      min-height: 640px;
+      border: 4px dashed rgba(255,255,255,0.35);
+      border-radius: 28px;
+      background: rgba(255,255,255,0.05);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: rgba(255,255,255,0.86);
+      text-shadow: 0 0 14px rgba(255,20,147,0.9);
+      letter-spacing: 2px;
+      font-weight: bold;
+      font-size: 16px;
+      backdrop-filter: blur(0.5px);
+    }
+
     .sidePanel .content {
       font-size: 13px;
       line-height: 1.45;
@@ -482,7 +499,7 @@
     .dangerLove {
       border: 3px dashed var(--red);
       border-radius: 20px;
-      background: rgba(255,255,255,0.46);
+      background: rgba(255,255,255,0.42);
       padding: 12px;
       color: #8a0029;
       margin-bottom: 12px;
@@ -493,7 +510,7 @@
       margin: 0 auto;
       border: 5px double var(--pink);
       border-radius: 26px;
-      background: rgba(255,255,255,0.58);
+      background: rgba(255,255,255,0.54);
       padding: 16px;
       text-align: center;
       white-space: normal;
@@ -766,8 +783,10 @@
       box-shadow:
         0 0 16px rgba(255,20,147,0.45),
         inset 0 0 10px rgba(255,255,255,0.45);
-      font-size: 25px;
+      font-size: 22px;
       line-height: 1;
+      color: white;
+      text-shadow: 0 0 8px rgba(90,0,52,0.7);
     }
 
     .heartIconButton.active .heartIcon {
@@ -845,23 +864,27 @@
         min-height: 460px;
       }
 
+      .emptyStage {
+        min-height: 460px;
+      }
+
       .chatMessages {
         height: 370px;
       }
 
       .screenSaverPhoto.s1 {
-        width: 250px;
-        height: 325px;
+        width: 280px;
+        height: 365px;
       }
 
       .screenSaverPhoto.s2 {
-        width: 170px;
-        height: 225px;
+        width: 190px;
+        height: 250px;
       }
 
       .screenSaverPhoto.s3 {
-        width: 140px;
-        height: 185px;
+        width: 150px;
+        height: 200px;
       }
     }
   </style>
@@ -885,7 +908,7 @@
 
     <div class="topBar">
       <span>NESSA'S PRIVATE LOVE ARCHIVE</span>
-      <span>REAL LOVE // REAL BETRAYAL // REAL DAMAGE</span>
+      <span>REAL LOVE // REAL DAMAGE</span>
       <span>USER: DR. N. THORNE</span>
     </div>
 
@@ -932,13 +955,17 @@
 
     <section class="archiveScreen" id="archiveScreen">
       <section class="archiveLayout">
-        <section class="window viewer">
+        <section class="window viewer" id="viewerWindow">
           <div class="windowTitle">
-            <span id="viewerTitle">archive_overview.sys</span>
-            <span id="viewerStatus">OPEN</span>
+            <span id="viewerTitle"></span>
+            <span id="viewerStatus"></span>
           </div>
 
           <div class="viewerBody" id="viewerBody"></div>
+        </section>
+
+        <section class="emptyStage" id="emptyStage">
+          SELECT A HEART FILE BELOW
         </section>
 
         <aside class="window sidePanel">
@@ -950,26 +977,17 @@
           <div class="content">
             <div class="dangerLove">
               <strong>Assessment:</strong><br><br>
-              Jason and Nessa were genuinely in love, but neither of them was innocent.
+              Jason and Nessa were genuinely in love. Neither of them was innocent.
               Jason used fear as a weapon. Nessa used grief as fuel.
             </div>
 
             <p>
-              Klik op de ronde hartknoppen onderaan om bestanden, chats, foto’s en notities te openen.
+              Select a heart file below to open recovered material.
             </p>
 
             <p>
-              De chat heeft hoofdstukken. Open “Secret Chat” en blader door de delen.
+              The chat is divided into chapters.
             </p>
-
-            <p>
-              De laatste omgeving is verborgen. De juiste aanwijzing staat ergens in deze privémap.
-            </p>
-
-            <div class="footerActions">
-              <a href="memory.html" class="buttonLink">OPEN MEMORY PROTOCOL</a>
-              <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
-            </div>
           </div>
         </aside>
       </section>
@@ -977,11 +995,6 @@
 
     <nav class="bottomDock" id="bottomDock">
       <div class="dockInner">
-        <button class="heartIconButton active" onclick="openFile('overview', this)">
-          <span class="heartIcon">♥</span>
-          <span class="heartLabel">Overview</span>
-        </button>
-
         <button class="heartIconButton" onclick="openFile('photo', this)">
           <span class="heartIcon">♡</span>
           <span class="heartLabel">Jason Photo</span>
@@ -1011,16 +1024,6 @@
           <span class="heartIcon">📷</span>
           <span class="heartLabel">Wedding Proof</span>
         </button>
-
-        <button class="heartIconButton" onclick="openFile('terminalHint', this)">
-          <span class="heartIcon">?</span>
-          <span class="heartLabel">Last Hint</span>
-        </button>
-
-        <a href="memory.html" class="heartIconButton">
-          <span class="heartIcon">★</span>
-          <span class="heartLabel">Memory</span>
-        </a>
 
         <a href="terminal.html" class="heartIconButton">
           <span class="heartIcon">⌂</span>
@@ -1093,24 +1096,22 @@
       },
 
       {
-        title: "Chapter 4 // Betrayal",
-        subtitle: "Encrypted chat // love and damage",
-        date: "Recovered fragment",
+        title: "Chapter 4 // Partnership",
+        subtitle: "Encrypted chat // shared guilt",
+        date: "21 June 2023",
         messages: [
           { speaker: "nessa", time: "03:12", text: "You used my research." },
           { speaker: "jason", time: "03:13", text: "I trusted your research." },
           { speaker: "nessa", time: "03:14", text: "That is not the same thing." },
-          { speaker: "jason", time: "03:15", text: "No. But it sounded better." },
+          { speaker: "jason", time: "03:15", text: "No. But it is closer to love than anything I know." },
           { speaker: "nessa", time: "03:17", text: "Did you love me?" },
           { speaker: "jason", time: "03:19", text: "Yes." },
-          { speaker: "nessa", time: "03:20", text: "Did you use me?" },
+          { speaker: "nessa", time: "03:20", text: "Did you know I would help?" },
           { speaker: "jason", time: "03:21", text: "Yes." },
-          { speaker: "nessa", time: "03:24", text: "You do not even pretend to be ashamed." },
-          { speaker: "jason", time: "03:25", text: "You never wanted a harmless man, Nessa." },
-          { speaker: "nessa", time: "03:27", text: "No. I wanted someone who would choose me." },
-          { speaker: "jason", time: "03:28", text: "I did. In my way." },
-          { speaker: "nessa", time: "03:31", text: "Your way destroys everything it touches." },
-          { speaker: "jason", time: "03:32", text: "And still you kept replying." }
+          { speaker: "nessa", time: "03:24", text: "Then we are both guilty." },
+          { speaker: "jason", time: "03:25", text: "I never wanted you innocent." },
+          { speaker: "nessa", time: "03:27", text: "Good. I never wanted you harmless." },
+          { speaker: "jason", time: "03:28", text: "That is why this works." }
         ]
       },
 
@@ -1132,45 +1133,6 @@
     ];
 
     const files = {
-      overview: {
-        title: "archive_overview.sys",
-        status: "OPEN",
-        type: "text",
-        body:
-`PRIVATE ARCHIVE RESTORED
-
-♥ Nessa's emotional encryption layer has been opened. ♥
-
-Owner:
-Dr. Nessa Thorne
-
-Archive type:
-Personal correspondence, romantic cache, deleted notes, recovered secure chat fragments
-
-Primary references:
-Jason Krane
-Nessa Thorne
-M
-Q
-Baarn water operation
-
-Recovered contents suggest:
-- Jason Krane and Nessa Thorne were genuinely in love.
-- Their relationship was real, secret and emotionally intense.
-- Jason was not innocent. He planned harm and used people.
-- Nessa was not innocent. She protected him, studied his methods and later reconstructed his presence.
-- Jason Krane died before the recent transmissions began.
-- The recent "Jason" messages were likely staged or reconstructed by Nessa.
-- Nessa also collected leverage against M and Q.
-
-System interpretation:
-This is not a simple love story.
-It is a love story between two dangerous people.
-
-Jason weaponised fear.
-Nessa weaponised grief.`
-      },
-
       photo: {
         title: "jason_krane_photo.jpg",
         status: "IMAGE",
@@ -1263,6 +1225,12 @@ His old words.
 His cruelty.
 His charm.
 
+Don't trust the map.
+Read what moves above it.
+Only the machine knows the route.
+Name the thing that carries the threat.
+Enter that name where commands are accepted.
+
 If Jason cannot return, then I will build an echo sharp enough to hurt them.
 
 He weaponised fear.
@@ -1314,38 +1282,6 @@ It always leaves evidence.`
         title: "m-q-wedding_photo.jpg",
         status: "IMAGE EVIDENCE",
         type: "mqPhoto"
-      },
-
-      terminalHint: {
-        title: "last_environment_hint.tmp",
-        status: "CORRUPTED CLUE",
-        type: "text",
-        body:
-`CORRUPTED FINAL ENVIRONMENT NOTE
-
-The last door is not visible.
-The last door has no icon.
-The last door has no folder.
-The last door answers only to a word.
-
-Nessa did not write the word directly.
-She buried it in a field rule:
-
-Don't trust the map.
-Read what moves above it.
-Only the machine knows the route.
-Name the thing that carries the threat.
-Enter that name where commands are accepted.
-
-System fragment:
-The word is five letters.
-It is not typed here.
-It must be typed on the terminal.
-
-Recovered instruction:
-Return to the command line.
-Use the hidden five-letter answer.
-Press ENTER.`
       }
     };
 
@@ -1382,7 +1318,9 @@ Press ENTER.`
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("archiveScreen").style.display = "block";
       document.getElementById("bottomDock").style.display = "block";
-      openFile("overview");
+      document.getElementById("viewerWindow").style.display = "none";
+      document.getElementById("emptyStage").style.display = "grid";
+      clearActiveIcons();
     }
 
     function escapeHtml(text) {
@@ -1488,8 +1426,18 @@ Press ENTER.`
       openFile("secretChat");
     }
 
+    function clearActiveIcons() {
+      const buttons = document.querySelectorAll(".heartIconButton");
+      buttons.forEach(function(btn) {
+        btn.classList.remove("active");
+      });
+    }
+
     function openFile(key, button) {
       const file = files[key];
+
+      document.getElementById("emptyStage").style.display = "none";
+      document.getElementById("viewerWindow").style.display = "block";
 
       document.getElementById("viewerTitle").textContent = file.title;
       document.getElementById("viewerStatus").textContent = file.status;
@@ -1506,10 +1454,7 @@ Press ENTER.`
         viewerBody.innerHTML = escapeHtml(file.body);
       }
 
-      const buttons = document.querySelectorAll(".heartIconButton");
-      buttons.forEach(function(btn) {
-        btn.classList.remove("active");
-      });
+      clearActiveIcons();
 
       if (button) {
         button.classList.add("active");
