@@ -10,14 +10,15 @@
       --hotpink: #ff1493;
       --softpink: #ffd1ec;
       --baby: #ffeaf7;
-      --purple: #a84dff;
+      --purple: #9b3cff;
       --red: #ff3355;
       --white: #ffffff;
       --cream: #fff7fb;
       --dark: #2a0018;
       --text: #5a0034;
       --yellow: #fff066;
-      --shadow: rgba(90, 0, 52, 0.34);
+      --glass: rgba(255, 247, 251, 0.68);
+      --glassStrong: rgba(255, 247, 251, 0.78);
     }
 
     * {
@@ -31,26 +32,11 @@
       color: var(--text);
       background:
         radial-gradient(circle at 20% 20%, rgba(255,255,255,0.85), transparent 16%),
-        radial-gradient(circle at 78% 18%, rgba(255,20,147,0.45), transparent 24%),
-        radial-gradient(circle at 48% 78%, rgba(168,77,255,0.30), transparent 34%),
+        radial-gradient(circle at 78% 18%, rgba(255,20,147,0.42), transparent 24%),
+        radial-gradient(circle at 48% 78%, rgba(168,77,255,0.28), transparent 34%),
         linear-gradient(135deg, #ffb3dc 0%, #ff72c6 34%, #ff2fa8 66%, #7a004a 100%);
       padding: 16px;
       overflow-x: hidden;
-    }
-
-    body::before {
-      content: "♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥  ♥";
-      position: fixed;
-      left: 0;
-      top: -40px;
-      width: 100%;
-      color: rgba(255,255,255,0.35);
-      font-size: 30px;
-      letter-spacing: 18px;
-      white-space: nowrap;
-      pointer-events: none;
-      animation: fallingHeartsText 10s linear infinite;
-      z-index: 1;
     }
 
     body::after {
@@ -61,27 +47,22 @@
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,0.05),
-          rgba(255,255,255,0.05) 1px,
+          rgba(255,255,255,0.035),
+          rgba(255,255,255,0.035) 1px,
           transparent 1px,
           transparent 5px
         );
-      z-index: 50;
+      z-index: 80;
       mix-blend-mode: screen;
-    }
-
-    @keyframes fallingHeartsText {
-      0% { transform: translateY(-70px); }
-      100% { transform: translateY(110vh); }
     }
 
     .floatingHeart {
       position: fixed;
       pointer-events: none;
       z-index: 2;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.48);
       text-shadow: 0 0 18px rgba(255,20,147,0.8);
-      animation: floatHeart 12s linear infinite;
+      animation: floatHeart 13s linear infinite;
     }
 
     .h1 { left: 7%; font-size: 34px; animation-delay: 0s; }
@@ -123,15 +104,12 @@
       max-width: 1360px;
       min-height: calc(100vh - 32px);
       margin: 0 auto;
-      border: 6px double var(--white);
+      border: 6px double rgba(255,255,255,0.88);
       border-radius: 32px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.58), transparent 45%),
-        linear-gradient(180deg, rgba(255,247,251,0.84), rgba(255,209,236,0.84));
+      background: rgba(255, 209, 236, 0.22);
       box-shadow:
         0 0 48px rgba(255,20,147,0.68),
-        inset 0 0 50px rgba(255,255,255,0.62),
-        inset 0 0 100px rgba(255,79,184,0.22);
+        inset 0 0 60px rgba(255,255,255,0.18);
       position: relative;
       overflow: hidden;
       z-index: 3;
@@ -142,8 +120,8 @@
       content: "NESSA ♥ JASON ♥ NESSA ♥ JASON ♥ NESSA ♥ JASON ♥";
       position: absolute;
       left: -5%;
-      top: 72px;
-      color: rgba(255,20,147,0.12);
+      top: 70px;
+      color: rgba(255,255,255,0.22);
       font-size: 58px;
       font-weight: bold;
       letter-spacing: 5px;
@@ -167,44 +145,44 @@
       border: 5px solid rgba(255,255,255,0.82);
       border-radius: 24px;
       box-shadow:
-        0 0 30px rgba(255,20,147,0.75),
-        0 0 70px rgba(255,255,255,0.38);
+        0 0 35px rgba(255,20,147,0.85),
+        0 0 80px rgba(255,255,255,0.45);
       filter:
         grayscale(1)
         sepia(1)
-        hue-rotate(275deg)
-        saturate(3.1)
-        brightness(1.05)
-        contrast(1.12);
-      opacity: 0.34;
+        hue-rotate(285deg)
+        saturate(3.4)
+        brightness(1.08)
+        contrast(1.14);
     }
 
     .s1 {
-      width: 330px;
-      height: 430px;
-      animation: jasonFloat1 32s linear infinite;
+      width: 380px;
+      height: 500px;
+      opacity: 0.52;
+      animation: jasonFloat1 31s linear infinite;
     }
 
     .s2 {
-      width: 240px;
-      height: 315px;
-      opacity: 0.26;
-      animation: jasonFloat2 28s linear infinite;
+      width: 280px;
+      height: 365px;
+      opacity: 0.36;
+      animation: jasonFloat2 27s linear infinite;
     }
 
     .s3 {
-      width: 190px;
-      height: 255px;
-      opacity: 0.22;
-      animation: jasonFloat3 36s linear infinite;
+      width: 220px;
+      height: 295px;
+      opacity: 0.30;
+      animation: jasonFloat3 35s linear infinite;
     }
 
     .jasonScreensaver::after {
       content: "JASON KRANE // BAARN WATER FILE // LOVE ARCHIVE";
       position: absolute;
-      color: rgba(255,255,255,0.92);
-      background: rgba(255,20,147,0.34);
-      border: 1px solid rgba(255,255,255,0.68);
+      color: rgba(255,255,255,0.94);
+      background: rgba(255,20,147,0.42);
+      border: 1px solid rgba(255,255,255,0.75);
       border-radius: 999px;
       padding: 7px 14px;
       font-size: 12px;
@@ -214,28 +192,28 @@
     }
 
     @keyframes jasonFloat1 {
-      0%   { left: 3%;  top: 8%;  transform: rotate(-7deg) scale(1); }
-      20%  { left: 70%; top: 7%;  transform: rotate(6deg) scale(1.03); }
-      42%  { left: 58%; top: 46%; transform: rotate(-4deg) scale(1); }
-      63%  { left: 8%;  top: 50%; transform: rotate(7deg) scale(1.04); }
-      82%  { left: 36%; top: 18%; transform: rotate(-5deg) scale(1); }
-      100% { left: 3%;  top: 8%;  transform: rotate(-7deg) scale(1); }
+      0%   { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
+      20%  { left: 66%; top: 6%;  transform: rotate(6deg) scale(1.03); }
+      42%  { left: 54%; top: 40%; transform: rotate(-4deg) scale(1); }
+      63%  { left: 7%;  top: 44%; transform: rotate(7deg) scale(1.04); }
+      82%  { left: 34%; top: 15%; transform: rotate(-5deg) scale(1); }
+      100% { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
     }
 
     @keyframes jasonFloat2 {
-      0%   { left: 77%; top: 67%; transform: rotate(7deg) scale(1); }
-      25%  { left: 58%; top: 16%; transform: rotate(-4deg) scale(1.04); }
-      50%  { left: 15%; top: 24%; transform: rotate(5deg) scale(1); }
-      75%  { left: 24%; top: 70%; transform: rotate(-6deg) scale(1.05); }
-      100% { left: 77%; top: 67%; transform: rotate(7deg) scale(1); }
+      0%   { left: 76%; top: 62%; transform: rotate(7deg) scale(1); }
+      25%  { left: 55%; top: 14%; transform: rotate(-4deg) scale(1.04); }
+      50%  { left: 12%; top: 22%; transform: rotate(5deg) scale(1); }
+      75%  { left: 22%; top: 66%; transform: rotate(-6deg) scale(1.05); }
+      100% { left: 76%; top: 62%; transform: rotate(7deg) scale(1); }
     }
 
     @keyframes jasonFloat3 {
-      0%   { left: 44%; top: 70%; transform: rotate(-5deg) scale(1); }
-      30%  { left: 82%; top: 34%; transform: rotate(5deg) scale(1.02); }
-      55%  { left: 34%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
-      80%  { left: 8%;  top: 56%; transform: rotate(4deg) scale(1); }
-      100% { left: 44%; top: 70%; transform: rotate(-5deg) scale(1); }
+      0%   { left: 42%; top: 68%; transform: rotate(-5deg) scale(1); }
+      30%  { left: 80%; top: 32%; transform: rotate(5deg) scale(1.02); }
+      55%  { left: 32%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
+      80%  { left: 8%;  top: 54%; transform: rotate(4deg) scale(1); }
+      100% { left: 42%; top: 68%; transform: rotate(-5deg) scale(1); }
     }
 
     @keyframes labelFloat {
@@ -248,16 +226,17 @@
 
     .topBar,
     .loginScreen,
-    .archiveScreen {
+    .archiveScreen,
+    .bottomDock {
       position: relative;
       z-index: 10;
     }
 
     .topBar {
       min-height: 44px;
-      border: 3px solid var(--white);
+      border: 3px solid rgba(255,255,255,0.9);
       border-radius: 22px;
-      background: linear-gradient(180deg, #ff9fdd 0%, #ff1493 100%);
+      background: rgba(255,20,147,0.76);
       color: var(--white);
       display: flex;
       align-items: center;
@@ -270,25 +249,25 @@
         0 0 22px rgba(255,20,147,0.55),
         inset 0 0 20px rgba(255,255,255,0.28);
       text-shadow: 0 0 8px rgba(90,0,52,0.65);
+      backdrop-filter: blur(5px);
     }
 
     .window {
-      border: 4px solid var(--white);
+      border: 4px solid rgba(255,255,255,0.88);
       border-radius: 28px;
-      background:
-        linear-gradient(180deg, rgba(255,247,251,0.94), rgba(255,209,236,0.92));
+      background: var(--glass);
       box-shadow:
-        6px 6px 0 rgba(122,0,74,0.20),
-        0 0 32px rgba(255,20,147,0.36),
-        inset 0 0 24px rgba(255,255,255,0.62);
+        6px 6px 0 rgba(122,0,74,0.18),
+        0 0 32px rgba(255,20,147,0.32),
+        inset 0 0 24px rgba(255,255,255,0.38);
       overflow: hidden;
-      backdrop-filter: blur(3px);
+      backdrop-filter: blur(5px);
     }
 
     .windowTitle {
       min-height: 36px;
-      border-bottom: 3px solid var(--white);
-      background: linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 48%, #ff1493 100%);
+      border-bottom: 3px solid rgba(255,255,255,0.86);
+      background: rgba(255,20,147,0.72);
       color: var(--white);
       display: flex;
       align-items: center;
@@ -343,6 +322,7 @@
     .loginScreen {
       max-width: 660px;
       margin: 70px auto;
+      background: rgba(255, 247, 251, 0.74);
     }
 
     label {
@@ -356,7 +336,7 @@
 
     input {
       width: 100%;
-      background: #fff7fb;
+      background: rgba(255,255,255,0.86);
       color: var(--text);
       border: 3px solid var(--pink);
       border-radius: 16px;
@@ -400,16 +380,6 @@
       text-shadow: 0 0 8px rgba(90,0,52,0.65);
     }
 
-    button::before,
-    .buttonLink::before {
-      content: "♥ ";
-    }
-
-    button::after,
-    .buttonLink::after {
-      content: " ♥";
-    }
-
     button:hover,
     .buttonLink:hover {
       filter: brightness(1.12);
@@ -427,9 +397,7 @@
     .fragmentBox {
       border: 3px dashed var(--pink);
       border-radius: 18px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.65), transparent 70%),
-        rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.48);
       color: var(--text);
       padding: 12px;
       margin: 14px 0;
@@ -493,6 +461,7 @@
       min-height: 580px;
       max-height: 680px;
       overflow-y: auto;
+      background: rgba(255, 247, 251, 0.18);
     }
 
     .viewerBody strong {
@@ -513,7 +482,7 @@
     .dangerLove {
       border: 3px dashed var(--red);
       border-radius: 20px;
-      background: rgba(255,255,255,0.58);
+      background: rgba(255,255,255,0.46);
       padding: 12px;
       color: #8a0029;
       margin-bottom: 12px;
@@ -524,9 +493,7 @@
       margin: 0 auto;
       border: 5px double var(--pink);
       border-radius: 26px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.8), transparent 72%),
-        rgba(255,209,236,0.72);
+      background: rgba(255,255,255,0.58);
       padding: 16px;
       text-align: center;
       white-space: normal;
@@ -545,7 +512,7 @@
       filter:
         grayscale(1)
         sepia(1)
-        hue-rotate(275deg)
+        hue-rotate(285deg)
         saturate(3)
         brightness(1.05)
         contrast(1.08);
@@ -573,7 +540,7 @@
 
     .phoneShell {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       margin: 0 auto;
       border: 7px solid #7a004a;
       border-radius: 34px;
@@ -586,7 +553,7 @@
     }
 
     .phoneTop {
-      min-height: 56px;
+      min-height: 58px;
       background: linear-gradient(180deg, #ff89cf, #ff1493);
       color: white;
       padding: 10px 14px;
@@ -623,8 +590,38 @@
       50% { transform: scale(1.18); }
     }
 
+    .chapterControls {
+      background: rgba(255,255,255,0.88);
+      border-bottom: 2px solid #ff89cf;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .chapterTitle {
+      color: var(--hotpink);
+      font-weight: bold;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .chapterButtons {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chapterButton {
+      margin: 0;
+      padding: 7px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+    }
+
     .chatMessages {
-      height: 470px;
+      height: 420px;
       overflow-y: auto;
       padding: 14px;
       background:
@@ -717,14 +714,14 @@
       z-index: 12;
       border: 4px solid white;
       border-radius: 28px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,209,236,0.86));
+      background: rgba(255,247,251,0.66);
       box-shadow:
         0 0 24px rgba(255,20,147,0.42),
         inset 0 0 18px rgba(255,255,255,0.52);
       padding: 10px;
       overflow-x: auto;
       display: none;
+      backdrop-filter: blur(5px);
     }
 
     .dockInner {
@@ -735,7 +732,7 @@
     }
 
     .heartIconButton {
-      width: 92px;
+      width: 94px;
       border: none;
       background: transparent;
       color: var(--text);
@@ -747,13 +744,9 @@
       box-shadow: none;
       text-shadow: none;
       display: grid;
-      gap: 4px;
+      gap: 5px;
       justify-items: center;
-    }
-
-    .heartIconButton::before,
-    .heartIconButton::after {
-      content: "";
+      text-decoration: none;
     }
 
     .heartIconButton:hover {
@@ -761,48 +754,31 @@
       filter: none;
     }
 
-    .heartShape {
-      width: 42px;
-      height: 38px;
-      position: relative;
-      transform: rotate(-45deg);
-      background: linear-gradient(135deg, #ff1493, #ff89cf);
-      box-shadow:
-        0 0 14px rgba(255,20,147,0.45),
-        inset 0 0 8px rgba(255,255,255,0.35);
-      border: 2px solid white;
-    }
-
-    .heartShape::before,
-    .heartShape::after {
-      content: "";
-      position: absolute;
-      width: 42px;
-      height: 38px;
-      background: inherit;
+    .heartIcon {
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: inherit;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #ff9ad7 30%, #ff1493 72%);
+      border: 3px solid white;
+      box-shadow:
+        0 0 16px rgba(255,20,147,0.45),
+        inset 0 0 10px rgba(255,255,255,0.45);
+      font-size: 25px;
+      line-height: 1;
     }
 
-    .heartShape::before {
-      top: -21px;
-      left: -2px;
+    .heartIconButton.active .heartIcon {
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #c99cff 28%, #9b3cff 75%);
+      animation: activePulse 1s infinite;
     }
 
-    .heartShape::after {
-      left: 21px;
-      top: -2px;
-    }
-
-    .heartIconButton.active .heartShape {
-      background: linear-gradient(135deg, #a84dff, #ff1493);
-      animation: activeHeart 0.9s infinite;
-    }
-
-    @keyframes activeHeart {
-      0%, 100% { transform: rotate(-45deg) scale(1); }
-      50% { transform: rotate(-45deg) scale(1.12); }
+    @keyframes activePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
     }
 
     .heartLabel {
@@ -810,7 +786,7 @@
       line-height: 1.15;
       color: #7a004a;
       font-weight: bold;
-      width: 90px;
+      width: 92px;
       text-shadow: 0 0 8px rgba(255,255,255,0.7);
     }
 
@@ -870,22 +846,22 @@
       }
 
       .chatMessages {
-        height: 390px;
+        height: 370px;
       }
 
       .screenSaverPhoto.s1 {
-        width: 220px;
-        height: 285px;
+        width: 250px;
+        height: 325px;
       }
 
       .screenSaverPhoto.s2 {
-        width: 160px;
-        height: 210px;
+        width: 170px;
+        height: 225px;
       }
 
       .screenSaverPhoto.s3 {
-        width: 130px;
-        height: 170px;
+        width: 140px;
+        height: 185px;
       }
     }
   </style>
@@ -979,7 +955,11 @@
             </div>
 
             <p>
-              Klik op de hartjes onderaan om bestanden, chats, foto’s en notities te openen.
+              Klik op de ronde hartknoppen onderaan om bestanden, chats, foto’s en notities te openen.
+            </p>
+
+            <p>
+              De chat heeft hoofdstukken. Open “Secret Chat” en blader door de delen.
             </p>
 
             <p>
@@ -998,62 +978,52 @@
     <nav class="bottomDock" id="bottomDock">
       <div class="dockInner">
         <button class="heartIconButton active" onclick="openFile('overview', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">♥</span>
           <span class="heartLabel">Overview</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('photo', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">♡</span>
           <span class="heartLabel">Jason Photo</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('chat1', this)">
-          <span class="heartShape"></span>
-          <span class="heartLabel">Chat 01</span>
-        </button>
-
-        <button class="heartIconButton" onclick="openFile('chat2', this)">
-          <span class="heartShape"></span>
-          <span class="heartLabel">Baarn Chat</span>
-        </button>
-
-        <button class="heartIconButton" onclick="openFile('chat3', this)">
-          <span class="heartShape"></span>
-          <span class="heartLabel">Betrayal Chat</span>
+        <button class="heartIconButton" onclick="openFile('secretChat', this)">
+          <span class="heartIcon">💬</span>
+          <span class="heartLabel">Secret Chat</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('death', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">✚</span>
           <span class="heartLabel">Death Notice</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('grief', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">✎</span>
           <span class="heartLabel">Nessa Note</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('mq', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">M+Q</span>
           <span class="heartLabel">M & Q Note</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('mqPhoto', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">📷</span>
           <span class="heartLabel">Wedding Proof</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('terminalHint', this)">
-          <span class="heartShape"></span>
+          <span class="heartIcon">?</span>
           <span class="heartLabel">Last Hint</span>
         </button>
 
         <a href="memory.html" class="heartIconButton">
-          <span class="heartShape"></span>
+          <span class="heartIcon">★</span>
           <span class="heartLabel">Memory</span>
         </a>
 
         <a href="terminal.html" class="heartIconButton">
-          <span class="heartShape"></span>
+          <span class="heartIcon">⌂</span>
           <span class="heartLabel">Terminal</span>
         </a>
       </div>
@@ -1062,6 +1032,104 @@
 
   <script>
     const privatePassword = "THORNENESSA";
+    let currentChatChapter = 0;
+
+    const chatChapters = [
+      {
+        title: "Chapter 1 // First Contact",
+        subtitle: "Encrypted chat // early relationship",
+        date: "14 October 2021",
+        messages: [
+          { speaker: "nessa", time: "22:13", text: "You stayed after the lecture." },
+          { speaker: "jason", time: "22:14", text: "You noticed." },
+          { speaker: "nessa", time: "22:15", text: "You made sure I would." },
+          { speaker: "jason", time: "22:17", text: "Maybe. You were the only person in the room who spoke about poison like it was alive." },
+          { speaker: "nessa", time: "22:19", text: "That should worry you." },
+          { speaker: "jason", time: "22:20", text: "It did. That is why I came back." },
+          { speaker: "nessa", time: "22:22", text: "You are trouble." },
+          { speaker: "jason", time: "22:23", text: "So are you. You just hide it under academic language." },
+          { speaker: "nessa", time: "22:26", text: "Careful, Mr. Krane." },
+          { speaker: "jason", time: "22:27", text: "Too late, Dr. Thorne." }
+        ]
+      },
+
+      {
+        title: "Chapter 2 // Real Love",
+        subtitle: "Encrypted chat // private relationship",
+        date: "3 February 2022",
+        messages: [
+          { speaker: "jason", time: "00:41", text: "I should not be here." },
+          { speaker: "nessa", time: "00:42", text: "But you are." },
+          { speaker: "jason", time: "00:44", text: "You make it difficult to leave." },
+          { speaker: "nessa", time: "00:45", text: "Good." },
+          { speaker: "jason", time: "00:46", text: "That is not safe for either of us." },
+          { speaker: "nessa", time: "00:48", text: "I am tired of safe." },
+          { speaker: "jason", time: "00:50", text: "Nessa." },
+          { speaker: "nessa", time: "00:51", text: "Say it again." },
+          { speaker: "jason", time: "00:52", text: "Nessa." },
+          { speaker: "nessa", time: "00:54", text: "That is the only honest thing you have said tonight." }
+        ]
+      },
+
+      {
+        title: "Chapter 3 // Baarn Water Operation",
+        subtitle: "Encrypted chat // operational planning",
+        date: "9 May 2023",
+        messages: [
+          { speaker: "jason", time: "01:02", text: "I need a compound that disperses in water without announcing itself." },
+          { speaker: "nessa", time: "01:04", text: "That is not a romantic opening." },
+          { speaker: "jason", time: "01:05", text: "I can be romantic after the problem is solved." },
+          { speaker: "nessa", time: "01:07", text: "Where?" },
+          { speaker: "jason", time: "01:09", text: "Baarn." },
+          { speaker: "nessa", time: "01:10", text: "Drinking water?" },
+          { speaker: "jason", time: "01:11", text: "A controlled scare. A signal. A message." },
+          { speaker: "nessa", time: "01:13", text: "Do not soften it for me. You mean poison." },
+          { speaker: "jason", time: "01:14", text: "I mean leverage." },
+          { speaker: "nessa", time: "01:17", text: "You always make cruelty sound strategic." },
+          { speaker: "jason", time: "01:19", text: "And you always understand me faster than anyone else." },
+          { speaker: "nessa", time: "01:21", text: "That does not make me good." },
+          { speaker: "jason", time: "01:22", text: "I never loved you because you were good." }
+        ]
+      },
+
+      {
+        title: "Chapter 4 // Betrayal",
+        subtitle: "Encrypted chat // love and damage",
+        date: "Recovered fragment",
+        messages: [
+          { speaker: "nessa", time: "03:12", text: "You used my research." },
+          { speaker: "jason", time: "03:13", text: "I trusted your research." },
+          { speaker: "nessa", time: "03:14", text: "That is not the same thing." },
+          { speaker: "jason", time: "03:15", text: "No. But it sounded better." },
+          { speaker: "nessa", time: "03:17", text: "Did you love me?" },
+          { speaker: "jason", time: "03:19", text: "Yes." },
+          { speaker: "nessa", time: "03:20", text: "Did you use me?" },
+          { speaker: "jason", time: "03:21", text: "Yes." },
+          { speaker: "nessa", time: "03:24", text: "You do not even pretend to be ashamed." },
+          { speaker: "jason", time: "03:25", text: "You never wanted a harmless man, Nessa." },
+          { speaker: "nessa", time: "03:27", text: "No. I wanted someone who would choose me." },
+          { speaker: "jason", time: "03:28", text: "I did. In my way." },
+          { speaker: "nessa", time: "03:31", text: "Your way destroys everything it touches." },
+          { speaker: "jason", time: "03:32", text: "And still you kept replying." }
+        ]
+      },
+
+      {
+        title: "Chapter 5 // After Death",
+        subtitle: "Recovered draft // Nessa alone",
+        date: "After 17 August 2024",
+        messages: [
+          { speaker: "nessa", time: "02:08", text: "They say you are dead." },
+          { speaker: "nessa", time: "02:09", text: "I know you were cruel." },
+          { speaker: "nessa", time: "02:10", text: "I know you would have poisoned Baarn if it served your message." },
+          { speaker: "nessa", time: "02:11", text: "I know I helped too much." },
+          { speaker: "nessa", time: "02:12", text: "But I also know what your voice sounded like in my kitchen at 03:00." },
+          { speaker: "nessa", time: "02:13", text: "So I kept it." },
+          { speaker: "nessa", time: "02:14", text: "Your messages. Your image. Your recordings." },
+          { speaker: "nessa", time: "02:15", text: "If they took you from the world, then I will make the world hear your echo." }
+        ]
+      }
+    ];
 
     const files = {
       overview: {
@@ -1109,74 +1177,10 @@ Nessa weaponised grief.`
         type: "photo"
       },
 
-      chat1: {
-        title: "secure_chat_01.log",
-        status: "DECRYPTED CHAT",
-        type: "chat",
-        contact: "Jason Krane",
-        subtitle: "Encrypted chat // early relationship",
-        date: "14 October 2021",
-        messages: [
-          { speaker: "nessa", time: "22:13", text: "You stayed after the lecture." },
-          { speaker: "jason", time: "22:14", text: "You noticed." },
-          { speaker: "nessa", time: "22:15", text: "You made sure I would." },
-          { speaker: "jason", time: "22:17", text: "Maybe. You were the only person in the room who spoke about poison like it was alive." },
-          { speaker: "nessa", time: "22:19", text: "That should worry you." },
-          { speaker: "jason", time: "22:20", text: "It did. That is why I came back." },
-          { speaker: "nessa", time: "22:22", text: "You are trouble." },
-          { speaker: "jason", time: "22:23", text: "So are you. You just hide it under academic language." },
-          { speaker: "nessa", time: "22:26", text: "Careful, Mr. Krane." },
-          { speaker: "jason", time: "22:27", text: "Too late, Dr. Thorne." }
-        ]
-      },
-
-      chat2: {
-        title: "secure_chat_02_baarn.log",
-        status: "DECRYPTED CHAT",
-        type: "chat",
-        contact: "Jason Krane",
-        subtitle: "Encrypted chat // Baarn water operation",
-        date: "9 May 2023",
-        messages: [
-          { speaker: "jason", time: "01:02", text: "I need a compound that disperses in water without announcing itself." },
-          { speaker: "nessa", time: "01:04", text: "That is not a romantic opening." },
-          { speaker: "jason", time: "01:05", text: "I can be romantic after the problem is solved." },
-          { speaker: "nessa", time: "01:07", text: "Where?" },
-          { speaker: "jason", time: "01:09", text: "Baarn." },
-          { speaker: "nessa", time: "01:10", text: "Drinking water?" },
-          { speaker: "jason", time: "01:11", text: "A controlled scare. A signal. A message." },
-          { speaker: "nessa", time: "01:13", text: "Do not soften it for me. You mean poison." },
-          { speaker: "jason", time: "01:14", text: "I mean leverage." },
-          { speaker: "nessa", time: "01:17", text: "You always make cruelty sound strategic." },
-          { speaker: "jason", time: "01:19", text: "And you always understand me faster than anyone else." },
-          { speaker: "nessa", time: "01:21", text: "That does not make me good." },
-          { speaker: "jason", time: "01:22", text: "I never loved you because you were good." }
-        ]
-      },
-
-      chat3: {
-        title: "secure_chat_03_after_baarn.log",
-        status: "PARTIAL CHAT",
-        type: "chat",
-        contact: "Jason Krane",
-        subtitle: "Encrypted chat // love and betrayal",
-        date: "Recovered fragment",
-        messages: [
-          { speaker: "nessa", time: "03:12", text: "You used my research." },
-          { speaker: "jason", time: "03:13", text: "I trusted your research." },
-          { speaker: "nessa", time: "03:14", text: "That is not the same thing." },
-          { speaker: "jason", time: "03:15", text: "No. But it sounded better." },
-          { speaker: "nessa", time: "03:17", text: "Did you love me?" },
-          { speaker: "jason", time: "03:19", text: "Yes." },
-          { speaker: "nessa", time: "03:20", text: "Did you use me?" },
-          { speaker: "jason", time: "03:21", text: "Yes." },
-          { speaker: "nessa", time: "03:24", text: "You do not even pretend to be ashamed." },
-          { speaker: "jason", time: "03:25", text: "You never wanted a harmless man, Nessa." },
-          { speaker: "nessa", time: "03:27", text: "No. I wanted someone who would choose me." },
-          { speaker: "jason", time: "03:28", text: "I did. In my way." },
-          { speaker: "nessa", time: "03:31", text: "Your way destroys everything it touches." },
-          { speaker: "jason", time: "03:32", text: "And still you kept replying." }
-        ]
+      secretChat: {
+        title: "secret_chat_chapters.log",
+        status: "CHAPTER CHAT",
+        type: "chapterChat"
       },
 
       death: {
@@ -1307,7 +1311,7 @@ It always leaves evidence.`
       },
 
       mqPhoto: {
-        title: "m_q_wedding_photo.jpg",
+        title: "m-q-wedding_photo.jpg",
         status: "IMAGE EVIDENCE",
         type: "mqPhoto"
       },
@@ -1406,7 +1410,7 @@ Press ENTER.`
     function makeMqPhotoHtml() {
       return `
         <div class="photoCard wedding">
-          <img src="m-q-wedding.jpg" alt="Recovered wedding photograph of M and Q">
+          <img src="m-q-wedding_photo.jpg" alt="Recovered wedding photograph of M and Q">
           <div class="photoCaption">
             Recovered image evidence:<br>
             <strong>M + Q</strong><br><br>
@@ -1418,8 +1422,10 @@ Press ENTER.`
       `;
     }
 
-    function makeChatHtml(file) {
-      const messages = file.messages.map(function(msg) {
+    function makeChapterChatHtml() {
+      const chapter = chatChapters[currentChatChapter];
+
+      const messages = chapter.messages.map(function(msg) {
         const speakerLabel = msg.speaker === "jason" ? "JASON" : "NESSA";
 
         return `
@@ -1435,10 +1441,19 @@ Press ENTER.`
         <div class="phoneShell">
           <div class="phoneTop">
             <div class="phoneContact">
-              <span class="phoneName">${escapeHtml(file.contact)}</span>
-              <span class="phoneSub">${escapeHtml(file.subtitle)} // ${escapeHtml(file.date)}</span>
+              <span class="phoneName">Jason Krane ♥ Nessa Thorne</span>
+              <span class="phoneSub">${escapeHtml(chapter.subtitle)} // ${escapeHtml(chapter.date)}</span>
             </div>
             <div class="phoneHeart">♥</div>
+          </div>
+
+          <div class="chapterControls">
+            <div class="chapterTitle">${escapeHtml(chapter.title)}</div>
+
+            <div class="chapterButtons">
+              <button class="chapterButton" onclick="previousChatChapter()">PREVIOUS</button>
+              <button class="chapterButton" onclick="nextChatChapter()">NEXT</button>
+            </div>
           </div>
 
           <div class="chatMessages">
@@ -1453,6 +1468,26 @@ Press ENTER.`
       `;
     }
 
+    function previousChatChapter() {
+      currentChatChapter--;
+
+      if (currentChatChapter < 0) {
+        currentChatChapter = chatChapters.length - 1;
+      }
+
+      openFile("secretChat");
+    }
+
+    function nextChatChapter() {
+      currentChatChapter++;
+
+      if (currentChatChapter >= chatChapters.length) {
+        currentChatChapter = 0;
+      }
+
+      openFile("secretChat");
+    }
+
     function openFile(key, button) {
       const file = files[key];
 
@@ -1465,8 +1500,8 @@ Press ENTER.`
         viewerBody.innerHTML = makePhotoHtml();
       } else if (file.type === "mqPhoto") {
         viewerBody.innerHTML = makeMqPhotoHtml();
-      } else if (file.type === "chat") {
-        viewerBody.innerHTML = makeChatHtml(file);
+      } else if (file.type === "chapterChat") {
+        viewerBody.innerHTML = makeChapterChatHtml();
       } else {
         viewerBody.innerHTML = escapeHtml(file.body);
       }
@@ -1479,9 +1514,9 @@ Press ENTER.`
       if (button) {
         button.classList.add("active");
       } else {
-        const firstButton = document.querySelector(".heartIconButton");
-        if (firstButton) {
-          firstButton.classList.add("active");
+        const matchingButton = document.querySelector("[onclick*='" + key + "']");
+        if (matchingButton) {
+          matchingButton.classList.add("active");
         }
       }
     }
