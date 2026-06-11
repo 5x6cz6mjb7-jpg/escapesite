@@ -2,36 +2,54 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Memory Protocol</title>
+  <title>Bart & Willemijn Memory Protocol</title>
 
   <style>
+    :root {
+      --pink: #ff4fb8;
+      --hotpink: #ff1493;
+      --softpink: #ffd1ec;
+      --baby: #ffeaf7;
+      --purple: #9b3cff;
+      --red: #ff3355;
+      --white: #ffffff;
+      --cream: #fff7fb;
+      --dark: #2a0018;
+      --text: #5a0034;
+      --yellow: #fff066;
+      --green: #7cff9b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #001100;
-      color: #00ff66;
       font-family: "Courier New", monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-      overflow: auto;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.9), transparent 16%),
+        radial-gradient(circle at 82% 20%, rgba(255,20,147,0.45), transparent 24%),
+        radial-gradient(circle at 50% 82%, rgba(155,60,255,0.32), transparent 34%),
+        linear-gradient(135deg, #ffb3dc 0%, #ff72c6 34%, #ff2fa8 66%, #7a004a 100%);
+      padding: 18px;
+      overflow-x: hidden;
     }
 
     body::before {
-      content: "";
+      content: "♥ ♡ ♥ ♡ ♥ ♡ ♥ ♡ ♥ ♡ ♥ ♡ ♥ ♡ ♥ ♡ ♥";
       position: fixed;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 255, 100, 0.08),
-          rgba(0, 255, 100, 0.08) 1px,
-          transparent 1px,
-          transparent 5px
-        );
+      left: 0;
+      top: -50px;
+      width: 100%;
+      color: rgba(255,255,255,0.32);
+      font-size: 34px;
+      letter-spacing: 18px;
+      white-space: nowrap;
       pointer-events: none;
+      animation: fallingHearts 12s linear infinite;
       z-index: 1;
     }
 
@@ -39,673 +57,838 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
       pointer-events: none;
-      z-index: 1;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.035),
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+      z-index: 50;
+      mix-blend-mode: screen;
     }
 
-    .terminal {
+    @keyframes fallingHearts {
+      0% {
+        transform: translateY(-80px);
+      }
+
+      100% {
+        transform: translateY(115vh);
+      }
+    }
+
+    .page {
       width: 100%;
-      max-width: 1120px;
-      background: #000900;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
-      padding: 24px;
-      box-sizing: border-box;
+      max-width: 1280px;
+      margin: 0 auto;
+      min-height: calc(100vh - 36px);
+      border: 6px double rgba(255,255,255,0.92);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.58), transparent 48%),
+        rgba(255, 209, 236, 0.52);
+      box-shadow:
+        0 0 48px rgba(255,20,147,0.72),
+        inset 0 0 70px rgba(255,255,255,0.28);
       position: relative;
       z-index: 2;
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    .page::before {
+      content: "BART ♥ WILLEMIJN ♥ MEMORY PROTOCOL ♥ BART ♥ WILLEMIJN ♥";
+      position: absolute;
+      left: -5%;
+      top: 76px;
+      color: rgba(255,255,255,0.20);
+      font-size: 56px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      white-space: nowrap;
+      transform: rotate(-7deg);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .topBar {
+      position: relative;
+      z-index: 5;
+      min-height: 48px;
+      border: 3px solid rgba(255,255,255,0.95);
+      border-radius: 24px;
+      background: rgba(255,20,147,0.78);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 16px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      box-shadow:
+        0 0 24px rgba(255,20,147,0.55),
+        inset 0 0 20px rgba(255,255,255,0.28);
+      text-shadow: 0 0 8px rgba(90,0,52,0.70);
+    }
+
+    .topBar span {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .mainGrid {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 4px solid rgba(255,255,255,0.88);
+      border-radius: 28px;
+      background: rgba(255,247,251,0.72);
+      box-shadow:
+        6px 6px 0 rgba(122,0,74,0.18),
+        0 0 32px rgba(255,20,147,0.34),
+        inset 0 0 24px rgba(255,255,255,0.38);
+      overflow: hidden;
+      backdrop-filter: blur(5px);
+    }
+
+    .panelTitle {
+      min-height: 38px;
+      border-bottom: 3px solid rgba(255,255,255,0.86);
+      background: rgba(255,20,147,0.76);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(90,0,52,0.70);
+    }
+
+    .panelTitle span:first-child::before {
+      content: "♥ ";
+    }
+
+    .panelTitle span:last-child::after {
+      content: " ♥";
+    }
+
+    .panelBody {
+      padding: 16px;
     }
 
     h1 {
-      margin: 0 0 10px 0;
-      text-align: center;
-      color: #00ff66;
-      font-size: 26px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
+      margin: 0 0 8px;
+      color: var(--hotpink);
+      font-size: 30px;
       letter-spacing: 2px;
+      text-shadow:
+        0 0 8px rgba(255,255,255,0.9),
+        0 0 18px rgba(255,20,147,0.45);
     }
 
-    .subtitle {
-      text-align: center;
-      color: #8dffb0;
-      line-height: 1.6;
-      margin-bottom: 18px;
-      white-space: pre-line;
+    h1::before,
+    h1::after {
+      content: " ♥ ";
+      color: var(--pink);
     }
 
-    .statusPanel {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 18px;
+    p {
+      margin: 8px 0;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
     }
 
-    .statusBox {
-      border: 1px dashed #00aa44;
-      background: rgba(0, 30, 0, 0.8);
+    .missionBox {
+      border: 3px dashed rgba(255,20,147,0.55);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.48);
       padding: 12px;
-      text-align: center;
-      color: #baffc9;
-      box-sizing: border-box;
-      min-height: 64px;
-    }
-
-    .statusLabel {
-      color: #00ff66;
+      margin: 12px 0;
       font-size: 13px;
-      margin-bottom: 6px;
+      line-height: 1.45;
     }
 
-    .statusValue {
-      font-size: 22px;
-      color: #ffee66;
-      font-weight: bold;
-      text-shadow: 0 0 6px rgba(255, 238, 102, 0.5);
-    }
-
-    .danger {
-      color: #ff4444 !important;
-      text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
-      animation: dangerBlink 0.6s infinite;
-    }
-
-    @keyframes dangerBlink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.45; }
-    }
-
-    .gameArea {
+    .statGrid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      border: 3px solid rgba(255,20,147,0.25);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.44);
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .statGrid div:nth-child(even) {
+      color: var(--hotpink);
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .timer {
+      font-size: 36px;
+      color: var(--white);
+      background: linear-gradient(180deg, #ff70c5, #ff1493);
+      border: 4px solid white;
+      border-radius: 24px;
+      text-align: center;
+      padding: 12px;
+      margin: 14px 0;
+      box-shadow:
+        0 0 24px rgba(255,20,147,0.48),
+        inset 0 0 14px rgba(255,255,255,0.32);
+      text-shadow: 0 0 10px rgba(90,0,52,0.8);
+    }
+
+    .timer.danger {
+      background: linear-gradient(180deg, #ff3355, #9b0030);
+      animation: dangerPulse 0.7s infinite;
+    }
+
+    @keyframes dangerPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: scale(1.035);
+        filter: brightness(1.28);
+      }
+    }
+
+    .buttonRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button,
+    .buttonLink {
+      color: var(--white);
+      background:
+        linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 45%, #ff1493 100%);
+      border-top: 3px solid #ffffff;
+      border-left: 3px solid #ffffff;
+      border-right: 3px solid #9f0060;
+      border-bottom: 3px solid #9f0060;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow:
+        0 0 18px rgba(255,20,147,0.35),
+        inset 0 0 14px rgba(255,255,255,0.32);
+      text-shadow: 0 0 8px rgba(90,0,52,0.65);
+    }
+
+    button:hover,
+    .buttonLink:hover {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .gamePanel {
+      padding: 16px;
+    }
+
+    .gameHeader {
+      display: flex;
+      justify-content: space-between;
       gap: 12px;
-      margin: 20px auto;
-      max-width: 850px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .gameTitle {
+      color: var(--hotpink);
+      font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(255,255,255,0.75);
+    }
+
+    .progressPill {
+      color: var(--white);
+      background: rgba(255,20,147,0.72);
+      border: 2px solid white;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      box-shadow: 0 0 16px rgba(255,20,147,0.30);
+    }
+
+    .memoryGrid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 12px;
     }
 
     .card {
-      aspect-ratio: 1 / 1.18;
-      border: 1px solid #00ff66;
-      background: #001600;
+      aspect-ratio: 1 / 1;
+      min-height: 120px;
+      border: none;
+      background: transparent;
+      perspective: 1000px;
       cursor: pointer;
+      padding: 0;
+      margin: 0;
+      box-shadow: none;
+      text-shadow: none;
+    }
+
+    .card:disabled {
+      opacity: 1;
+    }
+
+    .cardInner {
+      width: 100%;
+      height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
-      box-shadow: 0 0 12px rgba(0, 255, 100, 0.12);
+      transition: transform 0.55s ease;
     }
 
-    .card:hover {
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.35);
-    }
-
-    .card.flipped,
-    .card.matched {
+    .card.flipped .cardInner,
+    .card.matched .cardInner {
       transform: rotateY(180deg);
-      cursor: default;
-    }
-
-    .card.matched {
-      box-shadow: 0 0 18px rgba(255, 238, 102, 0.45);
-      border-color: #ffee66;
     }
 
     .cardFace {
       position: absolute;
       inset: 0;
       backface-visibility: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      box-sizing: border-box;
-      padding: 8px;
+      border: 4px solid rgba(255,255,255,0.92);
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      box-shadow:
+        0 0 22px rgba(255,20,147,0.34),
+        inset 0 0 18px rgba(255,255,255,0.30);
     }
 
     .cardBack {
       background:
-        linear-gradient(135deg, rgba(0,255,100,0.12), transparent 45%),
-        #001600;
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.9), transparent 22%),
+        linear-gradient(135deg, #ff9ad7, #ff1493);
+      color: white;
+      font-size: 42px;
+      text-shadow: 0 0 12px rgba(90,0,52,0.6);
     }
 
     .cardBack::before {
-      content: "MI6";
-      font-size: 26px;
-      font-weight: bold;
-      color: #00ff66;
-      text-shadow: 0 0 8px rgba(0,255,100,0.8);
+      content: "♥";
+      animation: cardBeat 1.4s infinite;
     }
 
-    .cardBack::after {
-      content: "CLASSIFIED";
-      margin-top: 8px;
-      font-size: 10px;
-      color: #8dffb0;
-      letter-spacing: 1px;
+    @keyframes cardBeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.16);
+      }
     }
 
     .cardFront {
-      background:
-        radial-gradient(circle at center, rgba(0, 255, 102, 0.08), transparent 70%),
-        #030803;
       transform: rotateY(180deg);
-      border: 1px solid rgba(255, 238, 102, 0.25);
-    }
-
-    .spyIcon {
-      width: 82px;
-      height: 82px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 0 8px rgba(255, 238, 102, 0.35));
-    }
-
-    .spyIcon svg {
-      width: 78px;
-      height: 78px;
-      overflow: visible;
-    }
-
-    .spyIcon .mainStroke {
-      stroke: #ffee66;
-      stroke-width: 4;
-      fill: none;
-      stroke-linecap: square;
-      stroke-linejoin: round;
-    }
-
-    .spyIcon .greenStroke {
-      stroke: #00ff66;
-      stroke-width: 3;
-      fill: none;
-      stroke-linecap: square;
-      stroke-linejoin: round;
-    }
-
-    .spyIcon .mainFill {
-      fill: #ffee66;
-    }
-
-    .spyIcon .greenFill {
-      fill: #00ff66;
-    }
-
-    .spyIcon .darkFill {
-      fill: #050805;
-    }
-
-    .spyIcon .softFill {
-      fill: rgba(0, 255, 102, 0.18);
-    }
-
-    .card.matched .spyIcon {
-      filter: drop-shadow(0 0 12px rgba(0, 255, 102, 0.75));
-    }
-
-    .card.matched .spyIcon .mainStroke {
-      stroke: #00ff66;
-    }
-
-    .card.matched .spyIcon .mainFill {
-      fill: #00ff66;
-    }
-
-    .iconLabel {
-      color: #ffee66;
-      font-size: 12px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.92), transparent 68%),
+        linear-gradient(180deg, #fff7fb, #ffd1ec);
+      padding: 8px;
       text-align: center;
-      line-height: 1.2;
-      letter-spacing: 1px;
-      min-height: 28px;
     }
 
-    .message {
-      min-height: 28px;
-      text-align: center;
-      color: #8dffb0;
-      line-height: 1.5;
-      margin-top: 12px;
+    .card.matched .cardFront {
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.92), transparent 68%),
+        linear-gradient(180deg, #e7ffe9, #7cff9b);
+      border-color: white;
+      animation: matchedGlow 1s infinite alternate;
     }
 
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 18px;
-      flex-wrap: wrap;
+    @keyframes matchedGlow {
+      0% {
+        box-shadow:
+          0 0 22px rgba(124,255,155,0.35),
+          inset 0 0 18px rgba(255,255,255,0.30);
+      }
+
+      100% {
+        box-shadow:
+          0 0 34px rgba(124,255,155,0.75),
+          inset 0 0 22px rgba(255,255,255,0.42);
+      }
     }
 
-    button {
-      padding: 12px 18px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      cursor: pointer;
-      letter-spacing: 1px;
+    .iconSvg {
+      width: 70%;
+      max-width: 76px;
+      height: 70%;
+      max-height: 76px;
+      display: block;
+      margin: 0 auto 4px;
     }
 
-    button:hover {
-      background: #005c22;
-    }
-
-    .backLink {
-      display: inline-block;
-      color: #00ff66;
-      text-decoration: none;
-      border-bottom: 1px solid #00ff66;
+    .cardLabel {
+      font-size: 10px;
+      color: #7a004a;
       font-weight: bold;
-      padding: 12px 18px;
+      line-height: 1.1;
+      min-height: 22px;
     }
 
-    #winBox,
-    #loseBox {
-      display: none;
-      max-width: 760px;
-      margin: 18px auto 0 auto;
-      padding: 18px;
-      line-height: 1.7;
-      box-sizing: border-box;
-    }
-
-    #winBox {
-      border: 1px solid #00ff66;
-      background: rgba(0, 35, 0, 0.95);
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
-      color: #baffc9;
-    }
-
-    #loseBox {
-      border: 1px solid #ff4444;
-      background: rgba(40, 0, 0, 0.92);
-      box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
-      color: #ff9999;
-    }
-
-    .glitchOverlay {
-      display: none;
+    .lockedOverlay {
       position: fixed;
       inset: 0;
-      z-index: 99;
-      pointer-events: none;
+      z-index: 100;
       background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(255,255,255,0.04),
-          rgba(255,255,255,0.04) 2px,
-          transparent 2px,
-          transparent 8px
-        ),
-        repeating-linear-gradient(
-          0deg,
-          rgba(0,255,100,0.08),
-          rgba(0,255,100,0.08) 3px,
-          transparent 3px,
-          transparent 11px
-        );
-      animation: glitchFlash 0.13s infinite;
+        radial-gradient(circle at center, rgba(255,255,255,0.28), transparent 38%),
+        rgba(42,0,24,0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
-    .glitchOverlay::before {
-      content: "MEMORY ARCHIVE RESTORED";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff4a3;
-      background: rgba(10,20,0,0.92);
-      border: 2px solid #ffee66;
-      padding: 18px 24px;
+    .resultBox {
+      width: 100%;
+      max-width: 620px;
+      border: 6px double white;
+      border-radius: 32px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.72), transparent 70%),
+        linear-gradient(180deg, #ffeaf7, #ff9ad7);
+      box-shadow:
+        0 0 44px rgba(255,20,147,0.85),
+        inset 0 0 32px rgba(255,255,255,0.5);
+      padding: 24px;
       text-align: center;
-      letter-spacing: 2px;
-      font-size: 26px;
-      text-shadow: 0 0 10px rgba(255,230,120,0.8);
-      box-shadow: 0 0 24px rgba(255,230,120,0.35);
-      animation: textSkew 0.18s infinite;
+      color: var(--text);
+      animation: resultPop 0.6s ease forwards;
     }
 
-    @keyframes glitchFlash {
-      0% { opacity: 0.35; filter: hue-rotate(0deg); }
-      50% { opacity: 0.8; filter: hue-rotate(35deg); }
-      100% { opacity: 0.45; filter: hue-rotate(0deg); }
-    }
-
-    @keyframes textSkew {
-      0% { transform: translate(-50%, -50%) skewX(0deg); }
-      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
-      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
-      75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
-      100% { transform: translate(-50%, -50%) skewX(0deg); }
-    }
-
-    @media (max-width: 900px) {
-      .statusPanel {
-        grid-template-columns: repeat(2, 1fr);
+    @keyframes resultPop {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
       }
 
-      .gameArea {
-        grid-template-columns: repeat(4, 1fr);
-        max-width: 680px;
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 
-    @media (max-width: 600px) {
-      .terminal {
-        padding: 18px;
+    .resultBox h2 {
+      font-size: 32px;
+      color: var(--hotpink);
+      margin: 0 0 10px;
+    }
+
+    .codeBox {
+      border: 4px solid white;
+      border-radius: 24px;
+      background: rgba(255,20,147,0.82);
+      color: white;
+      padding: 18px;
+      font-size: 34px;
+      letter-spacing: 4px;
+      font-weight: bold;
+      margin: 18px 0;
+      text-shadow: 0 0 12px rgba(90,0,52,0.7);
+      box-shadow: 0 0 24px rgba(255,20,147,0.45);
+    }
+
+    .failTitle {
+      color: var(--red) !important;
+    }
+
+    @media (max-width: 980px) {
+      .mainGrid {
+        grid-template-columns: 1fr;
+      }
+
+      .memoryGrid {
+        grid-template-columns: repeat(4, minmax(100px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 8px;
+      }
+
+      .page {
+        border-radius: 22px;
+        padding: 10px;
+      }
+
+      .topBar {
+        flex-direction: column;
+        font-size: 10px;
+        text-align: center;
       }
 
       h1 {
-        font-size: 21px;
+        font-size: 23px;
       }
 
-      .gameArea {
-        grid-template-columns: repeat(4, 1fr);
+      .memoryGrid {
+        grid-template-columns: repeat(3, minmax(86px, 1fr));
         gap: 8px;
       }
 
-      .spyIcon {
-        width: 50px;
-        height: 50px;
-        transform: scale(0.72);
-        margin-bottom: 3px;
+      .card {
+        min-height: 94px;
       }
 
-      .iconLabel {
-        font-size: 9px;
+      .iconSvg {
+        width: 58px;
+        height: 58px;
       }
 
-      .statusValue {
-        font-size: 18px;
+      .cardLabel {
+        font-size: 8px;
       }
 
-      .glitchOverlay::before {
-        font-size: 18px;
-        width: 86%;
+      .timer {
+        font-size: 28px;
+      }
+
+      .codeBox {
+        font-size: 24px;
+        letter-spacing: 2px;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <div class="glitchOverlay" id="glitchOverlay"></div>
-
-  <main class="terminal">
-    <h1>MI6 MEMORY PROTOCOL</h1>
-
-    <div class="subtitle">Classified visual memory test recovered.
-Find all matching spy-symbol pairs before the timer reaches zero.
-You have 2 minutes.</div>
-
-    <div class="statusPanel">
-      <div class="statusBox">
-        <div class="statusLabel">TIME REMAINING</div>
-        <div class="statusValue" id="timer">02:00</div>
-      </div>
-
-      <div class="statusBox">
-        <div class="statusLabel">MATCHES</div>
-        <div class="statusValue"><span id="matches">0</span> / 10</div>
-      </div>
-
-      <div class="statusBox">
-        <div class="statusLabel">MOVES</div>
-        <div class="statusValue" id="moves">0</div>
-      </div>
-
-      <div class="statusBox">
-        <div class="statusLabel">STATUS</div>
-        <div class="statusValue" id="status">READY</div>
-      </div>
+  <main class="page">
+    <div class="topBar">
+      <span>Bart & Willemijn Memory Protocol</span>
+      <span>Pink Lockbox Edition</span>
+      <span>Status: Encrypted</span>
     </div>
 
-    <section class="gameArea" id="gameArea"></section>
+    <section class="mainGrid">
+      <aside class="panel">
+        <div class="panelTitle">
+          <span>Mission</span>
+          <span>LOVE MEMORY</span>
+        </div>
 
-    <div class="message" id="message">
-      Press START MEMORY TEST to begin.
-    </div>
+        <div class="panelBody">
+          <h1>MEMORY</h1>
 
-    <div id="loseBox">
-      <strong>MEMORY TEST FAILED</strong><br><br>
-      Time expired before all pairs were matched.<br>
-      Restart the protocol and try again.
-    </div>
+          <p>
+            Match all personal symbols linked to Bart and Willemijn before the timer reaches zero.
+          </p>
 
-    <div id="winBox">
-      <strong>ACCESS GRANTED // MEMORY ARCHIVE RESTORED</strong><br><br>
+          <div class="missionBox">
+            Recover every pair to unlock the hidden memory code.
+            The code is needed for the final stage of the mission.
+          </div>
 
-      All visual pairs recovered before the timer expired.<br><br>
+          <div class="timer" id="timer">02:00</div>
 
-      UNLOCK CODE:<br>
-      <strong>GOLDENEYE</strong><br><br>
+          <div class="statGrid">
+            <div>Pairs found</div>
+            <div id="pairsFound">0 / 10</div>
 
-      Enter this code in the mission terminal.
-    </div>
+            <div>Moves</div>
+            <div id="moveCounter">0</div>
 
-    <div class="buttons">
-      <button onclick="startGame()">START MEMORY TEST</button>
-      <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
-    </div>
+            <div>Protocol</div>
+            <div id="gameStatus">READY</div>
+          </div>
+
+          <div class="buttonRow">
+            <button onclick="startGame()" id="startButton">START GAME</button>
+            <button onclick="resetGame()">RESET</button>
+            <a href="private.html" class="buttonLink">RETURN TO PRIVATE</a>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="panelTitle">
+          <span>Memory Grid</span>
+          <span>20 CARDS</span>
+        </div>
+
+        <div class="gamePanel">
+          <div class="gameHeader">
+            <div class="gameTitle">Find the 10 matching pairs</div>
+            <div class="progressPill" id="progressPill">Waiting for start</div>
+          </div>
+
+          <div class="memoryGrid" id="memoryGrid"></div>
+        </div>
+      </section>
+    </section>
   </main>
 
-  <script>
-    const gameArea = document.getElementById("gameArea");
-    const timerEl = document.getElementById("timer");
-    const matchesEl = document.getElementById("matches");
-    const movesEl = document.getElementById("moves");
-    const statusEl = document.getElementById("status");
-    const messageEl = document.getElementById("message");
-    const winBoxEl = document.getElementById("winBox");
-    const loseBoxEl = document.getElementById("loseBox");
-    const glitchOverlayEl = document.getElementById("glitchOverlay");
+  <div class="lockedOverlay" id="resultOverlay">
+    <div class="resultBox" id="resultBox">
+      <h2 id="resultTitle">MISSION COMPLETE</h2>
+      <p id="resultText"></p>
+      <div class="codeBox" id="codeBox">GOLDENEYE</div>
+      <div class="buttonRow" style="justify-content:center;">
+        <button onclick="closeOverlay()">CONTINUE</button>
+        <a href="private.html" class="buttonLink">RETURN TO PRIVATE</a>
+      </div>
+    </div>
+  </div>
 
-    const totalTime = 120;
+  <script>
     const unlockCode = "GOLDENEYE";
+    const totalTime = 120;
+
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let moves = 0;
+    let timeLeft = totalTime;
+    let timerInterval = null;
+    let gameStarted = false;
+    let lockBoard = false;
 
     const symbols = [
       {
-        id: "tuxedo",
-        label: "BLACK TIE",
+        id: "pineapple",
+        label: "Pineapple",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M28 14 H72 V88 H28 Z"/>
-            <path class="greenStroke" d="M35 18 L50 42 L65 18"/>
-            <path class="mainStroke" d="M42 38 L50 48 L58 38"/>
-            <path class="mainFill" d="M46 50 H54 V58 H46 Z"/>
-            <path class="mainFill" d="M46 64 H54 V72 H46 Z"/>
-            <path class="greenStroke" d="M36 88 L42 58"/>
-            <path class="greenStroke" d="M64 88 L58 58"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <path d="M50 6 L58 28 L50 20 L42 28 Z" fill="#3bbf5a"/>
+            <path d="M32 10 L48 32 L35 25 L25 36 Z" fill="#39a94f"/>
+            <path d="M68 10 L52 32 L65 25 L75 36 Z" fill="#39a94f"/>
+            <ellipse cx="50" cy="59" rx="28" ry="36" fill="#ffc83d" stroke="#a66a00" stroke-width="4"/>
+            <path d="M29 45 L71 75 M71 45 L29 75 M35 34 L75 62 M65 34 L25 62" stroke="#c88400" stroke-width="4"/>
+            <circle cx="50" cy="59" r="5" fill="#ffea7a"/>
           </svg>
         `
       },
       {
-        id: "martini",
-        label: "GLASS",
+        id: "hardenberg",
+        label: "Hardenberg Sign",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M20 18 H80 L56 48 H44 Z"/>
-            <path class="greenStroke" d="M28 25 H72"/>
-            <path class="mainStroke" d="M50 48 V78"/>
-            <path class="mainStroke" d="M34 84 H66"/>
-            <circle class="greenFill" cx="66" cy="28" r="5"/>
-            <path class="greenStroke" d="M66 28 L77 18"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <rect x="12" y="28" width="76" height="36" rx="5" fill="#2f78ff" stroke="#ffffff" stroke-width="5"/>
+            <text x="50" y="51" text-anchor="middle" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">HARDEN</text>
+            <text x="50" y="64" text-anchor="middle" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">BERG</text>
+            <rect x="46" y="64" width="8" height="26" fill="#888"/>
           </svg>
         `
       },
       {
-        id: "watch",
-        label: "LASER WATCH",
+        id: "mulderij",
+        label: "Mulderij",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M38 8 H62 V26 H38 Z"/>
-            <path class="mainStroke" d="M30 26 H70 V74 H30 Z"/>
-            <path class="mainStroke" d="M38 74 H62 V92 H38 Z"/>
-            <circle class="greenStroke" cx="50" cy="50" r="16"/>
-            <path class="mainStroke" d="M50 50 L61 41"/>
-            <path class="greenStroke" d="M18 50 H30"/>
-            <path class="greenStroke" d="M70 50 H82"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <rect x="10" y="34" width="80" height="32" rx="4" fill="#206bff" stroke="#ffffff" stroke-width="4"/>
+            <text x="50" y="55" text-anchor="middle" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">Mulderij</text>
+            <circle cx="18" cy="50" r="3" fill="#fff"/>
+            <circle cx="82" cy="50" r="3" fill="#fff"/>
           </svg>
         `
       },
       {
-        id: "car",
-        label: "SPY CAR",
+        id: "dnd",
+        label: "D&D Dice",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M16 52 H84 V72 H16 Z"/>
-            <path class="greenStroke" d="M30 52 L42 34 H62 L74 52"/>
-            <path class="greenStroke" d="M42 38 H58"/>
-            <circle class="mainStroke" cx="30" cy="76" r="8"/>
-            <circle class="mainStroke" cx="70" cy="76" r="8"/>
-            <path class="greenStroke" d="M80 58 H92"/>
-            <path class="greenStroke" d="M8 58 H20"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <polygon points="50,8 86,30 74,82 26,82 14,30" fill="#8b2cff" stroke="#ffffff" stroke-width="5"/>
+            <polygon points="50,8 50,82 14,30" fill="#b47cff" opacity="0.8"/>
+            <polygon points="50,8 86,30 50,82" fill="#6f1ed6" opacity="0.9"/>
+            <text x="50" y="58" text-anchor="middle" font-size="24" font-family="monospace" font-weight="bold" fill="#fff">20</text>
           </svg>
         `
       },
       {
-        id: "diamond",
-        label: "DIAMOND",
+        id: "vinkenstraat",
+        label: "Vinkenstraat 16",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M28 20 H72 L86 38 L50 86 L14 38 Z"/>
-            <path class="greenStroke" d="M14 38 H86"/>
-            <path class="greenStroke" d="M28 20 L50 86 L72 20"/>
-            <path class="greenStroke" d="M38 38 L50 20 L62 38"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <rect x="9" y="31" width="82" height="38" rx="4" fill="#206bff" stroke="#ffffff" stroke-width="4"/>
+            <text x="50" y="49" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">VINKENSTRAAT</text>
+            <text x="50" y="63" text-anchor="middle" font-size="18" font-family="monospace" font-weight="bold" fill="#ffffff">16</text>
           </svg>
         `
       },
       {
-        id: "vault",
-        label: "GOLD VAULT",
+        id: "bolt",
+        label: "Lightning Bolt",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <circle class="mainStroke" cx="50" cy="50" r="34"/>
-            <circle class="greenStroke" cx="50" cy="50" r="19"/>
-            <circle class="mainFill" cx="50" cy="50" r="5"/>
-            <path class="greenStroke" d="M50 16 V31"/>
-            <path class="greenStroke" d="M50 69 V84"/>
-            <path class="greenStroke" d="M16 50 H31"/>
-            <path class="greenStroke" d="M69 50 H84"/>
-            <path class="mainStroke" d="M60 50 H72"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <path d="M56 6 L22 55 H45 L36 94 L78 39 H53 Z" fill="#ffe45c" stroke="#7a4b00" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M56 6 L45 55 H22 Z" fill="#fff4a8" opacity="0.85"/>
           </svg>
         `
       },
       {
-        id: "satellite",
-        label: "ORBITAL LINK",
+        id: "wand",
+        label: "Magic Wand",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M42 42 L58 58"/>
-            <path class="mainStroke" d="M38 58 L58 38"/>
-            <path class="mainStroke" d="M12 24 L34 12 L44 34 L22 46 Z"/>
-            <path class="mainStroke" d="M56 66 L78 54 L88 76 L66 88 Z"/>
-            <circle class="greenFill" cx="50" cy="50" r="6"/>
-            <path class="greenStroke" d="M68 26 Q84 50 68 74"/>
-            <path class="greenStroke" d="M76 16 Q98 50 76 84"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <line x1="25" y1="78" x2="78" y2="25" stroke="#6b2b00" stroke-width="8" stroke-linecap="round"/>
+            <line x1="25" y1="78" x2="78" y2="25" stroke="#ffd49b" stroke-width="3" stroke-linecap="round"/>
+            <path d="M21 20 L25 30 L36 31 L27 38 L30 49 L21 43 L12 49 L15 38 L6 31 L17 30 Z" fill="#fff066" stroke="#b88700" stroke-width="2"/>
+            <path d="M74 10 L77 17 L85 18 L79 23 L81 31 L74 27 L67 31 L69 23 L63 18 L71 17 Z" fill="#fff066" stroke="#b88700" stroke-width="2"/>
+            <circle cx="83" cy="43" r="4" fill="#fff066"/>
           </svg>
         `
       },
       {
-        id: "passport",
-        label: "FALSE ID",
+        id: "lego",
+        label: "Lego Brick",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M30 12 H72 V88 H30 Z"/>
-            <path class="greenStroke" d="M40 26 H62"/>
-            <circle class="greenStroke" cx="51" cy="46" r="12"/>
-            <path class="greenStroke" d="M39 66 H63"/>
-            <path class="greenStroke" d="M39 74 H58"/>
-            <text x="50" y="30" text-anchor="middle" font-family="Courier New" font-size="10" fill="#ffee66">MI6</text>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <rect x="18" y="36" width="64" height="38" rx="5" fill="#ff3333" stroke="#8a0000" stroke-width="4"/>
+            <ellipse cx="34" cy="35" rx="10" ry="7" fill="#ff6666" stroke="#8a0000" stroke-width="3"/>
+            <ellipse cx="66" cy="35" rx="10" ry="7" fill="#ff6666" stroke="#8a0000" stroke-width="3"/>
+            <ellipse cx="34" cy="52" rx="8" ry="5" fill="#ff6666" opacity="0.55"/>
+            <ellipse cx="66" cy="52" rx="8" ry="5" fill="#ff6666" opacity="0.55"/>
           </svg>
         `
       },
       {
-        id: "island",
-        label: "SECRET LAIR",
+        id: "ring",
+        label: "LOTR Ring",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M18 72 Q50 54 82 72"/>
-            <path class="greenStroke" d="M34 72 Q50 80 66 72"/>
-            <path class="mainStroke" d="M50 72 V28"/>
-            <path class="greenStroke" d="M50 30 C34 20 24 28 16 40"/>
-            <path class="greenStroke" d="M50 30 C66 18 78 25 86 38"/>
-            <path class="greenStroke" d="M50 40 C38 38 30 44 24 54"/>
-            <path class="greenStroke" d="M50 40 C64 38 72 44 78 54"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <defs>
+              <radialGradient id="goldRing" cx="35%" cy="25%" r="70%">
+                <stop offset="0%" stop-color="#fff6a8"/>
+                <stop offset="45%" stop-color="#ffc83d"/>
+                <stop offset="100%" stop-color="#a66a00"/>
+              </radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="33" fill="none" stroke="url(#goldRing)" stroke-width="14"/>
+            <circle cx="50" cy="50" r="22" fill="none" stroke="#fff0a0" stroke-width="2" opacity="0.8"/>
+            <text x="50" y="86" text-anchor="middle" font-size="8" font-family="monospace" fill="#7a4b00">one ring</text>
           </svg>
         `
       },
       {
-        id: "cat",
-        label: "VILLAIN CAT",
+        id: "carSofa",
+        label: "Car + Sofa",
         svg: `
-          <svg viewBox="0 0 100 100">
-            <path class="mainStroke" d="M28 36 L36 20 L46 34 H54 L64 20 L72 36 V72 H28 Z"/>
-            <path class="greenStroke" d="M38 50 H44"/>
-            <path class="greenStroke" d="M56 50 H62"/>
-            <path class="mainStroke" d="M50 56 V62"/>
-            <path class="greenStroke" d="M38 68 H62"/>
-            <path class="greenStroke" d="M26 58 H10"/>
-            <path class="greenStroke" d="M74 58 H90"/>
-            <path class="greenStroke" d="M28 64 H12"/>
-            <path class="greenStroke" d="M72 64 H88"/>
+          <svg class="iconSvg" viewBox="0 0 100 100">
+            <rect x="16" y="47" width="68" height="24" rx="8" fill="#ff4fb8" stroke="#7a004a" stroke-width="4"/>
+            <path d="M29 47 L39 34 H61 L72 47 Z" fill="#ff9ad7" stroke="#7a004a" stroke-width="4"/>
+            <circle cx="31" cy="73" r="8" fill="#2a0018" stroke="#fff" stroke-width="3"/>
+            <circle cx="70" cy="73" r="8" fill="#2a0018" stroke="#fff" stroke-width="3"/>
+            <rect x="36" y="25" width="34" height="15" rx="5" fill="#9b6a3a" stroke="#4a2408" stroke-width="3"/>
+            <rect x="32" y="31" width="42" height="12" rx="5" fill="#c78a4a" stroke="#4a2408" stroke-width="3"/>
+            <text x="50" y="91" text-anchor="middle" font-size="8" font-family="monospace" fill="#7a004a">sofa ride</text>
           </svg>
         `
       }
     ];
 
-    let deck = [];
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = false;
-    let matches = 0;
-    let moves = 0;
-    let timeLeft = totalTime;
-    let timerInterval = null;
-    let gameRunning = false;
+    function shuffle(array) {
+      const newArray = [...array];
 
-    function startGame() {
-      clearInterval(timerInterval);
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
 
-      deck = [];
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
-      matches = 0;
-      moves = 0;
-      timeLeft = totalTime;
-      gameRunning = true;
+      return newArray;
+    }
 
-      winBoxEl.style.display = "none";
-      loseBoxEl.style.display = "none";
-      glitchOverlayEl.style.display = "none";
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+    }
 
-      timerEl.classList.remove("danger");
-      statusEl.textContent = "ACTIVE";
-      statusEl.classList.remove("danger");
-      messageEl.textContent = "Memory protocol active. Find all 10 pairs.";
+    function buildDeck() {
+      const doubled = [];
 
       symbols.forEach(function(symbol) {
-        deck.push({ ...symbol, uniqueId: symbol.id + "-A" });
-        deck.push({ ...symbol, uniqueId: symbol.id + "-B" });
+        doubled.push({ ...symbol, uniqueId: symbol.id + "-a" });
+        doubled.push({ ...symbol, uniqueId: symbol.id + "-b" });
       });
 
-      shuffle(deck);
-      renderBoard();
-      updateHud();
+      cards = shuffle(doubled);
+    }
+
+    function renderCards() {
+      const grid = document.getElementById("memoryGrid");
+      grid.innerHTML = "";
+
+      cards.forEach(function(card, index) {
+        const button = document.createElement("button");
+        button.className = "card";
+        button.dataset.index = index;
+        button.onclick = function() {
+          flipCard(index);
+        };
+
+        button.innerHTML = `
+          <div class="cardInner">
+            <div class="cardFace cardBack"></div>
+            <div class="cardFace cardFront">
+              <div>
+                ${card.svg}
+                <div class="cardLabel">${card.label}</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(button);
+      });
+    }
+
+    function startGame() {
+      resetGameState();
+      buildDeck();
+      renderCards();
+
+      gameStarted = true;
+      document.getElementById("startButton").disabled = true;
+      document.getElementById("gameStatus").textContent = "ACTIVE";
+      document.getElementById("progressPill").textContent = "Find all pairs";
+      document.getElementById("timer").classList.remove("danger");
 
       timerInterval = setInterval(function() {
-        if (!gameRunning) {
-          return;
-        }
-
         timeLeft--;
-        updateHud();
+        document.getElementById("timer").textContent = formatTime(timeLeft);
 
         if (timeLeft <= 20) {
-          timerEl.classList.add("danger");
-        } else {
-          timerEl.classList.remove("danger");
+          document.getElementById("timer").classList.add("danger");
         }
 
         if (timeLeft <= 0) {
@@ -714,140 +897,135 @@ You have 2 minutes.</div>
       }, 1000);
     }
 
-    function renderBoard() {
-      gameArea.innerHTML = "";
+    function resetGameState() {
+      clearInterval(timerInterval);
 
-      deck.forEach(function(cardData, index) {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.dataset.index = index;
-        card.dataset.id = cardData.id;
+      flippedCards = [];
+      matchedPairs = 0;
+      moves = 0;
+      timeLeft = totalTime;
+      gameStarted = false;
+      lockBoard = false;
 
-        card.innerHTML = `
-          <div class="cardFace cardBack"></div>
-          <div class="cardFace cardFront">
-            <div class="spyIcon">${cardData.svg}</div>
-            <div class="iconLabel">${cardData.label}</div>
-          </div>
-        `;
-
-        card.addEventListener("click", function() {
-          flipCard(card);
-        });
-
-        gameArea.appendChild(card);
-      });
+      document.getElementById("timer").textContent = formatTime(timeLeft);
+      document.getElementById("pairsFound").textContent = "0 / 10";
+      document.getElementById("moveCounter").textContent = "0";
+      document.getElementById("gameStatus").textContent = "READY";
+      document.getElementById("progressPill").textContent = "Waiting for start";
+      document.getElementById("startButton").disabled = false;
+      document.getElementById("timer").classList.remove("danger");
+      document.getElementById("resultOverlay").style.display = "none";
     }
 
-    function flipCard(card) {
-      if (!gameRunning || lockBoard) {
+    function resetGame() {
+      resetGameState();
+      buildDeck();
+      renderCards();
+    }
+
+    function flipCard(index) {
+      if (!gameStarted || lockBoard) {
         return;
       }
 
-      if (card.classList.contains("flipped") || card.classList.contains("matched")) {
+      const cardButton = document.querySelector(`.card[data-index="${index}"]`);
+
+      if (!cardButton || cardButton.classList.contains("flipped") || cardButton.classList.contains("matched")) {
         return;
       }
 
-      card.classList.add("flipped");
+      cardButton.classList.add("flipped");
+      flippedCards.push(index);
 
-      if (!firstCard) {
-        firstCard = card;
-        return;
+      if (flippedCards.length === 2) {
+        moves++;
+        document.getElementById("moveCounter").textContent = String(moves);
+        checkMatch();
       }
-
-      secondCard = card;
-      moves++;
-      updateHud();
-
-      checkMatch();
     }
 
     function checkMatch() {
-      const firstId = firstCard.dataset.id;
-      const secondId = secondCard.dataset.id;
-
-      if (firstId === secondId) {
-        firstCard.classList.add("matched");
-        secondCard.classList.add("matched");
-
-        matches++;
-        messageEl.textContent = "MATCH CONFIRMED // " + matches + " / 10";
-        resetTurn();
-        updateHud();
-
-        if (matches === symbols.length) {
-          winGame();
-        }
-
-        return;
-      }
-
       lockBoard = true;
-      messageEl.textContent = "NO MATCH // MEMORY TRACE REJECTED";
 
-      setTimeout(function() {
-        firstCard.classList.remove("flipped");
-        secondCard.classList.remove("flipped");
-        resetTurn();
-      }, 850);
-    }
+      const firstIndex = flippedCards[0];
+      const secondIndex = flippedCards[1];
 
-    function resetTurn() {
-      firstCard = null;
-      secondCard = null;
-      lockBoard = false;
-    }
+      const firstCard = cards[firstIndex];
+      const secondCard = cards[secondIndex];
 
-    function updateHud() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
+      const firstButton = document.querySelector(`.card[data-index="${firstIndex}"]`);
+      const secondButton = document.querySelector(`.card[data-index="${secondIndex}"]`);
 
-      timerEl.textContent =
-        String(minutes).padStart(2, "0") + ":" +
-        String(seconds).padStart(2, "0");
+      if (firstCard.id === secondCard.id) {
+        setTimeout(function() {
+          firstButton.classList.add("matched");
+          secondButton.classList.add("matched");
 
-      matchesEl.textContent = matches;
-      movesEl.textContent = moves;
-    }
+          matchedPairs++;
+          document.getElementById("pairsFound").textContent = matchedPairs + " / 10";
+          document.getElementById("progressPill").textContent = "Matched " + matchedPairs + " of 10";
 
-    function loseGame() {
-      gameRunning = false;
-      clearInterval(timerInterval);
+          flippedCards = [];
+          lockBoard = false;
 
-      statusEl.textContent = "FAILED";
-      statusEl.classList.add("danger");
-      timerEl.classList.add("danger");
-      messageEl.textContent = "TIME EXPIRED // MEMORY ARCHIVE LOCKED";
-      loseBoxEl.style.display = "block";
+          if (matchedPairs === 10) {
+            winGame();
+          }
+        }, 450);
+      } else {
+        setTimeout(function() {
+          firstButton.classList.remove("flipped");
+          secondButton.classList.remove("flipped");
+
+          flippedCards = [];
+          lockBoard = false;
+        }, 800);
+      }
     }
 
     function winGame() {
-      gameRunning = false;
       clearInterval(timerInterval);
+      gameStarted = false;
+      lockBoard = true;
 
-      statusEl.textContent = "CLEARED";
-      statusEl.classList.remove("danger");
-      timerEl.classList.remove("danger");
-      messageEl.textContent = "ACCESS GRANTED // CODE RECOVERED: " + unlockCode;
+      localStorage.setItem("memorySolved", "yes");
+      localStorage.setItem("memoryCode", unlockCode);
 
-      glitchOverlayEl.style.display = "block";
+      document.getElementById("gameStatus").textContent = "UNLOCKED";
+      document.getElementById("progressPill").textContent = "Code recovered";
 
-      setTimeout(function() {
-        glitchOverlayEl.style.display = "none";
-        winBoxEl.style.display = "block";
-        winBoxEl.scrollIntoView({ behavior: "smooth" });
-      }, 3600);
+      document.getElementById("resultTitle").textContent = "MEMORY UNLOCKED";
+      document.getElementById("resultTitle").classList.remove("failTitle");
+      document.getElementById("resultText").textContent =
+        "Bart and Willemijn recovered every matching symbol. The hidden code is:";
+      document.getElementById("codeBox").style.display = "block";
+      document.getElementById("codeBox").textContent = unlockCode;
+      document.getElementById("resultOverlay").style.display = "flex";
     }
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        const temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-      }
+    function loseGame() {
+      clearInterval(timerInterval);
+      gameStarted = false;
+      lockBoard = true;
+
+      document.getElementById("gameStatus").textContent = "FAILED";
+      document.getElementById("progressPill").textContent = "Time expired";
+
+      document.getElementById("resultTitle").textContent = "TIME EXPIRED";
+      document.getElementById("resultTitle").classList.add("failTitle");
+      document.getElementById("resultText").textContent =
+        "The memory protocol collapsed before all symbols were recovered. Reset the game and try again.";
+      document.getElementById("codeBox").style.display = "none";
+      document.getElementById("resultOverlay").style.display = "flex";
     }
+
+    function closeOverlay() {
+      document.getElementById("resultOverlay").style.display = "none";
+    }
+
+    buildDeck();
+    renderCards();
+    document.getElementById("timer").textContent = formatTime(timeLeft);
   </script>
-
 </body>
 </html>
