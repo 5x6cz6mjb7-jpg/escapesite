@@ -9,16 +9,12 @@
       --pink: #ff4fb8;
       --hotpink: #ff1493;
       --softpink: #ffd1ec;
-      --baby: #ffeaf7;
       --purple: #9b3cff;
       --red: #ff3355;
       --white: #ffffff;
-      --cream: #fff7fb;
       --dark: #2a0018;
       --text: #5a0034;
-      --yellow: #fff066;
       --glass: rgba(255, 247, 251, 0.58);
-      --glassStrong: rgba(255, 247, 251, 0.72);
     }
 
     * {
@@ -177,20 +173,6 @@
       animation: jasonFloat3 35s linear infinite;
     }
 
-    .jasonScreensaver::after {
-      content: "JASON KRANE // BAARN WATER FILE // LOVE ARCHIVE";
-      position: absolute;
-      color: rgba(255,255,255,0.94);
-      background: rgba(255,20,147,0.42);
-      border: 1px solid rgba(255,255,255,0.75);
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 12px;
-      letter-spacing: 2px;
-      animation: labelFloat 24s linear infinite;
-      text-shadow: 0 0 8px rgba(255,20,147,0.9);
-    }
-
     @keyframes jasonFloat1 {
       0%   { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
       20%  { left: 62%; top: 6%;  transform: rotate(6deg) scale(1.03); }
@@ -214,14 +196,6 @@
       55%  { left: 32%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
       80%  { left: 8%;  top: 50%; transform: rotate(4deg) scale(1); }
       100% { left: 42%; top: 64%; transform: rotate(-5deg) scale(1); }
-    }
-
-    @keyframes labelFloat {
-      0%   { left: 4%; top: 88%; }
-      25%  { left: 58%; top: 84%; }
-      50%  { left: 62%; top: 14%; }
-      75%  { left: 14%; top: 18%; }
-      100% { left: 4%; top: 88%; }
     }
 
     .topBar,
@@ -444,7 +418,7 @@
 
     .archiveLayout {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
+      grid-template-columns: 1fr;
       gap: 14px;
     }
 
@@ -479,7 +453,7 @@
       min-height: 640px;
       border: 4px dashed rgba(255,255,255,0.35);
       border-radius: 28px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.04);
       display: grid;
       place-items: center;
       text-align: center;
@@ -489,20 +463,6 @@
       font-weight: bold;
       font-size: 16px;
       backdrop-filter: blur(0.5px);
-    }
-
-    .sidePanel .content {
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .dangerLove {
-      border: 3px dashed var(--red);
-      border-radius: 20px;
-      background: rgba(255,255,255,0.42);
-      padding: 12px;
-      color: #8a0029;
-      margin-bottom: 12px;
     }
 
     .photoCard {
@@ -809,27 +769,6 @@
       text-shadow: 0 0 8px rgba(255,255,255,0.7);
     }
 
-    .footerActions {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 1000px) {
-      .archiveLayout {
-        grid-template-columns: 1fr;
-      }
-
-      .viewerBody {
-        max-height: none;
-      }
-
-      .sidePanel {
-        display: none;
-      }
-    }
-
     @media (max-width: 680px) {
       body {
         padding: 8px;
@@ -923,7 +862,7 @@
         <h2>Personal archive locked</h2>
 
         <p>
-          This directory is sealed behind Nessa's private recovery code.
+          This directory is sealed behind my private recovery code.
           The archive contains romantic material, operational evidence and emotional contamination.
         </p>
 
@@ -967,29 +906,6 @@
         <section class="emptyStage" id="emptyStage">
           SELECT A HEART FILE BELOW
         </section>
-
-        <aside class="window sidePanel">
-          <div class="windowTitle">
-            <span>Archive Notes</span>
-            <span>PRIVATE</span>
-          </div>
-
-          <div class="content">
-            <div class="dangerLove">
-              <strong>Assessment:</strong><br><br>
-              Jason and Nessa were genuinely in love. Neither of them was innocent.
-              Jason used fear as a weapon. Nessa used grief as fuel.
-            </div>
-
-            <p>
-              Select a heart file below to open recovered material.
-            </p>
-
-            <p>
-              The chat is divided into chapters.
-            </p>
-          </div>
-        </aside>
       </section>
     </section>
 
@@ -1012,7 +928,7 @@
 
         <button class="heartIconButton" onclick="openFile('grief', this)">
           <span class="heartIcon">✎</span>
-          <span class="heartLabel">Nessa Note</span>
+          <span class="heartLabel">Private Note</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('mq', this)">
@@ -1116,18 +1032,19 @@
       },
 
       {
-        title: "Chapter 5 // After Death",
+        title: "Chapter 5 // After Murder",
         subtitle: "Recovered draft // Nessa alone",
-        date: "After 17 August 2024",
+        date: "After 22 August 2025",
         messages: [
           { speaker: "nessa", time: "02:08", text: "They say you are dead." },
-          { speaker: "nessa", time: "02:09", text: "I know you were cruel." },
-          { speaker: "nessa", time: "02:10", text: "I know you would have poisoned Baarn if it served your message." },
-          { speaker: "nessa", time: "02:11", text: "I know I helped too much." },
-          { speaker: "nessa", time: "02:12", text: "But I also know what your voice sounded like in my kitchen at 03:00." },
-          { speaker: "nessa", time: "02:13", text: "So I kept it." },
-          { speaker: "nessa", time: "02:14", text: "Your messages. Your image. Your recordings." },
-          { speaker: "nessa", time: "02:15", text: "If they took you from the world, then I will make the world hear your echo." }
+          { speaker: "nessa", time: "02:09", text: "No. Not dead. Murdered." },
+          { speaker: "nessa", time: "02:10", text: "I know you were cruel." },
+          { speaker: "nessa", time: "02:11", text: "I know you would have poisoned Baarn if it served your message." },
+          { speaker: "nessa", time: "02:12", text: "I know I helped too much." },
+          { speaker: "nessa", time: "02:13", text: "But I also know what your voice sounded like in my kitchen at 03:00." },
+          { speaker: "nessa", time: "02:14", text: "So I kept it." },
+          { speaker: "nessa", time: "02:15", text: "Your messages. Your image. Your recordings." },
+          { speaker: "nessa", time: "02:16", text: "If they took you from the world, then I will make the world hear your echo." }
         ]
       }
     ];
@@ -1156,16 +1073,16 @@ Subject:
 Jason Krane
 
 Status:
-Deceased
+Murdered
 
 Reported date of death:
-17 August 2024
+22 August 2025
 
 Location:
 Classified field operation, coastal sector
 
 Cause:
-Redacted
+Homicide // details redacted
 
 Notification classification:
 Restricted
@@ -1191,28 +1108,34 @@ Someone with access to his words, image, recordings and emotional history recons
         status: "PERSONAL NOTE",
         type: "text",
         body:
-`I know what he was.
+`I know what Jason was.
 
-I need that written plainly, because grief tries to edit the dead into saints.
+I need to write that plainly, because grief keeps trying to turn him into something softer.
 
-Jason was not a saint.
-Jason was not even close.
+He was not soft.
+He was not innocent.
+Neither was I.
 
-He wanted Baarn frightened.
+Jason wanted Baarn frightened.
 He wanted the water touched.
 He wanted panic measured like a laboratory result.
 
-And still, I loved him.
+I understood what he was asking.
+I understood what it meant.
+I still stayed.
 
 That is the ugliest part.
 
 Not that he lied.
-Not that he used me.
-Not that I helped more than I should have.
+Not that he used people.
+Not even that I helped him more than I should have.
 
 The ugliest part is that I knew enough to stop and did not.
 
 They took him from the world.
+They did not just take him.
+They murdered him.
+
 The world became quieter.
 Safer, perhaps.
 
@@ -1242,9 +1165,7 @@ I will weaponise memory.`
         status: "RESTRICTED NOTE",
         type: "text",
         body:
-`PERSONAL OBSERVATION
-
-M and Q think nobody notices.
+`M and Q think nobody notices.
 
 They are wrong.
 
@@ -1275,7 +1196,9 @@ Two rings.
 One private archive.
 One foolish attempt to pretend that love leaves no evidence.
 
-It always leaves evidence.`
+It always leaves evidence.
+
+I kept the photograph because one day it might matter.`
       },
 
       mqPhoto: {
@@ -1337,9 +1260,8 @@ It always leaves evidence.`
           <div class="photoCaption">
             Recovered image reference:<br>
             <strong>JASON KRANE</strong><br><br>
-            Archive note:<br>
-            "Subject linked to Baarn water contamination planning."<br><br>
-            Nessa kept the image running behind the archive like a screensaver.
+            My note:<br>
+            "I kept this image running because I could not bear the silence after him."
           </div>
         </div>
       `;
@@ -1352,9 +1274,9 @@ It always leaves evidence.`
           <div class="photoCaption">
             Recovered image evidence:<br>
             <strong>M + Q</strong><br><br>
-            Archive note:<br>
-            "Ceremony photograph recovered from encrypted personal cache."<br><br>
-            Nessa marked this file as leverage material.
+            My note:<br>
+            "They tried to hide the ceremony. They failed."<br><br>
+            I kept this because every secret becomes useful eventually.
           </div>
         </div>
       `;
