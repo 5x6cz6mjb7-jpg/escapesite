@@ -72,7 +72,7 @@
       position: relative;
       z-index: 3;
       width: 100%;
-      max-width: 1500px;
+      max-width: 1520px;
       min-height: calc(100vh - 28px);
       margin: 0 auto;
       border: 3px solid rgba(0,246,255,0.72);
@@ -82,27 +82,6 @@
         inset 0 0 120px rgba(255,34,68,0.06);
       background: rgba(0, 12, 16, 0.72);
       overflow: hidden;
-    }
-
-    .app::before {
-      content: "";
-      position: absolute;
-      inset: -60%;
-      pointer-events: none;
-      background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-        rgba(0,246,255,0.10) 18deg,
-        transparent 34deg,
-        transparent 360deg
-      );
-      animation: radarSweep 7s linear infinite;
-      z-index: 1;
-    }
-
-    @keyframes radarSweep {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
     }
 
     .appInner {
@@ -159,7 +138,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 360px minmax(0, 1fr) 360px;
+      grid-template-columns: 380px minmax(0, 1fr) 390px;
       gap: 12px;
       align-items: stretch;
     }
@@ -206,6 +185,8 @@
       font-size: 12px;
       letter-spacing: 1.5px;
       text-shadow: 0 0 8px rgba(0,246,255,0.65);
+      position: relative;
+      z-index: 2;
     }
 
     .panelTitle span:last-child {
@@ -225,20 +206,6 @@
         inset 0 0 36px rgba(255,34,68,0.08);
     }
 
-    .megaTimer {
-      font-size: clamp(72px, 9vw, 150px);
-      line-height: 0.95;
-      font-weight: bold;
-      text-align: center;
-      letter-spacing: 6px;
-      color: var(--white);
-      text-shadow:
-        0 0 12px rgba(255,34,68,0.95),
-        0 0 32px rgba(255,34,68,0.75),
-        0 0 52px rgba(0,246,255,0.35);
-      padding: 18px 8px 8px;
-    }
-
     .timerLabel {
       text-align: center;
       color: var(--red2);
@@ -248,17 +215,55 @@
       animation: blinkText 1s steps(2, end) infinite;
     }
 
+    .megaTimer {
+      width: 100%;
+      text-align: center;
+      color: var(--white);
+      font-size: clamp(72px, 7.2vw, 112px);
+      line-height: 1;
+      font-weight: bold;
+      letter-spacing: 2px;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: visible;
+      text-shadow:
+        0 0 12px rgba(255,34,68,0.95),
+        0 0 32px rgba(255,34,68,0.75),
+        0 0 52px rgba(0,246,255,0.35);
+      padding: 10px 2px;
+      border: 2px solid rgba(255,34,68,0.34);
+      background: rgba(255,34,68,0.08);
+      box-shadow: inset 0 0 28px rgba(255,34,68,0.14);
+    }
+
+    .megaTimer.lowTime {
+      color: var(--red2);
+      animation: timerPanic 0.42s steps(2, end) infinite;
+    }
+
+    @keyframes timerPanic {
+      0%, 45% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      46%, 100% {
+        transform: scale(1.035);
+        filter: brightness(1.35);
+      }
+    }
+
     @keyframes blinkText {
       0%, 45% { opacity: 1; }
       46%, 100% { opacity: 0.35; }
     }
 
     .timerBarOuter {
-      height: 18px;
+      height: 20px;
       border: 1px solid rgba(255,34,68,0.75);
       background: rgba(255,34,68,0.12);
       overflow: hidden;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .timerBar {
@@ -268,6 +273,198 @@
         linear-gradient(90deg, var(--green), var(--yellow), var(--red));
       box-shadow: 0 0 18px rgba(255,34,68,0.5);
       transition: width 0.25s linear;
+    }
+
+    .penaltyFlash {
+      animation: penaltyFlash 0.55s ease;
+    }
+
+    @keyframes penaltyFlash {
+      0% { background: rgba(255,34,68,0.06); }
+      35% { background: rgba(255,34,68,0.55); }
+      100% { background: rgba(255,34,68,0.06); }
+    }
+
+    .radarBox {
+      margin-top: 14px;
+      border: 1px solid rgba(0,246,255,0.38);
+      background: rgba(0,0,0,0.32);
+      padding: 12px;
+    }
+
+    .radar {
+      width: 240px;
+      height: 240px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 2px solid rgba(0,246,255,0.75);
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle, transparent 0 18%, rgba(0,246,255,0.08) 18% 19%, transparent 19% 36%, rgba(0,246,255,0.08) 36% 37%, transparent 37% 54%, rgba(0,246,255,0.08) 54% 55%, transparent 55%),
+        linear-gradient(90deg, transparent 49.5%, rgba(0,246,255,0.26) 50%, transparent 50.5%),
+        linear-gradient(0deg, transparent 49.5%, rgba(0,246,255,0.26) 50%, transparent 50.5%),
+        radial-gradient(circle at center, rgba(0,246,255,0.16), rgba(0,0,0,0.78));
+      box-shadow:
+        0 0 26px rgba(0,246,255,0.28),
+        inset 0 0 34px rgba(0,246,255,0.18);
+    }
+
+    .radar::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 50%;
+      height: 50%;
+      transform-origin: 0 0;
+      background: conic-gradient(
+        from 0deg,
+        rgba(0,246,255,0.72),
+        rgba(0,246,255,0.18) 35deg,
+        transparent 70deg
+      );
+      animation: radarSpin 2.6s linear infinite;
+    }
+
+    .radar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 22px rgba(0,246,255,0.45);
+    }
+
+    @keyframes radarSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .radarDot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow:
+        0 0 8px var(--red),
+        0 0 18px var(--red);
+      animation: radarDotBlink 1s infinite;
+      z-index: 4;
+    }
+
+    .rd1 { left: 38%; top: 42%; }
+    .rd2 { left: 54%; top: 48%; animation-delay: 0.2s; }
+    .rd3 { left: 64%; top: 28%; animation-delay: 0.4s; }
+    .rd4 { left: 69%; top: 38%; animation-delay: 0.6s; }
+
+    @keyframes radarDotBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.65); }
+    }
+
+    .dronePixelBox {
+      margin-top: 14px;
+      height: 120px;
+      border: 1px solid rgba(0,246,255,0.38);
+      background:
+        linear-gradient(90deg, rgba(0,246,255,0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,246,255,0.08) 1px, transparent 1px),
+        rgba(0,0,0,0.32);
+      background-size: 18px 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pixelDrone {
+      position: absolute;
+      left: -80px;
+      top: 38px;
+      width: 74px;
+      height: 40px;
+      animation: droneFly 6.8s linear infinite;
+      filter: drop-shadow(0 0 10px rgba(0,246,255,0.9));
+    }
+
+    .pixelDrone .body {
+      position: absolute;
+      left: 28px;
+      top: 13px;
+      width: 18px;
+      height: 14px;
+      background: var(--cyan2);
+      box-shadow:
+        0 0 0 2px #003943,
+        0 0 12px rgba(0,246,255,0.85);
+    }
+
+    .pixelDrone .armH {
+      position: absolute;
+      left: 4px;
+      top: 18px;
+      width: 66px;
+      height: 4px;
+      background: var(--cyan);
+    }
+
+    .pixelDrone .armV {
+      position: absolute;
+      left: 35px;
+      top: 2px;
+      width: 4px;
+      height: 36px;
+      background: var(--cyan);
+    }
+
+    .pixelDrone .rotor {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 3px solid var(--white);
+      border-radius: 50%;
+      animation: rotorSpin 0.18s linear infinite;
+      box-shadow: 0 0 10px rgba(0,246,255,0.85);
+    }
+
+    .pixelDrone .r1 { left: 0; top: 11px; }
+    .pixelDrone .r2 { right: 0; top: 11px; }
+    .pixelDrone .r3 { left: 28px; top: -4px; }
+    .pixelDrone .r4 { left: 28px; bottom: -4px; }
+
+    .pixelDrone .light {
+      position: absolute;
+      left: 34px;
+      top: 30px;
+      width: 7px;
+      height: 7px;
+      background: var(--red);
+      box-shadow: 0 0 12px var(--red);
+      animation: radarDotBlink 0.45s infinite;
+    }
+
+    @keyframes rotorSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes droneFly {
+      0% {
+        left: -90px;
+        transform: translateY(0) scale(1);
+      }
+
+      30% {
+        transform: translateY(-18px) scale(1.06);
+      }
+
+      55% {
+        transform: translateY(16px) scale(0.96);
+      }
+
+      100% {
+        left: calc(100% + 90px);
+        transform: translateY(-8px) scale(1);
+      }
     }
 
     .alertStack {
@@ -403,17 +600,15 @@
     }
 
     /*
-      Map calibration:
+      Hidden maker calibration:
       A = IJmuiden
       B = Baarn
       C = Groningen
       D = Hardenberg
-
-      These names are NOT shown to players.
     */
     .pointA { left: 34%; top: 40%; }
     .pointB { left: 50%; top: 48%; }
-    .pointC { left: 72%; top: 15%; }
+    .pointC { left: 78%; top: 15%; }
     .pointD { left: 80%; top: 35%; }
 
     .targetOverlay {
@@ -424,7 +619,7 @@
       background:
         radial-gradient(circle at 34% 40%, rgba(255,34,68,0.20), transparent 8%),
         radial-gradient(circle at 50% 48%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 72% 15%, rgba(255,34,68,0.20), transparent 8%),
+        radial-gradient(circle at 78% 15%, rgba(255,34,68,0.20), transparent 8%),
         radial-gradient(circle at 80% 35%, rgba(255,34,68,0.20), transparent 8%);
       animation: targetWash 2.2s infinite;
     }
@@ -436,32 +631,33 @@
 
     .inputGrid {
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     .inputBlock {
       border: 1px solid rgba(0,246,255,0.36);
       background:
         linear-gradient(90deg, rgba(0,246,255,0.08), rgba(0,0,0,0.22));
-      padding: 12px;
+      padding: 10px;
       position: relative;
       overflow: hidden;
     }
 
-    .inputBlock::before {
-      content: "";
-      position: absolute;
-      left: -70%;
-      top: 0;
-      width: 65%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0,246,255,0.18), transparent);
-      animation: dataSweep 3.4s linear infinite;
+    .inputBlock.solved {
+      border-color: rgba(93,255,139,0.82);
+      background: rgba(93,255,139,0.10);
     }
 
-    @keyframes dataSweep {
-      from { left: -70%; }
-      to { left: 120%; }
+    .inputBlock.error {
+      border-color: rgba(255,34,68,0.92);
+      background: rgba(255,34,68,0.12);
+      animation: errorShake 0.35s ease;
+    }
+
+    @keyframes errorShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
 
     .inputLabel {
@@ -479,7 +675,7 @@
 
     .inputLabel strong {
       color: var(--cyan2);
-      font-size: 18px;
+      font-size: 16px;
       text-shadow: 0 0 8px rgba(0,246,255,0.72);
     }
 
@@ -488,15 +684,22 @@
       font-size: 11px;
     }
 
+    .checkRow {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
     input[type="text"],
     input[type="number"] {
       width: 100%;
       border: 2px solid rgba(0,246,255,0.65);
       background: rgba(0,0,0,0.55);
       color: var(--cyan2);
-      padding: 12px;
+      padding: 10px;
       font-family: "Courier New", monospace;
-      font-size: 22px;
+      font-size: 20px;
       outline: none;
       text-align: center;
       letter-spacing: 3px;
@@ -513,6 +716,12 @@
       box-shadow:
         inset 0 0 18px rgba(255,228,92,0.12),
         0 0 18px rgba(255,228,92,0.28);
+    }
+
+    .smallCheck {
+      padding: 10px;
+      font-size: 11px;
+      min-width: 78px;
     }
 
     .controlSection {
@@ -572,9 +781,9 @@
       background:
         linear-gradient(180deg, rgba(0,246,255,0.18), rgba(0,44,54,0.82));
       color: var(--cyan2);
-      padding: 14px 12px;
+      padding: 13px 12px;
       font-family: "Courier New", monospace;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
       letter-spacing: 1px;
       cursor: pointer;
@@ -592,6 +801,13 @@
         inset 0 0 18px rgba(255,228,92,0.08);
     }
 
+    button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+      color: var(--green);
+      border-color: rgba(93,255,139,0.65);
+    }
+
     .dangerButton {
       border-color: rgba(255,34,68,0.78);
       color: var(--red2);
@@ -601,7 +817,7 @@
     }
 
     .statusLog {
-      height: 220px;
+      height: 190px;
       overflow-y: auto;
       border: 1px solid rgba(0,246,255,0.35);
       background: rgba(0,0,0,0.38);
@@ -771,7 +987,7 @@
       }
     }
 
-    @media (max-width: 1180px) {
+    @media (max-width: 1220px) {
       .grid {
         grid-template-columns: 1fr;
       }
@@ -782,6 +998,10 @@
 
       .mapWrap {
         min-height: 520px;
+      }
+
+      .megaTimer {
+        font-size: clamp(72px, 14vw, 130px);
       }
     }
 
@@ -805,8 +1025,13 @@
       }
 
       .megaTimer {
-        font-size: 74px;
-        letter-spacing: 2px;
+        font-size: 70px;
+        letter-spacing: 0;
+      }
+
+      .radar {
+        width: 190px;
+        height: 190px;
       }
 
       .mapWrap {
@@ -819,6 +1044,10 @@
 
       .phoneNumber {
         font-size: 30px;
+      }
+
+      .checkRow {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -842,7 +1071,7 @@
       </header>
 
       <section class="grid">
-        <aside class="panel megaTimerPanel">
+        <aside class="panel megaTimerPanel" id="timerPanel">
           <div class="panelTitle">
             <span>Countdown</span>
             <span>CRITICAL</span>
@@ -857,9 +1086,41 @@
             </div>
 
             <div class="alertStack">
-              <div class="alertLine">WARNING // remote payload system armed</div>
-              <div class="alertLine">WARNING // signal lock requires vector confirmation</div>
-              <div class="alertLine">WARNING // single override attempt permitted</div>
+              <div class="alertLine">PENALTY PROTOCOL // -30 SECONDS PER FAILED CHECK</div>
+              <div class="alertLine">VECTOR SYSTEM // INDIVIDUAL CHECKS ENABLED</div>
+              <div class="alertLine">FINAL OVERRIDE // UNLOCKS AFTER ALL MODULES PASS</div>
+            </div>
+
+            <div class="radarBox">
+              <div class="panelTitle" style="margin: -12px -12px 12px;">
+                <span>Radar sweep</span>
+                <span>ACTIVE</span>
+              </div>
+
+              <div class="radar">
+                <div class="radarDot rd1"></div>
+                <div class="radarDot rd2"></div>
+                <div class="radarDot rd3"></div>
+                <div class="radarDot rd4"></div>
+              </div>
+            </div>
+
+            <div class="dronePixelBox">
+              <div class="panelTitle" style="margin: 0 0 0;">
+                <span>Pixel drone feed</span>
+                <span>LIVE</span>
+              </div>
+
+              <div class="pixelDrone">
+                <div class="armH"></div>
+                <div class="armV"></div>
+                <div class="rotor r1"></div>
+                <div class="rotor r2"></div>
+                <div class="rotor r3"></div>
+                <div class="rotor r4"></div>
+                <div class="body"></div>
+                <div class="light"></div>
+              </div>
             </div>
 
             <div class="telemetryGrid">
@@ -869,8 +1130,8 @@
               </div>
 
               <div class="telemetryBox">
-                <div class="telemetryLabel">JAMMER</div>
-                <div class="telemetryValue" id="jammerValue">ARMED</div>
+                <div class="telemetryLabel">MODULES</div>
+                <div class="telemetryValue" id="moduleValue">0/6</div>
               </div>
 
               <div class="telemetryBox">
@@ -879,8 +1140,8 @@
               </div>
 
               <div class="telemetryBox">
-                <div class="telemetryLabel">ATTEMPT</div>
-                <div class="telemetryValue" id="attemptValue">READY</div>
+                <div class="telemetryLabel">PENALTY</div>
+                <div class="telemetryValue">-00:30</div>
               </div>
             </div>
           </div>
@@ -913,28 +1174,40 @@
 
           <div class="panelBody">
             <div class="inputGrid">
-              <div class="inputBlock">
+              <div class="inputBlock" id="blockAB">
                 <div class="inputLabel">
                   <strong>POINT A → POINT B</strong>
                   <span>CM VECTOR</span>
                 </div>
-                <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+
+                <div class="checkRow">
+                  <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+                  <button class="smallCheck" id="checkAB" onclick="checkVector('AB')">CHECK</button>
+                </div>
               </div>
 
-              <div class="inputBlock">
+              <div class="inputBlock" id="blockBC">
                 <div class="inputLabel">
                   <strong>POINT B → POINT C</strong>
                   <span>CM VECTOR</span>
                 </div>
-                <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+
+                <div class="checkRow">
+                  <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+                  <button class="smallCheck" id="checkBC" onclick="checkVector('BC')">CHECK</button>
+                </div>
               </div>
 
-              <div class="inputBlock">
+              <div class="inputBlock" id="blockCD">
                 <div class="inputLabel">
                   <strong>POINT C → POINT D</strong>
                   <span>CM VECTOR</span>
                 </div>
-                <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+
+                <div class="checkRow">
+                  <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
+                  <button class="smallCheck" id="checkCD" onclick="checkVector('CD')">CHECK</button>
+                </div>
               </div>
             </div>
 
@@ -962,6 +1235,13 @@
                 <span id="sliderCValue">50</span>
               </div>
 
+              <button id="checkSliders" onclick="checkSliders()">CHECK STABILIZER MATRIX</button>
+
+              <div class="panelTitle" style="margin: 4px -12px 0;">
+                <span>Dial sequence</span>
+                <span>INPUT</span>
+              </div>
+
               <div class="knobGrid">
                 <div class="knob">
                   <label for="knobA">DIAL A</label>
@@ -978,10 +1258,12 @@
                   <input id="knobC" type="number" min="0" max="9" value="0">
                 </div>
               </div>
+
+              <button id="checkKnobs" onclick="checkKnobs()">CHECK DIAL SEQUENCE</button>
             </div>
 
             <div class="buttonStack">
-              <button onclick="executeOverride()" id="overrideButton">EXECUTE DRONE OVERRIDE</button>
+              <button onclick="executeFinalOverride()" id="overrideButton" disabled>EXECUTE FINAL DRONE OVERRIDE</button>
               <button onclick="resetTestMode()" class="dangerButton">RESET TEST MODE</button>
             </div>
 
@@ -994,8 +1276,8 @@
 &gt; encrypted map loaded
 &gt; signal points detected: A / B / C / D
 &gt; route metadata redacted
-&gt; waiting for manual vector input
-&gt; one override attempt available</div>
+&gt; penalty protocol active: -30 seconds per failed check
+&gt; waiting for individual module checks</div>
           </div>
         </aside>
       </section>
@@ -1023,8 +1305,8 @@
 
   <div class="overlay" id="failOverlay">
     <div class="failBox">
-      <div class="resultTitle">OVERRIDE FAILED</div>
-      <p id="failText">The drone computer rejected the manual vector input.</p>
+      <div class="resultTitle">MISSION FAILED</div>
+      <p id="failText">The drone sequence reached zero.</p>
       <button onclick="resetTestMode()">RESET TEST MODE</button>
     </div>
   </div>
@@ -1032,6 +1314,7 @@
   <script>
     const CONFIG = {
       timeLimitSeconds: 300,
+      penaltySeconds: 30,
 
       correctAB: "12",
       correctBC: "31",
@@ -1048,8 +1331,16 @@
 
     let timeLeft = CONFIG.timeLimitSeconds;
     let timerInterval = null;
-    let locked = false;
+    let missionEnded = false;
     let signalPulse = 87;
+
+    const solved = {
+      AB: false,
+      BC: false,
+      CD: false,
+      sliders: false,
+      knobs: false
+    };
 
     function formatSeconds(seconds) {
       const minutes = Math.floor(seconds / 60);
@@ -1058,15 +1349,11 @@
       return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
     }
 
-    function getRemainingSeconds() {
-      return Math.max(0, timeLeft);
-    }
-
     function startTimer() {
       clearInterval(timerInterval);
 
       timerInterval = setInterval(function() {
-        if (locked) {
+        if (missionEnded) {
           return;
         }
 
@@ -1079,21 +1366,22 @@
         updateTimerDisplay();
 
         if (timeLeft <= 0) {
-          failMission("TIME EXPIRED // remote payload sequence completed");
+          failMission("TIME EXPIRED // payload sequence completed");
         }
       }, 1000);
     }
 
     function updateTimerDisplay() {
-      document.getElementById("timer").textContent = formatSeconds(timeLeft);
+      const timer = document.getElementById("timer");
+      timer.textContent = formatSeconds(timeLeft);
 
       const percentage = Math.max(0, (timeLeft / CONFIG.timeLimitSeconds) * 100);
       document.getElementById("timerBar").style.width = percentage + "%";
 
       if (timeLeft <= 60) {
-        document.getElementById("timer").style.color = "#ff667a";
+        timer.classList.add("lowTime");
       } else {
-        document.getElementById("timer").style.color = "#eaffff";
+        timer.classList.remove("lowTime");
       }
     }
 
@@ -1118,91 +1406,208 @@
       log.scrollTop = log.scrollHeight;
     }
 
-    function readValues() {
-      return {
-        ab: normalizeInput(document.getElementById("distanceAB").value),
-        bc: normalizeInput(document.getElementById("distanceBC").value),
-        cd: normalizeInput(document.getElementById("distanceCD").value),
+    function applyPenalty(reason) {
+      timeLeft -= CONFIG.penaltySeconds;
 
-        sliderA: Number(document.getElementById("sliderA").value),
-        sliderB: Number(document.getElementById("sliderB").value),
-        sliderC: Number(document.getElementById("sliderC").value),
+      if (timeLeft < 0) {
+        timeLeft = 0;
+      }
 
-        knobA: Number(document.getElementById("knobA").value),
-        knobB: Number(document.getElementById("knobB").value),
-        knobC: Number(document.getElementById("knobC").value)
-      };
+      appendLog("> PENALTY // -30 seconds // " + reason);
+
+      const timerPanel = document.getElementById("timerPanel");
+      timerPanel.classList.remove("penaltyFlash");
+      void timerPanel.offsetWidth;
+      timerPanel.classList.add("penaltyFlash");
+
+      updateTimerDisplay();
+
+      if (timeLeft <= 0) {
+        failMission("TIME EXPIRED AFTER PENALTY");
+      }
     }
 
-    function executeOverride() {
-      if (locked) {
-        appendLog("> override rejected // attempt already consumed");
+    function markBlockSolved(blockId, buttonId, logLine) {
+      const block = document.getElementById(blockId);
+      const button = document.getElementById(buttonId);
+
+      block.classList.remove("error");
+      block.classList.add("solved");
+
+      button.disabled = true;
+      button.textContent = "LOCKED";
+
+      appendLog(logLine);
+      updateModuleCount();
+      checkFinalUnlock();
+    }
+
+    function markBlockError(blockId) {
+      const block = document.getElementById(blockId);
+      block.classList.remove("error");
+      void block.offsetWidth;
+      block.classList.add("error");
+    }
+
+    function checkVector(which) {
+      if (missionEnded || solved[which]) {
         return;
       }
 
-      locked = true;
-      document.getElementById("attemptValue").textContent = "USED";
-      document.getElementById("overrideButton").disabled = true;
+      let inputId = "";
+      let correctValue = "";
+      let blockId = "";
+      let buttonId = "";
 
-      const values = readValues();
+      if (which === "AB") {
+        inputId = "distanceAB";
+        correctValue = CONFIG.correctAB;
+        blockId = "blockAB";
+        buttonId = "checkAB";
+      }
 
-      appendLog("> executing manual override...");
-      appendLog("> validating vector A-B...");
-      appendLog("> validating vector B-C...");
-      appendLog("> validating vector C-D...");
+      if (which === "BC") {
+        inputId = "distanceBC";
+        correctValue = CONFIG.correctBC;
+        blockId = "blockBC";
+        buttonId = "checkBC";
+      }
+
+      if (which === "CD") {
+        inputId = "distanceCD";
+        correctValue = CONFIG.correctCD;
+        blockId = "blockCD";
+        buttonId = "checkCD";
+      }
+
+      const value = normalizeInput(document.getElementById(inputId).value);
+
+      appendLog("> checking vector " + which + "...");
+
+      if (value === correctValue) {
+        solved[which] = true;
+        markBlockSolved(blockId, buttonId, "> vector " + which + " accepted // module locked");
+      } else {
+        markBlockError(blockId);
+        applyPenalty("vector " + which + " mismatch");
+      }
+    }
+
+    function checkSliders() {
+      if (missionEnded || solved.sliders) {
+        return;
+      }
+
+      const sliderA = Number(document.getElementById("sliderA").value);
+      const sliderB = Number(document.getElementById("sliderB").value);
+      const sliderC = Number(document.getElementById("sliderC").value);
+
       appendLog("> checking stabilizer matrix...");
+
+      if (
+        sliderA === CONFIG.sliderA &&
+        sliderB === CONFIG.sliderB &&
+        sliderC === CONFIG.sliderC
+      ) {
+        solved.sliders = true;
+        document.getElementById("checkSliders").disabled = true;
+        document.getElementById("checkSliders").textContent = "STABILIZER LOCKED";
+        appendLog("> stabilizer matrix accepted // module locked");
+        updateModuleCount();
+        checkFinalUnlock();
+      } else {
+        applyPenalty("stabilizer matrix mismatch");
+      }
+    }
+
+    function checkKnobs() {
+      if (missionEnded || solved.knobs) {
+        return;
+      }
+
+      const knobA = Number(document.getElementById("knobA").value);
+      const knobB = Number(document.getElementById("knobB").value);
+      const knobC = Number(document.getElementById("knobC").value);
+
       appendLog("> checking dial sequence...");
 
-      const distancesCorrect =
-        values.ab === CONFIG.correctAB &&
-        values.bc === CONFIG.correctBC &&
-        values.cd === CONFIG.correctCD;
+      if (
+        knobA === CONFIG.knobA &&
+        knobB === CONFIG.knobB &&
+        knobC === CONFIG.knobC
+      ) {
+        solved.knobs = true;
+        document.getElementById("checkKnobs").disabled = true;
+        document.getElementById("checkKnobs").textContent = "DIALS LOCKED";
+        appendLog("> dial sequence accepted // module locked");
+        updateModuleCount();
+        checkFinalUnlock();
+      } else {
+        applyPenalty("dial sequence mismatch");
+      }
+    }
 
-      const slidersCorrect =
-        values.sliderA === CONFIG.sliderA &&
-        values.sliderB === CONFIG.sliderB &&
-        values.sliderC === CONFIG.sliderC;
+    function updateModuleCount() {
+      const count = Object.values(solved).filter(Boolean).length;
+      document.getElementById("moduleValue").textContent = count + "/5";
 
-      const knobsCorrect =
-        values.knobA === CONFIG.knobA &&
-        values.knobB === CONFIG.knobB &&
-        values.knobC === CONFIG.knobC;
+      if (count >= 3) {
+        document.getElementById("vectorValue").textContent = "PARTIAL";
+      }
 
-      setTimeout(function() {
-        if (distancesCorrect && slidersCorrect && knobsCorrect) {
-          winMission();
-        } else {
-          let reason = "manual override rejected";
+      if (count === 5) {
+        document.getElementById("vectorValue").textContent = "LOCKED";
+      }
+    }
 
-          if (!distancesCorrect) {
-            reason = "vector input mismatch";
-          } else if (!slidersCorrect) {
-            reason = "stabilizer matrix mismatch";
-          } else if (!knobsCorrect) {
-            reason = "dial sequence mismatch";
-          }
+    function checkFinalUnlock() {
+      const allSolved =
+        solved.AB &&
+        solved.BC &&
+        solved.CD &&
+        solved.sliders &&
+        solved.knobs;
 
-          failMission(reason);
-        }
-      }, 1800);
+      if (allSolved) {
+        document.getElementById("overrideButton").disabled = false;
+        appendLog("> all modules locked");
+        appendLog("> final drone override enabled");
+      }
+    }
+
+    function executeFinalOverride() {
+      if (missionEnded) {
+        return;
+      }
+
+      const allSolved =
+        solved.AB &&
+        solved.BC &&
+        solved.CD &&
+        solved.sliders &&
+        solved.knobs;
+
+      if (!allSolved) {
+        applyPenalty("final override attempted before all modules locked");
+        return;
+      }
+
+      winMission();
     }
 
     function winMission() {
       clearInterval(timerInterval);
+      missionEnded = true;
 
-      const remainingSeconds = getRemainingSeconds();
       localStorage.setItem("droneSolved", "yes");
-      localStorage.setItem("droneFinalRemainingSeconds", String(remainingSeconds));
+      localStorage.setItem("droneFinalRemainingSeconds", String(timeLeft));
 
-      appendLog("> vector accepted");
-      appendLog("> stabilizer matrix locked");
+      appendLog("> final override accepted");
       appendLog("> drone command channel seized");
       appendLog("> payload system disabled");
       appendLog("> mission accomplished");
 
-      document.getElementById("vectorValue").textContent = "LOCKED";
-      document.getElementById("jammerValue").textContent = "FIRED";
-      document.getElementById("winRemainingTime").textContent = formatSeconds(remainingSeconds);
+      document.getElementById("winRemainingTime").textContent = formatSeconds(timeLeft);
 
       launchFireworks();
       document.getElementById("winOverlay").style.display = "flex";
@@ -1210,23 +1615,29 @@
 
     function failMission(reason) {
       clearInterval(timerInterval);
-      locked = true;
+      missionEnded = true;
 
       appendLog("> ERROR // " + reason);
-      appendLog("> command channel locked");
-      appendLog("> override attempt consumed");
+      appendLog("> mission failed");
 
       document.getElementById("failText").textContent = reason;
-      document.getElementById("attemptValue").textContent = "LOCKED";
-      document.getElementById("overrideButton").disabled = true;
       document.getElementById("failOverlay").style.display = "flex";
+    }
+
+    function resetSolvedState() {
+      solved.AB = false;
+      solved.BC = false;
+      solved.CD = false;
+      solved.sliders = false;
+      solved.knobs = false;
     }
 
     function resetTestMode() {
       clearInterval(timerInterval);
 
-      locked = false;
+      missionEnded = false;
       timeLeft = CONFIG.timeLimitSeconds;
+      resetSolvedState();
 
       document.getElementById("distanceAB").value = "";
       document.getElementById("distanceBC").value = "";
@@ -1240,7 +1651,23 @@
       document.getElementById("knobB").value = 0;
       document.getElementById("knobC").value = 0;
 
-      document.getElementById("overrideButton").disabled = false;
+      ["blockAB", "blockBC", "blockCD"].forEach(function(id) {
+        document.getElementById(id).classList.remove("solved", "error");
+      });
+
+      [
+        ["checkAB", "CHECK"],
+        ["checkBC", "CHECK"],
+        ["checkCD", "CHECK"],
+        ["checkSliders", "CHECK STABILIZER MATRIX"],
+        ["checkKnobs", "CHECK DIAL SEQUENCE"]
+      ].forEach(function(item) {
+        const button = document.getElementById(item[0]);
+        button.disabled = false;
+        button.textContent = item[1];
+      });
+
+      document.getElementById("overrideButton").disabled = true;
       document.getElementById("failOverlay").style.display = "none";
       document.getElementById("winOverlay").style.display = "none";
 
@@ -1249,13 +1676,11 @@
 > encrypted map loaded
 > signal points detected: A / B / C / D
 > route metadata redacted
-> waiting for manual vector input
-> one override attempt available`;
+> penalty protocol active: -30 seconds per failed check
+> waiting for individual module checks`;
 
       document.getElementById("vectorValue").textContent = "OPEN";
-      document.getElementById("attemptValue").textContent = "READY";
-      document.getElementById("jammerValue").textContent = "ARMED";
-      document.getElementById("timer").style.color = "#eaffff";
+      document.getElementById("moduleValue").textContent = "0/5";
 
       localStorage.removeItem("droneSolved");
       localStorage.removeItem("droneFinalRemainingSeconds");
@@ -1290,7 +1715,7 @@
 
     function startTelemetryNoise() {
       setInterval(function() {
-        if (locked) {
+        if (missionEnded) {
           return;
         }
 
