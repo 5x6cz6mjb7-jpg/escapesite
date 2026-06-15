@@ -3,26 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drone Override Interface</title>
+
+  <title>Drone Override Interface V2</title>
 
   <style>
     :root {
-      --bg: #02070a;
-      --panel: rgba(4, 20, 26, 0.92);
-      --panel2: rgba(0, 12, 16, 0.9);
       --cyan: #00f6ff;
-      --cyan-soft: #7efcff;
+      --cyan2: #7dfcff;
       --green: #73ff92;
-      --green-soft: #b9ffcc;
+      --green2: #b9ffcc;
       --red: #ff264d;
-      --red-soft: #ff7891;
+      --red2: #ff7891;
       --yellow: #ffe867;
       --white: #efffff;
       --muted: #7ba5ab;
-      --border: rgba(0, 246, 255, 0.55);
-      --glow: 0 0 12px rgba(0, 246, 255, 0.4);
-      --danger-glow: 0 0 14px rgba(255, 38, 77, 0.45);
-      --success-glow: 0 0 14px rgba(115, 255, 146, 0.45);
+      --dark: #001014;
+      --panel: rgba(4, 20, 26, 0.92);
       --font: "Courier New", Courier, monospace;
     }
 
@@ -30,16 +26,17 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
+      min-height: 100vh;
       background:
-        radial-gradient(circle at 10% 10%, rgba(0, 246, 255, 0.06), transparent 20%),
-        radial-gradient(circle at 90% 85%, rgba(255, 38, 77, 0.06), transparent 20%),
+        radial-gradient(circle at 10% 10%, rgba(0, 246, 255, 0.07), transparent 22%),
+        radial-gradient(circle at 90% 85%, rgba(255, 38, 77, 0.08), transparent 24%),
         linear-gradient(180deg, #010304 0%, #031018 100%);
       color: var(--cyan);
       font-family: var(--font);
-      min-height: 100vh;
     }
 
     body {
@@ -59,8 +56,8 @@
           rgba(255,255,255,0.04) 0 1px,
           transparent 1px 4px
         );
-      mix-blend-mode: screen;
       opacity: 0.35;
+      mix-blend-mode: screen;
     }
 
     body::after {
@@ -81,8 +78,8 @@
       z-index: 2;
       width: 100%;
       max-width: 1280px;
-      margin: 0 auto;
       min-height: calc(100vh - 24px);
+      margin: 0 auto;
       border: 3px solid rgba(0,246,255,0.65);
       background:
         linear-gradient(180deg, rgba(1, 13, 18, 0.92), rgba(1, 8, 10, 0.95));
@@ -93,20 +90,10 @@
       overflow: hidden;
     }
 
-    .app::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(0,246,255,0.04), transparent 60%);
-      mix-blend-mode: screen;
-    }
-
     .appInner {
-      padding: 10px;
       position: relative;
-      z-index: 2;
+      z-index: 3;
+      padding: 10px;
     }
 
     .topBar {
@@ -126,42 +113,47 @@
       display: flex;
       flex-direction: column;
       gap: 3px;
-      font-size: 11px;
       color: var(--muted);
+      font-size: 11px;
       letter-spacing: 1px;
     }
 
     .topBlock.right {
-      text-align: right;
       align-items: flex-end;
+      text-align: right;
     }
 
     .mainTitle {
-      text-align: center;
       color: var(--white);
+      text-align: center;
       font-size: 20px;
       font-weight: bold;
       letter-spacing: 2px;
+      white-space: nowrap;
       text-shadow:
         0 0 8px rgba(0,246,255,0.7),
         0 0 18px rgba(255,38,77,0.25);
-      white-space: nowrap;
     }
 
     .mainTitle::before,
     .mainTitle::after {
       content: " // ";
-      color: var(--red-soft);
+      color: var(--red2);
     }
 
     .warningFlash {
-      color: var(--red-soft);
+      color: var(--red2);
       animation: warningBlink 0.9s steps(2, end) infinite;
     }
 
     @keyframes warningBlink {
-      0%, 45% { opacity: 1; }
-      46%, 100% { opacity: 0.4; }
+      0%, 45% {
+        opacity: 1;
+      }
+
+      46%, 100% {
+        opacity: 0.4;
+      }
     }
 
     .layout {
@@ -173,7 +165,7 @@
 
     .panel {
       position: relative;
-      border: 2px solid var(--border);
+      border: 2px solid rgba(0,246,255,0.55);
       background:
         linear-gradient(180deg, rgba(7, 29, 38, 0.88), rgba(1, 10, 14, 0.92));
       box-shadow:
@@ -197,8 +189,13 @@
     }
 
     @keyframes panelScan {
-      from { top: -90px; }
-      to { top: 110%; }
+      from {
+        top: -90px;
+      }
+
+      to {
+        top: 110%;
+      }
     }
 
     .panelTitle {
@@ -219,7 +216,7 @@
     }
 
     .panelTitle span:last-child {
-      color: var(--red-soft);
+      color: var(--red2);
     }
 
     .panelBody {
@@ -228,7 +225,6 @@
       padding: 10px;
     }
 
-    /* LEFT COLUMN */
     .timerPanel {
       border-color: rgba(255,38,77,0.7);
       box-shadow:
@@ -238,7 +234,7 @@
 
     .timerLabel {
       text-align: center;
-      color: var(--red-soft);
+      color: var(--red2);
       font-size: 12px;
       letter-spacing: 2px;
       margin-bottom: 8px;
@@ -248,10 +244,10 @@
     .megaTimer {
       width: 100%;
       text-align: center;
-      font-weight: bold;
       color: var(--white);
       font-size: 68px;
       line-height: 1;
+      font-weight: bold;
       letter-spacing: 2px;
       font-variant-numeric: tabular-nums;
       padding: 8px 2px;
@@ -272,6 +268,7 @@
         transform: scale(1);
         filter: brightness(1);
       }
+
       41%, 100% {
         transform: scale(1.03);
         filter: brightness(1.25);
@@ -299,9 +296,17 @@
     }
 
     @keyframes penaltyFlash {
-      0% { background-color: transparent; }
-      40% { background-color: rgba(255,38,77,0.25); }
-      100% { background-color: transparent; }
+      0% {
+        background-color: transparent;
+      }
+
+      40% {
+        background-color: rgba(255,38,77,0.25);
+      }
+
+      100% {
+        background-color: transparent;
+      }
     }
 
     .alertStack {
@@ -314,7 +319,7 @@
       padding: 7px 8px;
       border: 1px solid rgba(255,38,77,0.28);
       background: rgba(255,38,77,0.08);
-      color: var(--red-soft);
+      color: var(--red2);
       font-size: 11px;
       letter-spacing: 0.8px;
     }
@@ -362,15 +367,20 @@
       width: 8px;
       height: 8px;
       transform: translate(-50%, -50%);
-      background: var(--cyan-soft);
+      background: var(--cyan2);
       border-radius: 50%;
       box-shadow: 0 0 10px rgba(0,246,255,1);
       z-index: 5;
     }
 
     @keyframes radarSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .radarDot {
@@ -386,21 +396,46 @@
       z-index: 6;
     }
 
-    .rd1 { left: 38%; top: 45%; }
-    .rd2 { left: 51%; top: 52%; animation-delay: 0.2s; }
-    .rd3 { left: 70%; top: 41%; animation-delay: 0.4s; }
-    .rd4 { left: 71%; top: 48%; animation-delay: 0.6s; }
+    .rd1 {
+      left: 38%;
+      top: 45%;
+    }
+
+    .rd2 {
+      left: 51%;
+      top: 52%;
+      animation-delay: 0.2s;
+    }
+
+    .rd3 {
+      left: 70%;
+      top: 41%;
+      animation-delay: 0.4s;
+    }
+
+    .rd4 {
+      left: 71%;
+      top: 48%;
+      animation-delay: 0.6s;
+    }
 
     @keyframes radarDotBlink {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.65); }
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.35;
+        transform: scale(0.65);
+      }
     }
 
     .droneViewBox {
       margin-top: 12px;
       border: 1px solid rgba(115,255,146,0.35);
       background: #001006;
-      height: 200px;
+      height: 210px;
       position: relative;
       overflow: hidden;
       box-shadow:
@@ -418,7 +453,7 @@
       align-items: center;
       border-bottom: 1px solid rgba(115,255,146,0.22);
       background: rgba(115,255,146,0.08);
-      color: var(--green-soft);
+      color: var(--green2);
       font-size: 11px;
       letter-spacing: 1px;
     }
@@ -454,14 +489,37 @@
       z-index: 2;
     }
 
-    .st1 { left: 10%; top: 12%; }
-    .st2 { left: 28%; top: 9%; animation-delay: 0.4s; }
-    .st3 { left: 61%; top: 14%; animation-delay: 0.8s; }
-    .st4 { left: 84%; top: 19%; animation-delay: 1.2s; }
+    .st1 {
+      left: 10%;
+      top: 12%;
+    }
+
+    .st2 {
+      left: 28%;
+      top: 9%;
+      animation-delay: 0.4s;
+    }
+
+    .st3 {
+      left: 61%;
+      top: 14%;
+      animation-delay: 0.8s;
+    }
+
+    .st4 {
+      left: 84%;
+      top: 19%;
+      animation-delay: 1.2s;
+    }
 
     @keyframes starBlink {
-      0%,100% { opacity: 0.3; }
-      50% { opacity: 1; }
+      0%,100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
     }
 
     .wireMountain {
@@ -510,8 +568,13 @@
     }
 
     @keyframes wireGroundMove {
-      from { background-position: 0 0, 0 0, 0 0, 0 0; }
-      to { background-position: 0 0, 0 0, 0 0, 0 38px; }
+      from {
+        background-position: 0 0, 0 0, 0 0, 0 0;
+      }
+
+      to {
+        background-position: 0 0, 0 0, 0 0, 0 38px;
+      }
     }
 
     .wirePolderLines {
@@ -545,6 +608,18 @@
       box-shadow: inset 0 0 10px rgba(115,255,146,0.09);
     }
 
+    .wireDijk {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 58%;
+      height: 2px;
+      z-index: 8;
+      background: rgba(115,255,146,0.5);
+      box-shadow: 0 0 8px rgba(115,255,146,0.4);
+      transform: skewY(-6deg);
+    }
+
     .horizonVillage {
       position: absolute;
       left: 0;
@@ -554,15 +629,17 @@
       z-index: 5;
       background:
         linear-gradient(90deg,
-          transparent 0 8%,
-          rgba(115,255,146,0.55) 8% 10%,
-          transparent 10% 18%,
-          rgba(115,255,146,0.55) 18% 20%,
-          transparent 20% 28%,
-          rgba(115,255,146,0.55) 28% 30%,
-          transparent 30% 56%,
-          rgba(115,255,146,0.55) 56% 58%,
-          transparent 58% 72%,
+          transparent 0 7%,
+          rgba(115,255,146,0.55) 7% 9%,
+          transparent 9% 14%,
+          rgba(115,255,146,0.55) 14% 16%,
+          transparent 16% 24%,
+          rgba(115,255,146,0.55) 24% 27%,
+          transparent 27% 35%,
+          rgba(115,255,146,0.55) 35% 37%,
+          transparent 37% 58%,
+          rgba(115,255,146,0.55) 58% 60%,
+          transparent 60% 72%,
           rgba(115,255,146,0.55) 72% 74%,
           transparent 74% 100%
         );
@@ -579,16 +656,79 @@
     .wireMolen {
       position: absolute;
       left: 16%;
-      top: 26%;
-      width: 64px;
-      height: 90px;
+      top: 25%;
+      width: 68px;
+      height: 96px;
       filter: drop-shadow(0 0 6px rgba(115,255,146,0.8));
     }
 
-    .wireMolen svg {
-      width: 100%;
-      height: 100%;
-      display: block;
+    .wireMolenBase {
+      position: absolute;
+      left: 20px;
+      top: 48px;
+      width: 28px;
+      height: 42px;
+      border: 3px solid rgba(115,255,146,0.95);
+      clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
+    }
+
+    .wireMolenCap {
+      position: absolute;
+      left: 16px;
+      top: 38px;
+      width: 36px;
+      height: 14px;
+      border: 3px solid rgba(115,255,146,0.95);
+      border-bottom: none;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .wireMolenHub {
+      position: absolute;
+      left: 29px;
+      top: 31px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(115,255,146,0.95);
+      z-index: 2;
+    }
+
+    .wireMolenBlades {
+      position: absolute;
+      left: 34px;
+      top: 36px;
+      width: 4px;
+      height: 4px;
+      animation: molenSpin 1.8s linear infinite;
+      transform-origin: center;
+    }
+
+    .wireMolenBlades::before,
+    .wireMolenBlades::after {
+      content: "";
+      position: absolute;
+      left: -28px;
+      top: -2px;
+      width: 60px;
+      height: 4px;
+      background: rgba(115,255,146,0.95);
+      box-shadow: 0 0 6px rgba(115,255,146,0.65);
+    }
+
+    .wireMolenBlades::after {
+      transform: rotate(90deg);
+    }
+
+    @keyframes molenSpin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .wireHuis {
@@ -631,29 +771,51 @@
       transform: scale(0.74);
     }
 
+    .huis4 {
+      left: 82%;
+      top: 38%;
+      transform: scale(0.5);
+    }
+
     .wireObstacle {
       position: absolute;
-      width: 60px;
-      height: 60px;
-      border: 2px solid rgba(115,255,146,0.7);
+      width: 58px;
+      height: 58px;
+      border: 2px solid rgba(115,255,146,0.65);
       transform: rotate(45deg);
       box-shadow: 0 0 10px rgba(115,255,146,0.28);
       z-index: 9;
       animation: obstacleFly 3.1s linear infinite;
     }
 
-    .wo1 { left: 18%; top: 47%; animation-delay: 0s; }
-    .wo2 { left: 73%; top: 46%; animation-delay: 1s; }
-    .wo3 { left: 48%; top: 50%; animation-delay: 2s; }
+    .wo1 {
+      left: 18%;
+      top: 47%;
+      animation-delay: 0s;
+    }
+
+    .wo2 {
+      left: 73%;
+      top: 46%;
+      animation-delay: 1s;
+    }
+
+    .wo3 {
+      left: 48%;
+      top: 50%;
+      animation-delay: 2s;
+    }
 
     @keyframes obstacleFly {
       0% {
         transform: translateY(-20px) scale(0.3) rotate(45deg);
         opacity: 0;
       }
+
       15% {
-        opacity: 0.8;
+        opacity: 0.75;
       }
+
       100% {
         transform: translateY(140px) scale(1.7) rotate(45deg);
         opacity: 0;
@@ -702,6 +864,7 @@
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
       }
+
       46%, 100% {
         opacity: 0.45;
         transform: translate(-50%, -50%) scale(1.08);
@@ -735,10 +898,27 @@
       z-index: 14;
     }
 
-    .povTopLeft { left: 8px; top: 38px; }
-    .povTopRight { right: 8px; top: 38px; text-align: right; }
-    .povBottomLeft { left: 8px; bottom: 6px; }
-    .povBottomRight { right: 8px; bottom: 6px; text-align: right; }
+    .povTopLeft {
+      left: 8px;
+      top: 38px;
+    }
+
+    .povTopRight {
+      right: 8px;
+      top: 38px;
+      text-align: right;
+    }
+
+    .povBottomLeft {
+      left: 8px;
+      bottom: 6px;
+    }
+
+    .povBottomRight {
+      right: 8px;
+      bottom: 6px;
+      text-align: right;
+    }
 
     .telemetryGrid {
       margin-top: 12px;
@@ -755,19 +935,18 @@
     }
 
     .telemetryLabel {
-      font-size: 10px;
       color: var(--muted);
+      font-size: 10px;
       letter-spacing: 1px;
       margin-bottom: 5px;
     }
 
     .telemetryValue {
+      color: var(--cyan2);
       font-size: 18px;
-      color: var(--cyan-soft);
       text-shadow: 0 0 8px rgba(0,246,255,0.45);
     }
 
-    /* MAP */
     .mapPanel {
       min-height: 590px;
       display: flex;
@@ -825,8 +1004,13 @@
     }
 
     @keyframes mapPulse {
-      0%,100% { opacity: 0.45; }
-      50% { opacity: 0.9; }
+      0%,100% {
+        opacity: 0.45;
+      }
+
+      50% {
+        opacity: 0.9;
+      }
     }
 
     .signalPoint {
@@ -863,20 +1047,47 @@
     }
 
     @keyframes pointBlink {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.35; transform: scale(0.72); }
+      0%,100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.35;
+        transform: scale(0.72);
+      }
     }
 
     @keyframes pointRing {
-      0% { box-shadow: 0 0 0 0 rgba(255,38,77,0.75); }
-      100% { box-shadow: 0 0 0 20px rgba(255,38,77,0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(255,38,77,0.75);
+      }
+
+      100% {
+        box-shadow: 0 0 0 20px rgba(255,38,77,0);
+      }
     }
 
     /* A = IJmuiden, B = Baarn, C = Groningen, D = Hardenberg */
-    .pointA { left: 34%; top: 42%; }
-    .pointB { left: 48%; top: 50%; }
-    .pointC { left: 78%; top: 31%; }
-    .pointD { left: 80%; top: 39%; }
+    .pointA {
+      left: 34%;
+      top: 42%;
+    }
+
+    .pointB {
+      left: 48%;
+      top: 50%;
+    }
+
+    .pointC {
+      left: 78%;
+      top: 31%;
+    }
+
+    .pointD {
+      left: 80%;
+      top: 39%;
+    }
 
     .targetOverlay {
       position: absolute;
@@ -892,11 +1103,15 @@
     }
 
     @keyframes targetPulse {
-      0%,100% { opacity: 0.45; }
-      50% { opacity: 0.95; }
+      0%,100% {
+        opacity: 0.45;
+      }
+
+      50% {
+        opacity: 0.95;
+      }
     }
 
-    /* RIGHT COLUMN */
     .inputGrid {
       display: grid;
       gap: 9px;
@@ -920,9 +1135,17 @@
     }
 
     @keyframes errorShake {
-      0%,100% { transform: translateX(0); }
-      25% { transform: translateX(-4px); }
-      75% { transform: translateX(4px); }
+      0%,100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-4px);
+      }
+
+      75% {
+        transform: translateX(4px);
+      }
     }
 
     .inputLabel {
@@ -937,7 +1160,7 @@
     }
 
     .inputLabel strong {
-      color: var(--cyan-soft);
+      color: var(--cyan2);
       font-size: 14px;
       text-shadow: 0 0 7px rgba(0,246,255,0.45);
     }
@@ -958,7 +1181,7 @@
       width: 100%;
       border: 2px solid rgba(0,246,255,0.55);
       background: rgba(0,0,0,0.5);
-      color: var(--cyan-soft);
+      color: var(--cyan2);
       padding: 9px 10px;
       font-family: var(--font);
       font-size: 18px;
@@ -1064,7 +1287,7 @@
       border: 2px solid rgba(0,246,255,0.62);
       background:
         linear-gradient(180deg, rgba(0,246,255,0.16), rgba(0,44,54,0.78));
-      color: var(--cyan-soft);
+      color: var(--cyan2);
       padding: 11px 10px;
       font-family: var(--font);
       font-size: 12px;
@@ -1083,13 +1306,13 @@
     button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      color: var(--green-soft);
+      color: var(--green2);
       border-color: rgba(115,255,146,0.6);
     }
 
     .dangerButton {
       border-color: rgba(255,38,77,0.7);
-      color: var(--red-soft);
+      color: var(--red2);
       background:
         linear-gradient(180deg, rgba(255,38,77,0.15), rgba(54,0,10,0.78));
       text-shadow: 0 0 7px rgba(255,38,77,0.45);
@@ -1107,7 +1330,6 @@
       white-space: pre-line;
     }
 
-    /* OVERLAYS */
     .overlay {
       position: fixed;
       inset: 0;
@@ -1164,7 +1386,7 @@
       padding: 12px 18px;
       border: 2px solid rgba(0,246,255,0.65);
       background: rgba(0,246,255,0.06);
-      color: var(--cyan-soft);
+      color: var(--cyan2);
       font-size: 24px;
       letter-spacing: 2px;
     }
@@ -1212,6 +1434,7 @@
         transform: scale(0.2);
         opacity: 1;
       }
+
       100% {
         transform: scale(4);
         opacity: 0;
@@ -1282,6 +1505,7 @@
     }
   </style>
 </head>
+
 <body>
   <main class="app">
     <div class="appInner">
@@ -1300,7 +1524,6 @@
       </header>
 
       <section class="layout">
-        <!-- LEFT -->
         <aside class="panel timerPanel" id="timerPanel">
           <div class="panelTitle">
             <span>Countdown</span>
@@ -1340,7 +1563,7 @@
             <div class="droneViewBox">
               <div class="droneViewTitle">
                 <span>Retro drone POV</span>
-                <span>WIRE / NL MODE</span>
+                <span>WIRE / NL MODE V2</span>
               </div>
 
               <div class="dronePov">
@@ -1372,23 +1595,21 @@
                 <div class="wireGround"></div>
                 <div class="wirePolderLines"></div>
                 <div class="wireKanaal"></div>
+                <div class="wireDijk"></div>
                 <div class="horizonVillage"></div>
 
                 <div class="dutchScene">
                   <div class="wireMolen">
-                    <svg viewBox="0 0 64 90">
-                      <line x1="32" y1="16" x2="32" y2="44" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                      <line x1="18" y1="30" x2="46" y2="30" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                      <line x1="22" y1="20" x2="42" y2="40" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                      <line x1="42" y1="20" x2="22" y2="40" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                      <polygon points="25,44 39,44 46,84 18,84" fill="none" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                      <line x1="18" y1="84" x2="46" y2="84" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
-                    </svg>
+                    <div class="wireMolenBase"></div>
+                    <div class="wireMolenCap"></div>
+                    <div class="wireMolenBlades"></div>
+                    <div class="wireMolenHub"></div>
                   </div>
 
                   <div class="wireHuis huis1"></div>
                   <div class="wireHuis huis2"></div>
                   <div class="wireHuis huis3"></div>
+                  <div class="wireHuis huis4"></div>
                 </div>
 
                 <div class="wireObstacle wo1"></div>
@@ -1414,7 +1635,10 @@
                       stroke-width="3"
                     />
                     <line
-                      x1="105" y1="8" x2="105" y2="38"
+                      x1="105"
+                      y1="8"
+                      x2="105"
+                      y2="38"
                       stroke="rgba(115,255,146,0.95)"
                       stroke-width="3"
                     />
@@ -1467,7 +1691,6 @@
           </div>
         </aside>
 
-        <!-- MIDDLE -->
         <section class="panel mapPanel">
           <div class="panelTitle">
             <span>Encrypted national scan</span>
@@ -1486,7 +1709,6 @@
           </div>
         </section>
 
-        <!-- RIGHT -->
         <aside class="panel">
           <div class="panelTitle">
             <span>Vector override</span>
@@ -1500,6 +1722,7 @@
                   <strong>POINT A → POINT B</strong>
                   <span>CM VECTOR</span>
                 </div>
+
                 <div class="checkRow">
                   <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
                   <button id="checkAB" onclick="checkVector('AB')">CHECK</button>
@@ -1511,6 +1734,7 @@
                   <strong>POINT B → POINT C</strong>
                   <span>CM VECTOR</span>
                 </div>
+
                 <div class="checkRow">
                   <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
                   <button id="checkBC" onclick="checkVector('BC')">CHECK</button>
@@ -1522,6 +1746,7 @@
                   <strong>POINT C → POINT D</strong>
                   <span>CM VECTOR</span>
                 </div>
+
                 <div class="checkRow">
                   <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
                   <button id="checkCD" onclick="checkVector('CD')">CHECK</button>
@@ -1564,6 +1789,7 @@
                 <div class="gridlockHeader">
                   Activate the correct relay lamps. Rows A-J. Columns 1-10.
                 </div>
+
                 <div class="gridlock" id="gridlock"></div>
               </div>
 
@@ -1597,7 +1823,6 @@
     </div>
   </main>
 
-  <!-- WIN -->
   <div class="overlay" id="winOverlay">
     <div class="resultBox win">
       <div class="resultTitle">MISSION ACCOMPLISHED</div>
@@ -1617,7 +1842,6 @@
     </div>
   </div>
 
-  <!-- FAIL -->
   <div class="overlay" id="failOverlay">
     <div class="resultBox fail">
       <div class="resultTitle">MISSION FAILED</div>
@@ -1660,6 +1884,7 @@
     function formatSeconds(seconds) {
       const minutes = Math.floor(seconds / 60);
       const secs = seconds % 60;
+
       return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
     }
 
@@ -1680,11 +1905,16 @@
     function startTimer() {
       clearInterval(timerInterval);
 
-      timerInterval = setInterval(() => {
-        if (missionEnded) return;
+      timerInterval = setInterval(function() {
+        if (missionEnded) {
+          return;
+        }
 
         timeLeft--;
-        if (timeLeft < 0) timeLeft = 0;
+
+        if (timeLeft < 0) {
+          timeLeft = 0;
+        }
 
         updateTimerDisplay();
 
@@ -1717,7 +1947,10 @@
 
     function applyPenalty(reason) {
       timeLeft -= CONFIG.penaltySeconds;
-      if (timeLeft < 0) timeLeft = 0;
+
+      if (timeLeft < 0) {
+        timeLeft = 0;
+      }
 
       appendLog("> PENALTY // -30 seconds // " + reason);
 
@@ -1739,6 +1972,7 @@
 
       block.classList.remove("error");
       block.classList.add("solved");
+
       button.disabled = true;
       button.textContent = "LOCKED";
 
@@ -1755,7 +1989,9 @@
     }
 
     function checkVector(which) {
-      if (missionEnded || solved[which]) return;
+      if (missionEnded || solved[which]) {
+        return;
+      }
 
       let inputId = "";
       let correctValue = "";
@@ -1784,6 +2020,7 @@
       }
 
       const value = normalizeInput(document.getElementById(inputId).value);
+
       appendLog("> checking vector " + which + "...");
 
       if (value === correctValue) {
@@ -1796,7 +2033,9 @@
     }
 
     function checkSliders() {
-      if (missionEnded || solved.sliders) return;
+      if (missionEnded || solved.sliders) {
+        return;
+      }
 
       const sliderA = Number(document.getElementById("sliderA").value);
       const sliderB = Number(document.getElementById("sliderB").value);
@@ -1810,9 +2049,12 @@
         sliderC === CONFIG.sliderC
       ) {
         solved.sliders = true;
+
         document.getElementById("checkSliders").disabled = true;
         document.getElementById("checkSliders").textContent = "STABILIZER LOCKED";
+
         appendLog("> stabilizer matrix accepted // module locked");
+
         updateModuleCount();
         checkFinalUnlock();
       } else {
@@ -1824,6 +2066,7 @@
       const el = document.createElement("div");
       el.className = "gridLabel";
       el.textContent = text;
+
       return el;
     }
 
@@ -1839,25 +2082,31 @@
         grid.appendChild(makeGridLabel(String(n)));
       }
 
-      rows.forEach(row => {
+      rows.forEach(function(row) {
         grid.appendChild(makeGridLabel(row));
 
         for (let n = 1; n <= 10; n++) {
           const id = row + n;
           const cell = document.createElement("button");
+
           cell.type = "button";
           cell.className = "gridCell";
           cell.dataset.id = id;
           cell.setAttribute("aria-label", id);
 
-          cell.addEventListener("click", () => toggleGridCell(id, cell));
+          cell.addEventListener("click", function() {
+            toggleGridCell(id, cell);
+          });
+
           grid.appendChild(cell);
         }
       });
     }
 
     function toggleGridCell(id, cell) {
-      if (missionEnded || solved.gridlock) return;
+      if (missionEnded || solved.gridlock) {
+        return;
+      }
 
       if (activeGridCells.has(id)) {
         activeGridCells.delete(id);
@@ -1869,25 +2118,32 @@
     }
 
     function checkGridlock() {
-      if (missionEnded || solved.gridlock) return;
+      if (missionEnded || solved.gridlock) {
+        return;
+      }
 
       appendLog("> checking gridlock relay matrix...");
 
       const expected = [...CONFIG.gridlockCorrect].sort().join(",");
+
       const actual = [...activeGridCells]
-        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+        .sort(function(a, b) {
+          return a.localeCompare(b, undefined, { numeric: true });
+        })
         .join(",");
 
       if (actual === expected) {
         solved.gridlock = true;
+
         document.getElementById("checkGridlock").disabled = true;
         document.getElementById("checkGridlock").textContent = "GRIDLOCK LOCKED";
 
-        document.querySelectorAll(".gridCell").forEach(cell => {
+        document.querySelectorAll(".gridCell").forEach(function(cell) {
           cell.classList.add("locked");
         });
 
         appendLog("> gridlock relay matrix accepted // module locked");
+
         updateModuleCount();
         checkFinalUnlock();
       } else {
@@ -1924,7 +2180,9 @@
     }
 
     function executeFinalOverride() {
-      if (missionEnded) return;
+      if (missionEnded) {
+        return;
+      }
 
       const allSolved =
         solved.AB &&
@@ -1980,7 +2238,8 @@
 
     function resetGridlockState() {
       activeGridCells.clear();
-      document.querySelectorAll(".gridCell").forEach(cell => {
+
+      document.querySelectorAll(".gridCell").forEach(function(cell) {
         cell.classList.remove("active", "locked");
       });
     }
@@ -2002,7 +2261,7 @@
       document.getElementById("sliderB").value = 50;
       document.getElementById("sliderC").value = 50;
 
-      ["blockAB", "blockBC", "blockCD"].forEach(id => {
+      ["blockAB", "blockBC", "blockCD"].forEach(function(id) {
         document.getElementById(id).classList.remove("solved", "error");
       });
 
@@ -2012,10 +2271,10 @@
         ["checkCD", "CHECK"],
         ["checkSliders", "CHECK STABILIZER MATRIX"],
         ["checkGridlock", "CHECK GRIDLOCK MATRIX"]
-      ].forEach(([id, text]) => {
-        const button = document.getElementById(id);
+      ].forEach(function(item) {
+        const button = document.getElementById(item[0]);
         button.disabled = false;
-        button.textContent = text;
+        button.textContent = item[1];
       });
 
       document.getElementById("overrideButton").disabled = true;
@@ -2044,36 +2303,47 @@
     function launchFireworks() {
       let count = 0;
 
-      const interval = setInterval(() => {
+      const interval = setInterval(function() {
         const firework = document.createElement("div");
+
         firework.className = "firework";
         firework.style.left = Math.random() * 100 + "vw";
         firework.style.top = Math.random() * 80 + "vh";
 
         document.body.appendChild(firework);
 
-        setTimeout(() => {
+        setTimeout(function() {
           firework.remove();
         }, 1000);
 
         count++;
-        if (count > 18) clearInterval(interval);
+
+        if (count > 18) {
+          clearInterval(interval);
+        }
       }, 140);
     }
 
     function startTelemetryNoise() {
-      setInterval(() => {
-        if (missionEnded) return;
+      setInterval(function() {
+        if (missionEnded) {
+          return;
+        }
 
         signalPulse += Math.floor(Math.random() * 7) - 3;
-        if (signalPulse < 71) signalPulse = 71;
-        if (signalPulse > 96) signalPulse = 96;
+
+        if (signalPulse < 71) {
+          signalPulse = 71;
+        }
+
+        if (signalPulse > 96) {
+          signalPulse = 96;
+        }
 
         document.getElementById("signalValue").textContent = signalPulse + "%";
       }, 850);
     }
 
-    // START
     buildGridlock();
     updateSliderReadouts();
     updateTimerDisplay();
