@@ -134,7 +134,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 380px minmax(0, 1fr) 390px;
+      grid-template-columns: 380px minmax(0, 1fr) 410px;
       gap: 12px;
       align-items: stretch;
     }
@@ -370,7 +370,7 @@
     .rd1 { left: 38%; top: 45%; }
     .rd2 { left: 51%; top: 52%; animation-delay: 0.2s; }
     .rd3 { left: 69%; top: 37%; animation-delay: 0.4s; }
-    .rd4 { left: 70%; top: 49%; animation-delay: 0.6s; }
+    .rd4 { left: 70%; top: 47%; animation-delay: 0.6s; }
 
     @keyframes radarDotBlink {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -379,7 +379,7 @@
 
     .dronePixelBox {
       margin-top: 14px;
-      height: 190px;
+      height: 210px;
       border: 1px solid rgba(93,255,139,0.45);
       background: #001507;
       overflow: hidden;
@@ -397,214 +397,159 @@
       bottom: 0;
       overflow: hidden;
       background:
-        linear-gradient(180deg, #001f0a 0%, #003a12 28%, #001f0a 29%, #000b04 100%);
-      filter: grayscale(1) sepia(1) hue-rotate(75deg) saturate(3) brightness(0.95);
+        linear-gradient(180deg, #001b08 0%, #00260c 38%, #000a03 39%, #000000 100%);
+      color: var(--green);
     }
 
-    .povSkyGlow {
+    .wireSky {
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 32%;
+      inset: 0 0 55% 0;
       background:
-        radial-gradient(circle at 72% 24%, rgba(93,255,139,0.25), transparent 18%),
-        linear-gradient(180deg, rgba(93,255,139,0.18), transparent);
+        linear-gradient(0deg, rgba(93,255,139,0.08), transparent),
+        radial-gradient(circle at 50% 70%, rgba(93,255,139,0.12), transparent 32%);
       z-index: 1;
     }
 
-    .horizonLine {
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(93,255,139,0.8);
+      animation: starBlink 1.8s infinite;
+      z-index: 3;
+    }
+
+    .st1 { left: 12%; top: 18%; }
+    .st2 { left: 31%; top: 12%; animation-delay: 0.4s; }
+    .st3 { left: 64%; top: 16%; animation-delay: 0.8s; }
+    .st4 { left: 82%; top: 23%; animation-delay: 1.2s; }
+
+    @keyframes starBlink {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 1; }
+    }
+
+    .wireHorizon {
       position: absolute;
       left: 0;
       right: 0;
-      top: 31%;
+      top: 40%;
       height: 2px;
-      background: rgba(93,255,139,0.72);
-      box-shadow: 0 0 12px rgba(93,255,139,0.9);
-      z-index: 8;
+      background: rgba(93,255,139,0.75);
+      box-shadow: 0 0 12px rgba(93,255,139,0.85);
+      z-index: 6;
     }
 
-    .povGround {
+    .wireGround {
+      position: absolute;
+      left: -50%;
+      right: -50%;
+      top: 40%;
+      bottom: -20%;
+      background:
+        linear-gradient(90deg, transparent 49.7%, rgba(93,255,139,0.45) 50%, transparent 50.3%),
+        linear-gradient(78deg, transparent 49.5%, rgba(93,255,139,0.38) 50%, transparent 50.5%),
+        linear-gradient(102deg, transparent 49.5%, rgba(93,255,139,0.38) 50%, transparent 50.5%),
+        repeating-linear-gradient(0deg, transparent 0 18px, rgba(93,255,139,0.34) 19px, transparent 20px);
+      background-size:
+        100% 100%,
+        80px 100%,
+        80px 100%,
+        100% 38px;
+      transform: perspective(260px) rotateX(62deg);
+      transform-origin: top center;
+      animation: wireGroundMove 0.48s linear infinite;
+      z-index: 4;
+    }
+
+    @keyframes wireGroundMove {
+      from { background-position: 0 0, 0 0, 0 0, 0 0; }
+      to { background-position: 0 0, 0 0, 0 0, 0 38px; }
+    }
+
+    .wireMountain {
       position: absolute;
       left: 0;
       right: 0;
-      top: 31%;
-      bottom: 0;
-      background:
-        linear-gradient(90deg, rgba(93,255,139,0.13) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(93,255,139,0.13) 1px, transparent 1px),
-        repeating-linear-gradient(90deg, rgba(93,255,139,0.10) 0 42px, rgba(0,80,30,0.18) 42px 84px);
-      background-size: 32px 32px, 32px 32px, 168px 168px;
-      z-index: 2;
-    }
-
-    .povCanal {
-      position: absolute;
-      left: 16%;
-      top: 35%;
-      width: 12%;
-      height: 78%;
-      background: rgba(93,255,139,0.17);
-      border-left: 1px solid rgba(93,255,139,0.55);
-      border-right: 1px solid rgba(93,255,139,0.55);
-      transform: skewX(-13deg);
-      z-index: 3;
-      box-shadow:
-        inset 0 0 20px rgba(93,255,139,0.15),
-        0 0 14px rgba(93,255,139,0.16);
-    }
-
-    .povRoad {
-      position: absolute;
-      left: 45%;
-      top: 33%;
-      width: 10%;
-      height: 86%;
-      background:
-        linear-gradient(90deg, transparent 0 46%, rgba(93,255,139,0.45) 46% 54%, transparent 54% 100%),
-        rgba(93,255,139,0.10);
-      border-left: 1px solid rgba(93,255,139,0.35);
-      border-right: 1px solid rgba(93,255,139,0.35);
-      z-index: 3;
-    }
-
-    .windmill {
-      position: absolute;
-      left: 67%;
-      top: 26%;
-      width: 54px;
-      height: 72px;
-      z-index: 7;
-      filter: drop-shadow(0 0 8px rgba(93,255,139,0.65));
-    }
-
-    .windmillTower {
-      position: absolute;
-      left: 24px;
-      top: 31px;
-      width: 8px;
-      height: 38px;
-      background: rgba(93,255,139,0.8);
-      clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
-    }
-
-    .windmillHub {
-      position: absolute;
-      left: 22px;
-      top: 22px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(93,255,139,0.95);
-      z-index: 2;
-      box-shadow: 0 0 10px rgba(93,255,139,0.9);
-    }
-
-    .windmillBlades {
-      position: absolute;
-      left: 27px;
-      top: 28px;
-      width: 4px;
-      height: 4px;
-      animation: bladeSpin 1.4s linear infinite;
-      transform-origin: center;
-    }
-
-    .windmillBlades::before,
-    .windmillBlades::after {
-      content: "";
-      position: absolute;
-      left: -22px;
-      top: -2px;
-      width: 48px;
-      height: 4px;
-      background: rgba(93,255,139,0.85);
-    }
-
-    .windmillBlades::after {
-      transform: rotate(90deg);
-    }
-
-    @keyframes bladeSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .povHouse {
-      position: absolute;
+      top: 24%;
+      height: 36%;
       z-index: 5;
-      width: 34px;
-      height: 25px;
-      background: rgba(93,255,139,0.20);
-      border: 1px solid rgba(93,255,139,0.70);
-      box-shadow: 0 0 10px rgba(93,255,139,0.25);
+      pointer-events: none;
     }
 
-    .povHouse::before {
-      content: "";
+    .wireMountain svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 5px rgba(93,255,139,0.8));
+    }
+
+    .wireObstacle {
       position: absolute;
-      left: -3px;
-      top: -12px;
-      width: 40px;
-      height: 16px;
-      background: rgba(93,255,139,0.28);
-      border: 1px solid rgba(93,255,139,0.55);
-      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+      width: 70px;
+      height: 70px;
+      border: 2px solid rgba(93,255,139,0.8);
+      transform: rotate(45deg);
+      box-shadow: 0 0 12px rgba(93,255,139,0.45);
+      z-index: 8;
+      animation: obstacleFly 3.2s linear infinite;
     }
 
-    .house1 { left: 10%; top: 62%; transform: scale(0.75); }
-    .house2 { left: 76%; top: 59%; transform: scale(0.65); }
-    .house3 { left: 58%; top: 74%; transform: scale(0.95); }
+    .wo1 { left: 18%; top: 46%; animation-delay: 0s; }
+    .wo2 { left: 72%; top: 44%; animation-delay: 1.2s; }
+    .wo3 { left: 47%; top: 50%; animation-delay: 2.1s; }
 
-    .povMotionLines {
+    @keyframes obstacleFly {
+      0% {
+        transform: translateY(-40px) scale(0.25) rotate(45deg);
+        opacity: 0;
+      }
+
+      18% {
+        opacity: 0.85;
+      }
+
+      100% {
+        transform: translateY(150px) scale(1.9) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    .wireDroneWing {
       position: absolute;
-      inset: 31% 0 0 0;
-      z-index: 6;
-      background:
-        linear-gradient(115deg, transparent 0 44%, rgba(93,255,139,0.16) 45%, transparent 47%),
-        linear-gradient(65deg, transparent 0 44%, rgba(93,255,139,0.12) 45%, transparent 47%);
-      background-size: 90px 90px;
-      animation: flightSpeed 0.38s linear infinite;
-      opacity: 0.68;
-    }
-
-    @keyframes flightSpeed {
-      from { background-position: 0 0; }
-      to { background-position: 0 90px; }
-    }
-
-    .povData {
-      position: absolute;
-      color: rgba(180,255,200,0.9);
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(93,255,139,0.9);
+      left: 50%;
+      bottom: 4px;
+      width: 210px;
+      height: 54px;
+      transform: translateX(-50%);
       z-index: 12;
+      filter: drop-shadow(0 0 8px rgba(93,255,139,0.85));
     }
 
-    .povTopLeft { left: 8px; top: 42px; }
-    .povTopRight { right: 8px; top: 42px; text-align: right; }
-    .povBottomLeft { left: 8px; bottom: 8px; }
-    .povBottomRight { right: 8px; bottom: 8px; text-align: right; }
+    .wireDroneWing svg {
+      width: 100%;
+      height: 100%;
+    }
 
     .povReticleHorizontal,
     .povReticleVertical {
       position: absolute;
-      background: rgba(93,255,139,0.82);
+      background: rgba(93,255,139,0.85);
       box-shadow: 0 0 10px rgba(93,255,139,0.9);
-      z-index: 11;
+      z-index: 13;
     }
 
     .povReticleHorizontal {
-      left: 42%;
-      right: 42%;
-      top: 57%;
+      left: 40%;
+      right: 40%;
+      top: 55%;
       height: 2px;
     }
 
     .povReticleVertical {
-      top: 45%;
-      bottom: 29%;
+      top: 43%;
+      bottom: 33%;
       left: 50%;
       width: 2px;
     }
@@ -612,7 +557,7 @@
     .povTargetBox {
       position: absolute;
       left: 50%;
-      top: 57%;
+      top: 55%;
       width: 42px;
       height: 42px;
       border: 2px solid rgba(93,255,139,0.95);
@@ -621,7 +566,7 @@
         0 0 0 18px rgba(93,255,139,0.06),
         0 0 18px rgba(93,255,139,0.80);
       animation: targetLock 0.8s steps(2, end) infinite;
-      z-index: 11;
+      z-index: 13;
     }
 
     @keyframes targetLock {
@@ -635,6 +580,20 @@
         transform: translate(-50%, -50%) scale(1.12);
       }
     }
+
+    .povData {
+      position: absolute;
+      color: rgba(180,255,200,0.9);
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(93,255,139,0.9);
+      z-index: 15;
+    }
+
+    .povTopLeft { left: 8px; top: 42px; }
+    .povTopRight { right: 8px; top: 42px; text-align: right; }
+    .povBottomLeft { left: 8px; bottom: 8px; }
+    .povBottomRight { right: 8px; bottom: 8px; text-align: right; }
 
     .mapPanel {
       min-height: 720px;
@@ -753,7 +712,7 @@
     .pointA { left: 34%; top: 44%; }
     .pointB { left: 48%; top: 50%; }
     .pointC { left: 78%; top: 27%; }
-    .pointD { left: 80%; top: 44%; }
+    .pointD { left: 80%; top: 41%; }
 
     .targetOverlay {
       position: absolute;
@@ -764,7 +723,7 @@
         radial-gradient(circle at 34% 44%, rgba(255,34,68,0.20), transparent 8%),
         radial-gradient(circle at 48% 50%, rgba(255,34,68,0.20), transparent 8%),
         radial-gradient(circle at 78% 27%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 80% 44%, rgba(255,34,68,0.20), transparent 8%);
+        radial-gradient(circle at 80% 41%, rgba(255,34,68,0.20), transparent 8%);
       animation: targetWash 2.2s infinite;
     }
 
@@ -887,110 +846,62 @@
       accent-color: var(--cyan);
     }
 
-    .uplinkPanel {
+    .gridlockPanel {
       border: 1px solid rgba(0,246,255,0.36);
       background:
         radial-gradient(circle at center, rgba(0,246,255,0.12), transparent 60%),
         rgba(0,0,0,0.35);
-      padding: 12px;
-    }
-
-    .uplinkGrid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .uplinkChannel {
-      border: 2px solid rgba(0,246,255,0.5);
-      background:
-        linear-gradient(180deg, rgba(0,246,255,0.10), rgba(0,0,0,0.72));
       padding: 10px;
-      text-align: center;
-      box-shadow:
-        0 0 16px rgba(0,246,255,0.14),
-        inset 0 0 20px rgba(0,246,255,0.08);
-      position: relative;
-      overflow: hidden;
     }
 
-    .uplinkChannel::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: -80%;
-      height: 80%;
-      background: linear-gradient(180deg, transparent, rgba(0,246,255,0.18), transparent);
-      animation: uplinkScan 2.6s linear infinite;
-    }
-
-    @keyframes uplinkScan {
-      from { top: -80%; }
-      to { top: 120%; }
-    }
-
-    .uplinkLabel {
+    .gridlockHeader {
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 1px;
       margin-bottom: 8px;
-      position: relative;
-      z-index: 2;
+      line-height: 1.4;
     }
 
-    .uplinkDisplay {
-      height: 56px;
-      border: 2px solid rgba(0,246,255,0.65);
+    .gridlock {
       display: grid;
-      place-items: center;
-      color: var(--white);
-      font-size: 34px;
-      font-weight: bold;
-      background: rgba(0,0,0,0.55);
-      box-shadow:
-        inset 0 0 14px rgba(0,246,255,0.18),
-        0 0 14px rgba(0,246,255,0.20);
-      text-shadow: 0 0 12px rgba(0,246,255,0.9);
-      margin-bottom: 8px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .signalBars {
-      height: 24px;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: 22px repeat(10, 1fr);
       gap: 3px;
-      align-items: end;
-      margin-bottom: 8px;
+      align-items: center;
+      user-select: none;
+    }
+
+    .gridlockLabel {
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .gridCell {
+      height: 24px;
+      border: 1px solid rgba(0,246,255,0.28);
+      background:
+        radial-gradient(circle at center, rgba(0,246,255,0.10), rgba(0,0,0,0.72));
+      cursor: pointer;
+      box-shadow: inset 0 0 8px rgba(0,246,255,0.05);
       position: relative;
-      z-index: 2;
     }
 
-    .signalBars span {
-      display: block;
-      background: rgba(0,246,255,0.25);
-      border: 1px solid rgba(0,246,255,0.25);
+    .gridCell:hover {
+      border-color: var(--yellow);
     }
 
-    .signalBars span:nth-child(1) { height: 30%; }
-    .signalBars span:nth-child(2) { height: 45%; }
-    .signalBars span:nth-child(3) { height: 62%; }
-    .signalBars span:nth-child(4) { height: 78%; }
-    .signalBars span:nth-child(5) { height: 96%; }
-
-    .uplinkButtons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      position: relative;
-      z-index: 2;
+    .gridCell.active {
+      border-color: rgba(93,255,139,0.9);
+      background:
+        radial-gradient(circle at center, rgba(93,255,139,0.95) 0 18%, rgba(93,255,139,0.32) 19% 38%, rgba(0,0,0,0.7) 39%);
+      box-shadow:
+        0 0 10px rgba(93,255,139,0.55),
+        inset 0 0 10px rgba(93,255,139,0.25);
     }
 
-    .uplinkButtons button {
-      padding: 7px 0;
-      font-size: 13px;
+    .gridCell.locked {
+      pointer-events: none;
+      opacity: 0.85;
     }
 
     .buttonStack {
@@ -1251,8 +1162,13 @@
         min-height: 420px;
       }
 
-      .uplinkGrid {
-        grid-template-columns: 1fr;
+      .gridlock {
+        grid-template-columns: 18px repeat(10, 1fr);
+        gap: 2px;
+      }
+
+      .gridCell {
+        height: 20px;
       }
 
       .phoneNumber {
@@ -1322,32 +1238,57 @@
 
             <div class="dronePixelBox">
               <div class="panelTitle" style="margin: 0 0 0;">
-                <span>Drone POV feed</span>
-                <span>GREEN MODE</span>
+                <span>Retro drone POV</span>
+                <span>WIRE MODE</span>
               </div>
 
               <div class="dronePov">
-                <div class="povSkyGlow"></div>
-                <div class="povGround"></div>
-                <div class="povRoad"></div>
-                <div class="povCanal"></div>
-                <div class="horizonLine"></div>
+                <div class="wireSky"></div>
 
-                <div class="windmill">
-                  <div class="windmillTower"></div>
-                  <div class="windmillBlades"></div>
-                  <div class="windmillHub"></div>
+                <div class="star st1"></div>
+                <div class="star st2"></div>
+                <div class="star st3"></div>
+                <div class="star st4"></div>
+
+                <div class="wireMountain">
+                  <svg viewBox="0 0 500 120" preserveAspectRatio="none">
+                    <polyline points="0,95 45,72 80,88 125,45 172,86 225,38 276,90 330,56 384,84 430,52 500,92"
+                      fill="none"
+                      stroke="rgba(93,255,139,0.85)"
+                      stroke-width="3"/>
+                    <polyline points="0,116 500,116"
+                      fill="none"
+                      stroke="rgba(93,255,139,0.55)"
+                      stroke-width="2"/>
+                  </svg>
                 </div>
 
-                <div class="povHouse house1"></div>
-                <div class="povHouse house2"></div>
-                <div class="povHouse house3"></div>
+                <div class="wireHorizon"></div>
+                <div class="wireGround"></div>
 
-                <div class="povMotionLines"></div>
+                <div class="wireObstacle wo1"></div>
+                <div class="wireObstacle wo2"></div>
+                <div class="wireObstacle wo3"></div>
 
                 <div class="povReticleHorizontal"></div>
                 <div class="povReticleVertical"></div>
                 <div class="povTargetBox"></div>
+
+                <div class="wireDroneWing">
+                  <svg viewBox="0 0 210 54">
+                    <polyline points="0,45 75,22 105,38 135,22 210,45"
+                      fill="none"
+                      stroke="rgba(93,255,139,0.95)"
+                      stroke-width="3"/>
+                    <polyline points="75,22 105,8 135,22"
+                      fill="none"
+                      stroke="rgba(93,255,139,0.95)"
+                      stroke-width="3"/>
+                    <line x1="105" y1="8" x2="105" y2="38"
+                      stroke="rgba(93,255,139,0.95)"
+                      stroke-width="3"/>
+                  </svg>
+                </div>
               </div>
 
               <div class="povData povTopLeft">
@@ -1356,18 +1297,18 @@
               </div>
 
               <div class="povData povTopRight">
-                THERMAL OFF<br>
+                VECTOR RUN<br>
                 LOCK SEARCH
               </div>
 
               <div class="povData povBottomLeft">
-                WIND 14KT<br>
-                FEED 29FPS
+                RETRO NAV<br>
+                GRID 29FPS
               </div>
 
               <div class="povData povBottomRight">
-                DUTCH LOWLAND<br>
-                TARGET GRID
+                WIRE TERRAIN<br>
+                TARGET MODE
               </div>
             </div>
 
@@ -1486,51 +1427,19 @@
               <button id="checkSliders" onclick="checkSliders()">CHECK STABILIZER MATRIX</button>
 
               <div class="panelTitle" style="margin: 4px -12px 0;">
-                <span>Uplink frequency locks</span>
-                <span>SYNC</span>
+                <span>Gridlock relay matrix</span>
+                <span>10 × 10</span>
               </div>
 
-              <div class="uplinkPanel">
-                <div class="uplinkGrid">
-                  <div class="uplinkChannel">
-                    <div class="uplinkLabel">CHANNEL ALPHA</div>
-                    <div class="uplinkDisplay" id="uplinkAValue">0</div>
-                    <div class="signalBars">
-                      <span></span><span></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="uplinkButtons">
-                      <button onclick="changeUplink('A', -1)">-</button>
-                      <button onclick="changeUplink('A', 1)">+</button>
-                    </div>
-                  </div>
-
-                  <div class="uplinkChannel">
-                    <div class="uplinkLabel">CHANNEL BRAVO</div>
-                    <div class="uplinkDisplay" id="uplinkBValue">0</div>
-                    <div class="signalBars">
-                      <span></span><span></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="uplinkButtons">
-                      <button onclick="changeUplink('B', -1)">-</button>
-                      <button onclick="changeUplink('B', 1)">+</button>
-                    </div>
-                  </div>
-
-                  <div class="uplinkChannel">
-                    <div class="uplinkLabel">CHANNEL CHARLIE</div>
-                    <div class="uplinkDisplay" id="uplinkCValue">0</div>
-                    <div class="signalBars">
-                      <span></span><span></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="uplinkButtons">
-                      <button onclick="changeUplink('C', -1)">-</button>
-                      <button onclick="changeUplink('C', 1)">+</button>
-                    </div>
-                  </div>
+              <div class="gridlockPanel">
+                <div class="gridlockHeader">
+                  Activate the correct relay lamps. Rows A-J. Columns 1-10.
                 </div>
+
+                <div class="gridlock" id="gridlock"></div>
               </div>
 
-              <button id="checkUplink" onclick="checkUplink()">CHECK UPLINK SYNC</button>
+              <button id="checkGridlock" onclick="checkGridlock()">CHECK GRIDLOCK MATRIX</button>
             </div>
 
             <div class="buttonStack">
@@ -1595,9 +1504,7 @@
       sliderB: 38,
       sliderC: 91,
 
-      uplinkA: 7,
-      uplinkB: 3,
-      uplinkC: 5
+      gridlockCorrect: ["B3", "D7", "G5", "J9"]
     };
 
     let timeLeft = CONFIG.timeLimitSeconds;
@@ -1610,14 +1517,10 @@
       BC: false,
       CD: false,
       sliders: false,
-      uplink: false
+      gridlock: false
     };
 
-    const uplink = {
-      A: 0,
-      B: 0,
-      C: 0
-    };
+    const activeGridCells = new Set();
 
     function formatSeconds(seconds) {
       const minutes = Math.floor(seconds / 60);
@@ -1797,44 +1700,84 @@
       }
     }
 
-    function changeUplink(which, direction) {
-      if (missionEnded || solved.uplink) {
-        return;
+    function buildGridlock() {
+      const grid = document.getElementById("gridlock");
+      const rows = "ABCDEFGHIJ".split("");
+
+      grid.innerHTML = "";
+
+      grid.appendChild(makeGridLabel(""));
+
+      for (let n = 1; n <= 10; n++) {
+        grid.appendChild(makeGridLabel(String(n)));
       }
 
-      uplink[which] += direction;
+      rows.forEach(function(row) {
+        grid.appendChild(makeGridLabel(row));
 
-      if (uplink[which] > 9) {
-        uplink[which] = 0;
-      }
+        for (let n = 1; n <= 10; n++) {
+          const id = row + n;
+          const cell = document.createElement("button");
+          cell.className = "gridCell";
+          cell.type = "button";
+          cell.dataset.id = id;
+          cell.setAttribute("aria-label", id);
+          cell.onclick = function() {
+            toggleGridCell(id, cell);
+          };
 
-      if (uplink[which] < 0) {
-        uplink[which] = 9;
-      }
-
-      document.getElementById("uplink" + which + "Value").textContent = uplink[which];
+          grid.appendChild(cell);
+        }
+      });
     }
 
-    function checkUplink() {
-      if (missionEnded || solved.uplink) {
+    function makeGridLabel(text) {
+      const label = document.createElement("div");
+      label.className = "gridlockLabel";
+      label.textContent = text;
+      return label;
+    }
+
+    function toggleGridCell(id, cell) {
+      if (missionEnded || solved.gridlock) {
         return;
       }
 
-      appendLog("> checking uplink frequency sync...");
+      if (activeGridCells.has(id)) {
+        activeGridCells.delete(id);
+        cell.classList.remove("active");
+      } else {
+        activeGridCells.add(id);
+        cell.classList.add("active");
+      }
+    }
 
-      if (
-        uplink.A === CONFIG.uplinkA &&
-        uplink.B === CONFIG.uplinkB &&
-        uplink.C === CONFIG.uplinkC
-      ) {
-        solved.uplink = true;
-        document.getElementById("checkUplink").disabled = true;
-        document.getElementById("checkUplink").textContent = "UPLINK SYNC LOCKED";
-        appendLog("> uplink frequency accepted // module locked");
+    function checkGridlock() {
+      if (missionEnded || solved.gridlock) {
+        return;
+      }
+
+      appendLog("> checking gridlock relay matrix...");
+
+      const expected = [...CONFIG.gridlockCorrect].sort().join(",");
+      const actual = [...activeGridCells].sort(function(a, b) {
+        return a.localeCompare(b, undefined, { numeric: true });
+      }).join(",");
+
+      if (actual === expected) {
+        solved.gridlock = true;
+        document.getElementById("checkGridlock").disabled = true;
+        document.getElementById("checkGridlock").textContent = "GRIDLOCK MATRIX LOCKED";
+
+        document.querySelectorAll(".gridCell").forEach(function(cell) {
+          cell.classList.add("locked");
+        });
+
+        appendLog("> gridlock relay matrix accepted // module locked");
         updateModuleCount();
         checkFinalUnlock();
       } else {
-        applyPenalty("uplink frequency mismatch");
+        applyPenalty("gridlock relay mismatch");
       }
     }
 
@@ -1857,7 +1800,7 @@
         solved.BC &&
         solved.CD &&
         solved.sliders &&
-        solved.uplink;
+        solved.gridlock;
 
       if (allSolved) {
         document.getElementById("overrideButton").disabled = false;
@@ -1876,7 +1819,7 @@
         solved.BC &&
         solved.CD &&
         solved.sliders &&
-        solved.uplink;
+        solved.gridlock;
 
       if (!allSolved) {
         applyPenalty("final override attempted before all modules locked");
@@ -1920,17 +1863,15 @@
       solved.BC = false;
       solved.CD = false;
       solved.sliders = false;
-      solved.uplink = false;
+      solved.gridlock = false;
     }
 
-    function resetUplinkState() {
-      uplink.A = 0;
-      uplink.B = 0;
-      uplink.C = 0;
+    function resetGridlockState() {
+      activeGridCells.clear();
 
-      document.getElementById("uplinkAValue").textContent = "0";
-      document.getElementById("uplinkBValue").textContent = "0";
-      document.getElementById("uplinkCValue").textContent = "0";
+      document.querySelectorAll(".gridCell").forEach(function(cell) {
+        cell.classList.remove("active", "locked");
+      });
     }
 
     function resetTestMode() {
@@ -1939,7 +1880,7 @@
       missionEnded = false;
       timeLeft = CONFIG.timeLimitSeconds;
       resetSolvedState();
-      resetUplinkState();
+      resetGridlockState();
 
       document.getElementById("distanceAB").value = "";
       document.getElementById("distanceBC").value = "";
@@ -1958,7 +1899,7 @@
         ["checkBC", "CHECK"],
         ["checkCD", "CHECK"],
         ["checkSliders", "CHECK STABILIZER MATRIX"],
-        ["checkUplink", "CHECK UPLINK SYNC"]
+        ["checkGridlock", "CHECK GRIDLOCK MATRIX"]
       ].forEach(function(item) {
         const button = document.getElementById(item[0]);
         button.disabled = false;
@@ -2031,6 +1972,7 @@
       }, 850);
     }
 
+    buildGridlock();
     updateSliderReadouts();
     updateTimerDisplay();
     startTimer();
