@@ -1,38 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drone Override Interface</title>
 
   <style>
     :root {
+      --bg: #02070a;
+      --panel: rgba(4, 20, 26, 0.92);
+      --panel2: rgba(0, 12, 16, 0.9);
       --cyan: #00f6ff;
-      --cyan2: #7dfcff;
-      --red: #ff2244;
-      --red2: #ff667a;
-      --green: #5dff8b;
-      --green2: #b4ffc8;
-      --yellow: #ffe45c;
-      --white: #eaffff;
-      --muted: #7aa7ad;
-      --dark: #001014;
+      --cyan-soft: #7efcff;
+      --green: #73ff92;
+      --green-soft: #b9ffcc;
+      --red: #ff264d;
+      --red-soft: #ff7891;
+      --yellow: #ffe867;
+      --white: #efffff;
+      --muted: #7ba5ab;
+      --border: rgba(0, 246, 255, 0.55);
+      --glow: 0 0 12px rgba(0, 246, 255, 0.4);
+      --danger-glow: 0 0 14px rgba(255, 38, 77, 0.45);
+      --success-glow: 0 0 14px rgba(115, 255, 146, 0.45);
+      --font: "Courier New", Courier, monospace;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
       background:
-        radial-gradient(circle at 20% 18%, rgba(0,246,255,0.12), transparent 24%),
-        radial-gradient(circle at 78% 75%, rgba(255,34,68,0.12), transparent 28%),
-        linear-gradient(135deg, #000000 0%, #031016 45%, #090004 100%);
+        radial-gradient(circle at 10% 10%, rgba(0, 246, 255, 0.06), transparent 20%),
+        radial-gradient(circle at 90% 85%, rgba(255, 38, 77, 0.06), transparent 20%),
+        linear-gradient(180deg, #010304 0%, #031018 100%);
       color: var(--cyan);
-      font-family: "Courier New", monospace;
+      font-family: var(--font);
+      min-height: 100vh;
+    }
+
+    body {
+      padding: 12px;
       overflow-x: hidden;
-      padding: 14px;
     }
 
     body::before {
@@ -40,11 +52,15 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background:
-        linear-gradient(90deg, rgba(0,246,255,0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,246,255,0.035) 1px, transparent 1px);
-      background-size: 34px 34px;
       z-index: 1;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,0.04) 0 1px,
+          transparent 1px 4px
+        );
+      mix-blend-mode: screen;
+      opacity: 0.35;
     }
 
     body::after {
@@ -52,301 +68,304 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
+      z-index: 1;
       background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(255,255,255,0.045),
-          rgba(255,255,255,0.045) 1px,
-          transparent 1px,
-          transparent 5px
-        );
-      mix-blend-mode: screen;
-      z-index: 99;
+        linear-gradient(90deg, rgba(0,246,255,0.03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,246,255,0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.22;
     }
 
     .app {
       position: relative;
-      z-index: 3;
+      z-index: 2;
       width: 100%;
-      max-width: 1520px;
-      min-height: calc(100vh - 28px);
+      max-width: 1280px;
       margin: 0 auto;
-      border: 3px solid rgba(0,246,255,0.72);
+      min-height: calc(100vh - 24px);
+      border: 3px solid rgba(0,246,255,0.65);
+      background:
+        linear-gradient(180deg, rgba(1, 13, 18, 0.92), rgba(1, 8, 10, 0.95));
       box-shadow:
-        0 0 38px rgba(0,246,255,0.25),
-        inset 0 0 60px rgba(0,246,255,0.08),
-        inset 0 0 120px rgba(255,34,68,0.06);
-      background: rgba(0, 12, 16, 0.72);
+        0 0 28px rgba(0,246,255,0.16),
+        inset 0 0 50px rgba(0,246,255,0.05),
+        inset 0 0 80px rgba(255,38,77,0.04);
       overflow: hidden;
     }
 
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0,246,255,0.04), transparent 60%);
+      mix-blend-mode: screen;
+    }
+
     .appInner {
+      padding: 10px;
       position: relative;
-      z-index: 4;
-      padding: 14px;
+      z-index: 2;
     }
 
     .topBar {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
-      border: 2px solid rgba(0,246,255,0.65);
+      border: 2px solid rgba(0,246,255,0.55);
       background:
-        linear-gradient(90deg, rgba(0,246,255,0.08), rgba(255,34,68,0.12), rgba(0,246,255,0.08));
-      box-shadow:
-        0 0 22px rgba(0,246,255,0.25),
-        inset 0 0 24px rgba(0,246,255,0.08);
-      padding: 10px 12px;
-      margin-bottom: 12px;
+        linear-gradient(90deg, rgba(0,246,255,0.08), rgba(255,38,77,0.08), rgba(0,246,255,0.08));
+      padding: 8px 12px;
+      box-shadow: inset 0 0 18px rgba(0,246,255,0.06);
+      margin-bottom: 10px;
     }
 
-    .topLeft,
-    .topRight {
+    .topBlock {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      font-size: 12px;
+      gap: 3px;
+      font-size: 11px;
       color: var(--muted);
       letter-spacing: 1px;
     }
 
-    .topRight {
+    .topBlock.right {
       text-align: right;
+      align-items: flex-end;
     }
 
     .mainTitle {
       text-align: center;
       color: var(--white);
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-shadow:
-        0 0 10px rgba(0,246,255,0.9),
-        0 0 24px rgba(255,34,68,0.55);
+        0 0 8px rgba(0,246,255,0.7),
+        0 0 18px rgba(255,38,77,0.25);
+      white-space: nowrap;
     }
 
     .mainTitle::before,
     .mainTitle::after {
       content: " // ";
-      color: var(--red);
+      color: var(--red-soft);
     }
 
-    .grid {
+    .warningFlash {
+      color: var(--red-soft);
+      animation: warningBlink 0.9s steps(2, end) infinite;
+    }
+
+    @keyframes warningBlink {
+      0%, 45% { opacity: 1; }
+      46%, 100% { opacity: 0.4; }
+    }
+
+    .layout {
       display: grid;
-      grid-template-columns: 380px minmax(0, 1fr) 410px;
-      gap: 12px;
+      grid-template-columns: 310px minmax(0, 1fr) 355px;
+      gap: 10px;
       align-items: stretch;
     }
 
     .panel {
-      border: 2px solid rgba(0,246,255,0.56);
-      background:
-        linear-gradient(180deg, rgba(6,32,42,0.86), rgba(0,10,14,0.88));
-      box-shadow:
-        0 0 22px rgba(0,246,255,0.16),
-        inset 0 0 24px rgba(0,246,255,0.08);
-      min-height: 120px;
-      overflow: hidden;
       position: relative;
+      border: 2px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(7, 29, 38, 0.88), rgba(1, 10, 14, 0.92));
+      box-shadow:
+        0 0 18px rgba(0,246,255,0.12),
+        inset 0 0 20px rgba(0,246,255,0.05);
+      overflow: hidden;
+      min-height: 80px;
     }
 
     .panel::after {
       content: "";
       position: absolute;
-      left: -40%;
-      right: -40%;
-      top: -80px;
-      height: 70px;
-      background: linear-gradient(180deg, transparent, rgba(0,246,255,0.14), transparent);
-      animation: panelScan 4s linear infinite;
+      left: -25%;
+      right: -25%;
+      top: -90px;
+      height: 60px;
+      background: linear-gradient(180deg, transparent, rgba(0,246,255,0.12), transparent);
+      animation: panelScan 4.5s linear infinite;
       pointer-events: none;
+      opacity: 0.6;
     }
 
     @keyframes panelScan {
-      from { top: -80px; }
+      from { top: -90px; }
       to { top: 110%; }
     }
 
     .panelTitle {
-      min-height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 0 10px;
-      border-bottom: 1px solid rgba(0,246,255,0.45);
-      background: rgba(0,246,255,0.08);
-      color: var(--white);
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 8px rgba(0,246,255,0.65);
       position: relative;
       z-index: 2;
+      min-height: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      border-bottom: 1px solid rgba(0,246,255,0.35);
+      background: rgba(0,246,255,0.08);
+      color: var(--white);
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 7px rgba(0,246,255,0.45);
     }
 
     .panelTitle span:last-child {
-      color: var(--red2);
+      color: var(--red-soft);
     }
 
     .panelBody {
-      padding: 12px;
       position: relative;
       z-index: 2;
+      padding: 10px;
     }
 
-    .megaTimerPanel {
-      border-color: rgba(255,34,68,0.8);
+    /* LEFT COLUMN */
+    .timerPanel {
+      border-color: rgba(255,38,77,0.7);
       box-shadow:
-        0 0 34px rgba(255,34,68,0.32),
-        inset 0 0 36px rgba(255,34,68,0.08);
+        0 0 18px rgba(255,38,77,0.14),
+        inset 0 0 18px rgba(255,38,77,0.05);
     }
 
     .timerLabel {
       text-align: center;
-      color: var(--red2);
-      font-size: 14px;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-      animation: blinkText 1s steps(2, end) infinite;
+      color: var(--red-soft);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      animation: warningBlink 1s steps(2, end) infinite;
     }
 
     .megaTimer {
       width: 100%;
       text-align: center;
-      color: var(--white);
-      font-size: clamp(72px, 7.2vw, 112px);
-      line-height: 1;
       font-weight: bold;
+      color: var(--white);
+      font-size: 68px;
+      line-height: 1;
       letter-spacing: 2px;
       font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-      overflow: visible;
+      padding: 8px 2px;
+      border: 2px solid rgba(255,38,77,0.35);
+      background: rgba(255,38,77,0.08);
       text-shadow:
-        0 0 12px rgba(255,34,68,0.95),
-        0 0 32px rgba(255,34,68,0.75),
-        0 0 52px rgba(0,246,255,0.35);
-      padding: 10px 2px;
-      border: 2px solid rgba(255,34,68,0.34);
-      background: rgba(255,34,68,0.08);
-      box-shadow: inset 0 0 28px rgba(255,34,68,0.14);
+        0 0 10px rgba(255,38,77,0.8),
+        0 0 25px rgba(255,38,77,0.35);
+      box-shadow: inset 0 0 18px rgba(255,38,77,0.08);
     }
 
-    .megaTimer.lowTime {
-      color: var(--red2);
-      animation: timerPanic 0.42s steps(2, end) infinite;
+    .megaTimer.low {
+      animation: timerPanic 0.45s steps(2, end) infinite;
     }
 
     @keyframes timerPanic {
-      0%, 45% {
+      0%, 40% {
         transform: scale(1);
         filter: brightness(1);
       }
-
-      46%, 100% {
-        transform: scale(1.035);
-        filter: brightness(1.35);
+      41%, 100% {
+        transform: scale(1.03);
+        filter: brightness(1.25);
       }
     }
 
-    @keyframes blinkText {
-      0%, 45% { opacity: 1; }
-      46%, 100% { opacity: 0.35; }
-    }
-
     .timerBarOuter {
-      height: 20px;
-      border: 1px solid rgba(255,34,68,0.75);
-      background: rgba(255,34,68,0.12);
+      height: 18px;
+      margin-top: 10px;
+      border: 1px solid rgba(255,38,77,0.65);
+      background: rgba(255,38,77,0.12);
       overflow: hidden;
-      margin-top: 12px;
     }
 
     .timerBar {
-      height: 100%;
       width: 100%;
-      background:
-        linear-gradient(90deg, var(--green), var(--yellow), var(--red));
-      box-shadow: 0 0 18px rgba(255,34,68,0.5);
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--red));
       transition: width 0.25s linear;
+      box-shadow: 0 0 12px rgba(255,38,77,0.35);
     }
 
     .penaltyFlash {
-      animation: penaltyFlash 0.55s ease;
+      animation: penaltyFlash 0.5s ease;
     }
 
     @keyframes penaltyFlash {
-      0% { background: rgba(255,34,68,0.06); }
-      35% { background: rgba(255,34,68,0.55); }
-      100% { background: rgba(255,34,68,0.06); }
+      0% { background-color: transparent; }
+      40% { background-color: rgba(255,38,77,0.25); }
+      100% { background-color: transparent; }
     }
 
     .alertStack {
       display: grid;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 7px;
+      margin-top: 10px;
     }
 
     .alertLine {
-      border: 1px solid rgba(255,34,68,0.38);
-      background: rgba(255,34,68,0.08);
-      padding: 8px;
-      color: var(--red2);
-      font-size: 12px;
-      letter-spacing: 1px;
+      padding: 7px 8px;
+      border: 1px solid rgba(255,38,77,0.28);
+      background: rgba(255,38,77,0.08);
+      color: var(--red-soft);
+      font-size: 11px;
+      letter-spacing: 0.8px;
     }
 
-    .radarBox {
-      margin-top: 14px;
-      border: 1px solid rgba(0,246,255,0.38);
-      background: rgba(0,0,0,0.32);
-      padding: 12px;
+    .radarWrap {
+      margin-top: 12px;
+      border: 1px solid rgba(0,246,255,0.28);
+      background: rgba(0,0,0,0.25);
+      padding: 10px;
     }
 
     .radar {
-      width: 240px;
-      height: 240px;
+      width: 210px;
+      height: 210px;
       margin: 0 auto;
       border-radius: 50%;
-      border: 2px solid rgba(0,246,255,0.75);
+      border: 2px solid rgba(0,246,255,0.72);
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle, transparent 0 18%, rgba(0,246,255,0.12) 18% 19%, transparent 19% 36%, rgba(0,246,255,0.12) 36% 37%, transparent 37% 54%, rgba(0,246,255,0.12) 54% 55%, transparent 55%),
-        radial-gradient(circle at center, rgba(0,246,255,0.18), rgba(0,0,0,0.82));
+        radial-gradient(circle, transparent 0 18%, rgba(0,246,255,0.1) 18% 19%, transparent 19% 37%, rgba(0,246,255,0.1) 37% 38%, transparent 38% 56%, rgba(0,246,255,0.1) 56% 57%, transparent 57%),
+        radial-gradient(circle at center, rgba(0,246,255,0.14), rgba(0,0,0,0.82));
       box-shadow:
-        0 0 26px rgba(0,246,255,0.28),
-        inset 0 0 34px rgba(0,246,255,0.18);
+        0 0 18px rgba(0,246,255,0.18),
+        inset 0 0 20px rgba(0,246,255,0.12);
     }
 
-    .radarSweepLine {
+    .radarSweep {
       position: absolute;
       left: 50%;
       top: 50%;
       width: 50%;
-      height: 3px;
-      background: linear-gradient(90deg, rgba(0,246,255,1), rgba(0,246,255,0));
+      height: 2px;
+      background: linear-gradient(90deg, rgba(0,246,255,0.95), rgba(0,246,255,0));
       transform-origin: 0 50%;
-      animation: radarSpin 2.2s linear infinite;
-      box-shadow:
-        0 0 10px rgba(0,246,255,0.95),
-        0 0 22px rgba(0,246,255,0.65);
-      z-index: 3;
+      animation: radarSpin 2.4s linear infinite;
+      box-shadow: 0 0 10px rgba(0,246,255,0.8);
+      z-index: 4;
     }
 
     .radarCenter {
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--cyan2);
+      width: 8px;
+      height: 8px;
       transform: translate(-50%, -50%);
-      box-shadow:
-        0 0 12px rgba(0,246,255,1),
-        0 0 26px rgba(0,246,255,0.75);
-      z-index: 4;
+      background: var(--cyan-soft);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0,246,255,1);
+      z-index: 5;
     }
 
     @keyframes radarSpin {
@@ -356,48 +375,63 @@
 
     .radarDot {
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--red);
       box-shadow:
-        0 0 8px var(--red),
-        0 0 18px var(--red);
+        0 0 7px rgba(255,38,77,1),
+        0 0 14px rgba(255,38,77,0.7);
       animation: radarDotBlink 1s infinite;
-      z-index: 5;
+      z-index: 6;
     }
 
     .rd1 { left: 38%; top: 45%; }
     .rd2 { left: 51%; top: 52%; animation-delay: 0.2s; }
-    .rd3 { left: 69%; top: 37%; animation-delay: 0.4s; }
-    .rd4 { left: 70%; top: 47%; animation-delay: 0.6s; }
+    .rd3 { left: 70%; top: 41%; animation-delay: 0.4s; }
+    .rd4 { left: 71%; top: 48%; animation-delay: 0.6s; }
 
     @keyframes radarDotBlink {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.35; transform: scale(0.65); }
     }
 
-    .dronePixelBox {
-      margin-top: 14px;
-      height: 210px;
-      border: 1px solid rgba(93,255,139,0.45);
-      background: #001507;
-      overflow: hidden;
+    .droneViewBox {
+      margin-top: 12px;
+      border: 1px solid rgba(115,255,146,0.35);
+      background: #001006;
+      height: 200px;
       position: relative;
+      overflow: hidden;
       box-shadow:
-        inset 0 0 28px rgba(93,255,139,0.14),
-        0 0 18px rgba(93,255,139,0.12);
+        0 0 14px rgba(115,255,146,0.12),
+        inset 0 0 24px rgba(115,255,146,0.08);
+    }
+
+    .droneViewTitle {
+      position: relative;
+      z-index: 3;
+      height: 30px;
+      padding: 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(115,255,146,0.22);
+      background: rgba(115,255,146,0.08);
+      color: var(--green-soft);
+      font-size: 11px;
+      letter-spacing: 1px;
     }
 
     .dronePov {
       position: absolute;
       left: 0;
       right: 0;
-      top: 34px;
+      top: 30px;
       bottom: 0;
       overflow: hidden;
       background:
-        linear-gradient(180deg, #001b08 0%, #00260c 38%, #000a03 39%, #000000 100%);
+        linear-gradient(180deg, #001608 0%, #00210b 36%, #000a03 37%, #000000 100%);
       color: var(--green);
     }
 
@@ -405,29 +439,46 @@
       position: absolute;
       inset: 0 0 55% 0;
       background:
-        linear-gradient(0deg, rgba(93,255,139,0.08), transparent),
-        radial-gradient(circle at 50% 70%, rgba(93,255,139,0.12), transparent 32%);
+        linear-gradient(0deg, rgba(115,255,146,0.05), transparent),
+        radial-gradient(circle at 50% 80%, rgba(115,255,146,0.12), transparent 35%);
       z-index: 1;
     }
 
     .star {
       position: absolute;
-      width: 3px;
-      height: 3px;
+      width: 2px;
+      height: 2px;
       background: var(--green);
-      box-shadow: 0 0 8px rgba(93,255,139,0.8);
+      box-shadow: 0 0 7px rgba(115,255,146,0.85);
       animation: starBlink 1.8s infinite;
-      z-index: 3;
+      z-index: 2;
     }
 
-    .st1 { left: 12%; top: 18%; }
-    .st2 { left: 31%; top: 12%; animation-delay: 0.4s; }
-    .st3 { left: 64%; top: 16%; animation-delay: 0.8s; }
-    .st4 { left: 82%; top: 23%; animation-delay: 1.2s; }
+    .st1 { left: 10%; top: 12%; }
+    .st2 { left: 28%; top: 9%; animation-delay: 0.4s; }
+    .st3 { left: 61%; top: 14%; animation-delay: 0.8s; }
+    .st4 { left: 84%; top: 19%; animation-delay: 1.2s; }
 
     @keyframes starBlink {
-      0%, 100% { opacity: 0.35; }
+      0%,100% { opacity: 0.3; }
       50% { opacity: 1; }
+    }
+
+    .wireMountain {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 23%;
+      height: 35%;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .wireMountain svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 0 4px rgba(115,255,146,0.75));
     }
 
     .wireHorizon {
@@ -436,31 +487,26 @@
       right: 0;
       top: 40%;
       height: 2px;
-      background: rgba(93,255,139,0.75);
-      box-shadow: 0 0 12px rgba(93,255,139,0.85);
-      z-index: 6;
+      background: rgba(115,255,146,0.75);
+      box-shadow: 0 0 10px rgba(115,255,146,0.85);
+      z-index: 5;
     }
 
     .wireGround {
       position: absolute;
-      left: -50%;
-      right: -50%;
+      left: -45%;
+      right: -45%;
       top: 40%;
-      bottom: -20%;
-      background:
-        linear-gradient(90deg, transparent 49.7%, rgba(93,255,139,0.45) 50%, transparent 50.3%),
-        linear-gradient(78deg, transparent 49.5%, rgba(93,255,139,0.38) 50%, transparent 50.5%),
-        linear-gradient(102deg, transparent 49.5%, rgba(93,255,139,0.38) 50%, transparent 50.5%),
-        repeating-linear-gradient(0deg, transparent 0 18px, rgba(93,255,139,0.34) 19px, transparent 20px);
-      background-size:
-        100% 100%,
-        80px 100%,
-        80px 100%,
-        100% 38px;
+      bottom: -15%;
       transform: perspective(260px) rotateX(62deg);
       transform-origin: top center;
-      animation: wireGroundMove 0.48s linear infinite;
-      z-index: 4;
+      z-index: 3;
+      background:
+        linear-gradient(90deg, transparent 49.75%, rgba(115,255,146,0.38) 50%, transparent 50.25%),
+        linear-gradient(78deg, transparent 49.6%, rgba(115,255,146,0.35) 50%, transparent 50.4%),
+        linear-gradient(102deg, transparent 49.6%, rgba(115,255,146,0.35) 50%, transparent 50.4%),
+        repeating-linear-gradient(0deg, transparent 0 18px, rgba(115,255,146,0.28) 19px, transparent 20px);
+      animation: wireGroundMove 0.45s linear infinite;
     }
 
     @keyframes wireGroundMove {
@@ -468,105 +514,187 @@
       to { background-position: 0 0, 0 0, 0 0, 0 38px; }
     }
 
-    .wireMountain {
+    .wirePolderLines {
+      position: absolute;
+      inset: 43% 0 0 0;
+      z-index: 6;
+      background:
+        linear-gradient(90deg, transparent 20%, rgba(115,255,146,0.12) 21%, transparent 22%),
+        linear-gradient(90deg, transparent 44%, rgba(115,255,146,0.12) 45%, transparent 46%),
+        linear-gradient(90deg, transparent 68%, rgba(115,255,146,0.12) 69%, transparent 70%);
+      opacity: 0.7;
+    }
+
+    .wireKanaal {
+      position: absolute;
+      left: 44%;
+      top: 41%;
+      width: 10%;
+      height: 44%;
+      z-index: 7;
+      border-left: 2px solid rgba(115,255,146,0.7);
+      border-right: 2px solid rgba(115,255,146,0.7);
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(115,255,146,0.12) 0 10px,
+          transparent 10px 20px
+        );
+      transform: perspective(160px) rotateX(50deg);
+      transform-origin: top center;
+      box-shadow: inset 0 0 10px rgba(115,255,146,0.09);
+    }
+
+    .horizonVillage {
       position: absolute;
       left: 0;
       right: 0;
-      top: 24%;
-      height: 36%;
+      top: 34%;
+      height: 18px;
       z-index: 5;
+      background:
+        linear-gradient(90deg,
+          transparent 0 8%,
+          rgba(115,255,146,0.55) 8% 10%,
+          transparent 10% 18%,
+          rgba(115,255,146,0.55) 18% 20%,
+          transparent 20% 28%,
+          rgba(115,255,146,0.55) 28% 30%,
+          transparent 30% 56%,
+          rgba(115,255,146,0.55) 56% 58%,
+          transparent 58% 72%,
+          rgba(115,255,146,0.55) 72% 74%,
+          transparent 74% 100%
+        );
+      opacity: 0.35;
+    }
+
+    .dutchScene {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
       pointer-events: none;
     }
 
-    .wireMountain svg {
+    .wireMolen {
+      position: absolute;
+      left: 16%;
+      top: 26%;
+      width: 64px;
+      height: 90px;
+      filter: drop-shadow(0 0 6px rgba(115,255,146,0.8));
+    }
+
+    .wireMolen svg {
       width: 100%;
       height: 100%;
       display: block;
-      filter: drop-shadow(0 0 5px rgba(93,255,139,0.8));
+    }
+
+    .wireHuis {
+      position: absolute;
+      width: 38px;
+      height: 24px;
+      border: 2px solid rgba(115,255,146,0.85);
+      background: rgba(115,255,146,0.04);
+      box-shadow: 0 0 8px rgba(115,255,146,0.12);
+    }
+
+    .wireHuis::before {
+      content: "";
+      position: absolute;
+      left: -3px;
+      top: -14px;
+      width: 42px;
+      height: 16px;
+      border: 2px solid rgba(115,255,146,0.85);
+      border-bottom: none;
+      background: rgba(115,255,146,0.02);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .huis1 {
+      left: 27%;
+      top: 31%;
+      transform: scale(0.68);
+    }
+
+    .huis2 {
+      left: 71%;
+      top: 30%;
+      transform: scale(0.64);
+    }
+
+    .huis3 {
+      left: 60%;
+      top: 35%;
+      transform: scale(0.74);
     }
 
     .wireObstacle {
       position: absolute;
-      width: 70px;
-      height: 70px;
-      border: 2px solid rgba(93,255,139,0.8);
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(115,255,146,0.7);
       transform: rotate(45deg);
-      box-shadow: 0 0 12px rgba(93,255,139,0.45);
-      z-index: 8;
-      animation: obstacleFly 3.2s linear infinite;
+      box-shadow: 0 0 10px rgba(115,255,146,0.28);
+      z-index: 9;
+      animation: obstacleFly 3.1s linear infinite;
     }
 
-    .wo1 { left: 18%; top: 46%; animation-delay: 0s; }
-    .wo2 { left: 72%; top: 44%; animation-delay: 1.2s; }
-    .wo3 { left: 47%; top: 50%; animation-delay: 2.1s; }
+    .wo1 { left: 18%; top: 47%; animation-delay: 0s; }
+    .wo2 { left: 73%; top: 46%; animation-delay: 1s; }
+    .wo3 { left: 48%; top: 50%; animation-delay: 2s; }
 
     @keyframes obstacleFly {
       0% {
-        transform: translateY(-40px) scale(0.25) rotate(45deg);
+        transform: translateY(-20px) scale(0.3) rotate(45deg);
         opacity: 0;
       }
-
-      18% {
-        opacity: 0.85;
+      15% {
+        opacity: 0.8;
       }
-
       100% {
-        transform: translateY(150px) scale(1.9) rotate(45deg);
+        transform: translateY(140px) scale(1.7) rotate(45deg);
         opacity: 0;
       }
-    }
-
-    .wireDroneWing {
-      position: absolute;
-      left: 50%;
-      bottom: 4px;
-      width: 210px;
-      height: 54px;
-      transform: translateX(-50%);
-      z-index: 12;
-      filter: drop-shadow(0 0 8px rgba(93,255,139,0.85));
-    }
-
-    .wireDroneWing svg {
-      width: 100%;
-      height: 100%;
     }
 
     .povReticleHorizontal,
     .povReticleVertical {
       position: absolute;
-      background: rgba(93,255,139,0.85);
-      box-shadow: 0 0 10px rgba(93,255,139,0.9);
-      z-index: 13;
+      background: rgba(115,255,146,0.9);
+      box-shadow: 0 0 8px rgba(115,255,146,0.8);
+      z-index: 12;
     }
 
     .povReticleHorizontal {
       left: 40%;
       right: 40%;
-      top: 55%;
+      top: 56%;
       height: 2px;
     }
 
     .povReticleVertical {
-      top: 43%;
-      bottom: 33%;
       left: 50%;
+      top: 44%;
+      bottom: 30%;
       width: 2px;
     }
 
     .povTargetBox {
       position: absolute;
       left: 50%;
-      top: 55%;
-      width: 42px;
-      height: 42px;
-      border: 2px solid rgba(93,255,139,0.95);
+      top: 56%;
+      width: 40px;
+      height: 40px;
       transform: translate(-50%, -50%);
+      border: 2px solid rgba(115,255,146,0.95);
       box-shadow:
-        0 0 0 18px rgba(93,255,139,0.06),
-        0 0 18px rgba(93,255,139,0.80);
+        0 0 0 12px rgba(115,255,146,0.06),
+        0 0 12px rgba(115,255,146,0.7);
       animation: targetLock 0.8s steps(2, end) infinite;
-      z-index: 13;
+      z-index: 12;
     }
 
     @keyframes targetLock {
@@ -574,29 +702,74 @@
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
       }
-
       46%, 100% {
-        opacity: 0.42;
-        transform: translate(-50%, -50%) scale(1.12);
+        opacity: 0.45;
+        transform: translate(-50%, -50%) scale(1.08);
       }
+    }
+
+    .wireDroneWing {
+      position: absolute;
+      left: 50%;
+      bottom: 2px;
+      width: 190px;
+      height: 50px;
+      transform: translateX(-50%);
+      z-index: 13;
+      filter: drop-shadow(0 0 8px rgba(115,255,146,0.75));
+    }
+
+    .wireDroneWing svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .povData {
       position: absolute;
-      color: rgba(180,255,200,0.9);
+      color: rgba(185,255,204,0.92);
       font-size: 10px;
+      line-height: 1.2;
       letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(93,255,139,0.9);
-      z-index: 15;
+      text-shadow: 0 0 8px rgba(115,255,146,0.8);
+      z-index: 14;
     }
 
-    .povTopLeft { left: 8px; top: 42px; }
-    .povTopRight { right: 8px; top: 42px; text-align: right; }
-    .povBottomLeft { left: 8px; bottom: 8px; }
-    .povBottomRight { right: 8px; bottom: 8px; text-align: right; }
+    .povTopLeft { left: 8px; top: 38px; }
+    .povTopRight { right: 8px; top: 38px; text-align: right; }
+    .povBottomLeft { left: 8px; bottom: 6px; }
+    .povBottomRight { right: 8px; bottom: 6px; text-align: right; }
 
+    .telemetryGrid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .telemetryBox {
+      border: 1px solid rgba(0,246,255,0.28);
+      background: rgba(0,246,255,0.06);
+      padding: 8px;
+      min-height: 58px;
+    }
+
+    .telemetryLabel {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .telemetryValue {
+      font-size: 18px;
+      color: var(--cyan-soft);
+      text-shadow: 0 0 8px rgba(0,246,255,0.45);
+    }
+
+    /* MAP */
     .mapPanel {
-      min-height: 720px;
+      min-height: 590px;
       display: flex;
       flex-direction: column;
     }
@@ -604,12 +777,12 @@
     .mapWrap {
       position: relative;
       flex: 1;
-      min-height: 650px;
-      margin: 12px;
-      border: 2px solid rgba(0,246,255,0.45);
+      min-height: 520px;
+      margin: 10px;
+      border: 2px solid rgba(0,246,255,0.38);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.10), transparent 56%),
-        rgba(0,0,0,0.28);
+        radial-gradient(circle at center, rgba(0,246,255,0.08), transparent 60%),
+        rgba(0,0,0,0.22);
       overflow: hidden;
     }
 
@@ -618,11 +791,11 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(0,246,255,0.05) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,246,255,0.05) 1px, transparent 1px);
-      background-size: 28px 28px;
-      z-index: 4;
+        linear-gradient(90deg, rgba(0,246,255,0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,246,255,0.045) 1px, transparent 1px);
+      background-size: 24px 24px;
       pointer-events: none;
+      z-index: 4;
     }
 
     .mapImage {
@@ -631,36 +804,35 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      opacity: 0.98;
-      filter:
-        saturate(1.15)
-        contrast(1.12)
-        brightness(0.9)
-        drop-shadow(0 0 18px rgba(0,246,255,0.38));
       z-index: 1;
+      filter:
+        contrast(1.1)
+        brightness(0.9)
+        saturate(1.1)
+        drop-shadow(0 0 16px rgba(0,246,255,0.32));
     }
 
-    .noiseLayer {
+    .mapNoise {
       position: absolute;
       inset: 0;
-      z-index: 5;
+      z-index: 3;
       pointer-events: none;
       background:
-        radial-gradient(circle at 20% 30%, rgba(0,246,255,0.13), transparent 18%),
-        radial-gradient(circle at 75% 62%, rgba(255,34,68,0.10), transparent 18%);
+        radial-gradient(circle at 20% 28%, rgba(0,246,255,0.08), transparent 20%),
+        radial-gradient(circle at 82% 70%, rgba(255,38,77,0.08), transparent 18%);
       mix-blend-mode: screen;
-      animation: mapPulse 2.4s infinite;
+      animation: mapPulse 2.6s infinite;
     }
 
     @keyframes mapPulse {
-      0%, 100% { opacity: 0.55; }
+      0%,100% { opacity: 0.45; }
       50% { opacity: 0.9; }
     }
 
     .signalPoint {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       transform: translate(-50%, -50%);
       z-index: 10;
     }
@@ -672,10 +844,9 @@
       border-radius: 50%;
       background: var(--red);
       box-shadow:
-        0 0 12px rgba(255,34,68,1),
-        0 0 28px rgba(255,34,68,0.75),
-        0 0 48px rgba(255,34,68,0.42);
-      animation: pointBlink 0.75s infinite;
+        0 0 10px rgba(255,38,77,0.95),
+        0 0 22px rgba(255,38,77,0.55);
+      animation: pointBlink 0.8s infinite;
     }
 
     .signalPoint::after {
@@ -683,108 +854,97 @@
       position: absolute;
       left: 50%;
       top: 50%;
+      width: 32px;
+      height: 32px;
       transform: translate(-50%, -50%);
-      width: 34px;
-      height: 34px;
-      border: 2px solid rgba(255,255,255,0.9);
       border-radius: 50%;
-      box-shadow: 0 0 0 0 rgba(255,34,68,0.85);
-      animation: signalRing 1.4s infinite;
+      border: 2px solid rgba(255,255,255,0.8);
+      animation: pointRing 1.4s infinite;
     }
 
     @keyframes pointBlink {
-      0%, 100% { opacity: 1; transform: scale(1); }
+      0%,100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.35; transform: scale(0.72); }
     }
 
-    @keyframes signalRing {
-      0% { box-shadow: 0 0 0 0 rgba(255,34,68,0.85); }
-      100% { box-shadow: 0 0 0 22px rgba(255,34,68,0); }
+    @keyframes pointRing {
+      0% { box-shadow: 0 0 0 0 rgba(255,38,77,0.75); }
+      100% { box-shadow: 0 0 0 20px rgba(255,38,77,0); }
     }
 
-    /*
-      Hidden maker calibration:
-      A = IJmuiden
-      B = Baarn
-      C = Groningen
-      D = Hardenberg
-    */
-    .pointA { left: 34%; top: 44%; }
+    /* A = IJmuiden, B = Baarn, C = Groningen, D = Hardenberg */
+    .pointA { left: 34%; top: 42%; }
     .pointB { left: 48%; top: 50%; }
-    .pointC { left: 78%; top: 27%; }
-    .pointD { left: 80%; top: 41%; }
+    .pointC { left: 78%; top: 31%; }
+    .pointD { left: 80%; top: 39%; }
 
     .targetOverlay {
       position: absolute;
       inset: 0;
-      z-index: 8;
+      z-index: 6;
       pointer-events: none;
       background:
-        radial-gradient(circle at 34% 44%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 48% 50%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 78% 27%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 80% 41%, rgba(255,34,68,0.20), transparent 8%);
-      animation: targetWash 2.2s infinite;
+        radial-gradient(circle at 34% 42%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 48% 50%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 78% 31%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 80% 39%, rgba(255,38,77,0.18), transparent 8%);
+      animation: targetPulse 2.3s infinite;
     }
 
-    @keyframes targetWash {
-      0%, 100% { opacity: 0.42; }
-      50% { opacity: 0.9; }
+    @keyframes targetPulse {
+      0%,100% { opacity: 0.45; }
+      50% { opacity: 0.95; }
     }
 
+    /* RIGHT COLUMN */
     .inputGrid {
       display: grid;
-      gap: 10px;
+      gap: 9px;
     }
 
     .inputBlock {
-      border: 1px solid rgba(0,246,255,0.36);
-      background:
-        linear-gradient(90deg, rgba(0,246,255,0.08), rgba(0,0,0,0.22));
-      padding: 10px;
-      position: relative;
-      overflow: hidden;
+      border: 1px solid rgba(0,246,255,0.28);
+      background: linear-gradient(90deg, rgba(0,246,255,0.06), rgba(0,0,0,0.22));
+      padding: 9px;
     }
 
     .inputBlock.solved {
-      border-color: rgba(93,255,139,0.82);
-      background: rgba(93,255,139,0.10);
+      border-color: rgba(115,255,146,0.8);
+      background: rgba(115,255,146,0.08);
     }
 
     .inputBlock.error {
-      border-color: rgba(255,34,68,0.92);
-      background: rgba(255,34,68,0.12);
+      border-color: rgba(255,38,77,0.9);
+      background: rgba(255,38,77,0.10);
       animation: errorShake 0.35s ease;
     }
 
     @keyframes errorShake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
     }
 
     .inputLabel {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+      margin-bottom: 7px;
       color: var(--white);
-      font-size: 14px;
+      font-size: 12px;
       letter-spacing: 1px;
-      margin-bottom: 8px;
-      position: relative;
-      z-index: 2;
     }
 
     .inputLabel strong {
-      color: var(--cyan2);
-      font-size: 16px;
-      text-shadow: 0 0 8px rgba(0,246,255,0.72);
+      color: var(--cyan-soft);
+      font-size: 14px;
+      text-shadow: 0 0 7px rgba(0,246,255,0.45);
     }
 
     .inputLabel span {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
     }
 
     .checkRow {
@@ -796,49 +956,39 @@
 
     input[type="text"] {
       width: 100%;
-      border: 2px solid rgba(0,246,255,0.65);
-      background: rgba(0,0,0,0.55);
-      color: var(--cyan2);
-      padding: 10px;
-      font-family: "Courier New", monospace;
-      font-size: 20px;
-      outline: none;
+      border: 2px solid rgba(0,246,255,0.55);
+      background: rgba(0,0,0,0.5);
+      color: var(--cyan-soft);
+      padding: 9px 10px;
+      font-family: var(--font);
+      font-size: 18px;
       text-align: center;
-      letter-spacing: 3px;
-      box-shadow:
-        inset 0 0 18px rgba(0,246,255,0.08),
-        0 0 14px rgba(0,246,255,0.12);
-      position: relative;
-      z-index: 2;
+      letter-spacing: 2px;
+      outline: none;
+      box-shadow: inset 0 0 14px rgba(0,246,255,0.06);
     }
 
-    input:focus {
+    input[type="text"]:focus {
       border-color: var(--yellow);
       color: var(--white);
       box-shadow:
-        inset 0 0 18px rgba(255,228,92,0.12),
-        0 0 18px rgba(255,228,92,0.28);
-    }
-
-    .smallCheck {
-      padding: 10px;
-      font-size: 11px;
-      min-width: 78px;
+        0 0 12px rgba(255,232,103,0.18),
+        inset 0 0 14px rgba(255,232,103,0.08);
     }
 
     .controlSection {
-      margin-top: 12px;
       display: grid;
       gap: 10px;
+      margin-top: 12px;
     }
 
     .sliderLine {
       display: grid;
-      grid-template-columns: 80px 1fr 42px;
+      grid-template-columns: 74px 1fr 36px;
       gap: 8px;
       align-items: center;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     input[type="range"] {
@@ -847,42 +997,42 @@
     }
 
     .gridlockPanel {
-      border: 1px solid rgba(0,246,255,0.36);
+      border: 1px solid rgba(0,246,255,0.28);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.12), transparent 60%),
-        rgba(0,0,0,0.35);
-      padding: 10px;
+        radial-gradient(circle at center, rgba(0,246,255,0.08), transparent 60%),
+        rgba(0,0,0,0.32);
+      padding: 8px;
     }
 
     .gridlockHeader {
       color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 1px;
+      font-size: 10px;
+      line-height: 1.35;
+      letter-spacing: 0.7px;
       margin-bottom: 8px;
-      line-height: 1.4;
     }
 
     .gridlock {
       display: grid;
-      grid-template-columns: 22px repeat(10, 1fr);
+      grid-template-columns: 18px repeat(10, 1fr);
       gap: 3px;
       align-items: center;
       user-select: none;
     }
 
-    .gridlockLabel {
-      color: var(--muted);
+    .gridLabel {
       font-size: 10px;
+      color: var(--muted);
       text-align: center;
     }
 
     .gridCell {
-      height: 24px;
-      border: 1px solid rgba(0,246,255,0.28);
+      height: 22px;
+      border: 1px solid rgba(0,246,255,0.25);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.10), rgba(0,0,0,0.72));
+        radial-gradient(circle at center, rgba(0,246,255,0.09), rgba(0,0,0,0.75));
       cursor: pointer;
-      box-shadow: inset 0 0 8px rgba(0,246,255,0.05);
+      box-shadow: inset 0 0 8px rgba(0,246,255,0.04);
       position: relative;
     }
 
@@ -891,12 +1041,12 @@
     }
 
     .gridCell.active {
-      border-color: rgba(93,255,139,0.9);
+      border-color: rgba(115,255,146,0.95);
       background:
-        radial-gradient(circle at center, rgba(93,255,139,0.95) 0 18%, rgba(93,255,139,0.32) 19% 38%, rgba(0,0,0,0.7) 39%);
+        radial-gradient(circle at center, rgba(115,255,146,0.95) 0 18%, rgba(115,255,146,0.3) 19% 40%, rgba(0,0,0,0.76) 41%);
       box-shadow:
-        0 0 10px rgba(93,255,139,0.55),
-        inset 0 0 10px rgba(93,255,139,0.25);
+        0 0 10px rgba(115,255,146,0.55),
+        inset 0 0 10px rgba(115,255,146,0.18);
     }
 
     .gridCell.locked {
@@ -906,180 +1056,138 @@
 
     .buttonStack {
       display: grid;
-      gap: 10px;
+      gap: 9px;
       margin-top: 12px;
     }
 
     button {
-      border: 2px solid rgba(0,246,255,0.75);
+      border: 2px solid rgba(0,246,255,0.62);
       background:
-        linear-gradient(180deg, rgba(0,246,255,0.18), rgba(0,44,54,0.82));
-      color: var(--cyan2);
-      padding: 13px 12px;
-      font-family: "Courier New", monospace;
-      font-size: 13px;
+        linear-gradient(180deg, rgba(0,246,255,0.16), rgba(0,44,54,0.78));
+      color: var(--cyan-soft);
+      padding: 11px 10px;
+      font-family: var(--font);
+      font-size: 12px;
       font-weight: bold;
       letter-spacing: 1px;
       cursor: pointer;
-      text-shadow: 0 0 8px rgba(0,246,255,0.75);
-      box-shadow:
-        0 0 18px rgba(0,246,255,0.16),
-        inset 0 0 18px rgba(0,246,255,0.08);
+      text-shadow: 0 0 7px rgba(0,246,255,0.45);
+      box-shadow: inset 0 0 14px rgba(0,246,255,0.06);
     }
 
     button:hover {
       border-color: var(--yellow);
       color: var(--yellow);
-      box-shadow:
-        0 0 22px rgba(255,228,92,0.25),
-        inset 0 0 18px rgba(255,228,92,0.08);
     }
 
     button:disabled {
-      opacity: 0.48;
+      opacity: 0.5;
       cursor: not-allowed;
-      color: var(--green);
-      border-color: rgba(93,255,139,0.65);
+      color: var(--green-soft);
+      border-color: rgba(115,255,146,0.6);
     }
 
     .dangerButton {
-      border-color: rgba(255,34,68,0.78);
-      color: var(--red2);
+      border-color: rgba(255,38,77,0.7);
+      color: var(--red-soft);
       background:
-        linear-gradient(180deg, rgba(255,34,68,0.18), rgba(54,0,10,0.82));
-      text-shadow: 0 0 8px rgba(255,34,68,0.75);
+        linear-gradient(180deg, rgba(255,38,77,0.15), rgba(54,0,10,0.78));
+      text-shadow: 0 0 7px rgba(255,38,77,0.45);
     }
 
     .statusLog {
-      height: 190px;
+      height: 180px;
       overflow-y: auto;
-      border: 1px solid rgba(0,246,255,0.35);
-      background: rgba(0,0,0,0.38);
-      padding: 10px;
+      border: 1px solid rgba(0,246,255,0.28);
+      background: rgba(0,0,0,0.35);
+      padding: 9px;
       color: var(--green);
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.45;
       white-space: pre-line;
     }
 
-    .telemetryGrid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .telemetryBox {
-      border: 1px solid rgba(0,246,255,0.32);
-      background: rgba(0,246,255,0.06);
-      padding: 10px;
-      min-height: 64px;
-    }
-
-    .telemetryLabel {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .telemetryValue {
-      color: var(--cyan2);
-      font-size: 18px;
-      text-shadow: 0 0 8px rgba(0,246,255,0.65);
-    }
-
-    .warningFlash {
-      color: var(--red2);
-      animation: warnBlink 0.9s steps(2, end) infinite;
-    }
-
-    @keyframes warnBlink {
-      0%, 45% { opacity: 1; }
-      46%, 100% { opacity: 0.3; }
-    }
-
+    /* OVERLAYS */
     .overlay {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(circle at center, rgba(0,246,255,0.16), transparent 38%),
-        rgba(0,0,0,0.88);
-      z-index: 120;
+      z-index: 200;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 20px;
+      background:
+        radial-gradient(circle at center, rgba(0,246,255,0.14), transparent 40%),
+        rgba(0,0,0,0.88);
     }
 
-    .winBox,
-    .failBox {
+    .resultBox {
       width: 100%;
-      max-width: 760px;
+      max-width: 700px;
+      padding: 24px;
+      text-align: center;
       border: 4px solid var(--cyan);
       background:
         linear-gradient(180deg, rgba(6,32,42,0.96), rgba(0,10,14,0.96));
       box-shadow:
-        0 0 42px rgba(0,246,255,0.55),
-        inset 0 0 40px rgba(0,246,255,0.10);
-      text-align: center;
-      padding: 26px;
+        0 0 34px rgba(0,246,255,0.45),
+        inset 0 0 30px rgba(0,246,255,0.08);
     }
 
-    .winBox {
+    .resultBox.win {
       border-color: var(--green);
       box-shadow:
-        0 0 42px rgba(93,255,139,0.45),
-        inset 0 0 40px rgba(93,255,139,0.10);
+        0 0 34px rgba(115,255,146,0.36),
+        inset 0 0 30px rgba(115,255,146,0.08);
     }
 
-    .failBox {
+    .resultBox.fail {
       border-color: var(--red);
       box-shadow:
-        0 0 42px rgba(255,34,68,0.50),
-        inset 0 0 40px rgba(255,34,68,0.10);
+        0 0 34px rgba(255,38,77,0.36),
+        inset 0 0 30px rgba(255,38,77,0.08);
     }
 
     .resultTitle {
       color: var(--white);
-      font-size: 42px;
+      font-size: 38px;
       letter-spacing: 3px;
+      margin-bottom: 10px;
       text-shadow:
-        0 0 12px rgba(0,246,255,0.9),
-        0 0 28px rgba(93,255,139,0.55);
-      margin-bottom: 12px;
+        0 0 10px rgba(0,246,255,0.7),
+        0 0 22px rgba(115,255,146,0.3);
+    }
+
+    .timeLeftBox {
+      display: inline-block;
+      margin: 12px 0 18px;
+      padding: 12px 18px;
+      border: 2px solid rgba(0,246,255,0.65);
+      background: rgba(0,246,255,0.06);
+      color: var(--cyan-soft);
+      font-size: 24px;
+      letter-spacing: 2px;
     }
 
     .callBox {
-      margin: 18px auto;
-      border: 2px solid rgba(93,255,139,0.8);
-      background: rgba(93,255,139,0.08);
+      margin: 16px auto;
+      max-width: 500px;
+      padding: 16px;
+      border: 2px solid rgba(115,255,146,0.7);
+      background: rgba(115,255,146,0.08);
       color: var(--green);
-      padding: 18px;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.5;
-      max-width: 520px;
     }
 
     .phoneNumber {
       display: block;
       color: var(--white);
-      font-size: 42px;
+      font-size: 40px;
       font-weight: bold;
       letter-spacing: 3px;
       margin: 10px 0;
-      text-shadow: 0 0 18px rgba(93,255,139,0.85);
-    }
-
-    .timeLeftBox {
-      display: inline-block;
-      margin: 10px 0 18px;
-      border: 2px solid rgba(0,246,255,0.7);
-      color: var(--cyan2);
-      padding: 12px 18px;
-      font-size: 28px;
-      letter-spacing: 2px;
-      background: rgba(0,246,255,0.07);
+      text-shadow: 0 0 14px rgba(115,255,146,0.65);
     }
 
     .firework {
@@ -1089,10 +1197,10 @@
       border-radius: 50%;
       background: var(--green);
       pointer-events: none;
-      z-index: 140;
+      z-index: 300;
       animation: firework 1s ease-out forwards;
       box-shadow:
-        0 0 12px var(--green),
+        0 0 10px var(--green),
         20px 0 0 var(--cyan),
         -20px 0 0 var(--yellow),
         0 20px 0 var(--red),
@@ -1104,103 +1212,96 @@
         transform: scale(0.2);
         opacity: 1;
       }
-
       100% {
         transform: scale(4);
         opacity: 0;
       }
     }
 
-    @media (max-width: 1220px) {
-      .grid {
+    @media (max-width: 1180px) {
+      .layout {
         grid-template-columns: 1fr;
       }
 
       .mapPanel {
-        min-height: 560px;
+        min-height: 480px;
       }
 
       .mapWrap {
-        min-height: 520px;
+        min-height: 430px;
       }
 
       .megaTimer {
-        font-size: clamp(72px, 14vw, 130px);
+        font-size: 64px;
       }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 700px) {
       body {
-        padding: 8px;
+        padding: 6px;
       }
 
       .appInner {
-        padding: 8px;
+        padding: 6px;
       }
 
       .topBar {
         grid-template-columns: 1fr;
+      }
+
+      .topBlock,
+      .topBlock.right {
+        align-items: center;
         text-align: center;
       }
 
-      .topLeft,
-      .topRight {
-        text-align: center;
+      .mainTitle {
+        font-size: 18px;
       }
 
       .megaTimer {
-        font-size: 70px;
-        letter-spacing: 0;
+        font-size: 56px;
       }
 
       .radar {
-        width: 190px;
-        height: 190px;
-      }
-
-      .mapWrap {
-        min-height: 420px;
+        width: 180px;
+        height: 180px;
       }
 
       .gridlock {
-        grid-template-columns: 18px repeat(10, 1fr);
         gap: 2px;
       }
 
       .gridCell {
-        height: 20px;
+        height: 18px;
       }
 
       .phoneNumber {
-        font-size: 30px;
-      }
-
-      .checkRow {
-        grid-template-columns: 1fr;
+        font-size: 28px;
       }
     }
   </style>
 </head>
-
 <body>
   <main class="app">
     <div class="appInner">
       <header class="topBar">
-        <div class="topLeft">
+        <div class="topBlock">
           <span>DRONE COMPUTER NODE</span>
-          <span>CONTROL LINK: UNSTABLE</span>
+          <span>CONTROL LINK : UNSTABLE</span>
         </div>
 
         <div class="mainTitle">REMOTE OVERRIDE INTERFACE</div>
 
-        <div class="topRight">
-          <span>ROUTE DATA: REDACTED</span>
+        <div class="topBlock right">
+          <span>PAYLOAD STATUS : ARMED</span>
           <span class="warningFlash">THREAT VECTOR ACTIVE</span>
         </div>
       </header>
 
-      <section class="grid">
-        <aside class="panel megaTimerPanel" id="timerPanel">
+      <section class="layout">
+        <!-- LEFT -->
+        <aside class="panel timerPanel" id="timerPanel">
           <div class="panelTitle">
             <span>Countdown</span>
             <span>CRITICAL</span>
@@ -1215,19 +1316,19 @@
             </div>
 
             <div class="alertStack">
-              <div class="alertLine">PENALTY PROTOCOL // -30 SECONDS PER FAILED CHECK</div>
-              <div class="alertLine">VECTOR SYSTEM // INDIVIDUAL CHECKS ENABLED</div>
-              <div class="alertLine">FINAL OVERRIDE // UNLOCKS AFTER ALL MODULES PASS</div>
+              <div class="alertLine">PENALTY : -30 SECONDS PER FAILED CHECK</div>
+              <div class="alertLine">FINAL OVERRIDE OPENS AFTER ALL MODULES PASS</div>
+              <div class="alertLine">ROUTE DATA HAS BEEN PARTIALLY REDACTED</div>
             </div>
 
-            <div class="radarBox">
-              <div class="panelTitle" style="margin: -12px -12px 12px;">
+            <div class="radarWrap">
+              <div class="panelTitle" style="margin: -10px -10px 10px;">
                 <span>Radar sweep</span>
                 <span>ACTIVE</span>
               </div>
 
               <div class="radar">
-                <div class="radarSweepLine"></div>
+                <div class="radarSweep"></div>
                 <div class="radarCenter"></div>
                 <div class="radarDot rd1"></div>
                 <div class="radarDot rd2"></div>
@@ -1236,10 +1337,10 @@
               </div>
             </div>
 
-            <div class="dronePixelBox">
-              <div class="panelTitle" style="margin: 0 0 0;">
+            <div class="droneViewBox">
+              <div class="droneViewTitle">
                 <span>Retro drone POV</span>
-                <span>WIRE MODE</span>
+                <span>WIRE / NL MODE</span>
               </div>
 
               <div class="dronePov">
@@ -1252,19 +1353,43 @@
 
                 <div class="wireMountain">
                   <svg viewBox="0 0 500 120" preserveAspectRatio="none">
-                    <polyline points="0,95 45,72 80,88 125,45 172,86 225,38 276,90 330,56 384,84 430,52 500,92"
+                    <polyline
+                      points="0,94 40,74 82,86 128,42 170,85 222,39 275,88 332,54 386,81 432,49 500,90"
                       fill="none"
-                      stroke="rgba(93,255,139,0.85)"
-                      stroke-width="3"/>
-                    <polyline points="0,116 500,116"
+                      stroke="rgba(115,255,146,0.85)"
+                      stroke-width="3"
+                    />
+                    <polyline
+                      points="0,116 500,116"
                       fill="none"
-                      stroke="rgba(93,255,139,0.55)"
-                      stroke-width="2"/>
+                      stroke="rgba(115,255,146,0.55)"
+                      stroke-width="2"
+                    />
                   </svg>
                 </div>
 
                 <div class="wireHorizon"></div>
                 <div class="wireGround"></div>
+                <div class="wirePolderLines"></div>
+                <div class="wireKanaal"></div>
+                <div class="horizonVillage"></div>
+
+                <div class="dutchScene">
+                  <div class="wireMolen">
+                    <svg viewBox="0 0 64 90">
+                      <line x1="32" y1="16" x2="32" y2="44" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                      <line x1="18" y1="30" x2="46" y2="30" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                      <line x1="22" y1="20" x2="42" y2="40" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                      <line x1="42" y1="20" x2="22" y2="40" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                      <polygon points="25,44 39,44 46,84 18,84" fill="none" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                      <line x1="18" y1="84" x2="46" y2="84" stroke="rgba(115,255,146,0.95)" stroke-width="3"/>
+                    </svg>
+                  </div>
+
+                  <div class="wireHuis huis1"></div>
+                  <div class="wireHuis huis2"></div>
+                  <div class="wireHuis huis3"></div>
+                </div>
 
                 <div class="wireObstacle wo1"></div>
                 <div class="wireObstacle wo2"></div>
@@ -1276,17 +1401,23 @@
 
                 <div class="wireDroneWing">
                   <svg viewBox="0 0 210 54">
-                    <polyline points="0,45 75,22 105,38 135,22 210,45"
+                    <polyline
+                      points="0,45 75,22 105,38 135,22 210,45"
                       fill="none"
-                      stroke="rgba(93,255,139,0.95)"
-                      stroke-width="3"/>
-                    <polyline points="75,22 105,8 135,22"
+                      stroke="rgba(115,255,146,0.95)"
+                      stroke-width="3"
+                    />
+                    <polyline
+                      points="75,22 105,8 135,22"
                       fill="none"
-                      stroke="rgba(93,255,139,0.95)"
-                      stroke-width="3"/>
-                    <line x1="105" y1="8" x2="105" y2="38"
-                      stroke="rgba(93,255,139,0.95)"
-                      stroke-width="3"/>
+                      stroke="rgba(115,255,146,0.95)"
+                      stroke-width="3"
+                    />
+                    <line
+                      x1="105" y1="8" x2="105" y2="38"
+                      stroke="rgba(115,255,146,0.95)"
+                      stroke-width="3"
+                    />
                   </svg>
                 </div>
               </div>
@@ -1302,12 +1433,12 @@
               </div>
 
               <div class="povData povBottomLeft">
-                RETRO NAV<br>
-                GRID 29FPS
+                DUTCH LOWLAND<br>
+                GRID FEED 29FPS
               </div>
 
               <div class="povData povBottomRight">
-                WIRE TERRAIN<br>
+                RETRO WIRE HUD<br>
                 TARGET MODE
               </div>
             </div>
@@ -1336,6 +1467,7 @@
           </div>
         </aside>
 
+        <!-- MIDDLE -->
         <section class="panel mapPanel">
           <div class="panelTitle">
             <span>Encrypted national scan</span>
@@ -1343,10 +1475,9 @@
           </div>
 
           <div class="mapWrap">
-            <img src="nederland-map.png" class="mapImage" alt="Encrypted Netherlands tactical map">
-
+            <img src="nederland-map.png" class="mapImage" alt="Netherlands Map" />
+            <div class="mapNoise"></div>
             <div class="targetOverlay"></div>
-            <div class="noiseLayer"></div>
 
             <div class="signalPoint pointA"></div>
             <div class="signalPoint pointB"></div>
@@ -1355,6 +1486,7 @@
           </div>
         </section>
 
+        <!-- RIGHT -->
         <aside class="panel">
           <div class="panelTitle">
             <span>Vector override</span>
@@ -1368,10 +1500,9 @@
                   <strong>POINT A → POINT B</strong>
                   <span>CM VECTOR</span>
                 </div>
-
                 <div class="checkRow">
-                  <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
-                  <button class="smallCheck" id="checkAB" onclick="checkVector('AB')">CHECK</button>
+                  <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
+                  <button id="checkAB" onclick="checkVector('AB')">CHECK</button>
                 </div>
               </div>
 
@@ -1380,10 +1511,9 @@
                   <strong>POINT B → POINT C</strong>
                   <span>CM VECTOR</span>
                 </div>
-
                 <div class="checkRow">
-                  <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
-                  <button class="smallCheck" id="checkBC" onclick="checkVector('BC')">CHECK</button>
+                  <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
+                  <button id="checkBC" onclick="checkVector('BC')">CHECK</button>
                 </div>
               </div>
 
@@ -1392,50 +1522,48 @@
                   <strong>POINT C → POINT D</strong>
                   <span>CM VECTOR</span>
                 </div>
-
                 <div class="checkRow">
-                  <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--">
-                  <button class="smallCheck" id="checkCD" onclick="checkVector('CD')">CHECK</button>
+                  <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
+                  <button id="checkCD" onclick="checkVector('CD')">CHECK</button>
                 </div>
               </div>
             </div>
 
             <div class="controlSection">
-              <div class="panelTitle" style="margin: 0 -12px;">
+              <div class="panelTitle" style="margin: 0 -10px 0;">
                 <span>Stabilizer matrix</span>
                 <span>CALIBRATE</span>
               </div>
 
               <div class="sliderLine">
                 <span>ALT-X</span>
-                <input id="sliderA" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()">
+                <input id="sliderA" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
                 <span id="sliderAValue">50</span>
               </div>
 
               <div class="sliderLine">
                 <span>GYRO-Y</span>
-                <input id="sliderB" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()">
+                <input id="sliderB" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
                 <span id="sliderBValue">50</span>
               </div>
 
               <div class="sliderLine">
                 <span>LOCK-Z</span>
-                <input id="sliderC" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()">
+                <input id="sliderC" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
                 <span id="sliderCValue">50</span>
               </div>
 
               <button id="checkSliders" onclick="checkSliders()">CHECK STABILIZER MATRIX</button>
 
-              <div class="panelTitle" style="margin: 4px -12px 0;">
+              <div class="panelTitle" style="margin: 2px -10px 0;">
                 <span>Gridlock relay matrix</span>
-                <span>10 × 10</span>
+                <span>A-J / 1-10</span>
               </div>
 
               <div class="gridlockPanel">
                 <div class="gridlockHeader">
                   Activate the correct relay lamps. Rows A-J. Columns 1-10.
                 </div>
-
                 <div class="gridlock" id="gridlock"></div>
               </div>
 
@@ -1443,11 +1571,16 @@
             </div>
 
             <div class="buttonStack">
-              <button onclick="executeFinalOverride()" id="overrideButton" disabled>EXECUTE FINAL DRONE OVERRIDE</button>
-              <button onclick="resetTestMode()" class="dangerButton">RESET TEST MODE</button>
+              <button id="overrideButton" onclick="executeFinalOverride()" disabled>
+                EXECUTE FINAL DRONE OVERRIDE
+              </button>
+
+              <button class="dangerButton" onclick="resetTestMode()">
+                RESET TEST MODE
+              </button>
             </div>
 
-            <div class="panelTitle" style="margin: 12px -12px 0;">
+            <div class="panelTitle" style="margin: 12px -10px 0;">
               <span>System log</span>
               <span>LIVE</span>
             </div>
@@ -1456,7 +1589,7 @@
 &gt; encrypted map loaded
 &gt; signal points detected
 &gt; route metadata redacted
-&gt; penalty protocol active: -30 seconds per failed check
+&gt; penalty protocol active : -30 seconds per failed check
 &gt; waiting for individual module checks</div>
           </div>
         </aside>
@@ -1464,8 +1597,9 @@
     </div>
   </main>
 
+  <!-- WIN -->
   <div class="overlay" id="winOverlay">
-    <div class="winBox">
+    <div class="resultBox win">
       <div class="resultTitle">MISSION ACCOMPLISHED</div>
       <p>DRONE DEACTIVATED · TARGET AREA SECURE</p>
 
@@ -1483,8 +1617,9 @@
     </div>
   </div>
 
+  <!-- FAIL -->
   <div class="overlay" id="failOverlay">
-    <div class="failBox">
+    <div class="resultBox fail">
       <div class="resultTitle">MISSION FAILED</div>
       <p id="failText">The drone sequence reached zero.</p>
       <button onclick="resetTestMode()">RESET TEST MODE</button>
@@ -1525,30 +1660,7 @@
     function formatSeconds(seconds) {
       const minutes = Math.floor(seconds / 60);
       const secs = seconds % 60;
-
       return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-
-      timerInterval = setInterval(function() {
-        if (missionEnded) {
-          return;
-        }
-
-        timeLeft--;
-
-        if (timeLeft < 0) {
-          timeLeft = 0;
-        }
-
-        updateTimerDisplay();
-
-        if (timeLeft <= 0) {
-          failMission("TIME EXPIRED // payload sequence completed");
-        }
-      }, 1000);
     }
 
     function updateTimerDisplay() {
@@ -1559,10 +1671,27 @@
       document.getElementById("timerBar").style.width = percentage + "%";
 
       if (timeLeft <= 60) {
-        timer.classList.add("lowTime");
+        timer.classList.add("low");
       } else {
-        timer.classList.remove("lowTime");
+        timer.classList.remove("low");
       }
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+
+      timerInterval = setInterval(() => {
+        if (missionEnded) return;
+
+        timeLeft--;
+        if (timeLeft < 0) timeLeft = 0;
+
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+          failMission("TIME EXPIRED // payload sequence completed");
+        }
+      }, 1000);
     }
 
     function updateSliderReadouts() {
@@ -1575,9 +1704,9 @@
       return String(value)
         .trim()
         .replaceAll(" ", "")
-        .replaceAll(",", ".")
         .replace("cm", "")
-        .replace("CM", "");
+        .replace("CM", "")
+        .replace(",", ".");
     }
 
     function appendLog(line) {
@@ -1588,10 +1717,7 @@
 
     function applyPenalty(reason) {
       timeLeft -= CONFIG.penaltySeconds;
-
-      if (timeLeft < 0) {
-        timeLeft = 0;
-      }
+      if (timeLeft < 0) timeLeft = 0;
 
       appendLog("> PENALTY // -30 seconds // " + reason);
 
@@ -1613,7 +1739,6 @@
 
       block.classList.remove("error");
       block.classList.add("solved");
-
       button.disabled = true;
       button.textContent = "LOCKED";
 
@@ -1630,9 +1755,7 @@
     }
 
     function checkVector(which) {
-      if (missionEnded || solved[which]) {
-        return;
-      }
+      if (missionEnded || solved[which]) return;
 
       let inputId = "";
       let correctValue = "";
@@ -1661,7 +1784,6 @@
       }
 
       const value = normalizeInput(document.getElementById(inputId).value);
-
       appendLog("> checking vector " + which + "...");
 
       if (value === correctValue) {
@@ -1674,9 +1796,7 @@
     }
 
     function checkSliders() {
-      if (missionEnded || solved.sliders) {
-        return;
-      }
+      if (missionEnded || solved.sliders) return;
 
       const sliderA = Number(document.getElementById("sliderA").value);
       const sliderB = Number(document.getElementById("sliderB").value);
@@ -1700,11 +1820,18 @@
       }
     }
 
+    function makeGridLabel(text) {
+      const el = document.createElement("div");
+      el.className = "gridLabel";
+      el.textContent = text;
+      return el;
+    }
+
     function buildGridlock() {
       const grid = document.getElementById("gridlock");
-      const rows = "ABCDEFGHIJ".split("");
-
       grid.innerHTML = "";
+
+      const rows = "ABCDEFGHIJ".split("");
 
       grid.appendChild(makeGridLabel(""));
 
@@ -1712,36 +1839,25 @@
         grid.appendChild(makeGridLabel(String(n)));
       }
 
-      rows.forEach(function(row) {
+      rows.forEach(row => {
         grid.appendChild(makeGridLabel(row));
 
         for (let n = 1; n <= 10; n++) {
           const id = row + n;
           const cell = document.createElement("button");
-          cell.className = "gridCell";
           cell.type = "button";
+          cell.className = "gridCell";
           cell.dataset.id = id;
           cell.setAttribute("aria-label", id);
-          cell.onclick = function() {
-            toggleGridCell(id, cell);
-          };
 
+          cell.addEventListener("click", () => toggleGridCell(id, cell));
           grid.appendChild(cell);
         }
       });
     }
 
-    function makeGridLabel(text) {
-      const label = document.createElement("div");
-      label.className = "gridlockLabel";
-      label.textContent = text;
-      return label;
-    }
-
     function toggleGridCell(id, cell) {
-      if (missionEnded || solved.gridlock) {
-        return;
-      }
+      if (missionEnded || solved.gridlock) return;
 
       if (activeGridCells.has(id)) {
         activeGridCells.delete(id);
@@ -1753,23 +1869,21 @@
     }
 
     function checkGridlock() {
-      if (missionEnded || solved.gridlock) {
-        return;
-      }
+      if (missionEnded || solved.gridlock) return;
 
       appendLog("> checking gridlock relay matrix...");
 
       const expected = [...CONFIG.gridlockCorrect].sort().join(",");
-      const actual = [...activeGridCells].sort(function(a, b) {
-        return a.localeCompare(b, undefined, { numeric: true });
-      }).join(",");
+      const actual = [...activeGridCells]
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+        .join(",");
 
       if (actual === expected) {
         solved.gridlock = true;
         document.getElementById("checkGridlock").disabled = true;
-        document.getElementById("checkGridlock").textContent = "GRIDLOCK MATRIX LOCKED";
+        document.getElementById("checkGridlock").textContent = "GRIDLOCK LOCKED";
 
-        document.querySelectorAll(".gridCell").forEach(function(cell) {
+        document.querySelectorAll(".gridCell").forEach(cell => {
           cell.classList.add("locked");
         });
 
@@ -1810,9 +1924,7 @@
     }
 
     function executeFinalOverride() {
-      if (missionEnded) {
-        return;
-      }
+      if (missionEnded) return;
 
       const allSolved =
         solved.AB &&
@@ -1842,9 +1954,9 @@
       appendLog("> mission accomplished");
 
       document.getElementById("winRemainingTime").textContent = formatSeconds(timeLeft);
+      document.getElementById("winOverlay").style.display = "flex";
 
       launchFireworks();
-      document.getElementById("winOverlay").style.display = "flex";
     }
 
     function failMission(reason) {
@@ -1868,8 +1980,7 @@
 
     function resetGridlockState() {
       activeGridCells.clear();
-
-      document.querySelectorAll(".gridCell").forEach(function(cell) {
+      document.querySelectorAll(".gridCell").forEach(cell => {
         cell.classList.remove("active", "locked");
       });
     }
@@ -1879,6 +1990,7 @@
 
       missionEnded = false;
       timeLeft = CONFIG.timeLimitSeconds;
+
       resetSolvedState();
       resetGridlockState();
 
@@ -1890,7 +2002,7 @@
       document.getElementById("sliderB").value = 50;
       document.getElementById("sliderC").value = 50;
 
-      ["blockAB", "blockBC", "blockCD"].forEach(function(id) {
+      ["blockAB", "blockBC", "blockCD"].forEach(id => {
         document.getElementById(id).classList.remove("solved", "error");
       });
 
@@ -1900,10 +2012,10 @@
         ["checkCD", "CHECK"],
         ["checkSliders", "CHECK STABILIZER MATRIX"],
         ["checkGridlock", "CHECK GRIDLOCK MATRIX"]
-      ].forEach(function(item) {
-        const button = document.getElementById(item[0]);
+      ].forEach(([id, text]) => {
+        const button = document.getElementById(id);
         button.disabled = false;
-        button.textContent = item[1];
+        button.textContent = text;
       });
 
       document.getElementById("overrideButton").disabled = true;
@@ -1915,7 +2027,7 @@
 > encrypted map loaded
 > signal points detected
 > route metadata redacted
-> penalty protocol active: -30 seconds per failed check
+> penalty protocol active : -30 seconds per failed check
 > waiting for individual module checks`;
 
       document.getElementById("vectorValue").textContent = "OPEN";
@@ -1932,7 +2044,7 @@
     function launchFireworks() {
       let count = 0;
 
-      const interval = setInterval(function() {
+      const interval = setInterval(() => {
         const firework = document.createElement("div");
         firework.className = "firework";
         firework.style.left = Math.random() * 100 + "vw";
@@ -1940,38 +2052,28 @@
 
         document.body.appendChild(firework);
 
-        setTimeout(function() {
+        setTimeout(() => {
           firework.remove();
         }, 1000);
 
         count++;
-
-        if (count > 18) {
-          clearInterval(interval);
-        }
+        if (count > 18) clearInterval(interval);
       }, 140);
     }
 
     function startTelemetryNoise() {
-      setInterval(function() {
-        if (missionEnded) {
-          return;
-        }
+      setInterval(() => {
+        if (missionEnded) return;
 
         signalPulse += Math.floor(Math.random() * 7) - 3;
-
-        if (signalPulse < 71) {
-          signalPulse = 71;
-        }
-
-        if (signalPulse > 96) {
-          signalPulse = 96;
-        }
+        if (signalPulse < 71) signalPulse = 71;
+        if (signalPulse > 96) signalPulse = 96;
 
         document.getElementById("signalValue").textContent = signalPulse + "%";
       }, 850);
     }
 
+    // START
     buildGridlock();
     updateSliderReadouts();
     updateTimerDisplay();
