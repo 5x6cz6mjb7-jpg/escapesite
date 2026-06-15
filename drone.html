@@ -6,13 +6,12 @@
 
   <style>
     :root {
-      --bg: #02070a;
-      --panel: rgba(4, 18, 24, 0.88);
       --cyan: #00f6ff;
       --cyan2: #7dfcff;
       --red: #ff2244;
       --red2: #ff667a;
       --green: #5dff8b;
+      --green2: #b4ffc8;
       --yellow: #ffe45c;
       --white: #eaffff;
       --muted: #7aa7ad;
@@ -29,7 +28,6 @@
       background:
         radial-gradient(circle at 20% 18%, rgba(0,246,255,0.12), transparent 24%),
         radial-gradient(circle at 78% 75%, rgba(255,34,68,0.12), transparent 28%),
-        radial-gradient(circle at 50% 50%, rgba(0,246,255,0.05), transparent 42%),
         linear-gradient(135deg, #000000 0%, #031016 45%, #090004 100%);
       color: var(--cyan);
       font-family: "Courier New", monospace;
@@ -283,6 +281,21 @@
       100% { background: rgba(255,34,68,0.06); }
     }
 
+    .alertStack {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .alertLine {
+      border: 1px solid rgba(255,34,68,0.38);
+      background: rgba(255,34,68,0.08);
+      padding: 8px;
+      color: var(--red2);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
     .radarBox {
       margin-top: 14px;
       border: 1px solid rgba(0,246,255,0.38);
@@ -299,9 +312,7 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle, transparent 0 17%, rgba(0,246,255,0.12) 17% 18%, transparent 18% 34%, rgba(0,246,255,0.12) 34% 35%, transparent 35% 52%, rgba(0,246,255,0.12) 52% 53%, transparent 53%),
-        linear-gradient(90deg, transparent 49.5%, rgba(0,246,255,0.28) 50%, transparent 50.5%),
-        linear-gradient(0deg, transparent 49.5%, rgba(0,246,255,0.28) 50%, transparent 50.5%),
+        radial-gradient(circle, transparent 0 18%, rgba(0,246,255,0.12) 18% 19%, transparent 19% 36%, rgba(0,246,255,0.12) 36% 37%, transparent 37% 54%, rgba(0,246,255,0.12) 54% 55%, transparent 55%),
         radial-gradient(circle at center, rgba(0,246,255,0.18), rgba(0,0,0,0.82));
       box-shadow:
         0 0 26px rgba(0,246,255,0.28),
@@ -356,10 +367,10 @@
       z-index: 5;
     }
 
-    .rd1 { left: 38%; top: 42%; }
-    .rd2 { left: 52%; top: 50%; animation-delay: 0.2s; }
-    .rd3 { left: 68%; top: 31%; animation-delay: 0.4s; }
-    .rd4 { left: 69%; top: 43%; animation-delay: 0.6s; }
+    .rd1 { left: 38%; top: 45%; }
+    .rd2 { left: 51%; top: 52%; animation-delay: 0.2s; }
+    .rd3 { left: 69%; top: 37%; animation-delay: 0.4s; }
+    .rd4 { left: 70%; top: 49%; animation-delay: 0.6s; }
 
     @keyframes radarDotBlink {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -369,13 +380,13 @@
     .dronePixelBox {
       margin-top: 14px;
       height: 190px;
-      border: 1px solid rgba(0,246,255,0.38);
-      background: rgba(0,0,0,0.46);
+      border: 1px solid rgba(93,255,139,0.45);
+      background: #001507;
       overflow: hidden;
       position: relative;
       box-shadow:
-        inset 0 0 28px rgba(0,246,255,0.12),
-        0 0 18px rgba(0,246,255,0.10);
+        inset 0 0 28px rgba(93,255,139,0.14),
+        0 0 18px rgba(93,255,139,0.12);
     }
 
     .dronePov {
@@ -386,7 +397,8 @@
       bottom: 0;
       overflow: hidden;
       background:
-        linear-gradient(180deg, #08233a 0%, #0a4c78 26%, #b8e6ff 27%, #b8e6ff 31%, #397e33 32%, #174414 100%);
+        linear-gradient(180deg, #001f0a 0%, #003a12 28%, #001f0a 29%, #000b04 100%);
+      filter: grayscale(1) sepia(1) hue-rotate(75deg) saturate(3) brightness(0.95);
     }
 
     .povSkyGlow {
@@ -394,59 +406,11 @@
       left: 0;
       right: 0;
       top: 0;
-      height: 34%;
+      height: 32%;
       background:
-        radial-gradient(circle at 72% 24%, rgba(255,255,255,0.42), transparent 18%),
-        linear-gradient(180deg, rgba(0,246,255,0.18), transparent);
+        radial-gradient(circle at 72% 24%, rgba(93,255,139,0.25), transparent 18%),
+        linear-gradient(180deg, rgba(93,255,139,0.18), transparent);
       z-index: 1;
-    }
-
-    .povGround {
-      position: absolute;
-      left: 50%;
-      top: 38px;
-      width: 210%;
-      height: 220%;
-      transform: translateX(-50%) rotateX(62deg);
-      transform-origin: top center;
-      background:
-        linear-gradient(90deg, rgba(0,246,255,0.22) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,246,255,0.22) 1px, transparent 1px),
-        repeating-linear-gradient(90deg, rgba(93,255,139,0.11) 0 46px, rgba(0,70,35,0.18) 46px 92px);
-      background-size: 36px 36px, 36px 36px, 184px 184px;
-      animation: groundMove 0.85s linear infinite;
-      opacity: 0.78;
-      z-index: 2;
-    }
-
-    .povRoad {
-      position: absolute;
-      left: 44%;
-      top: 35%;
-      width: 12%;
-      height: 90%;
-      background:
-        linear-gradient(90deg, transparent 0 46%, rgba(255,255,255,0.35) 46% 54%, transparent 54% 100%),
-        rgba(55,55,55,0.72);
-      transform: perspective(200px) rotateX(58deg);
-      transform-origin: top center;
-      z-index: 3;
-      box-shadow: 0 0 14px rgba(0,246,255,0.18);
-    }
-
-    .povCanal {
-      position: absolute;
-      left: 19%;
-      top: 41%;
-      width: 9%;
-      height: 92%;
-      background: rgba(0,170,255,0.42);
-      transform: perspective(200px) rotateX(58deg) skewX(-12deg);
-      transform-origin: top center;
-      z-index: 3;
-      box-shadow:
-        0 0 12px rgba(0,246,255,0.35),
-        inset 0 0 12px rgba(255,255,255,0.18);
     }
 
     .horizonLine {
@@ -455,46 +419,91 @@
       right: 0;
       top: 31%;
       height: 2px;
-      background: rgba(0,246,255,0.65);
-      box-shadow: 0 0 12px rgba(0,246,255,0.9);
-      z-index: 5;
+      background: rgba(93,255,139,0.72);
+      box-shadow: 0 0 12px rgba(93,255,139,0.9);
+      z-index: 8;
+    }
+
+    .povGround {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 31%;
+      bottom: 0;
+      background:
+        linear-gradient(90deg, rgba(93,255,139,0.13) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(93,255,139,0.13) 1px, transparent 1px),
+        repeating-linear-gradient(90deg, rgba(93,255,139,0.10) 0 42px, rgba(0,80,30,0.18) 42px 84px);
+      background-size: 32px 32px, 32px 32px, 168px 168px;
+      z-index: 2;
+    }
+
+    .povCanal {
+      position: absolute;
+      left: 16%;
+      top: 35%;
+      width: 12%;
+      height: 78%;
+      background: rgba(93,255,139,0.17);
+      border-left: 1px solid rgba(93,255,139,0.55);
+      border-right: 1px solid rgba(93,255,139,0.55);
+      transform: skewX(-13deg);
+      z-index: 3;
+      box-shadow:
+        inset 0 0 20px rgba(93,255,139,0.15),
+        0 0 14px rgba(93,255,139,0.16);
+    }
+
+    .povRoad {
+      position: absolute;
+      left: 45%;
+      top: 33%;
+      width: 10%;
+      height: 86%;
+      background:
+        linear-gradient(90deg, transparent 0 46%, rgba(93,255,139,0.45) 46% 54%, transparent 54% 100%),
+        rgba(93,255,139,0.10);
+      border-left: 1px solid rgba(93,255,139,0.35);
+      border-right: 1px solid rgba(93,255,139,0.35);
+      z-index: 3;
     }
 
     .windmill {
       position: absolute;
-      left: 68%;
+      left: 67%;
       top: 26%;
-      width: 50px;
-      height: 70px;
-      z-index: 6;
-      filter: drop-shadow(0 0 8px rgba(0,246,255,0.6));
+      width: 54px;
+      height: 72px;
+      z-index: 7;
+      filter: drop-shadow(0 0 8px rgba(93,255,139,0.65));
     }
 
     .windmillTower {
       position: absolute;
-      left: 22px;
-      top: 30px;
+      left: 24px;
+      top: 31px;
       width: 8px;
       height: 38px;
-      background: rgba(234,255,255,0.9);
+      background: rgba(93,255,139,0.8);
       clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
     }
 
     .windmillHub {
       position: absolute;
-      left: 20px;
-      top: 21px;
+      left: 22px;
+      top: 22px;
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--red2);
+      background: rgba(93,255,139,0.95);
       z-index: 2;
+      box-shadow: 0 0 10px rgba(93,255,139,0.9);
     }
 
     .windmillBlades {
       position: absolute;
-      left: 25px;
-      top: 27px;
+      left: 27px;
+      top: 28px;
       width: 4px;
       height: 4px;
       animation: bladeSpin 1.4s linear infinite;
@@ -509,7 +518,7 @@
       top: -2px;
       width: 48px;
       height: 4px;
-      background: rgba(234,255,255,0.9);
+      background: rgba(93,255,139,0.85);
     }
 
     .windmillBlades::after {
@@ -526,10 +535,9 @@
       z-index: 5;
       width: 34px;
       height: 25px;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(0,246,255,0.65);
-      box-shadow: 0 0 10px rgba(0,246,255,0.25);
-      animation: houseMove 4s linear infinite;
+      background: rgba(93,255,139,0.20);
+      border: 1px solid rgba(93,255,139,0.70);
+      box-shadow: 0 0 10px rgba(93,255,139,0.25);
     }
 
     .povHouse::before {
@@ -539,72 +547,52 @@
       top: -12px;
       width: 40px;
       height: 16px;
-      background: rgba(255,34,68,0.7);
+      background: rgba(93,255,139,0.28);
+      border: 1px solid rgba(93,255,139,0.55);
       clip-path: polygon(50% 0, 100% 100%, 0 100%);
     }
 
-    .house1 { left: 12%; bottom: -35px; animation-delay: 0s; }
-    .house2 { left: 78%; bottom: -45px; animation-delay: 1.5s; }
-    .house3 { left: 58%; bottom: -55px; animation-delay: 2.8s; }
+    .house1 { left: 10%; top: 62%; transform: scale(0.75); }
+    .house2 { left: 76%; top: 59%; transform: scale(0.65); }
+    .house3 { left: 58%; top: 74%; transform: scale(0.95); }
 
-    @keyframes houseMove {
-      0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 0;
-      }
-
-      22% {
-        opacity: 0.95;
-      }
-
-      100% {
-        transform: translateY(-165px) scale(1.45);
-        opacity: 0;
-      }
+    .povMotionLines {
+      position: absolute;
+      inset: 31% 0 0 0;
+      z-index: 6;
+      background:
+        linear-gradient(115deg, transparent 0 44%, rgba(93,255,139,0.16) 45%, transparent 47%),
+        linear-gradient(65deg, transparent 0 44%, rgba(93,255,139,0.12) 45%, transparent 47%);
+      background-size: 90px 90px;
+      animation: flightSpeed 0.38s linear infinite;
+      opacity: 0.68;
     }
 
-    @keyframes groundMove {
-      from { background-position: 0 0, 0 0, 0 0; }
-      to { background-position: 0 36px, 0 36px, 0 184px; }
+    @keyframes flightSpeed {
+      from { background-position: 0 0; }
+      to { background-position: 0 90px; }
     }
 
     .povData {
       position: absolute;
-      color: rgba(234,255,255,0.86);
+      color: rgba(180,255,200,0.9);
       font-size: 10px;
       letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(0,246,255,0.9);
-      z-index: 10;
+      text-shadow: 0 0 8px rgba(93,255,139,0.9);
+      z-index: 12;
     }
 
-    .povTopLeft {
-      left: 8px;
-      top: 42px;
-    }
-
-    .povTopRight {
-      right: 8px;
-      top: 42px;
-      text-align: right;
-    }
-
-    .povBottomLeft {
-      left: 8px;
-      bottom: 8px;
-    }
-
-    .povBottomRight {
-      right: 8px;
-      bottom: 8px;
-      text-align: right;
-    }
+    .povTopLeft { left: 8px; top: 42px; }
+    .povTopRight { right: 8px; top: 42px; text-align: right; }
+    .povBottomLeft { left: 8px; bottom: 8px; }
+    .povBottomRight { right: 8px; bottom: 8px; text-align: right; }
 
     .povReticleHorizontal,
     .povReticleVertical {
       position: absolute;
-      background: rgba(255,34,68,0.78);
-      box-shadow: 0 0 10px rgba(255,34,68,0.9);
-      z-index: 9;
+      background: rgba(93,255,139,0.82);
+      box-shadow: 0 0 10px rgba(93,255,139,0.9);
+      z-index: 11;
     }
 
     .povReticleHorizontal {
@@ -627,13 +615,13 @@
       top: 57%;
       width: 42px;
       height: 42px;
-      border: 2px solid rgba(255,34,68,0.95);
+      border: 2px solid rgba(93,255,139,0.95);
       transform: translate(-50%, -50%);
       box-shadow:
-        0 0 0 18px rgba(255,34,68,0.06),
-        0 0 18px rgba(255,34,68,0.80);
+        0 0 0 18px rgba(93,255,139,0.06),
+        0 0 18px rgba(93,255,139,0.80);
       animation: targetLock 0.8s steps(2, end) infinite;
-      z-index: 9;
+      z-index: 11;
     }
 
     @keyframes targetLock {
@@ -646,21 +634,6 @@
         opacity: 0.42;
         transform: translate(-50%, -50%) scale(1.12);
       }
-    }
-
-    .alertStack {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .alertLine {
-      border: 1px solid rgba(255,34,68,0.38);
-      background: rgba(255,34,68,0.08);
-      padding: 8px;
-      color: var(--red2);
-      font-size: 12px;
-      letter-spacing: 1px;
     }
 
     .mapPanel {
@@ -766,13 +739,8 @@
     }
 
     @keyframes signalRing {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255,34,68,0.85);
-      }
-
-      100% {
-        box-shadow: 0 0 0 22px rgba(255,34,68,0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(255,34,68,0.85); }
+      100% { box-shadow: 0 0 0 22px rgba(255,34,68,0); }
     }
 
     /*
@@ -782,10 +750,10 @@
       C = Groningen
       D = Hardenberg
     */
-    .pointA { left: 34%; top: 40%; }
+    .pointA { left: 34%; top: 44%; }
     .pointB { left: 48%; top: 50%; }
-    .pointC { left: 78%; top: 18%; }
-    .pointD { left: 80%; top: 39%; }
+    .pointC { left: 78%; top: 27%; }
+    .pointD { left: 80%; top: 44%; }
 
     .targetOverlay {
       position: absolute;
@@ -793,10 +761,10 @@
       z-index: 8;
       pointer-events: none;
       background:
-        radial-gradient(circle at 34% 40%, rgba(255,34,68,0.20), transparent 8%),
+        radial-gradient(circle at 34% 44%, rgba(255,34,68,0.20), transparent 8%),
         radial-gradient(circle at 48% 50%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 78% 18%, rgba(255,34,68,0.20), transparent 8%),
-        radial-gradient(circle at 80% 39%, rgba(255,34,68,0.20), transparent 8%);
+        radial-gradient(circle at 78% 27%, rgba(255,34,68,0.20), transparent 8%),
+        radial-gradient(circle at 80% 44%, rgba(255,34,68,0.20), transparent 8%);
       animation: targetWash 2.2s infinite;
     }
 
@@ -867,8 +835,7 @@
       align-items: center;
     }
 
-    input[type="text"],
-    input[type="number"] {
+    input[type="text"] {
       width: 100%;
       border: 2px solid rgba(0,246,255,0.65);
       background: rgba(0,0,0,0.55);
@@ -920,7 +887,7 @@
       accent-color: var(--cyan);
     }
 
-    .codeWheelPanel {
+    .uplinkPanel {
       border: 1px solid rgba(0,246,255,0.36);
       background:
         radial-gradient(circle at center, rgba(0,246,255,0.12), transparent 60%),
@@ -928,57 +895,100 @@
       padding: 12px;
     }
 
-    .wheelGrid {
+    .uplinkGrid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
 
-    .codeWheel {
+    .uplinkChannel {
       border: 2px solid rgba(0,246,255,0.5);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.18), rgba(0,0,0,0.72));
+        linear-gradient(180deg, rgba(0,246,255,0.10), rgba(0,0,0,0.72));
       padding: 10px;
       text-align: center;
       box-shadow:
         0 0 16px rgba(0,246,255,0.14),
         inset 0 0 20px rgba(0,246,255,0.08);
+      position: relative;
+      overflow: hidden;
     }
 
-    .wheelLabel {
+    .uplinkChannel::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -80%;
+      height: 80%;
+      background: linear-gradient(180deg, transparent, rgba(0,246,255,0.18), transparent);
+      animation: uplinkScan 2.6s linear infinite;
+    }
+
+    @keyframes uplinkScan {
+      from { top: -80%; }
+      to { top: 120%; }
+    }
+
+    .uplinkLabel {
       color: var(--muted);
       font-size: 10px;
       letter-spacing: 1px;
       margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
     }
 
-    .wheelDisplay {
-      width: 74px;
-      height: 74px;
-      margin: 0 auto 8px;
-      border-radius: 50%;
-      border: 3px solid rgba(0,246,255,0.75);
+    .uplinkDisplay {
+      height: 56px;
+      border: 2px solid rgba(0,246,255,0.65);
       display: grid;
       place-items: center;
       color: var(--white);
       font-size: 34px;
       font-weight: bold;
-      background:
-        radial-gradient(circle at 35% 28%, rgba(255,255,255,0.22), transparent 20%),
-        radial-gradient(circle at center, rgba(0,246,255,0.16), rgba(0,0,0,0.85));
+      background: rgba(0,0,0,0.55);
       box-shadow:
-        0 0 18px rgba(0,246,255,0.34),
-        inset 0 0 18px rgba(0,246,255,0.14);
+        inset 0 0 14px rgba(0,246,255,0.18),
+        0 0 14px rgba(0,246,255,0.20);
       text-shadow: 0 0 12px rgba(0,246,255,0.9);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
     }
 
-    .wheelButtons {
+    .signalBars {
+      height: 24px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 3px;
+      align-items: end;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .signalBars span {
+      display: block;
+      background: rgba(0,246,255,0.25);
+      border: 1px solid rgba(0,246,255,0.25);
+    }
+
+    .signalBars span:nth-child(1) { height: 30%; }
+    .signalBars span:nth-child(2) { height: 45%; }
+    .signalBars span:nth-child(3) { height: 62%; }
+    .signalBars span:nth-child(4) { height: 78%; }
+    .signalBars span:nth-child(5) { height: 96%; }
+
+    .uplinkButtons {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px;
+      position: relative;
+      z-index: 2;
     }
 
-    .wheelButtons button {
+    .uplinkButtons button {
       padding: 7px 0;
       font-size: 13px;
     }
@@ -1129,12 +1139,6 @@
       margin-bottom: 12px;
     }
 
-    .failBox .resultTitle {
-      text-shadow:
-        0 0 12px rgba(255,34,68,0.9),
-        0 0 28px rgba(255,34,68,0.55);
-    }
-
     .callBox {
       margin: 18px auto;
       border: 2px solid rgba(93,255,139,0.8);
@@ -1181,11 +1185,7 @@
         20px 0 0 var(--cyan),
         -20px 0 0 var(--yellow),
         0 20px 0 var(--red),
-        0 -20px 0 var(--white),
-        14px 14px 0 var(--cyan),
-        -14px -14px 0 var(--yellow),
-        14px -14px 0 var(--red),
-        -14px 14px 0 var(--white);
+        0 -20px 0 var(--white);
     }
 
     @keyframes firework {
@@ -1251,7 +1251,7 @@
         min-height: 420px;
       }
 
-      .wheelGrid {
+      .uplinkGrid {
         grid-template-columns: 1fr;
       }
 
@@ -1323,7 +1323,7 @@
             <div class="dronePixelBox">
               <div class="panelTitle" style="margin: 0 0 0;">
                 <span>Drone POV feed</span>
-                <span>LIVE</span>
+                <span>GREEN MODE</span>
               </div>
 
               <div class="dronePov">
@@ -1342,6 +1342,8 @@
                 <div class="povHouse house1"></div>
                 <div class="povHouse house2"></div>
                 <div class="povHouse house3"></div>
+
+                <div class="povMotionLines"></div>
 
                 <div class="povReticleHorizontal"></div>
                 <div class="povReticleVertical"></div>
@@ -1396,7 +1398,7 @@
         <section class="panel mapPanel">
           <div class="panelTitle">
             <span>Encrypted national scan</span>
-            <span>POINTS A-D</span>
+            <span>SIGNAL POINTS</span>
           </div>
 
           <div class="mapWrap">
@@ -1484,42 +1486,51 @@
               <button id="checkSliders" onclick="checkSliders()">CHECK STABILIZER MATRIX</button>
 
               <div class="panelTitle" style="margin: 4px -12px 0;">
-                <span>Rotary code wheels</span>
-                <span>SEQUENCE</span>
+                <span>Uplink frequency locks</span>
+                <span>SYNC</span>
               </div>
 
-              <div class="codeWheelPanel">
-                <div class="wheelGrid">
-                  <div class="codeWheel">
-                    <div class="wheelLabel">WHEEL A</div>
-                    <div class="wheelDisplay" id="wheelAValue">0</div>
-                    <div class="wheelButtons">
-                      <button onclick="changeWheel('A', -1)">-</button>
-                      <button onclick="changeWheel('A', 1)">+</button>
+              <div class="uplinkPanel">
+                <div class="uplinkGrid">
+                  <div class="uplinkChannel">
+                    <div class="uplinkLabel">CHANNEL ALPHA</div>
+                    <div class="uplinkDisplay" id="uplinkAValue">0</div>
+                    <div class="signalBars">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="uplinkButtons">
+                      <button onclick="changeUplink('A', -1)">-</button>
+                      <button onclick="changeUplink('A', 1)">+</button>
                     </div>
                   </div>
 
-                  <div class="codeWheel">
-                    <div class="wheelLabel">WHEEL B</div>
-                    <div class="wheelDisplay" id="wheelBValue">0</div>
-                    <div class="wheelButtons">
-                      <button onclick="changeWheel('B', -1)">-</button>
-                      <button onclick="changeWheel('B', 1)">+</button>
+                  <div class="uplinkChannel">
+                    <div class="uplinkLabel">CHANNEL BRAVO</div>
+                    <div class="uplinkDisplay" id="uplinkBValue">0</div>
+                    <div class="signalBars">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="uplinkButtons">
+                      <button onclick="changeUplink('B', -1)">-</button>
+                      <button onclick="changeUplink('B', 1)">+</button>
                     </div>
                   </div>
 
-                  <div class="codeWheel">
-                    <div class="wheelLabel">WHEEL C</div>
-                    <div class="wheelDisplay" id="wheelCValue">0</div>
-                    <div class="wheelButtons">
-                      <button onclick="changeWheel('C', -1)">-</button>
-                      <button onclick="changeWheel('C', 1)">+</button>
+                  <div class="uplinkChannel">
+                    <div class="uplinkLabel">CHANNEL CHARLIE</div>
+                    <div class="uplinkDisplay" id="uplinkCValue">0</div>
+                    <div class="signalBars">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="uplinkButtons">
+                      <button onclick="changeUplink('C', -1)">-</button>
+                      <button onclick="changeUplink('C', 1)">+</button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <button id="checkWheels" onclick="checkWheels()">CHECK ROTARY SEQUENCE</button>
+              <button id="checkUplink" onclick="checkUplink()">CHECK UPLINK SYNC</button>
             </div>
 
             <div class="buttonStack">
@@ -1584,9 +1595,9 @@
       sliderB: 38,
       sliderC: 91,
 
-      wheelA: 7,
-      wheelB: 3,
-      wheelC: 5
+      uplinkA: 7,
+      uplinkB: 3,
+      uplinkC: 5
     };
 
     let timeLeft = CONFIG.timeLimitSeconds;
@@ -1599,10 +1610,10 @@
       BC: false,
       CD: false,
       sliders: false,
-      wheels: false
+      uplink: false
     };
 
-    const wheels = {
+    const uplink = {
       A: 0,
       B: 0,
       C: 0
@@ -1786,44 +1797,44 @@
       }
     }
 
-    function changeWheel(which, direction) {
-      if (missionEnded || solved.wheels) {
+    function changeUplink(which, direction) {
+      if (missionEnded || solved.uplink) {
         return;
       }
 
-      wheels[which] += direction;
+      uplink[which] += direction;
 
-      if (wheels[which] > 9) {
-        wheels[which] = 0;
+      if (uplink[which] > 9) {
+        uplink[which] = 0;
       }
 
-      if (wheels[which] < 0) {
-        wheels[which] = 9;
+      if (uplink[which] < 0) {
+        uplink[which] = 9;
       }
 
-      document.getElementById("wheel" + which + "Value").textContent = wheels[which];
+      document.getElementById("uplink" + which + "Value").textContent = uplink[which];
     }
 
-    function checkWheels() {
-      if (missionEnded || solved.wheels) {
+    function checkUplink() {
+      if (missionEnded || solved.uplink) {
         return;
       }
 
-      appendLog("> checking rotary wheel sequence...");
+      appendLog("> checking uplink frequency sync...");
 
       if (
-        wheels.A === CONFIG.wheelA &&
-        wheels.B === CONFIG.wheelB &&
-        wheels.C === CONFIG.wheelC
+        uplink.A === CONFIG.uplinkA &&
+        uplink.B === CONFIG.uplinkB &&
+        uplink.C === CONFIG.uplinkC
       ) {
-        solved.wheels = true;
-        document.getElementById("checkWheels").disabled = true;
-        document.getElementById("checkWheels").textContent = "ROTARY SEQUENCE LOCKED";
-        appendLog("> rotary wheel sequence accepted // module locked");
+        solved.uplink = true;
+        document.getElementById("checkUplink").disabled = true;
+        document.getElementById("checkUplink").textContent = "UPLINK SYNC LOCKED";
+        appendLog("> uplink frequency accepted // module locked");
         updateModuleCount();
         checkFinalUnlock();
       } else {
-        applyPenalty("rotary wheel sequence mismatch");
+        applyPenalty("uplink frequency mismatch");
       }
     }
 
@@ -1846,7 +1857,7 @@
         solved.BC &&
         solved.CD &&
         solved.sliders &&
-        solved.wheels;
+        solved.uplink;
 
       if (allSolved) {
         document.getElementById("overrideButton").disabled = false;
@@ -1865,7 +1876,7 @@
         solved.BC &&
         solved.CD &&
         solved.sliders &&
-        solved.wheels;
+        solved.uplink;
 
       if (!allSolved) {
         applyPenalty("final override attempted before all modules locked");
@@ -1909,17 +1920,17 @@
       solved.BC = false;
       solved.CD = false;
       solved.sliders = false;
-      solved.wheels = false;
+      solved.uplink = false;
     }
 
-    function resetWheelState() {
-      wheels.A = 0;
-      wheels.B = 0;
-      wheels.C = 0;
+    function resetUplinkState() {
+      uplink.A = 0;
+      uplink.B = 0;
+      uplink.C = 0;
 
-      document.getElementById("wheelAValue").textContent = "0";
-      document.getElementById("wheelBValue").textContent = "0";
-      document.getElementById("wheelCValue").textContent = "0";
+      document.getElementById("uplinkAValue").textContent = "0";
+      document.getElementById("uplinkBValue").textContent = "0";
+      document.getElementById("uplinkCValue").textContent = "0";
     }
 
     function resetTestMode() {
@@ -1928,7 +1939,7 @@
       missionEnded = false;
       timeLeft = CONFIG.timeLimitSeconds;
       resetSolvedState();
-      resetWheelState();
+      resetUplinkState();
 
       document.getElementById("distanceAB").value = "";
       document.getElementById("distanceBC").value = "";
@@ -1947,7 +1958,7 @@
         ["checkBC", "CHECK"],
         ["checkCD", "CHECK"],
         ["checkSliders", "CHECK STABILIZER MATRIX"],
-        ["checkWheels", "CHECK ROTARY SEQUENCE"]
+        ["checkUplink", "CHECK UPLINK SYNC"]
       ].forEach(function(item) {
         const button = document.getElementById(item[0]);
         button.disabled = false;
