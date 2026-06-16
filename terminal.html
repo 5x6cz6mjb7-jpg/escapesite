@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Thorne Private Workstation</title>
@@ -7,13 +7,15 @@
   <style>
     :root {
       --green: #00ff66;
-      --green2: #00aa44;
-      --dark: #001100;
-      --text: #baffc9;
-      --white: #eaffef;
-      --yellow: #ffee66;
-      --red: #ff5555;
-      --purple: #d48cff;
+      --green2: #8dffb0;
+      --dark: #020403;
+      --panel: #07120b;
+      --red: #ff2b4f;
+      --amber: #ffd36a;
+      --blue: #5ad7ff;
+      --white: #eaffee;
+      --muted: #6ba77b;
+      --shadow: rgba(0, 255, 102, 0.35);
     }
 
     * {
@@ -24,14 +26,10 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at center, #1b2b1b 0%, #050805 58%, #000 100%);
-      font-family: "Courier New", monospace;
+        radial-gradient(circle at center, #12301b 0%, #050806 48%, #000000 100%);
       color: var(--green);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 18px;
-      overflow: auto;
+      font-family: "Courier New", monospace;
+      overflow: hidden;
     }
 
     body::before {
@@ -39,1577 +37,786 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
+      z-index: 50;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.055),
-          rgba(0, 255, 100, 0.055) 1px,
+          rgba(255,255,255,0.045),
+          rgba(255,255,255,0.045) 1px,
           transparent 1px,
-          transparent 4px
+          transparent 5px
         );
-      z-index: 1;
+      mix-blend-mode: screen;
+      opacity: 0.45;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 51;
+      background:
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.22) 60%, rgba(0,0,0,0.8) 100%);
     }
 
     .computerShell {
-      width: 100%;
-      max-width: 1420px;
-      background:
-        linear-gradient(180deg, #242b24 0%, #141a14 45%, #0b100b 100%);
-      border: 4px solid #3c4a3c;
-      border-radius: 22px;
-      padding: 22px 22px 34px;
-      box-shadow:
-        0 0 0 3px #050805,
-        0 22px 50px rgba(0, 0, 0, 0.78),
-        inset 0 0 18px rgba(255, 255, 255, 0.05);
+      width: 100vw;
+      height: 100vh;
+      padding: 22px;
+      display: grid;
+      place-items: center;
       position: relative;
-      z-index: 2;
     }
 
-    .computerShell::before {
-      content: "";
-      position: absolute;
-      left: 38px;
-      right: 38px;
-      top: 12px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      pointer-events: none;
+    .monitorFrame {
+      width: min(1280px, calc(100vw - 40px));
+      height: min(820px, calc(100vh - 40px));
+      border-radius: 28px;
+      border: 18px solid #111;
+      background:
+        linear-gradient(145deg, #1e1e1e, #080808);
+      box-shadow:
+        0 0 50px rgba(0,0,0,0.9),
+        inset 0 0 16px rgba(255,255,255,0.08);
+      padding: 18px;
+      position: relative;
     }
 
-    .computerShell::after {
+    .monitorFrame::before {
       content: "";
-      display: block;
-      width: 210px;
-      height: 20px;
-      background: #090d09;
-      border: 2px solid #273527;
-      border-radius: 0 0 18px 18px;
       position: absolute;
       left: 50%;
-      bottom: 5px;
+      bottom: -38px;
       transform: translateX(-50%);
-      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
-    }
-
-    .monitorLabel {
-      text-align: center;
-      color: #9fc29f;
-      font-size: 12px;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
+      width: 220px;
+      height: 28px;
+      background: #111;
+      border-radius: 0 0 22px 22px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.6);
     }
 
     .monitorScreen {
-      min-height: 790px;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      border: 3px solid rgba(0,255,102,0.35);
       background:
-        radial-gradient(circle at center, rgba(0, 255, 102, 0.16), transparent 48%),
-        linear-gradient(180deg, #052005 0%, #020b02 100%);
-      border: 7px solid #0c140c;
-      border-radius: 28px;
-      padding: 16px;
+        radial-gradient(circle at center, rgba(0,255,102,0.12), rgba(0,0,0,0.92) 62%),
+        linear-gradient(180deg, #001106 0%, #000000 100%);
       position: relative;
       overflow: hidden;
       box-shadow:
-        inset 0 0 0 2px #324532,
-        inset 0 0 55px rgba(0, 255, 100, 0.12),
-        inset 0 0 135px rgba(0, 0, 0, 0.78),
-        0 0 22px rgba(0, 0, 0, 0.8);
+        inset 0 0 80px rgba(0,255,102,0.18),
+        0 0 22px rgba(0,255,102,0.24);
     }
 
     .monitorScreen::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(255, 255, 255, 0.026),
-          rgba(255, 255, 255, 0.026) 1px,
-          transparent 1px,
-          transparent 3px
-        );
-      pointer-events: none;
-      z-index: 45;
-      mix-blend-mode: screen;
-      animation: scanMove 7s linear infinite;
-    }
-
-    .monitorScreen::after {
-      content: "";
-      position: absolute;
-      inset: -8px;
-      background:
-        radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.58) 100%),
-        radial-gradient(ellipse at center, transparent 58%, rgba(0, 255, 102, 0.08) 70%, rgba(0, 0, 0, 0.45) 100%);
-      pointer-events: none;
-      z-index: 48;
-    }
-
-    .glassReflection {
-      position: absolute;
-      inset: 0;
-      z-index: 47;
       pointer-events: none;
       background:
-        linear-gradient(
-          115deg,
-          rgba(255, 255, 255, 0.10) 0%,
-          rgba(255, 255, 255, 0.045) 13%,
-          transparent 30%
-        ),
-        radial-gradient(
-          ellipse at 32% 18%,
-          rgba(255, 255, 255, 0.09),
-          transparent 28%
-        );
-      mix-blend-mode: screen;
-      opacity: 0.58;
-    }
-
-    .crtGlow {
-      position: absolute;
-      inset: -20%;
-      pointer-events: none;
-      z-index: 35;
-      background:
-        radial-gradient(circle at 28% 32%, rgba(0, 255, 102, 0.24), transparent 26%),
-        radial-gradient(circle at 72% 62%, rgba(0, 255, 102, 0.14), transparent 30%),
-        radial-gradient(circle at 50% 50%, rgba(0, 255, 102, 0.12), transparent 54%);
-      mix-blend-mode: screen;
-      opacity: 0.62;
-      animation: greenWaas 9s ease-in-out infinite alternate;
-    }
-
-    .crtFlicker {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 36;
-      background: rgba(0, 255, 102, 0.025);
-      animation: flicker 4.2s infinite;
+        linear-gradient(110deg, rgba(255,255,255,0.12), transparent 22%, transparent 72%, rgba(255,255,255,0.05));
+      opacity: 0.18;
+      z-index: 20;
     }
 
     .crtSweep {
       position: absolute;
       left: 0;
       right: 0;
-      height: 130px;
-      top: -150px;
+      top: -160px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(0,255,102,0.12), transparent);
+      animation: sweep 4s linear infinite;
       pointer-events: none;
-      z-index: 37;
-      background: linear-gradient(
-        180deg,
-        transparent,
-        rgba(0, 255, 102, 0.10),
-        transparent
-      );
-      animation: sweep 6.8s linear infinite;
-    }
-
-    .crtNoise {
-      position: absolute;
-      inset: 0;
-      z-index: 38;
-      opacity: 0.055;
-      pointer-events: none;
-      background:
-        radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px);
-      background-size: 7px 7px;
-      animation: noiseShift 0.45s steps(2) infinite;
-    }
-
-    @keyframes greenWaas {
-      0% {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.44;
-      }
-
-      35% {
-        transform: translate(2%, 1%) scale(1.04);
-        opacity: 0.66;
-      }
-
-      70% {
-        transform: translate(-1%, 3%) scale(1.02);
-        opacity: 0.53;
-      }
-
-      100% {
-        transform: translate(3%, -2%) scale(1.06);
-        opacity: 0.72;
-      }
-    }
-
-    @keyframes flicker {
-      0%, 100% { opacity: 0.05; }
-      8% { opacity: 0.13; }
-      9% { opacity: 0.02; }
-      10% { opacity: 0.18; }
-      11% { opacity: 0.04; }
-      38% { opacity: 0.07; }
-      39% { opacity: 0.15; }
-      40% { opacity: 0.03; }
-      72% { opacity: 0.11; }
-      73% { opacity: 0.04; }
+      z-index: 25;
     }
 
     @keyframes sweep {
-      0% { top: -150px; }
-      100% { top: 100%; }
-    }
-
-    @keyframes scanMove {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(12px); }
-    }
-
-    @keyframes noiseShift {
-      0% { transform: translate(0, 0); }
-      50% { transform: translate(3px, -2px); }
-      100% { transform: translate(-2px, 2px); }
+      from { top: -160px; }
+      to { top: 110%; }
     }
 
     .loginScreen,
-    .desktop {
-      height: 100%;
-      min-height: 748px;
-      position: relative;
-      border: 2px solid var(--green2);
-      background:
-        linear-gradient(90deg, rgba(0,255,102,0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,255,102,0.035) 1px, transparent 1px),
-        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 68%),
-        linear-gradient(180deg, #082308 0%, #031203 100%);
-      background-size: 32px 32px, 32px 32px, auto, auto;
-      box-shadow:
-        inset 0 0 18px rgba(0, 255, 100, 0.09),
-        inset 0 0 90px rgba(0, 0, 0, 0.55);
-      overflow: hidden;
-      border-radius: 12px;
-      animation: desktopPulse 6s ease-in-out infinite;
-      z-index: 10;
-    }
-
-    @keyframes desktopPulse {
-      0%, 100% {
-        filter: brightness(1) contrast(1);
-        transform: scale(1);
-      }
-
-      50% {
-        filter: brightness(1.08) contrast(1.05);
-        transform: scale(1.002);
-      }
+    .desktopScreen {
+      position: absolute;
+      inset: 0;
     }
 
     .loginScreen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 22px;
+      display: grid;
+      place-items: center;
+      padding: 30px;
     }
 
-    .desktop {
-      display: none;
-    }
-
-    .loginWindow {
-      width: 520px;
-      max-width: 100%;
-      border: 2px solid #d8ffe6;
-      background: #031203;
+    .loginBox {
+      width: min(520px, 92%);
+      border: 2px solid rgba(0,255,102,0.6);
+      background: rgba(0,0,0,0.72);
       box-shadow:
-        4px 4px 0 rgba(0,0,0,0.65),
-        0 0 28px rgba(0,255,100,0.18);
-      position: relative;
-      z-index: 12;
+        0 0 30px rgba(0,255,102,0.28),
+        inset 0 0 24px rgba(0,255,102,0.08);
+      padding: 26px;
     }
 
-    .loginTitleBar,
-    .windowTitleBar {
-      height: 30px;
-      background:
-        linear-gradient(180deg, #12a046 0%, #0a4c22 100%);
+    .loginTitle {
       color: var(--white);
-      border-bottom: 2px solid #d8ffe6;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 7px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .loginBody {
-      padding: 22px;
-      color: var(--text);
-    }
-
-    .loginHeader {
-      text-align: center;
-      border: 1px dashed rgba(0,255,102,0.35);
-      padding: 14px;
-      margin-bottom: 18px;
-      background: rgba(0,0,0,0.28);
-    }
-
-    .loginHeader h1 {
-      margin: 0 0 8px;
-      color: var(--yellow);
-      font-size: 21px;
+      font-size: 26px;
       letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(0,255,102,0.75);
     }
 
-    .loginHeader p {
-      margin: 4px 0;
+    .loginSub {
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      margin-bottom: 22px;
+      line-height: 1.4;
+    }
+
+    .fieldLabel {
+      color: var(--green2);
       font-size: 12px;
-      color: #9dffbd;
+      margin: 12px 0 6px;
+      letter-spacing: 1px;
     }
 
-    .loginField {
-      margin-bottom: 14px;
-    }
-
-    .loginField label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 12px;
-      color: var(--white);
-    }
-
-    .loginField input {
+    .loginBox input {
       width: 100%;
-      background: #000;
-      color: var(--green);
-      border: 2px solid var(--green2);
-      padding: 11px;
-      font-family: "Courier New", monospace;
-      font-size: 15px;
-      outline: none;
-      box-shadow: inset 0 0 12px rgba(0,255,100,0.08);
-    }
-
-    .loginField input:focus {
-      border-color: var(--yellow);
-      box-shadow:
-        inset 0 0 12px rgba(0,255,100,0.13),
-        0 0 12px rgba(255,238,102,0.16);
-    }
-
-    .loginButtons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .oldButton {
-      color: var(--white);
-      background:
-        linear-gradient(180deg, #19b84e 0%, #0c6c2b 100%);
-      border-top: 2px solid #d8ffe6;
-      border-left: 2px solid #d8ffe6;
-      border-right: 2px solid #052b13;
-      border-bottom: 2px solid #052b13;
-      padding: 10px 14px;
-      font-family: "Courier New", monospace;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .oldButton:hover {
-      filter: brightness(1.18);
-    }
-
-    .oldButton.secondary {
-      background:
-        linear-gradient(180deg, #0b4c22 0%, #062b13 100%);
-      color: var(--yellow);
-    }
-
-    .loginMessage {
-      min-height: 22px;
-      margin-top: 14px;
-      font-size: 13px;
-      color: var(--red);
-    }
-
-    .hintBox {
-      display: none;
-      margin-top: 14px;
-      border: 1px dashed var(--green2);
-      background: rgba(0,0,0,0.32);
+      border: 2px solid rgba(0,255,102,0.45);
+      background: rgba(0,0,0,0.74);
+      color: var(--green2);
       padding: 12px;
-      color: #9dffbd;
-      font-size: 13px;
-      line-height: 1.5;
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      outline: none;
     }
 
-    .hintBox strong {
-      color: var(--yellow);
+    .loginBox input:focus {
+      border-color: var(--amber);
+      color: var(--white);
+    }
+
+    .loginButton {
+      width: 100%;
+      margin-top: 16px;
+      border: 2px solid rgba(0,255,102,0.65);
+      background: rgba(0,255,102,0.10);
+      color: var(--green2);
+      padding: 13px;
+      font-family: "Courier New", monospace;
+      font-weight: bold;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .loginButton:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    .loginError {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .recoveryBox {
+      margin-top: 16px;
+      border: 1px solid rgba(255,211,106,0.45);
+      color: var(--amber);
+      background: rgba(255,211,106,0.07);
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .desktopScreen {
+      display: none;
+      background:
+        linear-gradient(180deg, rgba(0,40,18,0.35), rgba(0,0,0,0.35)),
+        radial-gradient(circle at 80% 22%, rgba(0,255,102,0.12), transparent 26%);
     }
 
     .desktopTopStrip {
-      min-height: 34px;
-      background:
-        linear-gradient(180deg, #0e642c 0%, #062b13 100%);
-      border-bottom: 2px solid #d8ffe6;
-      color: var(--white);
+      height: 34px;
+      border-bottom: 2px solid rgba(0,255,102,0.34);
+      background: rgba(0,0,0,0.45);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding: 0 10px;
+      justify-content: space-between;
+      padding: 0 14px;
+      color: var(--green2);
       font-size: 12px;
-      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .desktopMain {
+      height: calc(100% - 66px);
       display: grid;
-      grid-template-columns: 132px 1fr 390px;
-      gap: 14px;
-      padding: 16px 14px 58px;
-      position: relative;
-      min-height: 674px;
+      grid-template-columns: 160px 1fr 360px;
+      gap: 12px;
+      padding: 12px;
     }
 
     .iconColumn {
       display: grid;
-      grid-template-columns: 1fr;
-      align-content: start;
-      gap: 12px;
+      grid-auto-rows: min-content;
+      gap: 14px;
     }
 
     .desktopIcon {
-      width: 92px;
-      min-height: 74px;
-      color: var(--white);
+      width: 124px;
+      min-height: 78px;
+      border: 1px solid transparent;
+      color: var(--green2);
       text-decoration: none;
-      background: transparent;
-      border: 1px solid transparent;
-      font-family: "Courier New", monospace;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 5px 4px;
-      gap: 5px;
       text-align: center;
-    }
-
-    button.desktopIcon {
-      appearance: none;
-      border: 1px solid transparent;
+      padding: 8px 4px;
+      font-size: 12px;
+      display: block;
     }
 
     .desktopIcon:hover {
-      background: rgba(0, 255, 102, 0.08);
-      border: 1px dotted #d8ffe6;
+      border-color: rgba(0,255,102,0.45);
+      background: rgba(0,255,102,0.08);
     }
 
-    .desktopIcon:hover .iconName {
-      background: rgba(0, 255, 102, 0.22);
-      border: 1px dotted #d8ffe6;
-    }
-
-    .iconName {
-      color: var(--white);
-      font-size: 11px;
-      line-height: 1.18;
-      text-align: center;
-      padding: 2px 4px;
-      min-height: 28px;
-      text-shadow: 1px 1px #000;
-    }
-
-    .folder95 {
-      width: 50px;
-      height: 42px;
-      position: relative;
-      margin-top: 4px;
-      animation: folderFloat 3.2s ease-in-out infinite;
-    }
-
-    .folder95.chemistry {
-      animation-delay: 0s;
-    }
-
-    .folder95.botany {
-      animation-delay: 0.4s;
-    }
-
-    .folder95.private {
-      animation-delay: 0.8s;
-    }
-
-    @keyframes folderFloat {
-      0%, 100% {
-        transform: translateY(0);
-        filter: brightness(1);
-      }
-
-      50% {
-        transform: translateY(-2px);
-        filter: brightness(1.18);
-      }
-    }
-
-    .folder95 .tab {
-      position: absolute;
-      left: 3px;
-      top: 2px;
-      width: 22px;
-      height: 10px;
-      background: #34e878;
-      border-left: 2px solid #d8ffe6;
-      border-top: 2px solid #d8ffe6;
-      border-right: 2px solid #0a5c28;
-    }
-
-    .folder95 .back {
-      position: absolute;
-      left: 0;
-      top: 10px;
-      width: 50px;
-      height: 29px;
-      background: #0d7a34;
-      border: 2px solid #d8ffe6;
-    }
-
-    .folder95 .front {
-      position: absolute;
-      left: 2px;
-      top: 17px;
-      width: 48px;
-      height: 24px;
-      background:
-        linear-gradient(180deg, #2bdd70 0%, #0d8a3a 100%);
-      border-left: 2px solid #d8ffe6;
-      border-bottom: 2px solid #052b13;
-      border-right: 2px solid #052b13;
-      border-top: 2px solid rgba(255,255,255,0.45);
-      box-shadow:
-        inset 0 2px 0 rgba(255,255,255,0.26),
-        0 0 10px rgba(0,255,100,0.18);
-    }
-
-    .folder95.private .front::before {
-      content: "";
-      position: absolute;
-      left: 17px;
-      top: 4px;
-      width: 12px;
-      height: 10px;
-      border: 2px solid #ffee66;
-      border-bottom: none;
-      border-radius: 7px 7px 0 0;
-    }
-
-    .folder95.private .front::after {
-      content: "";
-      position: absolute;
-      left: 14px;
-      top: 13px;
-      width: 18px;
-      height: 12px;
-      background: #ffee66;
-      border: 1px solid #001100;
-      box-shadow: 0 0 7px rgba(255,238,102,0.5);
-    }
-
-    .oldIcon {
+    .folderIcon,
+    .diskIcon,
+    .docIcon,
+    .binIcon {
       width: 46px;
-      height: 46px;
+      height: 36px;
+      margin: 0 auto 6px;
       position: relative;
-      margin-top: 3px;
+      border: 2px solid var(--green);
+      box-shadow: 0 0 10px rgba(0,255,102,0.24);
     }
 
-    .computerIcon {
-      border: 2px solid #d8ffe6;
-      background: #071b07;
-      width: 44px;
-      height: 34px;
-      margin-top: 4px;
-      box-shadow: 0 0 9px rgba(0,255,100,0.15);
+    .folderIcon {
+      background: rgba(0,255,102,0.10);
     }
 
-    .computerIcon::before {
+    .folderIcon::before {
       content: "";
       position: absolute;
-      left: 8px;
-      top: 9px;
-      width: 28px;
-      height: 18px;
-      background: #00ff66;
-      opacity: 0.75;
-    }
-
-    .computerIcon::after {
-      content: "";
-      position: absolute;
-      left: 14px;
-      top: 38px;
-      width: 18px;
-      height: 5px;
-      background: #d8ffe6;
-      box-shadow: 0 5px 0 #d8ffe6;
+      left: -2px;
+      top: -12px;
+      width: 26px;
+      height: 12px;
+      border: 2px solid var(--green);
+      border-bottom: none;
+      background: rgba(0,255,102,0.12);
     }
 
     .diskIcon {
-      width: 40px;
-      height: 42px;
-      background: #0b310b;
-      border: 2px solid #d8ffe6;
-      box-shadow: 0 0 9px rgba(0,255,100,0.15);
+      border-radius: 4px;
+      background:
+        linear-gradient(180deg, rgba(0,255,102,0.16), rgba(0,0,0,0.4));
     }
 
     .diskIcon::before {
       content: "";
       position: absolute;
-      left: 7px;
-      top: 5px;
-      width: 24px;
-      height: 11px;
-      background: #00ff66;
-      border: 1px solid #001100;
+      left: 8px;
+      right: 8px;
+      top: 6px;
+      height: 10px;
+      border: 1px solid var(--green);
     }
 
-    .diskIcon::after {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 24px;
-      width: 20px;
-      height: 12px;
-      background: #d8ffe6;
-      border: 1px solid #001100;
+    .docIcon {
+      background: rgba(255,255,255,0.04);
     }
 
-    .trashIcon {
-      width: 38px;
-      height: 42px;
-    }
-
-    .trashIcon::before {
+    .docIcon::before,
+    .docIcon::after {
       content: "";
       position: absolute;
       left: 8px;
-      top: 13px;
-      width: 24px;
-      height: 25px;
-      border: 2px solid #d8ffe6;
-      background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(0,255,102,0.18),
-          rgba(0,255,102,0.18) 3px,
-          transparent 3px,
-          transparent 7px
-        );
+      right: 8px;
+      height: 1px;
+      background: var(--green);
     }
 
-    .trashIcon::after {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 7px;
-      width: 30px;
-      height: 6px;
-      background: #d8ffe6;
-      border: 1px solid #001100;
-    }
+    .docIcon::before { top: 12px; }
+    .docIcon::after { top: 22px; }
 
-    .textIcon {
-      width: 36px;
-      height: 44px;
-      background: #d8ffe6;
-      border: 2px solid #001100;
-      box-shadow:
-        0 0 0 2px #d8ffe6,
-        0 0 9px rgba(0,255,100,0.15);
-    }
-
-    .textIcon::before {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 12px;
-      height: 12px;
-      background: #00aa44;
-      clip-path: polygon(0 0, 100% 100%, 0 100%);
-    }
-
-    .textIcon::after {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 18px;
-      width: 20px;
-      height: 2px;
-      background: #001100;
-      box-shadow:
-        0 6px 0 #001100,
-        0 12px 0 #001100;
+    .binIcon {
+      border-radius: 2px 2px 8px 8px;
+      background: rgba(0,255,102,0.05);
     }
 
     .centerArea {
       position: relative;
-      min-height: 620px;
-      border: 1px dashed rgba(0,255,102,0.18);
+      border: 1px solid rgba(0,255,102,0.20);
       background:
-        radial-gradient(circle at center, rgba(0,255,102,0.05), transparent 60%);
+        radial-gradient(circle at center, rgba(0,255,102,0.08), transparent 58%),
+        rgba(0,0,0,0.20);
+      overflow: hidden;
     }
 
     .desktopStamp {
       position: absolute;
-      left: 28px;
-      top: 30px;
-      border: 2px solid rgba(0,255,102,0.24);
-      color: rgba(186,255,201,0.35);
-      padding: 18px 22px;
-      font-size: 24px;
-      letter-spacing: 3px;
-      transform: rotate(-8deg);
-      text-align: center;
-      line-height: 1.3;
-      text-transform: uppercase;
+      left: 24px;
+      top: 22px;
+      color: rgba(0,255,102,0.24);
+      font-size: 42px;
+      line-height: 1.1;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-shadow: 0 0 18px rgba(0,255,102,0.18);
     }
 
     .warningNote {
       position: absolute;
       left: 28px;
-      bottom: 30px;
-      width: 350px;
-      border: 2px solid var(--green2);
-      background: rgba(0, 0, 0, 0.35);
-      box-shadow: 0 0 14px rgba(0,255,100,0.12);
-    }
-
-    .warningTitle {
-      background: #0c3a16;
-      border-bottom: 2px solid var(--green2);
-      color: var(--yellow);
-      padding: 6px 8px;
+      bottom: 26px;
+      width: min(520px, calc(100% - 56px));
+      border: 1px solid rgba(255,43,79,0.55);
+      color: var(--red);
+      background: rgba(255,43,79,0.08);
+      padding: 12px;
       font-size: 12px;
-    }
-
-    .warningBody {
-      padding: 10px;
-      color: #9dffbd;
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    .systemWindow,
-    .readmeWindow,
-    .recycleWindow,
-    .easterEggWindow {
-      border: 2px solid #d8ffe6;
-      background: #031203;
-      box-shadow:
-        4px 4px 0 rgba(0, 0, 0, 0.65),
-        0 0 18px rgba(0,255,100,0.16);
+      line-height: 1.45;
+      box-shadow: 0 0 16px rgba(255,43,79,0.12);
     }
 
     .systemWindow {
-      align-self: start;
-    }
-
-    .readmeWindow,
-    .recycleWindow,
-    .easterEggWindow {
-      display: none;
-      position: absolute;
-      width: 480px;
-      max-width: calc(100% - 40px);
-      z-index: 30;
-    }
-
-    .readmeWindow {
-      left: 42%;
-      top: 104px;
-    }
-
-    .recycleWindow {
-      left: 35%;
-      top: 150px;
-    }
-
-    .easterEggWindow {
-      left: 40%;
-      top: 245px;
-      z-index: 31;
-    }
-
-    .windowButtons {
+      border: 2px solid rgba(0,255,102,0.35);
+      background: rgba(0,0,0,0.55);
+      box-shadow:
+        0 0 18px rgba(0,255,102,0.16),
+        inset 0 0 20px rgba(0,255,102,0.05);
       display: flex;
-      gap: 4px;
+      flex-direction: column;
+      min-height: 0;
     }
 
-    .winButton {
-      width: 16px;
-      height: 16px;
-      background: #0b2a0b;
-      border: 1px solid #d8ffe6;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .winButton.close::before {
-      content: "x";
-      position: absolute;
-      inset: 0;
-      color: #d8ffe6;
+    .windowTitle {
+      min-height: 32px;
+      border-bottom: 1px solid rgba(0,255,102,0.28);
+      background: rgba(0,255,102,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: var(--white);
       font-size: 12px;
-      line-height: 14px;
-      text-align: center;
+      letter-spacing: 1px;
     }
 
-    .systemBody,
-    .readmeBody,
-    .recycleBody,
-    .easterEggBody {
-      padding: 14px;
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.55;
+    .systemContent {
+      padding: 12px;
+      font-size: 12px;
+      overflow: auto;
+      flex: 1;
     }
 
-    .systemBox,
-    .readmeBox,
-    .recycleBox,
-    .easterEggBox {
-      border: 1px dashed var(--green2);
-      background: rgba(0,255,102,0.045);
+    .systemBox {
+      border: 1px solid rgba(0,255,102,0.25);
+      background: rgba(0,255,102,0.05);
       padding: 10px;
-      margin-bottom: 12px;
-      white-space: pre-line;
-    }
-
-    .readmeBox strong,
-    .recycleBox strong,
-    .easterEggBox strong {
-      color: var(--yellow);
+      margin-bottom: 10px;
+      line-height: 1.45;
+      color: var(--green2);
     }
 
     .statusGrid {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 6px 12px;
-      border: 1px solid rgba(0,255,102,0.25);
-      background: rgba(0,0,0,0.25);
-      padding: 10px;
-      margin-bottom: 12px;
+      gap: 7px;
+      margin-bottom: 10px;
     }
 
-    .statusGrid div:nth-child(even) {
-      color: var(--yellow);
+    .statusRow {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px dashed rgba(0,255,102,0.18);
+      padding-bottom: 5px;
+    }
+
+    .statusRow span:last-child {
+      color: var(--amber);
       text-align: right;
     }
 
     .miniLog {
-      height: 136px;
-      overflow: hidden;
       border: 1px solid rgba(0,255,102,0.25);
-      background: rgba(0,0,0,0.28);
-      padding: 8px;
-      color: #8dffb0;
-      font-size: 12px;
+      background: rgba(0,0,0,0.45);
+      padding: 10px;
+      color: var(--green);
       line-height: 1.45;
-      margin-bottom: 10px;
+      white-space: pre-line;
+      min-height: 128px;
     }
 
     .hintLine {
-      color: var(--yellow);
+      margin-top: 10px;
+      color: var(--amber);
       font-size: 12px;
-      border: 1px solid rgba(255,238,102,0.28);
-      background: rgba(255,238,102,0.055);
-      padding: 8px;
-      margin-bottom: 10px;
+      line-height: 1.45;
     }
 
     .commandTerminal {
-      border: 1px solid rgba(0,255,102,0.38);
-      background: rgba(0,0,0,0.42);
-      box-shadow:
-        inset 0 0 16px rgba(0,255,102,0.06),
-        0 0 12px rgba(0,255,102,0.08);
+      border-top: 2px solid rgba(0,255,102,0.30);
+      background: rgba(0,0,0,0.52);
+      padding: 8px;
     }
 
     .commandHeader {
-      background: #0c3a16;
-      color: var(--yellow);
-      border-bottom: 1px solid rgba(0,255,102,0.38);
-      padding: 6px 8px;
+      color: var(--white);
       font-size: 12px;
-      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
     }
 
     .commandOutput {
-      height: 118px;
+      height: 82px;
       overflow-y: auto;
+      border: 1px solid rgba(0,255,102,0.25);
+      background: rgba(0,0,0,0.48);
       padding: 8px;
-      color: #8dffb0;
-      font-size: 12px;
-      line-height: 1.45;
+      color: var(--green);
+      font-size: 11px;
+      line-height: 1.35;
       white-space: pre-line;
     }
 
     .commandInputRow {
       display: flex;
       align-items: center;
-      border-top: 1px solid rgba(0,255,102,0.22);
-      padding: 7px 8px;
       gap: 6px;
+      margin-top: 7px;
+      font-size: 12px;
     }
 
     .commandPrompt {
-      color: var(--yellow);
-      font-size: 12px;
+      color: var(--green2);
       white-space: nowrap;
     }
 
     .commandInput {
       flex: 1;
-      min-width: 0;
-      background: transparent;
       border: none;
-      color: var(--green);
       outline: none;
-      font-family: "Courier New", monospace;
-      font-size: 12px;
-    }
-
-    .deletedItem {
-      width: 100%;
-      text-align: left;
-      border: 1px solid rgba(0,255,102,0.24);
-      background: rgba(0,0,0,0.22);
+      background: transparent;
       color: var(--white);
-      padding: 8px;
-      margin: 6px 0;
       font-family: "Courier New", monospace;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .deletedItem:hover {
-      background: rgba(0,255,102,0.10);
-      border-color: var(--yellow);
-    }
-
-    .tinyTextIcon {
-      width: 16px;
-      height: 20px;
-      display: inline-block;
-      background: #d8ffe6;
-      border: 1px solid #001100;
-      position: relative;
-    }
-
-    .tinyTextIcon::after {
-      content: "";
-      position: absolute;
-      left: 3px;
-      top: 7px;
-      width: 9px;
-      height: 1px;
-      background: #001100;
-      box-shadow:
-        0 4px 0 #001100,
-        0 8px 0 #001100;
-    }
-
-    .joke {
-      margin-top: 12px;
-      color: #9dffbd;
-      font-size: 12px;
-      border-top: 1px dotted rgba(0,255,102,0.25);
-      padding-top: 10px;
-    }
-
-    .easterEggText {
-      margin-top: 10px;
-      color: #caffd7;
-      white-space: pre-line;
+      font-size: 13px;
     }
 
     .taskbar {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 42px;
-      background:
-        linear-gradient(180deg, #0e642c 0%, #062b13 100%);
-      border-top: 2px solid #d8ffe6;
+      height: 32px;
+      border-top: 2px solid rgba(0,255,102,0.34);
+      background: rgba(0,0,0,0.62);
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 5px 8px;
+      gap: 10px;
+      padding: 0 10px;
+      color: var(--green2);
+      font-size: 12px;
     }
 
     .startButton {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 82px;
+      border: 1px solid rgba(0,255,102,0.45);
+      padding: 4px 12px;
+      background: rgba(0,255,102,0.08);
       color: var(--white);
-      text-decoration: none;
-      border-top: 2px solid #d8ffe6;
-      border-left: 2px solid #d8ffe6;
-      border-right: 2px solid #052b13;
-      border-bottom: 2px solid #052b13;
-      background: #0b4c22;
-      padding: 5px 8px;
-      font-weight: bold;
-      font-size: 12px;
     }
 
-    .startLogo {
-      width: 18px;
-      height: 18px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
+    .popupWindow {
+      position: absolute;
+      left: 210px;
+      top: 90px;
+      width: 520px;
+      max-width: calc(100% - 240px);
+      border: 2px solid rgba(0,255,102,0.55);
+      background: rgba(0,0,0,0.92);
+      color: var(--green2);
+      box-shadow: 0 0 28px rgba(0,255,102,0.22);
+      z-index: 30;
+      display: none;
     }
 
-    .startLogo span {
-      background: var(--green);
-      box-shadow: 0 0 5px rgba(0,255,102,0.45);
+    .popupBody {
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-line;
     }
 
-    .taskButtons {
-      display: flex;
-      gap: 6px;
-      flex: 1;
-      min-width: 0;
+    .closeButton {
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
+      color: var(--white);
+      cursor: pointer;
+      font-family: "Courier New", monospace;
     }
 
-    .taskButton {
-      min-width: 120px;
-      max-width: 180px;
-      padding: 6px 8px;
-      border: 1px solid rgba(216,255,230,0.55);
-      background: rgba(0,0,0,0.18);
-      color: #d8ffe6;
-      font-size: 12px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .commandWakeShake {
+      animation: commandWakeShake 0.9s ease-in-out;
     }
 
-    .clock {
-      min-width: 72px;
-      text-align: center;
-      color: var(--yellow);
-      border: 1px inset rgba(216,255,230,0.65);
-      background: rgba(0,0,0,0.24);
-      padding: 5px 8px;
-      font-size: 12px;
+    @keyframes commandWakeShake {
+      0% { transform: translate(0, 0) rotate(0deg); filter: brightness(1); }
+      10% { transform: translate(-8px, 4px) rotate(-0.6deg); filter: brightness(1.4); }
+      20% { transform: translate(7px, -5px) rotate(0.5deg); filter: brightness(0.8); }
+      30% { transform: translate(-6px, 6px) rotate(-0.4deg); filter: brightness(1.7); }
+      40% { transform: translate(6px, -3px) rotate(0.4deg); filter: brightness(1); }
+      50% { transform: translate(-4px, 4px) rotate(-0.3deg); filter: brightness(1.5); }
+      60% { transform: translate(4px, -4px) rotate(0.3deg); filter: brightness(0.9); }
+      70% { transform: translate(-2px, 2px) rotate(-0.2deg); filter: brightness(1.3); }
+      80% { transform: translate(2px, -2px) rotate(0.2deg); filter: brightness(1.1); }
+      100% { transform: translate(0, 0) rotate(0deg); filter: brightness(1); }
     }
 
-    @media (max-width: 1120px) {
-      .desktopMain {
-        grid-template-columns: 120px 1fr;
-      }
-
-      .systemWindow {
-        grid-column: 1 / -1;
-      }
-
-      .centerArea {
-        min-height: 420px;
-      }
-
-      .readmeWindow {
-        top: 120px;
-      }
-
-      .recycleWindow {
-        top: 190px;
-      }
-
-      .easterEggWindow {
-        top: 330px;
-      }
+    .commandWakeFlash {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background:
+        radial-gradient(circle at center, rgba(120, 255, 160, 0.45), transparent 42%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 40, 70, 0.22),
+          rgba(255, 40, 70, 0.22) 2px,
+          transparent 2px,
+          transparent 7px
+        );
+      mix-blend-mode: screen;
+      animation: commandWakeFlash 0.9s ease-out forwards;
     }
 
-    @media (max-width: 760px) {
+    @keyframes commandWakeFlash {
+      0% { opacity: 0; }
+      12% { opacity: 1; }
+      30% { opacity: 0.35; }
+      48% { opacity: 0.9; }
+      70% { opacity: 0.25; }
+      100% { opacity: 0; }
+    }
+
+    @media (max-width: 1100px) {
       body {
-        padding: 8px;
+        overflow: auto;
       }
 
       .computerShell {
-        padding: 12px 12px 24px;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .monitorFrame {
+        height: auto;
+        min-height: 900px;
       }
 
       .monitorScreen {
-        padding: 8px;
-        min-height: auto;
-        border-radius: 18px;
-      }
-
-      .loginScreen,
-      .desktop {
-        min-height: 1120px;
-      }
-
-      .desktopTopStrip {
-        font-size: 10px;
-        gap: 8px;
-      }
-
-      .desktopTopStrip span:last-child {
-        display: none;
+        min-height: 860px;
       }
 
       .desktopMain {
         grid-template-columns: 1fr;
-        padding: 12px 8px 54px;
+        height: auto;
       }
 
       .iconColumn {
-        grid-template-columns: repeat(3, 88px);
-        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+        display: grid;
       }
 
       .centerArea {
-        display: none;
+        min-height: 260px;
       }
 
-      .taskButtons {
-        display: none;
-      }
-
-      .clock {
-        min-width: 78px;
-      }
-
-      .readmeWindow,
-      .recycleWindow,
-      .easterEggWindow {
-        width: calc(100% - 28px);
-        top: 150px;
-        left: 14px;
-      }
-
-      .recycleWindow {
-        top: 220px;
-      }
-
-      .easterEggWindow {
-        top: 410px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .iconColumn {
-        grid-template-columns: repeat(2, 88px);
-      }
-
-      .loginScreen,
-      .desktop {
-        min-height: 1280px;
+      .popupWindow {
+        left: 20px;
+        right: 20px;
+        width: auto;
+        max-width: none;
       }
     }
   </style>
 </head>
 
 <body>
+  <div class="computerShell">
+    <div class="monitorFrame">
+      <div class="monitorScreen">
+        <div class="crtSweep"></div>
 
-  <main class="computerShell">
-    <div class="monitorLabel">Thorne Private Workstation // Botanical Chemistry Archive</div>
-
-    <section class="monitorScreen">
-      <div class="crtGlow"></div>
-      <div class="crtFlicker"></div>
-      <div class="crtSweep"></div>
-      <div class="crtNoise"></div>
-      <div class="glassReflection"></div>
-
-      <section class="loginScreen" id="loginScreen">
-        <div class="loginWindow">
-          <div class="loginTitleBar">
-            <span>Private Workstation Login</span>
-            <div class="windowButtons">
-              <span class="winButton"></span>
-              <span class="winButton"></span>
-              <span class="winButton close"></span>
-            </div>
-          </div>
-
-          <div class="loginBody">
-            <div class="loginHeader">
-              <h1>THORNE PRIVATE WORKSTATION</h1>
-              <p>Botanical Chemistry Archive</p>
-              <p>Owner: Dr. Nessa Thorne</p>
-              <p>St. Brigid's University, Dublin</p>
+        <section class="loginScreen" id="loginScreen">
+          <div class="loginBox">
+            <div class="loginTitle">THORNE PRIVATE WORKSTATION</div>
+            <div class="loginSub">
+              BOTANICAL CHEMISTRY ARCHIVE<br>
+              USER: DR. N. THORNE
             </div>
 
-            <div class="loginField">
-              <label for="emailInput">EMAIL ADDRESS</label>
-              <input id="emailInput" type="text" autocomplete="off" placeholder="enter email address">
-            </div>
+            <div class="fieldLabel">EMAIL</div>
+            <input id="emailInput" type="text" autocomplete="off" placeholder="user@archive">
 
-            <div class="loginField">
-              <label for="passwordInput">PASSWORD</label>
-              <input id="passwordInput" type="password" autocomplete="off" placeholder="enter password">
-            </div>
+            <div class="fieldLabel">PASSWORD</div>
+            <input id="passwordInput" type="password" autocomplete="off" placeholder="password">
 
-            <div class="loginButtons">
-              <button class="oldButton" onclick="attemptLogin()">LOGIN</button>
-              <button class="oldButton secondary" onclick="showPasswordHint()">FORGOT PASSWORD?</button>
-            </div>
+            <button class="loginButton" onclick="attemptLogin()">OPEN WORKSTATION</button>
 
-            <div class="loginMessage" id="loginMessage"></div>
+            <div class="loginError" id="loginError"></div>
 
-            <div class="hintBox" id="hintBox">
-              <strong>PASSWORD RECOVERY QUESTION</strong><br><br>
+            <div class="recoveryBox">
+              PASSWORD RECOVERY QUESTION<br><br>
               What is my favourite flower?<br><br>
               Botanical file hint:<br>
-              <em>Geranium sanguineum</em><br><br>
-              Common name required.<br>
-              Spaces are not required.
+              <strong>Geranium sanguineum</strong><br><br>
+              Common name required. Spaces are not required.
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <div class="desktop" id="desktop">
-        <div class="desktopTopStrip">
-          <span>THORNE OS // PRIVATE LAB DESKTOP</span>
-          <span>ARCHIVE NODE: BOTANICAL-CHEMISTRY</span>
-          <span>USER: DR. N. THORNE</span>
-        </div>
+        <section class="desktopScreen" id="desktopScreen">
+          <div class="desktopTopStrip">
+            <span>THORNE PRIVATE WORKSTATION // BOTANICAL CHEMISTRY ARCHIVE</span>
+            <span id="clock">--:--</span>
+          </div>
 
-        <div class="desktopMain">
-          <nav class="iconColumn">
-            <a class="desktopIcon" href="chemistry.html">
-              <span class="folder95 chemistry">
-                <span class="tab"></span>
-                <span class="back"></span>
-                <span class="front"></span>
-              </span>
-              <span class="iconName">Chemistry</span>
-            </a>
+          <div class="desktopMain">
+            <nav class="iconColumn">
+              <a class="desktopIcon" href="chemistry.html">
+                <div class="folderIcon"></div>
+                <span>Chemistry</span>
+              </a>
 
-            <a class="desktopIcon" href="botany.html">
-              <span class="folder95 botany">
-                <span class="tab"></span>
-                <span class="back"></span>
-                <span class="front"></span>
-              </span>
-              <span class="iconName">Botany</span>
-            </a>
+              <a class="desktopIcon" href="botany.html">
+                <div class="folderIcon"></div>
+                <span>Botany</span>
+              </a>
 
-            <a class="desktopIcon" href="private.html">
-              <span class="folder95 private">
-                <span class="tab"></span>
-                <span class="back"></span>
-                <span class="front"></span>
-              </span>
-              <span class="iconName">Private</span>
-            </a>
+              <a class="desktopIcon" href="private.html">
+                <div class="folderIcon"></div>
+                <span>Private</span>
+              </a>
 
-            <div class="desktopIcon">
-              <span class="oldIcon computerIcon"></span>
-              <span class="iconName">My Computer</span>
-            </div>
-
-            <div class="desktopIcon">
-              <span class="oldIcon diskIcon"></span>
-              <span class="iconName">Backup Disk</span>
-            </div>
-
-            <button class="desktopIcon" onclick="openReadme()">
-              <span class="oldIcon textIcon"></span>
-              <span class="iconName">Readme.txt</span>
-            </button>
-
-            <button class="desktopIcon" onclick="openRecycle()">
-              <span class="oldIcon trashIcon"></span>
-              <span class="iconName">Recycle Bin</span>
-            </button>
-          </nav>
-
-          <section class="centerArea">
-            <div class="desktopStamp">
-              thorne<br>
-              private<br>
-              workstation
-            </div>
-
-            <div class="warningNote">
-              <div class="warningTitle">Local System Warning</div>
-              <div class="warningBody">
-                Three main directories remain accessible:
-                Chemistry, Botany and Private.
-                The Private folder appears to contain personal material connected to Jason Krane.
-              </div>
-            </div>
-          </section>
-
-          <aside class="systemWindow">
-            <div class="windowTitleBar">
-              <span>System Monitor</span>
-              <div class="windowButtons">
-                <span class="winButton"></span>
-                <span class="winButton"></span>
-                <span class="winButton close"></span>
-              </div>
-            </div>
-
-            <div class="systemBody">
-              <div class="systemBox">THORNE BOTANICAL CHEMISTRY NODE
-Signal source: private workstation
-Local cache: partially restored
-Operator: DR. N. THORNE
-Last external contact: JASON KRANE</div>
-
-              <div class="statusGrid">
-                <div>Main folders</div>
-                <div>3</div>
-
-                <div>Chemistry records</div>
-                <div>unstable</div>
-
-                <div>Botany records</div>
-                <div>fragmented</div>
-
-                <div>Private records</div>
-                <div>locked</div>
-
-                <div>Diary reference</div>
-                <div>hidden</div>
+              <div class="desktopIcon" onclick="openPopup('computer')">
+                <div class="folderIcon"></div>
+                <span>My Computer</span>
               </div>
 
-              <div class="miniLog">
-                <div>&gt; booting private recovery shell...</div>
-                <div>&gt; scanning chemical notebooks...</div>
-                <div>&gt; botanical index partially restored</div>
-                <div>&gt; private correspondence detected</div>
-                <div>&gt; Jason Krane reference count: abnormal</div>
-                <div>&gt; warning: staged transmission residue found</div>
-                <div>&gt; open Readme.txt for recovery order</div>
+              <a class="desktopIcon" href="shoot.html">
+                <div class="diskIcon"></div>
+                <span>Backup Disk</span>
+              </a>
+
+              <div class="desktopIcon" onclick="openPopup('readme')">
+                <div class="docIcon"></div>
+                <span>Readme.txt</span>
               </div>
 
-              <div class="hintLine">
-                Recommended order: Chemistry → Botany → Private.
+              <div class="desktopIcon" onclick="openPopup('bin')">
+                <div class="binIcon"></div>
+                <span>Recycle Bin</span>
+              </div>
+            </nav>
+
+            <section class="centerArea">
+              <div class="desktopStamp">
+                DR. N.<br>
+                THORNE
+              </div>
+
+              <div class="warningNote">
+                WARNING: This private workstation contains reconstructed files, staged transmissions,
+                damaged research notes and residual command traces. Some paths are not visible as icons.
+              </div>
+            </section>
+
+            <aside class="systemWindow">
+              <div class="windowTitle">
+                <span>System Monitor</span>
+                <span>LIVE</span>
+              </div>
+
+              <div class="systemContent">
+                <div class="systemBox">
+                  THORNE BOTANICAL CHEMISTRY NODE<br>
+                  Signal source: private workstation<br>
+                  Local cache: partially restored<br>
+                  Operator: DR. N. THORNE<br>
+                  Last external contact: JASON KRANE
+                </div>
+
+                <div class="statusGrid">
+                  <div class="statusRow"><span>Main folders</span><span>3</span></div>
+                  <div class="statusRow"><span>Chemistry records</span><span>unstable</span></div>
+                  <div class="statusRow"><span>Botany records</span><span>fragmented</span></div>
+                  <div class="statusRow"><span>Private records</span><span>locked</span></div>
+                  <div class="statusRow"><span>Backup disk</span><span>mounted</span></div>
+                  <div class="statusRow"><span>Command terminal</span><span>listening</span></div>
+                </div>
+
+                <div class="miniLog">
+&gt; booting private recovery shell...
+&gt; scanning chemical notebooks...
+&gt; botanical index partially restored
+&gt; private correspondence detected
+&gt; Jason Krane reference count: abnormal
+&gt; external backup disk mounted
+&gt; security simulation recovered
+&gt; command channel available
+&gt; open Readme.txt for recovery order
+                </div>
+
+                <div class="hintLine">
+                  Recommended order: Chemistry → Botany → Backup Disk → Private.
+                </div>
               </div>
 
               <div class="commandTerminal">
                 <div class="commandHeader">Command Terminal</div>
-                <div class="commandOutput" id="commandOutput">
-&gt; command channel restored
+                <div class="commandOutput" id="commandOutput">&gt; command channel restored
 &gt; type command and press ENTER
-&gt; unknown commands may return corrupted output
-                </div>
+&gt; unknown commands may return corrupted output</div>
+
                 <div class="commandInputRow">
                   <span class="commandPrompt">C:\THORNE&gt;</span>
                   <input id="commandInput" class="commandInput" type="text" autocomplete="off" placeholder="type command">
                 </div>
               </div>
-            </div>
-          </aside>
-
-          <section class="readmeWindow" id="readmeWindow">
-            <div class="windowTitleBar">
-              <span>Readme.txt</span>
-              <div class="windowButtons">
-                <span class="winButton"></span>
-                <span class="winButton"></span>
-                <span class="winButton close" onclick="closeReadme()"></span>
-              </div>
-            </div>
-
-            <div class="readmeBody">
-              <div class="readmeBox"><strong>PRIVATE WORKSTATION RECOVERY INSTRUCTIONS</strong>
-
-This workstation belongs to Dr. Nessa Thorne.
-
-Three main directories are available:
-
-1. Chemistry
-2. Botany
-3. Private</div>
-
-              <div class="readmeBox"><strong>RECOMMENDED RECOVERY ORDER</strong>
-
-Open Chemistry first.
-
-Then open Botany.
-
-Only open Private after recovering enough context from the first two folders.
-
-The Private folder may contain personal material connected to Jason Krane.</div>
-
-              <div class="readmeBox"><strong>WARNING</strong>
-
-Do not assume Jason Krane is the sender.
-
-Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
-
-Find the diary.</div>
-            </div>
-          </section>
-
-          <section class="recycleWindow" id="recycleWindow">
-            <div class="windowTitleBar">
-              <span>Recycle Bin</span>
-              <div class="windowButtons">
-                <span class="winButton"></span>
-                <span class="winButton"></span>
-                <span class="winButton close" onclick="closeRecycle()"></span>
-              </div>
-            </div>
-
-            <div class="recycleBody">
-              <div class="recycleBox"><strong>RECYCLE BIN CONTENTS</strong>
-
-3 deleted items found.
-Click an item to recover readable text.</div>
-
-              <button class="deletedItem" onclick="openEasterEgg('poem')">
-                <span class="tinyTextIcon"></span>
-                <span>krane_love_poem_final_FINAL2.txt</span>
-              </button>
-
-              <button class="deletedItem" onclick="openEasterEgg('revenge')">
-                <span class="tinyTextIcon"></span>
-                <span>definitely_not_a_revenge_plan.txt</span>
-              </button>
-
-              <button class="deletedItem" onclick="openEasterEgg('plants')">
-                <span class="tinyTextIcon"></span>
-                <span>plants_that_understand_me.xls</span>
-              </button>
-
-              <div class="joke">
-                Deleted note recovered:<br><br>
-                “Reminder: stop naming suspicious folders suspicious names.”
-              </div>
-            </div>
-          </section>
-
-          <section class="easterEggWindow" id="easterEggWindow">
-            <div class="windowTitleBar">
-              <span id="easterEggTitle">Recovered File</span>
-              <div class="windowButtons">
-                <span class="winButton"></span>
-                <span class="winButton"></span>
-                <span class="winButton close" onclick="closeEasterEgg()"></span>
-              </div>
-            </div>
-
-            <div class="easterEggBody">
-              <div class="easterEggBox">
-                <strong id="easterEggHeader">RECOVERED TEXT</strong>
-
-                <div class="easterEggText" id="easterEggText"></div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <footer class="taskbar">
-          <a class="startButton" href="#">
-            <span class="startLogo">
-              <span></span><span></span><span></span><span></span>
-            </span>
-            <span>Start</span>
-          </a>
-
-          <div class="taskButtons">
-            <div class="taskButton">System Monitor</div>
-            <div class="taskButton">Desktop</div>
-            <div class="taskButton">Thorne Archive</div>
+            </aside>
           </div>
 
-          <div class="clock" id="clockBox">00:00</div>
-        </footer>
+          <div class="taskbar">
+            <span class="startButton">START</span>
+            <span>THORNE OS</span>
+            <span>// private workstation active</span>
+          </div>
+
+          <div class="popupWindow" id="popupWindow">
+            <div class="windowTitle">
+              <span id="popupTitle">Window</span>
+              <button class="closeButton" onclick="closePopup()">X</button>
+            </div>
+            <div class="popupBody" id="popupBody"></div>
+          </div>
+        </section>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
+
+  <audio id="wakeSound" src="terminal-wake.mp3" preload="auto"></audio>
 
   <script>
     const correctEmail = "n.thorne@stbrigid-lab.ie";
     const correctPassword = "BLOODYCRANESBILL";
-
-    const easterEggs = {
-      poem: {
-        title: "krane_love_poem_final_FINAL2.txt",
-        header: "RECOVERED ROMANTIC DOCUMENT",
-        text:
-`Jason,
-
-Roses are red.
-Violets are blue.
-Your cover was terrible,
-but I still covered for you.
-
-I tried to write something romantic.
-The rhododendron judged me.
-
-Delete this before anyone from the department finds it.
-
-- N.`
-      },
-
-      revenge: {
-        title: "definitely_not_a_revenge_plan.txt",
-        header: "RECOVERED SUSPICIOUS DOCUMENT",
-        text:
-`This is absolutely not a revenge plan.
-
-Step 1:
-Do not fake a Jason transmission.
-
-Step 2:
-Do not lure agents into following emotional clues.
-
-Step 3:
-Do not leave obvious files on your desktop.
-
-Step 4:
-Do not name this file definitely_not_a_revenge_plan.txt.
-
-Note to self:
-Rename file later.`
-      },
-
-      plants: {
-        title: "plants_that_understand_me.xls",
-        header: "RECOVERED BOTANICAL SPREADSHEET",
-        text:
-`Plants That Understand Me:
-
-1. Bloody Cranesbill
-Reason: dramatic, loyal, excellent name.
-
-2. Nightshade
-Reason: never asks unnecessary questions.
-
-3. Rosehip
-Reason: looks harmless, keeps secrets.
-
-4. Office fern
-Reason: emotionally unavailable, but consistent.
-
-5. Jason
-Reason: technically not a plant.
-Moved to archive.`
-      }
-    };
 
     const randomTerminalResponses = [
       "> command rejected // damaged registry path",
@@ -1628,8 +835,9 @@ Moved to archive.`
       "> directory access must be performed through desktop icons"
     ];
 
-    function normalizePassword(value) {
-      return value
+    function normalizeLoginPassword(value) {
+      return String(value)
+        .trim()
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
@@ -1638,112 +846,153 @@ Moved to archive.`
         .replaceAll("’", "");
     }
 
-    function openDesktop() {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("desktop").style.display = "block";
-
-      setTimeout(function() {
-        const commandInput = document.getElementById("commandInput");
-        if (commandInput) {
-          commandInput.focus();
-        }
-      }, 400);
-    }
-
     function attemptLogin() {
-      const emailInput = document.getElementById("emailInput").value.trim().toLowerCase();
-      const passwordInput = normalizePassword(document.getElementById("passwordInput").value);
-      const message = document.getElementById("loginMessage");
+      const email = document.getElementById("emailInput").value.trim().toLowerCase();
+      const password = normalizeLoginPassword(document.getElementById("passwordInput").value);
+      const error = document.getElementById("loginError");
 
-      if (emailInput === correctEmail && passwordInput === correctPassword) {
-        message.style.color = "#ffee66";
-        message.textContent = "ACCESS GRANTED // opening private workstation...";
-
-        localStorage.setItem("thorneLoggedIn", "yes");
-
+      if (email === correctEmail && password === correctPassword) {
+        error.textContent = "";
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("desktopScreen").style.display = "block";
+        localStorage.setItem("terminalLoggedIn", "yes");
         setTimeout(function() {
-          openDesktop();
-        }, 900);
+          document.getElementById("commandInput").focus();
+        }, 300);
       } else {
-        message.style.color = "#ff5555";
-        message.textContent = "ACCESS DENIED // invalid email or password.";
+        error.textContent = "ACCESS DENIED // botanical recovery answer invalid";
       }
     }
 
-    function showPasswordHint() {
-      const hintBox = document.getElementById("hintBox");
-      const message = document.getElementById("loginMessage");
+    function openPopup(type) {
+      const popup = document.getElementById("popupWindow");
+      const title = document.getElementById("popupTitle");
+      const body = document.getElementById("popupBody");
 
-      hintBox.style.display = "block";
-      message.style.color = "#ffee66";
-      message.textContent = "PASSWORD RECOVERY HINT LOADED.";
+      if (type === "readme") {
+        title.textContent = "Readme.txt";
+        body.textContent =
+`RECOVERY ORDER
+
+1. Open Chemistry.
+2. Open Botany.
+3. Check the Backup Disk.
+4. Use any recovered terminal codes in the Command Terminal.
+5. Open Private when both private fragments are known.
+
+NOTE:
+This workstation does not show every route as an icon.
+Some words must be typed manually.
+
+WARNING:
+Jason Krane reference count is abnormal.`;
+      }
+
+      if (type === "computer") {
+        title.textContent = "My Computer";
+        body.textContent =
+`LOCAL DRIVES
+
+C:\\THORNE_ARCHIVE
+- Chemistry
+- Botany
+- Private
+
+D:\\BACKUP_DISK
+- Security simulation recovered
+- Old terminal wake-code residue detected
+
+System note:
+Command Terminal accepts manually typed codes.`;
+      }
+
+      if (type === "bin") {
+        title.textContent = "Recycle Bin";
+        body.textContent =
+`RECYCLE BIN
+
+Deleted item fragments:
+- staged_transmission.tmp
+- krane_voice_rebuild.cache
+- greenhouse_echo.seed
+- old_security_simulation.link
+
+Most files are too damaged to restore.`;
+      }
+
+      popup.style.display = "block";
     }
 
-    function updateClock() {
-      const clock = document.getElementById("clockBox");
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
-      clock.textContent = hours + ":" + minutes;
+    function closePopup() {
+      document.getElementById("popupWindow").style.display = "none";
     }
 
-    function openReadme() {
-      document.getElementById("readmeWindow").style.display = "block";
-      document.getElementById("recycleWindow").style.display = "none";
-      document.getElementById("easterEggWindow").style.display = "none";
-    }
-
-    function closeReadme() {
-      document.getElementById("readmeWindow").style.display = "none";
-    }
-
-    function openRecycle() {
-      document.getElementById("recycleWindow").style.display = "block";
-      document.getElementById("readmeWindow").style.display = "none";
-      document.getElementById("easterEggWindow").style.display = "none";
-    }
-
-    function closeRecycle() {
-      document.getElementById("recycleWindow").style.display = "none";
-      document.getElementById("easterEggWindow").style.display = "none";
-    }
-
-    function openEasterEgg(type) {
-      const file = easterEggs[type];
-
-      document.getElementById("easterEggTitle").textContent = file.title;
-      document.getElementById("easterEggHeader").textContent = file.header;
-      document.getElementById("easterEggText").textContent = file.text;
-      document.getElementById("easterEggWindow").style.display = "block";
-    }
-
-    function closeEasterEgg() {
-      document.getElementById("easterEggWindow").style.display = "none";
-    }
-
-    function appendCommandLine(text) {
+    function appendCommandLine(line) {
       const output = document.getElementById("commandOutput");
-      output.textContent += "\n" + text;
+      output.textContent += "\n" + line;
       output.scrollTop = output.scrollHeight;
     }
 
-    function handleCommandInput() {
-      const input = document.getElementById("commandInput");
-      const rawCommand = input.value.trim();
+    function triggerCommandWakeEffect() {
+      const shell = document.querySelector(".computerShell") || document.body;
 
-      if (!rawCommand) {
+      shell.classList.remove("commandWakeShake");
+      void shell.offsetWidth;
+      shell.classList.add("commandWakeShake");
+
+      const flash = document.createElement("div");
+      flash.className = "commandWakeFlash";
+      document.body.appendChild(flash);
+
+      setTimeout(function() {
+        flash.remove();
+      }, 950);
+
+      const sound = document.getElementById("wakeSound");
+
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(function() {});
+      }
+    }
+
+    function handleCommandInput(event) {
+      if (event.key !== "Enter") {
         return;
       }
 
-      const command = rawCommand.toLowerCase();
+      const input = document.getElementById("commandInput");
+      const original = input.value.trim();
+      const command = original.toLowerCase();
+
+      if (!command) {
+        return;
+      }
+
+      appendCommandLine("C:\\THORNE> " + original);
       input.value = "";
 
-      appendCommandLine("C:\\THORNE> " + rawCommand);
+      if (command === "echoseed") {
+        appendCommandLine("> backup simulation code accepted");
+        appendCommandLine("> dormant command layer responding...");
+        appendCommandLine("> greenhouse echo detected in terminal channel");
+        appendCommandLine("> command terminal is now confirmed as interactive");
+        appendCommandLine("> not all useful commands are visible as icons");
+        appendCommandLine("> system note: some words must be typed manually");
+
+        triggerCommandWakeEffect();
+
+        localStorage.setItem("backupWakeCodeEntered", "yes");
+
+        return;
+      }
 
       if (command === "drone") {
         appendCommandLine("> hidden command accepted");
         appendCommandLine("> final environment unlocked");
         appendCommandLine("> opening external control interface...");
+
+        triggerCommandWakeEffect();
 
         setTimeout(function() {
           window.location.href = "drone.html";
@@ -1752,47 +1001,18 @@ Moved to archive.`
         return;
       }
 
-      if (command === "help") {
-        appendCommandLine("> available actions: open desktop folders manually");
-        appendCommandLine("> readable directories: Chemistry, Botany, Private");
-        appendCommandLine("> recovery shell is damaged and cannot open folders directly");
-        return;
-      }
+      const randomResponse = randomTerminalResponses[
+        Math.floor(Math.random() * randomTerminalResponses.length)
+      ];
 
-      if (command === "clear" || command === "cls") {
-        document.getElementById("commandOutput").textContent =
-`> command channel restored
-> type command and press ENTER
-> unknown commands may return corrupted output`;
-        return;
-      }
+      appendCommandLine(randomResponse);
+    }
 
-      if (command === "dir" || command === "ls") {
-        appendCommandLine("> DIRECTORY LIST");
-        appendCommandLine("> Chemistry");
-        appendCommandLine("> Botany");
-        appendCommandLine("> Private");
-        appendCommandLine("> Readme.txt");
-        appendCommandLine("> Recycle Bin");
-        return;
-      }
-
-      if (command.includes("jason")) {
-        appendCommandLine("> Jason Krane reference found");
-        appendCommandLine("> reference count abnormal");
-        appendCommandLine("> open Private folder after recovering both archive fragments");
-        return;
-      }
-
-      if (command.includes("nessa") || command.includes("thorne")) {
-        appendCommandLine("> user profile: DR. N. THORNE");
-        appendCommandLine("> former lecturer // botanical chemistry");
-        appendCommandLine("> private archive integrity: unstable");
-        return;
-      }
-
-      const response = randomTerminalResponses[Math.floor(Math.random() * randomTerminalResponses.length)];
-      appendCommandLine(response);
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      document.getElementById("clock").textContent = hours + ":" + minutes;
     }
 
     document.getElementById("passwordInput").addEventListener("keydown", function(event) {
@@ -1803,23 +1023,14 @@ Moved to archive.`
 
     document.getElementById("emailInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        document.getElementById("passwordInput").focus();
+        attemptLogin();
       }
     });
 
-    document.getElementById("commandInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        handleCommandInput();
-      }
-    });
-
-    if (localStorage.getItem("thorneLoggedIn") === "yes") {
-      openDesktop();
-    }
+    document.getElementById("commandInput").addEventListener("keydown", handleCommandInput);
 
     updateClock();
     setInterval(updateClock, 1000);
   </script>
-
 </body>
 </html>
