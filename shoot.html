@@ -7,22 +7,26 @@
   <style>
     :root {
       --green: #7cff9e;
-      --green2: #c7ffd7;
+      --green-soft: #c7ffd7;
+      --green-dark: #001407;
       --red: #ff3158;
+      --red-soft: #ff8097;
       --amber: #ffd36a;
       --blue: #6fdcff;
       --white: #f2fff7;
-      --dark: #020604;
-      --panel: rgba(0, 16, 8, 0.86);
       --muted: #8fbaa0;
+      --black: #000000;
+      --panel: rgba(0, 16, 8, 0.86);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
+      padding: 0;
       min-height: 100vh;
       background:
         radial-gradient(circle at center, rgba(124,255,158,0.12), transparent 42%),
@@ -47,9 +51,22 @@
           transparent 5px
         );
       mix-blend-mode: screen;
+      opacity: 0.5;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 51;
+      background:
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.16) 58%, rgba(0,0,0,0.82) 100%);
     }
 
     .gameShell {
+      position: relative;
+      z-index: 2;
       width: 100vw;
       height: 100vh;
       padding: 14px;
@@ -82,6 +99,7 @@
 
     .topSide.right {
       text-align: right;
+      align-items: flex-end;
     }
 
     .mainTitle {
@@ -93,6 +111,7 @@
       text-shadow:
         0 0 10px rgba(124,255,158,0.85),
         0 0 24px rgba(124,255,158,0.25);
+      white-space: nowrap;
     }
 
     .mainArea {
@@ -110,9 +129,29 @@
         0 0 18px rgba(124,255,158,0.12),
         inset 0 0 20px rgba(124,255,158,0.05);
       overflow: hidden;
+      position: relative;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      left: -30%;
+      right: -30%;
+      top: -90px;
+      height: 60px;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(124,255,158,0.11), transparent);
+      animation: panelScan 5s linear infinite;
+    }
+
+    @keyframes panelScan {
+      from { top: -90px; }
+      to { top: 115%; }
     }
 
     .panelTitle {
+      position: relative;
+      z-index: 2;
       height: 34px;
       display: flex;
       align-items: center;
@@ -130,6 +169,8 @@
     }
 
     .panelBody {
+      position: relative;
+      z-index: 2;
       padding: 12px;
       font-size: 13px;
       line-height: 1.5;
@@ -154,7 +195,7 @@
     }
 
     .stat strong {
-      color: var(--green2);
+      color: var(--green-soft);
       font-size: 20px;
       text-shadow: 0 0 8px rgba(124,255,158,0.5);
     }
@@ -166,6 +207,10 @@
       padding: 10px;
       margin-top: 12px;
       font-size: 12px;
+    }
+
+    .instruction strong {
+      color: var(--amber);
     }
 
     .gamePanel {
@@ -211,7 +256,7 @@
       border: 2px solid rgba(124,255,158,0.48);
       background:
         linear-gradient(180deg, rgba(124,255,158,0.16), rgba(0,45,18,0.78));
-      color: var(--green2);
+      color: var(--green-soft);
       font-family: "Courier New", monospace;
       font-weight: bold;
       padding: 12px;
@@ -228,16 +273,28 @@
     }
 
     .danger {
-      color: var(--red);
+      color: var(--red-soft);
       border-color: rgba(255,49,88,0.55);
       background:
         linear-gradient(180deg, rgba(255,49,88,0.15), rgba(50,0,10,0.78));
     }
 
+    .bottomBar {
+      border: 2px solid rgba(124,255,158,0.32);
+      background: rgba(0, 18, 8, 0.76);
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
     .overlay {
       position: fixed;
       inset: 0;
-      z-index: 100;
+      z-index: 200;
       display: none;
       align-items: center;
       justify-content: center;
@@ -255,7 +312,7 @@
       background:
         radial-gradient(circle at center, rgba(124,255,158,0.10), transparent 62%),
         rgba(0, 12, 8, 0.97);
-      color: var(--green2);
+      color: var(--green-soft);
       padding: 28px;
       text-align: center;
       box-shadow:
@@ -310,25 +367,15 @@
       text-shadow: 0 0 14px rgba(124, 255, 158, 0.8);
     }
 
-    .bottomBar {
-      border: 2px solid rgba(124,255,158,0.32);
-      background: rgba(0, 18, 8, 0.76);
-      padding: 8px 12px;
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 1px;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
     @media (max-width: 1100px) {
+      html,
       body {
         overflow: auto;
       }
 
       .gameShell {
         height: auto;
+        min-height: 100vh;
       }
 
       .mainArea {
@@ -337,6 +384,20 @@
 
       canvas {
         max-height: none;
+      }
+
+      .topBar {
+        grid-template-columns: 1fr;
+      }
+
+      .topSide,
+      .topSide.right {
+        text-align: center;
+        align-items: center;
+      }
+
+      .mainTitle {
+        white-space: normal;
       }
     }
   </style>
@@ -354,7 +415,7 @@
 
       <div class="topSide right">
         <span>SIMULATION STATUS: ARMED</span>
-        <span>OBJECTIVE: CLEAR ALL HOSTILES</span>
+        <span>OBJECTIVE: CLEAR HOSTILE ARCHIVE</span>
       </div>
     </header>
 
@@ -394,10 +455,10 @@
           </div>
 
           <div class="instruction">
-            CONTROLS<br><br>
+            <strong>CONTROLS</strong><br><br>
             Move: Arrow keys or WASD<br>
             Fire: Space<br><br>
-            Find the keycard, open the specimen vault, recover the weapon and clear the simulation.
+            Find the keycard, open the specimen vault, recover the weapon and clear all hostile archive entities.
           </div>
         </div>
       </aside>
@@ -438,13 +499,16 @@
   <div class="overlay" id="startOverlay">
     <div class="startBox">
       <h1>BACKUP DISK FOUND</h1>
+
       <p>
         This recovered simulation appears to be an old security training environment.
         Completion may reveal a terminal wake-code left inside the backup layer.
       </p>
+
       <p>
         Clear the hostile archive and return to the workstation with whatever code is recovered.
       </p>
+
       <button onclick="startGame()">START SIMULATION</button>
     </div>
   </div>
@@ -470,9 +534,11 @@
   <div class="overlay" id="failOverlay">
     <div class="failBox">
       <h1>SIMULATION FAILED</h1>
+
       <p>
         Agent health reached zero. Restart the backup simulation and try again.
       </p>
+
       <button onclick="restartGame()">RESTART SIMULATION</button>
     </div>
   </div>
@@ -522,15 +588,39 @@
       health: 5,
       hasKey: false,
       hasWeapon: false,
-      cooldown: 0
+      cooldown: 0,
+      facingX: 1,
+      facingY: 0,
+      invincible: 0
     };
 
     let enemies = [];
     let bullets = [];
     let particles = [];
-    let keycard = { x: 3 * tileSize + 8, y: 2 * tileSize + 8, w: 16, h: 16, taken: false };
-    let vault = { x: 16 * tileSize, y: 12 * tileSize, w: tileSize, h: tileSize, opened: false };
-    let weapon = { x: 16 * tileSize + 8, y: 12 * tileSize + 8, w: 16, h: 16, taken: false };
+
+    let keycard = {
+      x: 3 * tileSize + 8,
+      y: 2 * tileSize + 8,
+      w: 16,
+      h: 16,
+      taken: false
+    };
+
+    let vault = {
+      x: 16 * tileSize,
+      y: 12 * tileSize,
+      w: tileSize,
+      h: tileSize,
+      opened: false
+    };
+
+    let weapon = {
+      x: 16 * tileSize + 8,
+      y: 12 * tileSize + 8,
+      w: 16,
+      h: 16,
+      taken: false
+    };
 
     function appendLog(line) {
       const log = document.getElementById("logBox");
@@ -563,10 +653,14 @@
       player.hasKey = false;
       player.hasWeapon = false;
       player.cooldown = 0;
+      player.facingX = 1;
+      player.facingY = 0;
+      player.invincible = 0;
 
       keycard.taken = false;
       vault.opened = false;
       weapon.taken = false;
+
       bullets = [];
       particles = [];
 
@@ -593,6 +687,7 @@
         cancelAnimationFrame(animationId);
       }
 
+      render();
       gameLoop();
     }
 
@@ -641,10 +736,29 @@
       let dx = 0;
       let dy = 0;
 
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) dy -= player.speed;
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) dy += player.speed;
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) dx -= player.speed;
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) dx += player.speed;
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
+        dy -= player.speed;
+        player.facingX = 0;
+        player.facingY = -1;
+      }
+
+      if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
+        dy += player.speed;
+        player.facingX = 0;
+        player.facingY = 1;
+      }
+
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+        dx -= player.speed;
+        player.facingX = -1;
+        player.facingY = 0;
+      }
+
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+        dx += player.speed;
+        player.facingX = 1;
+        player.facingY = 0;
+      }
 
       if (dx !== 0 && dy !== 0) {
         dx *= 0.707;
@@ -681,6 +795,10 @@
       if (player.cooldown > 0) {
         player.cooldown--;
       }
+
+      if (player.invincible > 0) {
+        player.invincible--;
+      }
     }
 
     function fireBullet() {
@@ -688,19 +806,10 @@
         return;
       }
 
-      let dx = 1;
-      let dy = 0;
+      let dx = player.facingX;
+      let dy = player.facingY;
 
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-        dx = 0;
-        dy = -1;
-      } else if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-        dx = 0;
-        dy = 1;
-      } else if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-        dx = -1;
-        dy = 0;
-      } else if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+      if (dx === 0 && dy === 0) {
         dx = 1;
         dy = 0;
       }
@@ -716,6 +825,7 @@
       });
 
       player.cooldown = 18;
+      appendLog("> pulse fired");
     }
 
     function updateBullets() {
@@ -734,7 +844,7 @@
           if (enemy.health > 0 && rectsOverlap(bullet, enemy)) {
             enemy.health--;
             bullet.life = 0;
-            spawnParticles(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, varColor("--red"));
+            spawnParticles(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, "#ff3158");
 
             if (enemy.health <= 0) {
               appendLog("> hostile archive entity neutralized");
@@ -746,10 +856,6 @@
       enemies = enemies.filter(function(enemy) {
         return enemy.health > 0;
       });
-    }
-
-    function varColor(name) {
-      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     }
 
     function updateEnemies() {
@@ -775,11 +881,13 @@
           enemy.y += dy;
         }
 
-        if (rectsOverlap(player, enemy) && enemy.hitCooldown <= 0) {
+        if (rectsOverlap(player, enemy) && enemy.hitCooldown <= 0 && player.invincible <= 0) {
           enemy.hitCooldown = 60;
+          player.invincible = 45;
           player.health--;
+
           appendLog("> agent damaged by hostile entity");
-          spawnParticles(player.x + player.w / 2, player.y + player.h / 2, varColor("--red"));
+          spawnParticles(player.x + player.w / 2, player.y + player.h / 2, "#ff3158");
 
           if (player.health <= 0) {
             failGame();
@@ -889,64 +997,95 @@
     }
 
     function drawKeycard() {
-      if (keycard.taken) return;
+      if (keycard.taken) {
+        return;
+      }
 
-      ctx.fillStyle = varColor("--amber");
+      ctx.fillStyle = "#ffd36a";
       ctx.fillRect(keycard.x, keycard.y, keycard.w, keycard.h);
 
-      ctx.strokeStyle = "#fff";
+      ctx.strokeStyle = "#ffffff";
       ctx.strokeRect(keycard.x, keycard.y, keycard.w, keycard.h);
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(keycard.x + 3, keycard.y + 4, keycard.w - 6, 2);
     }
 
     function drawVault() {
       ctx.fillStyle = vault.opened ? "rgba(124,255,158,0.22)" : "rgba(111,220,255,0.20)";
       ctx.fillRect(vault.x, vault.y, vault.w, vault.h);
 
-      ctx.strokeStyle = vault.opened ? varColor("--green") : varColor("--blue");
+      ctx.strokeStyle = vault.opened ? "#7cff9e" : "#6fdcff";
       ctx.lineWidth = 2;
       ctx.strokeRect(vault.x + 4, vault.y + 4, vault.w - 8, vault.h - 8);
+
+      ctx.fillStyle = vault.opened ? "#7cff9e" : "#6fdcff";
+      ctx.fillRect(vault.x + 13, vault.y + 13, 6, 6);
+
       ctx.lineWidth = 1;
     }
 
     function drawWeapon() {
-      if (!vault.opened || weapon.taken) return;
+      if (!vault.opened || weapon.taken) {
+        return;
+      }
 
-      ctx.fillStyle = varColor("--blue");
+      ctx.fillStyle = "#6fdcff";
       ctx.fillRect(weapon.x, weapon.y + 6, weapon.w, 5);
       ctx.fillRect(weapon.x + 10, weapon.y, 5, weapon.h);
-      ctx.shadowColor = varColor("--blue");
+
+      ctx.shadowColor = "#6fdcff";
       ctx.shadowBlur = 10;
       ctx.fillRect(weapon.x + 5, weapon.y + 5, 12, 8);
       ctx.shadowBlur = 0;
     }
 
     function drawPlayer() {
-      ctx.fillStyle = varColor("--green");
+      if (player.invincible > 0 && Math.floor(player.invincible / 5) % 2 === 0) {
+        ctx.globalAlpha = 0.45;
+      }
+
+      ctx.fillStyle = "#7cff9e";
       ctx.fillRect(player.x, player.y, player.w, player.h);
 
-      ctx.strokeStyle = varColor("--white");
+      ctx.strokeStyle = "#ffffff";
       ctx.strokeRect(player.x - 2, player.y - 2, player.w + 4, player.h + 4);
 
+      ctx.fillStyle = "#001407";
+      ctx.fillRect(player.x + 5, player.y + 5, 3, 3);
+      ctx.fillRect(player.x + 11, player.y + 5, 3, 3);
+
       if (player.hasWeapon) {
-        ctx.fillStyle = varColor("--blue");
-        ctx.fillRect(player.x + player.w, player.y + 7, 12, 4);
+        ctx.fillStyle = "#6fdcff";
+        ctx.fillRect(
+          player.x + player.w / 2 + player.facingX * 8,
+          player.y + player.h / 2 + player.facingY * 8,
+          10,
+          4
+        );
       }
+
+      ctx.globalAlpha = 1;
     }
 
     function drawEnemies() {
       enemies.forEach(function(enemy) {
-        ctx.fillStyle = varColor("--red");
+        ctx.fillStyle = "#ff3158";
         ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
 
         ctx.strokeStyle = "rgba(255,255,255,0.75)";
         ctx.strokeRect(enemy.x - 2, enemy.y - 2, enemy.w + 4, enemy.h + 4);
+
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(enemy.x + 4, enemy.y + 5, 4, 4);
+        ctx.fillRect(enemy.x + 11, enemy.y + 5, 4, 4);
       });
     }
 
     function drawBullets() {
       bullets.forEach(function(bullet) {
-        ctx.fillStyle = varColor("--amber");
-        ctx.shadowColor = varColor("--amber");
+        ctx.fillStyle = "#ffd36a";
+        ctx.shadowColor = "#ffd36a";
         ctx.shadowBlur = 8;
         ctx.fillRect(bullet.x, bullet.y, bullet.w, bullet.h);
         ctx.shadowBlur = 0;
