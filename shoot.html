@@ -1,1543 +1,1015 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MI6 Botanical Lab // Top Down Protocol</title>
+  <title>Backup Disk Security Simulation</title>
 
   <style>
+    :root {
+      --green: #7cff9e;
+      --green2: #c7ffd7;
+      --red: #ff3158;
+      --amber: #ffd36a;
+      --blue: #6fdcff;
+      --white: #f2fff7;
+      --dark: #020604;
+      --panel: rgba(0, 16, 8, 0.86);
+      --muted: #8fbaa0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #050805;
-      color: #00ff66;
+      background:
+        radial-gradient(circle at center, rgba(124,255,158,0.12), transparent 42%),
+        linear-gradient(180deg, #020604 0%, #000000 100%);
+      color: var(--green);
       font-family: "Courier New", monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-      overflow: auto;
+      overflow: hidden;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
+      z-index: 50;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.06),
-          rgba(0, 255, 100, 0.06) 1px,
+          rgba(255,255,255,0.04),
+          rgba(255,255,255,0.04) 1px,
           transparent 1px,
           transparent 5px
         );
-      pointer-events: none;
-      z-index: 1;
+      mix-blend-mode: screen;
     }
 
-    .terminal {
-      width: 100%;
-      max-width: 1120px;
-      background: #000900;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
-      padding: 24px;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 2;
-    }
-
-    h1 {
-      margin: 0 0 10px 0;
-      text-align: center;
-      color: #00ff66;
-      font-size: 26px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
-      letter-spacing: 2px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #8dffb0;
-      line-height: 1.6;
-      margin-bottom: 18px;
-      white-space: pre-line;
-    }
-
-    .layout {
+    .gameShell {
+      width: 100vw;
+      height: 100vh;
+      padding: 14px;
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 20px;
-      align-items: start;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
     }
 
-    canvas {
-      width: 100%;
-      max-width: 640px;
-      background: #000;
-      border: 2px solid #00ff66;
-      box-shadow: inset 0 0 28px rgba(0, 255, 100, 0.14);
-      display: block;
-      margin: 0 auto;
-      image-rendering: pixelated;
+    .topBar {
+      border: 2px solid rgba(124,255,158,0.45);
+      background: rgba(0, 20, 8, 0.78);
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      box-shadow:
+        0 0 18px rgba(124,255,158,0.14),
+        inset 0 0 18px rgba(124,255,158,0.06);
+    }
+
+    .topSide {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .topSide.right {
+      text-align: right;
+    }
+
+    .mainTitle {
+      color: var(--white);
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow:
+        0 0 10px rgba(124,255,158,0.85),
+        0 0 24px rgba(124,255,158,0.25);
+    }
+
+    .mainArea {
+      display: grid;
+      grid-template-columns: 260px 1fr 300px;
+      gap: 10px;
+      min-height: 0;
     }
 
     .panel {
-      background: rgba(0, 20, 0, 0.9);
-      border: 1px solid #00aa44;
-      padding: 16px;
-      box-sizing: border-box;
-      color: #baffc9;
-      min-height: 480px;
+      border: 2px solid rgba(124,255,158,0.38);
+      background:
+        linear-gradient(180deg, rgba(0, 22, 9, 0.88), rgba(0, 8, 4, 0.92));
+      box-shadow:
+        0 0 18px rgba(124,255,158,0.12),
+        inset 0 0 20px rgba(124,255,158,0.05);
+      overflow: hidden;
     }
 
     .panelTitle {
-      color: #00ff66;
-      font-weight: bold;
-      margin-bottom: 12px;
-      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
-    }
-
-    .statBox {
-      margin-bottom: 12px;
-      padding: 10px;
-      border: 1px dashed #00aa44;
-      background: rgba(0, 40, 0, 0.35);
-      line-height: 1.7;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px 14px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      cursor: pointer;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      border-bottom: 1px solid rgba(124,255,158,0.30);
+      background: rgba(124,255,158,0.08);
+      color: var(--white);
+      font-size: 12px;
       letter-spacing: 1px;
-      margin-top: 10px;
     }
 
-    button:hover {
-      background: #005c22;
+    .panelTitle span:last-child {
+      color: var(--amber);
     }
 
-    .controls {
-      margin-top: 18px;
-      line-height: 1.8;
-      color: #8dffb0;
-      font-size: 14px;
-    }
-
-    #message {
-      min-height: 24px;
-      margin-top: 14px;
-      color: #8dffb0;
+    .panelBody {
+      padding: 12px;
+      font-size: 13px;
       line-height: 1.5;
     }
 
-    #gameOverBox {
-      display: none;
-      margin-top: 16px;
-      padding: 16px;
-      border: 1px solid #ff4444;
-      background: rgba(40, 0, 0, 0.92);
-      color: #ff9999;
-      line-height: 1.6;
-      box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
-    }
-
-    #glitchStatus {
-      display: none;
-      margin-top: 16px;
-      color: #fff4a3;
-      font-weight: bold;
-      animation: blinkStatus 0.3s infinite;
-    }
-
-    @keyframes blinkStatus {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.35; }
-    }
-
-    #winBox {
-      display: none;
-      margin-top: 16px;
-      padding: 16px;
-      border: 1px solid #00ff66;
-      background: rgba(0, 35, 0, 0.95);
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
-      line-height: 1.7;
-      color: #baffc9;
-    }
-
-    .mobileControls {
-      display: none;
-      grid-template-columns: repeat(3, 72px);
+    .statGrid {
+      display: grid;
       gap: 8px;
-      justify-content: center;
-      margin-top: 16px;
     }
 
-    .mobileControls button {
-      width: 72px;
-      height: 52px;
-      margin-top: 0;
-      padding: 0;
-      font-size: 18px;
+    .stat {
+      border: 1px solid rgba(124,255,158,0.28);
+      background: rgba(124,255,158,0.06);
+      padding: 10px;
     }
 
-    .shootWide {
-      grid-column: span 3;
-      width: 232px !important;
+    .stat small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 5px;
+      letter-spacing: 1px;
     }
 
-    .backLink {
-      display: inline-block;
-      margin-top: 20px;
-      color: #00ff66;
-      text-decoration: none;
-      border-bottom: 1px solid #00ff66;
+    .stat strong {
+      color: var(--green2);
+      font-size: 20px;
+      text-shadow: 0 0 8px rgba(124,255,158,0.5);
+    }
+
+    .instruction {
+      color: var(--muted);
+      border: 1px solid rgba(255,211,106,0.35);
+      background: rgba(255,211,106,0.06);
+      padding: 10px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .gamePanel {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+    }
+
+    canvas {
+      width: min(720px, 100%);
+      aspect-ratio: 1 / 1;
+      max-height: calc(100vh - 150px);
+      border: 4px solid rgba(124,255,158,0.55);
+      background: #07150b;
+      image-rendering: pixelated;
+      box-shadow:
+        0 0 28px rgba(124,255,158,0.22),
+        inset 0 0 30px rgba(124,255,158,0.08);
+    }
+
+    .logBox {
+      height: 330px;
+      overflow-y: auto;
+      border: 1px solid rgba(124,255,158,0.24);
+      background: rgba(0,0,0,0.34);
+      padding: 10px;
+      color: var(--green);
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .buttonRow {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button,
+    .returnLink {
+      border: 2px solid rgba(124,255,158,0.48);
+      background:
+        linear-gradient(180deg, rgba(124,255,158,0.16), rgba(0,45,18,0.78));
+      color: var(--green2);
+      font-family: "Courier New", monospace;
       font-weight: bold;
+      padding: 12px;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      letter-spacing: 1px;
     }
 
-    .glitchOverlay {
-      display: none;
+    button:hover,
+    .returnLink:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    .danger {
+      color: var(--red);
+      border-color: rgba(255,49,88,0.55);
+      background:
+        linear-gradient(180deg, rgba(255,49,88,0.15), rgba(50,0,10,0.78));
+    }
+
+    .overlay {
       position: fixed;
       inset: 0;
-      z-index: 99;
-      pointer-events: none;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
       background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(255,255,255,0.04),
-          rgba(255,255,255,0.04) 2px,
-          transparent 2px,
-          transparent 8px
-        ),
-        repeating-linear-gradient(
-          0deg,
-          rgba(255,220,0,0.08),
-          rgba(255,220,0,0.08) 3px,
-          transparent 3px,
-          transparent 11px
-        );
-      animation: glitchFlash 0.13s infinite;
+        radial-gradient(circle at center, rgba(124,255,158,0.14), transparent 42%),
+        rgba(0,0,0,0.88);
+      padding: 20px;
     }
 
-    .glitchOverlay::before {
-      content: "LAB WORD RECOVERED";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #fff4a3;
-      background: rgba(10,20,0,0.92);
-      border: 2px solid #ffee66;
-      padding: 18px 24px;
+    .startBox,
+    .winBox,
+    .failBox {
+      width: min(760px, 100%);
+      border: 3px solid rgba(124,255,158,0.75);
+      background:
+        radial-gradient(circle at center, rgba(124,255,158,0.10), transparent 62%),
+        rgba(0, 12, 8, 0.97);
+      color: var(--green2);
+      padding: 28px;
       text-align: center;
-      letter-spacing: 2px;
-      font-size: 26px;
-      text-shadow: 0 0 10px rgba(255,230,120,0.8);
-      box-shadow: 0 0 24px rgba(255,230,120,0.35);
-      animation: textSkew 0.18s infinite;
+      box-shadow:
+        0 0 38px rgba(124,255,158,0.38),
+        inset 0 0 28px rgba(124,255,158,0.07);
     }
 
-    @keyframes glitchFlash {
-      0% { opacity: 0.35; filter: hue-rotate(0deg); }
-      50% { opacity: 0.8; filter: hue-rotate(40deg); }
-      100% { opacity: 0.45; filter: hue-rotate(0deg); }
+    .failBox {
+      border-color: rgba(255,49,88,0.75);
+      box-shadow:
+        0 0 38px rgba(255,49,88,0.34),
+        inset 0 0 28px rgba(255,49,88,0.07);
     }
 
-    @keyframes textSkew {
-      0% { transform: translate(-50%, -50%) skewX(0deg); }
-      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
-      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
-      75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
-      100% { transform: translate(-50%, -50%) skewX(0deg); }
+    .startBox h1,
+    .winBox h1,
+    .failBox h1 {
+      color: var(--white);
+      margin: 0 0 14px;
+      font-size: 34px;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 12px rgba(124,255,158,0.9),
+        0 0 26px rgba(124,255,158,0.35);
     }
 
-    @media (max-width: 900px) {
-      .layout {
+    .failBox h1 {
+      text-shadow:
+        0 0 12px rgba(255,49,88,0.9),
+        0 0 26px rgba(255,49,88,0.35);
+    }
+
+    .startBox p,
+    .winBox p,
+    .failBox p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 12px 0;
+    }
+
+    .codeBox {
+      margin: 18px auto;
+      padding: 16px;
+      border: 2px dashed var(--green);
+      background: rgba(124, 255, 158, 0.08);
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(124, 255, 158, 0.8);
+    }
+
+    .bottomBar {
+      border: 2px solid rgba(124,255,158,0.32);
+      background: rgba(0, 18, 8, 0.76);
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        overflow: auto;
+      }
+
+      .gameShell {
+        height: auto;
+      }
+
+      .mainArea {
         grid-template-columns: 1fr;
       }
 
-      .panel {
-        min-height: auto;
-      }
-
-      .mobileControls {
-        display: grid;
-      }
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 21px;
-      }
-
-      .terminal {
-        padding: 18px;
-      }
-
-      .glitchOverlay::before {
-        font-size: 18px;
-        width: 86%;
+      canvas {
+        max-height: none;
       }
     }
   </style>
 </head>
 
 <body>
+  <main class="gameShell">
+    <header class="topBar">
+      <div class="topSide">
+        <span>BACKUP DISK // SECURITY SIMULATION</span>
+        <span>RECOVERED EXTERNAL MODULE</span>
+      </div>
 
-  <div class="glitchOverlay" id="glitchOverlay"></div>
+      <div class="mainTitle">JASON KRANE INCIDENT FILE</div>
 
-  <main class="terminal">
-    <h1>MI6 BOTANICAL LAB // TOP-DOWN RANGE</h1>
+      <div class="topSide right">
+        <span>SIMULATION STATUS: ARMED</span>
+        <span>OBJECTIVE: CLEAR ALL HOSTILES</span>
+      </div>
+    </header>
 
-    <div class="subtitle">Top-down laboratory simulation recovered.
-Find the key in another room.
-Open the weapon chest in the specimen vault.
-Only then can you fire bio-darts.
-Collect all hidden letters and defeat all M/Q security dummies.</div>
-
-    <div class="layout">
-      <section>
-        <canvas id="game" width="640" height="480"></canvas>
-
-        <div class="mobileControls">
-          <button onclick="pressMove('up')">▲</button>
-          <button onclick="shoot()">✹</button>
-          <button onclick="pressMove('down')">▼</button>
-          <button onclick="pressMove('left')">◀</button>
-          <button onclick="pressMove('right')">▶</button>
-          <button class="shootWide" onclick="shoot()">FIRE</button>
+    <section class="mainArea">
+      <aside class="panel">
+        <div class="panelTitle">
+          <span>Agent Status</span>
+          <span>LIVE</span>
         </div>
+
+        <div class="panelBody">
+          <div class="statGrid">
+            <div class="stat">
+              <small>HEALTH</small>
+              <strong id="healthText">5</strong>
+            </div>
+
+            <div class="stat">
+              <small>KEYCARD</small>
+              <strong id="keyText">NO</strong>
+            </div>
+
+            <div class="stat">
+              <small>WEAPON</small>
+              <strong id="weaponText">NO</strong>
+            </div>
+
+            <div class="stat">
+              <small>HOSTILES</small>
+              <strong id="enemyText">0</strong>
+            </div>
+
+            <div class="stat">
+              <small>OBJECTIVE</small>
+              <strong id="objectiveText">FIND KEY</strong>
+            </div>
+          </div>
+
+          <div class="instruction">
+            CONTROLS<br><br>
+            Move: Arrow keys or WASD<br>
+            Fire: Space<br><br>
+            Find the keycard, open the specimen vault, recover the weapon and clear the simulation.
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel gamePanel">
+        <canvas id="gameCanvas" width="640" height="640"></canvas>
       </section>
 
       <aside class="panel">
-        <div class="panelTitle">LAB STATUS</div>
-
-        <div class="statBox">
-          ROOM: <span id="roomName">CENTRAL LAB</span><br>
-          STATUS: <span id="status">ACTIVE</span><br>
-          KEY: <span id="keyStatus">NO</span><br>
-          WEAPON: <span id="weaponStatus">NO</span><br>
-          ENEMIES LEFT: <span id="enemiesLeft">0</span><br>
-          LETTERS: <span id="lettersFound">0</span> / 8<br>
-          WORD: <span id="wordProgress">________</span>
+        <div class="panelTitle">
+          <span>Simulation Log</span>
+          <span>RECOVERED</span>
         </div>
 
-        <button onclick="startGame()">START / RESTART LAB</button>
-        <button onclick="shoot()">FIRE BIO-DART</button>
+        <div class="panelBody">
+          <div class="logBox" id="logBox">&gt; backup disk mounted
+&gt; security simulation loaded
+&gt; weapon cache locked
+&gt; keycard missing
+&gt; old terminal wake-code residue detected
+&gt; simulation waiting for start</div>
 
-        <div id="message">Simulation standby.</div>
-
-        <div id="gameOverBox">
-          <strong>SIMULATION FAILED</strong><br><br>
-          You were hit by enemy fire.<br>
-          Restart the lab to try again.
+          <div class="buttonRow">
+            <button onclick="restartGame()">RESTART SIMULATION</button>
+            <a href="terminal.html" class="returnLink">RETURN TO WORKSTATION</a>
+            <button class="danger" onclick="showStart()">READ BRIEFING</button>
+          </div>
         </div>
-
-        <div id="glitchStatus">
-          LAB MEMORY UNSTABLE // RECONSTRUCTING WORD...
-        </div>
-
-        <div id="winBox">
-          <strong>ACCESS GRANTED // LAB CLEARED</strong><br><br>
-
-          Weapon recovered.<br>
-          All rooms cleared.<br>
-          All letters recovered.<br><br>
-
-          UNLOCK CODE:<br>
-          <strong>EYESONLY</strong><br><br>
-
-          Enter this code in the mission terminal.
-        </div>
-
-        <div class="controls">
-          CONTROLS:<br>
-          W / ↑ = move up<br>
-          S / ↓ = move down<br>
-          A / ← = move left<br>
-          D / → = move right<br>
-          SPACE = fire bio-dart<br><br>
-          First find the key in WEST LAB.<br>
-          Then open the chest in SPECIMEN VAULT.<br>
-          Red shots from M/Q are fatal.
-        </div>
-
-        <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
       </aside>
-    </div>
+    </section>
+
+    <footer class="bottomBar">
+      <span>D:\BACKUP_DISK\security_simulation.exe</span>
+      <span>Recovered from damaged external cache</span>
+    </footer>
   </main>
 
+  <div class="overlay" id="startOverlay">
+    <div class="startBox">
+      <h1>BACKUP DISK FOUND</h1>
+      <p>
+        This recovered simulation appears to be an old security training environment.
+        Completion may reveal a terminal wake-code left inside the backup layer.
+      </p>
+      <p>
+        Clear the hostile archive and return to the workstation with whatever code is recovered.
+      </p>
+      <button onclick="startGame()">START SIMULATION</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="winOverlay">
+    <div class="winBox">
+      <h1>BACKUP SIMULATION COMPLETE</h1>
+
+      <p>
+        Security simulation cleared. An old terminal wake-code has been recovered from the backup disk.
+      </p>
+
+      <div class="codeBox">ECHOSEED</div>
+
+      <p>
+        Return to the workstation and type this code into the Command Terminal.
+      </p>
+
+      <a href="terminal.html" class="returnLink">RETURN TO WORKSTATION</a>
+    </div>
+  </div>
+
+  <div class="overlay" id="failOverlay">
+    <div class="failBox">
+      <h1>SIMULATION FAILED</h1>
+      <p>
+        Agent health reached zero. Restart the backup simulation and try again.
+      </p>
+      <button onclick="restartGame()">RESTART SIMULATION</button>
+    </div>
+  </div>
+
   <script>
-    const canvas = document.getElementById("game");
+    const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const roomNameEl = document.getElementById("roomName");
-    const statusEl = document.getElementById("status");
-    const keyStatusEl = document.getElementById("keyStatus");
-    const weaponStatusEl = document.getElementById("weaponStatus");
-    const enemiesLeftEl = document.getElementById("enemiesLeft");
-    const lettersFoundEl = document.getElementById("lettersFound");
-    const wordProgressEl = document.getElementById("wordProgress");
-    const messageEl = document.getElementById("message");
-    const gameOverBoxEl = document.getElementById("gameOverBox");
-    const glitchStatusEl = document.getElementById("glitchStatus");
-    const winBoxEl = document.getElementById("winBox");
-    const glitchOverlayEl = document.getElementById("glitchOverlay");
+    const tileSize = 32;
+    const mapWidth = 20;
+    const mapHeight = 20;
 
-    const TILE = 32;
-    const COLS = 20;
-    const ROWS = 15;
+    const keys = {};
 
-    const playerSize = 22;
-    const enemySize = 24;
-    const projectileSize = 8;
-
-    const targetWord = "EYESONLY";
-    const glitchDuration = 4200;
-
-    let player;
-    let currentRoom;
-    let keys = {};
-    let projectiles = [];
-    let enemyProjectiles = [];
-    let animationId = null;
     let gameRunning = false;
-    let collectedLetters = [];
-    let frameCount = 0;
+    let animationId = null;
 
-    let hasKey = false;
-    let hasWeapon = false;
+    const map = [
+      "####################",
+      "#...........#......#",
+      "#..K........#..E...#",
+      "#...........#......#",
+      "#......######......#",
+      "#..................#",
+      "#..####............#",
+      "#..#..#......E.....#",
+      "#..#..#............#",
+      "#..#..######..######",
+      "#.............#....#",
+      "#......E......#....#",
+      "#.............#..V.#",
+      "#######..######....#",
+      "#..................#",
+      "#....E.............#",
+      "#............#######",
+      "#..P...............#",
+      "#..................#",
+      "####################"
+    ];
 
-    const keyItem = {
-      room: "1,0",
-      x: 3,
-      y: 10,
-      collected: false
+    const player = {
+      x: 2 * tileSize + 8,
+      y: 17 * tileSize + 8,
+      w: 18,
+      h: 18,
+      speed: 2.6,
+      health: 5,
+      hasKey: false,
+      hasWeapon: false,
+      cooldown: 0
     };
 
-    const weaponChest = {
-      room: "0,2",
-      x: 16,
-      y: 11,
-      opened: false
-    };
+    let enemies = [];
+    let bullets = [];
+    let particles = [];
+    let keycard = { x: 3 * tileSize + 8, y: 2 * tileSize + 8, w: 16, h: 16, taken: false };
+    let vault = { x: 16 * tileSize, y: 12 * tileSize, w: tileSize, h: tileSize, opened: false };
+    let weapon = { x: 16 * tileSize + 8, y: 12 * tileSize + 8, w: 16, h: 16, taken: false };
 
-    const rooms = {
-      "0,1": {
-        name: "GREENHOUSE A",
-        doors: { down: "1,1", right: "0,2" },
-        letter: { value: "E", x: 10, y: 7 },
-        enemies: [
-          { x: 5, y: 5, label: "M" },
-          { x: 15, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [4, 3], [5, 3], [6, 3],
-          [13, 4], [14, 4],
-          [9, 10], [10, 10], [11, 10]
-        ]
-      },
+    function appendLog(line) {
+      const log = document.getElementById("logBox");
+      log.textContent += "\n" + line;
+      log.scrollTop = log.scrollHeight;
+    }
 
-      "0,2": {
-        name: "SPECIMEN VAULT",
-        doors: { left: "0,1", down: "1,2" },
-        letter: { value: "Y", x: 14, y: 4 },
-        enemies: [
-          { x: 7, y: 8, label: "Q" }
-        ],
-        blocks: [
-          [3, 5], [4, 5], [5, 5],
-          [10, 3], [10, 4], [10, 5],
-          [15, 9], [16, 9]
-        ]
-      },
-
-      "1,0": {
-        name: "WEST LAB",
-        doors: { right: "1,1", down: "2,0" },
-        letter: { value: "E", x: 5, y: 10 },
-        enemies: [
-          { x: 13, y: 5, label: "M" }
-        ],
-        blocks: [
-          [7, 4], [8, 4], [9, 4],
-          [7, 5],
-          [4, 9], [5, 9],
-          [14, 11], [15, 11]
-        ]
-      },
-
-      "1,1": {
-        name: "CENTRAL LAB",
-        doors: { up: "0,1", right: "1,2", down: "2,1", left: "1,0" },
-        letter: { value: "S", x: 15, y: 7 },
-        enemies: [
-          { x: 4, y: 4, label: "Q" },
-          { x: 16, y: 11, label: "M" }
-        ],
-        blocks: [
-          [8, 6], [9, 6], [10, 6], [11, 6],
-          [8, 8], [9, 8], [10, 8], [11, 8],
-          [5, 11], [14, 3]
-        ]
-      },
-
-      "1,2": {
-        name: "SERVER GARDEN",
-        doors: { up: "0,2", down: "2,2", left: "1,1" },
-        letter: { value: "O", x: 6, y: 6 },
-        enemies: [
-          { x: 15, y: 5, label: "Q" },
-          { x: 14, y: 11, label: "M" }
-        ],
-        blocks: [
-          [5, 3], [5, 4], [5, 5],
-          [10, 7], [11, 7], [12, 7],
-          [16, 10], [16, 11]
-        ]
-      },
-
-      "2,0": {
-        name: "VENOM STORAGE",
-        doors: { up: "1,0", right: "2,1" },
-        letter: { value: "N", x: 13, y: 9 },
-        enemies: [
-          { x: 5, y: 5, label: "M" }
-        ],
-        blocks: [
-          [6, 8], [7, 8], [8, 8],
-          [12, 3], [13, 3],
-          [15, 11], [16, 11]
-        ]
-      },
-
-      "2,1": {
-        name: "ROOT ARCHIVE",
-        doors: { up: "1,1", left: "2,0", right: "2,2" },
-        letter: { value: "L", x: 10, y: 11 },
-        enemies: [
-          { x: 4, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [3, 4], [4, 4], [5, 4],
-          [10, 5], [10, 6], [10, 7],
-          [14, 9], [15, 9]
-        ]
-      },
-
-      "2,2": {
-        name: "FINAL CONSERVATORY",
-        doors: { up: "1,2", left: "2,1" },
-        letter: { value: "Y", x: 15, y: 5 },
-        enemies: [
-          { x: 5, y: 5, label: "M" },
-          { x: 10, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [7, 3], [8, 3], [9, 3],
-          [12, 6], [12, 7], [12, 8],
-          [4, 11], [5, 11], [6, 11]
-        ]
-      }
-    };
+    function showStart() {
+      document.getElementById("startOverlay").style.display = "flex";
+    }
 
     function startGame() {
+      document.getElementById("startOverlay").style.display = "none";
+
+      if (!gameRunning) {
+        gameRunning = true;
+        appendLog("> simulation active");
+        gameLoop();
+      }
+    }
+
+    function restartGame() {
+      document.getElementById("failOverlay").style.display = "none";
+      document.getElementById("winOverlay").style.display = "none";
+      document.getElementById("startOverlay").style.display = "none";
+
+      player.x = 2 * tileSize + 8;
+      player.y = 17 * tileSize + 8;
+      player.health = 5;
+      player.hasKey = false;
+      player.hasWeapon = false;
+      player.cooldown = 0;
+
+      keycard.taken = false;
+      vault.opened = false;
+      weapon.taken = false;
+      bullets = [];
+      particles = [];
+
+      enemies = [
+        makeEnemy(15, 2),
+        makeEnemy(12, 7),
+        makeEnemy(7, 11),
+        makeEnemy(5, 15),
+        makeEnemy(14, 15)
+      ];
+
+      document.getElementById("logBox").textContent =
+`> backup disk mounted
+> security simulation loaded
+> weapon cache locked
+> keycard missing
+> old terminal wake-code residue detected
+> simulation restarted`;
+
+      gameRunning = true;
+      updateHud();
+
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
 
-      currentRoom = "1,1";
-      collectedLetters = [];
-      projectiles = [];
-      enemyProjectiles = [];
-      frameCount = 0;
-      gameRunning = true;
+      gameLoop();
+    }
 
-      hasKey = false;
-      hasWeapon = false;
-      keyItem.collected = false;
-      weaponChest.opened = false;
+    function makeEnemy(tx, ty) {
+      return {
+        x: tx * tileSize + 8,
+        y: ty * tileSize + 8,
+        w: 18,
+        h: 18,
+        speed: 1.15 + Math.random() * 0.35,
+        health: 2,
+        hitCooldown: 0
+      };
+    }
 
-      Object.keys(rooms).forEach(function(key) {
-        const room = rooms[key];
+    function isWallAtPixel(px, py) {
+      const tx = Math.floor(px / tileSize);
+      const ty = Math.floor(py / tileSize);
 
-        room.letter.collected = false;
+      if (tx < 0 || ty < 0 || tx >= mapWidth || ty >= mapHeight) {
+        return true;
+      }
 
-        room.enemies.forEach(function(enemy) {
-          enemy.alive = true;
-          enemy.px = enemy.x * TILE + TILE / 2;
-          enemy.py = enemy.y * TILE + TILE / 2;
-          enemy.vx = Math.random() < 0.5 ? 1 : -1;
-          enemy.vy = Math.random() < 0.5 ? 1 : -1;
-          enemy.walkFrame = 0;
-          enemy.shootCooldown = 90 + Math.floor(Math.random() * 100);
+      return map[ty][tx] === "#";
+    }
+
+    function rectHitsWall(x, y, w, h) {
+      return (
+        isWallAtPixel(x, y) ||
+        isWallAtPixel(x + w, y) ||
+        isWallAtPixel(x, y + h) ||
+        isWallAtPixel(x + w, y + h)
+      );
+    }
+
+    function rectsOverlap(a, b) {
+      return (
+        a.x < b.x + b.w &&
+        a.x + a.w > b.x &&
+        a.y < b.y + b.h &&
+        a.y + a.h > b.y
+      );
+    }
+
+    function movePlayer() {
+      let dx = 0;
+      let dy = 0;
+
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) dy -= player.speed;
+      if (keys["ArrowDown"] || keys["s"] || keys["S"]) dy += player.speed;
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) dx -= player.speed;
+      if (keys["ArrowRight"] || keys["d"] || keys["D"]) dx += player.speed;
+
+      if (dx !== 0 && dy !== 0) {
+        dx *= 0.707;
+        dy *= 0.707;
+      }
+
+      if (!rectHitsWall(player.x + dx, player.y, player.w, player.h)) {
+        player.x += dx;
+      }
+
+      if (!rectHitsWall(player.x, player.y + dy, player.w, player.h)) {
+        player.y += dy;
+      }
+
+      if (!keycard.taken && rectsOverlap(player, keycard)) {
+        keycard.taken = true;
+        player.hasKey = true;
+        appendLog("> keycard recovered");
+      }
+
+      if (player.hasKey && !vault.opened && rectsOverlap(player, vault)) {
+        vault.opened = true;
+        appendLog("> specimen vault opened");
+        appendLog("> weapon cache exposed");
+      }
+
+      if (vault.opened && !weapon.taken && rectsOverlap(player, weapon)) {
+        weapon.taken = true;
+        player.hasWeapon = true;
+        appendLog("> pulse weapon recovered");
+        appendLog("> press SPACE to fire");
+      }
+
+      if (player.cooldown > 0) {
+        player.cooldown--;
+      }
+    }
+
+    function fireBullet() {
+      if (!player.hasWeapon || player.cooldown > 0) {
+        return;
+      }
+
+      let dx = 1;
+      let dy = 0;
+
+      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
+        dx = 0;
+        dy = -1;
+      } else if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
+        dx = 0;
+        dy = 1;
+      } else if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+        dx = -1;
+        dy = 0;
+      } else if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+        dx = 1;
+        dy = 0;
+      }
+
+      bullets.push({
+        x: player.x + player.w / 2 - 3,
+        y: player.y + player.h / 2 - 3,
+        w: 6,
+        h: 6,
+        dx: dx * 6,
+        dy: dy * 6,
+        life: 70
+      });
+
+      player.cooldown = 18;
+    }
+
+    function updateBullets() {
+      bullets.forEach(function(bullet) {
+        bullet.x += bullet.dx;
+        bullet.y += bullet.dy;
+        bullet.life--;
+      });
+
+      bullets = bullets.filter(function(bullet) {
+        return bullet.life > 0 && !rectHitsWall(bullet.x, bullet.y, bullet.w, bullet.h);
+      });
+
+      bullets.forEach(function(bullet) {
+        enemies.forEach(function(enemy) {
+          if (enemy.health > 0 && rectsOverlap(bullet, enemy)) {
+            enemy.health--;
+            bullet.life = 0;
+            spawnParticles(enemy.x + enemy.w / 2, enemy.y + enemy.h / 2, varColor("--red"));
+
+            if (enemy.health <= 0) {
+              appendLog("> hostile archive entity neutralized");
+            }
+          }
         });
       });
 
-      player = {
-        x: 3 * TILE + TILE / 2,
-        y: 7 * TILE + TILE / 2,
-        dx: 1,
-        dy: 0,
-        status: "ACTIVE",
-        hurtTimer: 0,
-        walkFrame: 0,
-        moving: false
-      };
-
-      glitchOverlayEl.style.display = "none";
-      glitchStatusEl.style.display = "none";
-      winBoxEl.style.display = "none";
-      gameOverBoxEl.style.display = "none";
-
-      messageEl.textContent = "Find the key in WEST LAB. Then open the chest in SPECIMEN VAULT.";
-      updateHud();
-
-      animationId = requestAnimationFrame(gameLoop);
-    }
-
-    function gameLoop() {
-      if (!gameRunning) {
-        drawGame();
-        return;
-      }
-
-      frameCount++;
-
-      updatePlayer();
-      updateEnemies();
-      updateProjectiles();
-      updateEnemyProjectiles();
-      checkKeyPickup();
-      checkChestOpen();
-      checkLetterPickup();
-      checkWinCondition();
-      drawGame();
-      updateHud();
-
-      animationId = requestAnimationFrame(gameLoop);
-    }
-
-    function updatePlayer() {
-      let moveX = 0;
-      let moveY = 0;
-      const speed = 2.4;
-
-      player.moving = false;
-
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-        moveY -= speed;
-        player.dx = 0;
-        player.dy = -1;
-        player.moving = true;
-      }
-
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-        moveY += speed;
-        player.dx = 0;
-        player.dy = 1;
-        player.moving = true;
-      }
-
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-        moveX -= speed;
-        player.dx = -1;
-        player.dy = 0;
-        player.moving = true;
-      }
-
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-        moveX += speed;
-        player.dx = 1;
-        player.dy = 0;
-        player.moving = true;
-      }
-
-      moveEntity(player, moveX, 0, playerSize);
-      moveEntity(player, 0, moveY, playerSize);
-
-      if (player.moving) {
-        player.walkFrame++;
-      }
-
-      handleRoomTransition();
-
-      if (player.hurtTimer > 0) {
-        player.hurtTimer--;
-      }
-    }
-
-    function moveEntity(entity, dx, dy, size) {
-      const newX = entity.x + dx;
-      const newY = entity.y + dy;
-
-      if (!collidesWithWalls(newX, entity.y, size)) {
-        entity.x = newX;
-      }
-
-      if (!collidesWithWalls(entity.x, newY, size)) {
-        entity.y = newY;
-      }
-    }
-
-    function collidesWithWalls(x, y, size) {
-      const half = size / 2;
-
-      const points = [
-        [x - half, y - half],
-        [x + half, y - half],
-        [x - half, y + half],
-        [x + half, y + half]
-      ];
-
-      for (let i = 0; i < points.length; i++) {
-        const px = points[i][0];
-        const py = points[i][1];
-
-        if (px < TILE) {
-          if (!isDoorArea(px, py)) return true;
-        }
-
-        if (px > canvas.width - TILE) {
-          if (!isDoorArea(px, py)) return true;
-        }
-
-        if (py < TILE) {
-          if (!isDoorArea(px, py)) return true;
-        }
-
-        if (py > canvas.height - TILE) {
-          if (!isDoorArea(px, py)) return true;
-        }
-
-        const tileX = Math.floor(px / TILE);
-        const tileY = Math.floor(py / TILE);
-
-        if (isBlock(tileX, tileY)) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    function isDoorArea(x, y) {
-      const room = rooms[currentRoom];
-      const doorMin = 8 * TILE;
-      const doorMax = 12 * TILE;
-
-      if (y < TILE && x >= doorMin && x <= doorMax && room.doors.up) {
-        return true;
-      }
-
-      if (y > canvas.height - TILE && x >= doorMin && x <= doorMax && room.doors.down) {
-        return true;
-      }
-
-      if (x < TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.left) {
-        return true;
-      }
-
-      if (x > canvas.width - TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.right) {
-        return true;
-      }
-
-      return false;
-    }
-
-    function isBlock(tileX, tileY) {
-      const room = rooms[currentRoom];
-
-      return room.blocks.some(function(block) {
-        return block[0] === tileX && block[1] === tileY;
+      enemies = enemies.filter(function(enemy) {
+        return enemy.health > 0;
       });
     }
 
-    function handleRoomTransition() {
-      const room = rooms[currentRoom];
-
-      if (player.y < 0 && room.doors.up) {
-        currentRoom = room.doors.up;
-        player.y = canvas.height - TILE * 2;
-        player.x = canvas.width / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
-      }
-
-      if (player.y > canvas.height && room.doors.down) {
-        currentRoom = room.doors.down;
-        player.y = TILE * 2;
-        player.x = canvas.width / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
-      }
-
-      if (player.x < 0 && room.doors.left) {
-        currentRoom = room.doors.left;
-        player.x = canvas.width - TILE * 2;
-        player.y = canvas.height / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
-      }
-
-      if (player.x > canvas.width && room.doors.right) {
-        currentRoom = room.doors.right;
-        player.x = TILE * 2;
-        player.y = canvas.height / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
-      }
+    function varColor(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     }
 
     function updateEnemies() {
-      const room = rooms[currentRoom];
-
-      room.enemies.forEach(function(enemy) {
-        if (!enemy.alive) {
-          return;
+      enemies.forEach(function(enemy) {
+        if (enemy.hitCooldown > 0) {
+          enemy.hitCooldown--;
         }
 
-        enemy.walkFrame++;
-        enemy.shootCooldown--;
+        const centerEnemyX = enemy.x + enemy.w / 2;
+        const centerEnemyY = enemy.y + enemy.h / 2;
+        const centerPlayerX = player.x + player.w / 2;
+        const centerPlayerY = player.y + player.h / 2;
 
-        const dxToPlayer = player.x - enemy.px;
-        const dyToPlayer = player.y - enemy.py;
-        const distance = Math.sqrt(dxToPlayer * dxToPlayer + dyToPlayer * dyToPlayer);
+        const angle = Math.atan2(centerPlayerY - centerEnemyY, centerPlayerX - centerEnemyX);
+        const dx = Math.cos(angle) * enemy.speed;
+        const dy = Math.sin(angle) * enemy.speed;
 
-        if (distance < 180 && distance > 0) {
-          enemy.vx = dxToPlayer / distance;
-          enemy.vy = dyToPlayer / distance;
+        if (!rectHitsWall(enemy.x + dx, enemy.y, enemy.w, enemy.h)) {
+          enemy.x += dx;
         }
 
-        const speed = enemy.label === "Q" ? 1.25 : 1.0;
-
-        const nextX = enemy.px + enemy.vx * speed;
-        const nextY = enemy.py + enemy.vy * speed;
-
-        if (!collidesWithWalls(nextX, enemy.py, enemySize)) {
-          enemy.px = nextX;
-        } else {
-          enemy.vx *= -1;
+        if (!rectHitsWall(enemy.x, enemy.y + dy, enemy.w, enemy.h)) {
+          enemy.y += dy;
         }
 
-        if (!collidesWithWalls(enemy.px, nextY, enemySize)) {
-          enemy.py = nextY;
-        } else {
-          enemy.vy *= -1;
-        }
+        if (rectsOverlap(player, enemy) && enemy.hitCooldown <= 0) {
+          enemy.hitCooldown = 60;
+          player.health--;
+          appendLog("> agent damaged by hostile entity");
+          spawnParticles(player.x + player.w / 2, player.y + player.h / 2, varColor("--red"));
 
-        if (hasWeapon && distance < 260 && enemy.shootCooldown <= 0) {
-          enemyShoot(enemy, dxToPlayer, dyToPlayer, distance);
-          enemy.shootCooldown = enemy.label === "Q"
-            ? 70 + Math.floor(Math.random() * 50)
-            : 95 + Math.floor(Math.random() * 70);
-        }
-
-        if (distance < 26) {
-          loseGame("You were caught by " + enemy.label + " security dummy.");
-        }
-      });
-    }
-
-    function enemyShoot(enemy, dxToPlayer, dyToPlayer, distance) {
-      if (distance <= 0) {
-        return;
-      }
-
-      enemyProjectiles.push({
-        x: enemy.px,
-        y: enemy.py,
-        dx: dxToPlayer / distance,
-        dy: dyToPlayer / distance,
-        speed: enemy.label === "Q" ? 3.3 : 2.8,
-        life: 95,
-        label: enemy.label
-      });
-    }
-
-    function updateProjectiles() {
-      for (let i = projectiles.length - 1; i >= 0; i--) {
-        const projectile = projectiles[i];
-
-        projectile.x += projectile.dx * projectile.speed;
-        projectile.y += projectile.dy * projectile.speed;
-        projectile.life--;
-
-        const tileX = Math.floor(projectile.x / TILE);
-        const tileY = Math.floor(projectile.y / TILE);
-
-        if (
-          projectile.life <= 0 ||
-          projectile.x < 0 ||
-          projectile.x > canvas.width ||
-          projectile.y < 0 ||
-          projectile.y > canvas.height ||
-          isBlock(tileX, tileY)
-        ) {
-          projectiles.splice(i, 1);
-          continue;
-        }
-
-        const room = rooms[currentRoom];
-
-        for (let j = 0; j < room.enemies.length; j++) {
-          const enemy = room.enemies[j];
-
-          if (!enemy.alive) {
-            continue;
-          }
-
-          const dx = projectile.x - enemy.px;
-          const dy = projectile.y - enemy.py;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 22) {
-            enemy.alive = false;
-            projectiles.splice(i, 1);
-            messageEl.textContent = enemy.label + " security dummy disabled.";
-            break;
+          if (player.health <= 0) {
+            failGame();
           }
         }
-      }
-    }
-
-    function updateEnemyProjectiles() {
-      for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
-        const projectile = enemyProjectiles[i];
-
-        projectile.x += projectile.dx * projectile.speed;
-        projectile.y += projectile.dy * projectile.speed;
-        projectile.life--;
-
-        const tileX = Math.floor(projectile.x / TILE);
-        const tileY = Math.floor(projectile.y / TILE);
-
-        if (
-          projectile.life <= 0 ||
-          projectile.x < 0 ||
-          projectile.x > canvas.width ||
-          projectile.y < 0 ||
-          projectile.y > canvas.height ||
-          isBlock(tileX, tileY)
-        ) {
-          enemyProjectiles.splice(i, 1);
-          continue;
-        }
-
-        const dx = projectile.x - player.x;
-        const dy = projectile.y - player.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 17) {
-          loseGame("You were hit by " + projectile.label + " enemy fire.");
-          return;
-        }
-      }
-    }
-
-    function shoot() {
-      if (!gameRunning) {
-        return;
-      }
-
-      if (!hasWeapon) {
-        messageEl.textContent = "NO WEAPON // Find the key in WEST LAB and open the chest in SPECIMEN VAULT.";
-        return;
-      }
-
-      projectiles.push({
-        x: player.x + player.dx * 16,
-        y: player.y + player.dy * 16,
-        dx: player.dx,
-        dy: player.dy,
-        speed: 6,
-        life: 55
       });
     }
 
-    function checkKeyPickup() {
-      if (keyItem.collected || currentRoom !== keyItem.room) {
-        return;
-      }
-
-      const kx = keyItem.x * TILE + TILE / 2;
-      const ky = keyItem.y * TILE + TILE / 2;
-      const dx = player.x - kx;
-      const dy = player.y - ky;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 28) {
-        keyItem.collected = true;
-        hasKey = true;
-        messageEl.textContent = "KEY RECOVERED // Travel to SPECIMEN VAULT and open the chest.";
+    function spawnParticles(x, y, color) {
+      for (let i = 0; i < 12; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          dx: (Math.random() - 0.5) * 4,
+          dy: (Math.random() - 0.5) * 4,
+          life: 24,
+          color: color
+        });
       }
     }
 
-    function checkChestOpen() {
-      if (weaponChest.opened || currentRoom !== weaponChest.room) {
-        return;
-      }
+    function updateParticles() {
+      particles.forEach(function(particle) {
+        particle.x += particle.dx;
+        particle.y += particle.dy;
+        particle.life--;
+      });
 
-      const cx = weaponChest.x * TILE + TILE / 2;
-      const cy = weaponChest.y * TILE + TILE / 2;
-      const dx = player.x - cx;
-      const dy = player.y - cy;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      particles = particles.filter(function(particle) {
+        return particle.life > 0;
+      });
+    }
 
-      if (distance < 32) {
-        if (!hasKey) {
-          messageEl.textContent = "CHEST LOCKED // Key required from WEST LAB.";
-          return;
-        }
+    function updateHud() {
+      document.getElementById("healthText").textContent = player.health;
+      document.getElementById("keyText").textContent = player.hasKey ? "YES" : "NO";
+      document.getElementById("weaponText").textContent = player.hasWeapon ? "YES" : "NO";
+      document.getElementById("enemyText").textContent = enemies.length;
 
-        weaponChest.opened = true;
-        hasWeapon = true;
-        messageEl.textContent = "CHEST OPENED // BIO-DART WEAPON ACQUIRED.";
+      if (!player.hasKey) {
+        document.getElementById("objectiveText").textContent = "FIND KEY";
+      } else if (!vault.opened) {
+        document.getElementById("objectiveText").textContent = "OPEN VAULT";
+      } else if (!player.hasWeapon) {
+        document.getElementById("objectiveText").textContent = "GET WEAPON";
+      } else if (enemies.length > 0) {
+        document.getElementById("objectiveText").textContent = "CLEAR HOSTILES";
+      } else {
+        document.getElementById("objectiveText").textContent = "COMPLETE";
       }
     }
 
-    function checkLetterPickup() {
-      const room = rooms[currentRoom];
-      const letter = room.letter;
-
-      if (letter.collected) {
-        return;
-      }
-
-      const lx = letter.x * TILE + TILE / 2;
-      const ly = letter.y * TILE + TILE / 2;
-      const dx = player.x - lx;
-      const dy = player.y - ly;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 28) {
-        letter.collected = true;
-        collectedLetters.push(letter.value);
-        messageEl.textContent = "Letter recovered: " + letter.value;
-      }
-    }
-
-    function checkWinCondition() {
-      const allLettersCollected = collectedLetters.length >= targetWord.length;
-      const enemiesLeft = countEnemiesLeft();
-
-      if (allLettersCollected && enemiesLeft === 0 && hasWeapon) {
+    function checkWin() {
+      if (
+        gameRunning &&
+        player.hasKey &&
+        player.hasWeapon &&
+        enemies.length === 0
+      ) {
         winGame();
       }
     }
 
-    function countEnemiesLeft() {
-      let count = 0;
-
-      Object.keys(rooms).forEach(function(key) {
-        rooms[key].enemies.forEach(function(enemy) {
-          if (enemy.alive) {
-            count++;
-          }
-        });
-      });
-
-      return count;
-    }
-
-    function loseGame(reason) {
-      gameRunning = false;
-      player.status = "FAILED";
-      messageEl.textContent = reason;
-      gameOverBoxEl.style.display = "block";
-      enemyProjectiles = [];
-      projectiles = [];
-      updateHud();
-    }
-
     function winGame() {
       gameRunning = false;
-      player.status = "CLEARED";
-      glitchStatusEl.style.display = "block";
-      glitchOverlayEl.style.display = "block";
+      localStorage.setItem("shootSolved", "yes");
 
-      setTimeout(function() {
-        glitchOverlayEl.style.display = "none";
-        winBoxEl.style.display = "block";
-        winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Word recovered: EYESONLY.";
-      }, glitchDuration);
+      appendLog("> simulation complete");
+      appendLog("> recovered wake-code: ECHOSEED");
+
+      document.getElementById("winOverlay").style.display = "flex";
+
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     }
 
-    function drawGame() {
-      drawRoom();
-      drawLetters();
-      drawKey();
-      drawChest();
-      drawEnemies();
-      drawProjectiles();
-      drawEnemyProjectiles();
-      drawPlayer();
-      drawHudOnCanvas();
+    function failGame() {
+      gameRunning = false;
+      document.getElementById("failOverlay").style.display = "flex";
+
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     }
 
-    function drawRoom() {
-      const room = rooms[currentRoom];
+    function drawMap() {
+      for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+          const tile = map[y][x];
 
-      ctx.fillStyle = "#001100";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+          if (tile === "#") {
+            ctx.fillStyle = "#102d18";
+            ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          ctx.fillStyle = (x + y) % 2 === 0 ? "#001600" : "#001000";
-          ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+            ctx.strokeStyle = "rgba(124,255,158,0.25)";
+            ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+          } else {
+            ctx.fillStyle = "#06110a";
+            ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
 
-          ctx.strokeStyle = "rgba(0,255,100,0.05)";
-          ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
+            ctx.strokeStyle = "rgba(124,255,158,0.045)";
+            ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+          }
         }
       }
-
-      drawWallsAndDoors(room);
-      drawBlocks(room);
-      drawLabDetails();
     }
 
-    function drawWallsAndDoors(room) {
-      ctx.fillStyle = "#005522";
+    function drawKeycard() {
+      if (keycard.taken) return;
 
-      ctx.fillRect(0, 0, canvas.width, TILE);
-      ctx.fillRect(0, canvas.height - TILE, canvas.width, TILE);
-      ctx.fillRect(0, 0, TILE, canvas.height);
-      ctx.fillRect(canvas.width - TILE, 0, TILE, canvas.height);
+      ctx.fillStyle = varColor("--amber");
+      ctx.fillRect(keycard.x, keycard.y, keycard.w, keycard.h);
 
-      ctx.fillStyle = "#000000";
+      ctx.strokeStyle = "#fff";
+      ctx.strokeRect(keycard.x, keycard.y, keycard.w, keycard.h);
+    }
 
-      if (room.doors.up) {
-        ctx.fillRect(8 * TILE, 0, 4 * TILE, TILE);
-      }
+    function drawVault() {
+      ctx.fillStyle = vault.opened ? "rgba(124,255,158,0.22)" : "rgba(111,220,255,0.20)";
+      ctx.fillRect(vault.x, vault.y, vault.w, vault.h);
 
-      if (room.doors.down) {
-        ctx.fillRect(8 * TILE, canvas.height - TILE, 4 * TILE, TILE);
-      }
-
-      if (room.doors.left) {
-        ctx.fillRect(0, 6 * TILE, TILE, 3 * TILE);
-      }
-
-      if (room.doors.right) {
-        ctx.fillRect(canvas.width - TILE, 6 * TILE, TILE, 3 * TILE);
-      }
-
-      ctx.strokeStyle = "#00ff66";
+      ctx.strokeStyle = vault.opened ? varColor("--green") : varColor("--blue");
       ctx.lineWidth = 2;
-      ctx.strokeRect(TILE, TILE, canvas.width - TILE * 2, canvas.height - TILE * 2);
+      ctx.strokeRect(vault.x + 4, vault.y + 4, vault.w - 8, vault.h - 8);
+      ctx.lineWidth = 1;
     }
 
-    function drawBlocks(room) {
-      room.blocks.forEach(function(block) {
-        const x = block[0] * TILE;
-        const y = block[1] * TILE;
+    function drawWeapon() {
+      if (!vault.opened || weapon.taken) return;
 
-        ctx.fillStyle = "#003b16";
-        ctx.fillRect(x, y, TILE, TILE);
-
-        ctx.strokeStyle = "#00aa44";
-        ctx.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
-
-        ctx.fillStyle = "rgba(0,255,100,0.15)";
-        ctx.fillRect(x + 6, y + 6, TILE - 12, 6);
-      });
-    }
-
-    function drawLabDetails() {
-      ctx.fillStyle = "#00240d";
-      ctx.fillRect(2 * TILE, 2 * TILE, 22, 22);
-      ctx.fillRect(17 * TILE, 12 * TILE, 22, 22);
-
-      ctx.strokeStyle = "#00aa44";
-      ctx.strokeRect(2 * TILE, 2 * TILE, 22, 22);
-      ctx.strokeRect(17 * TILE, 12 * TILE, 22, 22);
-
-      ctx.fillStyle = "#66ff99";
-      ctx.fillRect(2 * TILE + 7, 2 * TILE + 6, 8, 10);
-      ctx.fillRect(17 * TILE + 7, 12 * TILE + 6, 8, 10);
-    }
-
-    function drawLetters() {
-      const room = rooms[currentRoom];
-      const letter = room.letter;
-
-      if (letter.collected) {
-        return;
-      }
-
-      const x = letter.x * TILE + TILE / 2;
-      const y = letter.y * TILE + TILE / 2;
-
-      ctx.fillStyle = "#ffee66";
-      ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = "#000000";
-      ctx.stroke();
-
-      ctx.fillStyle = "#000000";
-      ctx.font = "bold 20px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(letter.value, x, y + 1);
-    }
-
-    function drawKey() {
-      if (keyItem.collected || currentRoom !== keyItem.room) {
-        return;
-      }
-
-      const x = keyItem.x * TILE + TILE / 2;
-      const y = keyItem.y * TILE + TILE / 2;
-
-      ctx.fillStyle = "#ffee66";
-      ctx.fillRect(x - 4, y - 12, 8, 24);
-      ctx.fillRect(x - 4, y + 6, 18, 6);
-
-      ctx.strokeStyle = "#000000";
-      ctx.strokeRect(x - 4, y - 12, 8, 24);
-      ctx.strokeRect(x - 4, y + 6, 18, 6);
-
-      ctx.beginPath();
-      ctx.arc(x, y - 16, 8, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.fillStyle = "#ffee66";
-      ctx.font = "bold 12px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("KEY", x, y + 28);
-    }
-
-    function drawChest() {
-      if (currentRoom !== weaponChest.room) {
-        return;
-      }
-
-      const x = weaponChest.x * TILE;
-      const y = weaponChest.y * TILE;
-
-      if (weaponChest.opened) {
-        ctx.fillStyle = "#3b2500";
-        ctx.fillRect(x + 4, y + 14, TILE - 8, TILE - 10);
-
-        ctx.fillStyle = "#111111";
-        ctx.fillRect(x + 6, y + 6, TILE - 12, 10);
-
-        ctx.strokeStyle = "#ffee66";
-        ctx.strokeRect(x + 4, y + 14, TILE - 8, TILE - 10);
-
-        ctx.fillStyle = "#66ff99";
-        ctx.fillRect(x + 13, y + 18, 6, 10);
-        ctx.fillRect(x + 18, y + 15, 10, 6);
-      } else {
-        ctx.fillStyle = "#5c3500";
-        ctx.fillRect(x + 4, y + 9, TILE - 8, TILE - 8);
-
-        ctx.fillStyle = "#8a5200";
-        ctx.fillRect(x + 4, y + 4, TILE - 8, 11);
-
-        ctx.strokeStyle = "#ffee66";
-        ctx.strokeRect(x + 4, y + 9, TILE - 8, TILE - 8);
-        ctx.strokeRect(x + 4, y + 4, TILE - 8, 11);
-
-        ctx.fillStyle = "#ffee66";
-        ctx.fillRect(x + 14, y + 15, 6, 8);
-      }
-
-      ctx.fillStyle = "#ffee66";
-      ctx.font = "bold 12px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText(weaponChest.opened ? "OPEN" : "CHEST", x + TILE / 2, y + TILE + 12);
-    }
-
-    function drawEnemies() {
-      const room = rooms[currentRoom];
-
-      room.enemies.forEach(function(enemy) {
-        if (!enemy.alive) {
-          return;
-        }
-
-        drawSecurityDummy(enemy);
-      });
-    }
-
-    function drawSecurityDummy(enemy) {
-      const x = enemy.px;
-      const y = enemy.py;
-      const walk = Math.sin(enemy.walkFrame * 0.25) * 2;
-
-      ctx.save();
-      ctx.translate(x, y);
-
-      ctx.fillStyle = "rgba(0,0,0,0.45)";
-      ctx.fillRect(-14, 15, 28, 7);
-
-      ctx.fillStyle = "#080808";
-      ctx.fillRect(-10, 4 + walk, 7, 13);
-      ctx.fillRect(3, 4 - walk, 7, 13);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.strokeRect(-10, 4 + walk, 7, 13);
-      ctx.strokeRect(3, 4 - walk, 7, 13);
-
-      ctx.fillStyle = "#111111";
-      ctx.fillRect(-13, -13, 26, 24);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-13, -13, 26, 24);
-
-      ctx.fillStyle = "#050505";
-      ctx.fillRect(-9, -27, 18, 15);
-
-      ctx.strokeStyle = "#ffeeee";
-      ctx.strokeRect(-9, -27, 18, 15);
-
-      ctx.fillStyle = "#ff5555";
-      ctx.fillRect(-6, -22, 12, 4);
-
-      ctx.fillStyle = "#0b0b0b";
-      ctx.fillRect(-18, -9, 5, 17);
-      ctx.fillRect(13, -9, 5, 17);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.strokeRect(-18, -9, 5, 17);
-      ctx.strokeRect(13, -9, 5, 17);
-
-      ctx.fillStyle = "#300000";
-      ctx.fillRect(-8, -7, 16, 14);
-
-      ctx.fillStyle = "#ff5555";
-      ctx.font = "bold 14px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(enemy.label, 0, 1);
-
-      ctx.restore();
-    }
-
-    function drawProjectiles() {
-      projectiles.forEach(function(projectile) {
-        ctx.fillStyle = "#66ff99";
-        ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = "#baffc9";
-        ctx.stroke();
-      });
-    }
-
-    function drawEnemyProjectiles() {
-      enemyProjectiles.forEach(function(projectile) {
-        ctx.fillStyle = "#ff3333";
-        ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = "#ff9999";
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(255,0,0,0.25)";
-        ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize, 0, Math.PI * 2);
-        ctx.fill();
-      });
+      ctx.fillStyle = varColor("--blue");
+      ctx.fillRect(weapon.x, weapon.y + 6, weapon.w, 5);
+      ctx.fillRect(weapon.x + 10, weapon.y, 5, weapon.h);
+      ctx.shadowColor = varColor("--blue");
+      ctx.shadowBlur = 10;
+      ctx.fillRect(weapon.x + 5, weapon.y + 5, 12, 8);
+      ctx.shadowBlur = 0;
     }
 
     function drawPlayer() {
-      const walk = player.moving ? Math.sin(player.walkFrame * 0.25) * 2 : 0;
+      ctx.fillStyle = varColor("--green");
+      ctx.fillRect(player.x, player.y, player.w, player.h);
 
-      ctx.save();
-      ctx.translate(player.x, player.y);
+      ctx.strokeStyle = varColor("--white");
+      ctx.strokeRect(player.x - 2, player.y - 2, player.w + 4, player.h + 4);
 
-      if (player.hurtTimer > 0 || player.status === "FAILED") {
-        ctx.globalAlpha = 0.45;
-      }
-
-      ctx.fillStyle = "rgba(0,0,0,0.45)";
-      ctx.fillRect(-13, 15, 26, 7);
-
-      ctx.fillStyle = "#001f0b";
-      ctx.fillRect(-9, 4 + walk, 7, 13);
-      ctx.fillRect(2, 4 - walk, 7, 13);
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.strokeRect(-9, 4 + walk, 7, 13);
-      ctx.strokeRect(2, 4 - walk, 7, 13);
-
-      ctx.fillStyle = "#003b16";
-      ctx.fillRect(-12, -13, 24, 25);
-
-      ctx.strokeStyle = "#baffc9";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-12, -13, 24, 25);
-
-      ctx.fillStyle = "#00280f";
-      ctx.fillRect(-17, -9, 5, 17);
-      ctx.fillRect(12, -9, 5, 17);
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.strokeRect(-17, -9, 5, 17);
-      ctx.strokeRect(12, -9, 5, 17);
-
-      ctx.fillStyle = "#d7b07a";
-      ctx.fillRect(-8, -28, 16, 15);
-
-      ctx.strokeStyle = "#001100";
-      ctx.strokeRect(-8, -28, 16, 15);
-
-      ctx.fillStyle = "#1a0f05";
-      ctx.fillRect(-8, -30, 16, 5);
-
-      ctx.fillStyle = "#001100";
-
-      if (player.dy === -1) {
-        ctx.fillRect(-5, -24, 10, 2);
-      } else if (player.dy === 1) {
-        ctx.fillRect(-5, -22, 3, 3);
-        ctx.fillRect(2, -22, 3, 3);
-      } else if (player.dx === -1) {
-        ctx.fillRect(-6, -22, 4, 3);
-      } else if (player.dx === 1) {
-        ctx.fillRect(2, -22, 4, 3);
-      }
-
-      if (hasWeapon) {
-        ctx.fillStyle = "#ffee66";
-
-        if (player.dy === -1) {
-          ctx.fillRect(-3, -38, 6, 10);
-        }
-
-        if (player.dy === 1) {
-          ctx.fillRect(-3, 12, 6, 10);
-        }
-
-        if (player.dx === -1) {
-          ctx.fillRect(-25, -5, 10, 6);
-        }
-
-        if (player.dx === 1) {
-          ctx.fillRect(15, -5, 10, 6);
-        }
-      }
-
-      if (hasKey) {
-        ctx.fillStyle = "#ffee66";
-        ctx.fillRect(7, -8, 5, 10);
-      }
-
-      ctx.fillStyle = hasWeapon ? "#00ff66" : "#006b2a";
-      ctx.fillRect(-4, -6, 8, 4);
-
-      ctx.restore();
-    }
-
-    function drawHudOnCanvas() {
-      const room = rooms[currentRoom];
-
-      ctx.fillStyle = "rgba(0,0,0,0.7)";
-      ctx.fillRect(8, 8, 330, 90);
-
-      ctx.fillStyle = "#00ff66";
-      ctx.font = "14px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText(room.name, 18, 28);
-      ctx.fillText("WORD: " + getWordProgress(), 18, 48);
-      ctx.fillText("KEY: " + (hasKey ? "YES" : "NO") + " // WEAPON: " + (hasWeapon ? "YES" : "NO"), 18, 68);
-
-      if (hasWeapon) {
-        ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 88);
-      } else {
-        ctx.fillText("KEY: WEST LAB // CHEST: VAULT", 18, 88);
+      if (player.hasWeapon) {
+        ctx.fillStyle = varColor("--blue");
+        ctx.fillRect(player.x + player.w, player.y + 7, 12, 4);
       }
     }
 
-    function getWordProgress() {
-      let result = "";
+    function drawEnemies() {
+      enemies.forEach(function(enemy) {
+        ctx.fillStyle = varColor("--red");
+        ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
 
-      for (let i = 0; i < targetWord.length; i++) {
-        result += collectedLetters[i] ? collectedLetters[i] : "_";
-      }
-
-      return result;
+        ctx.strokeStyle = "rgba(255,255,255,0.75)";
+        ctx.strokeRect(enemy.x - 2, enemy.y - 2, enemy.w + 4, enemy.h + 4);
+      });
     }
 
-    function updateHud() {
-      roomNameEl.textContent = rooms[currentRoom].name;
-      statusEl.textContent = player.status;
-      keyStatusEl.textContent = hasKey ? "YES" : "NO";
-      weaponStatusEl.textContent = hasWeapon ? "YES" : "NO";
-      enemiesLeftEl.textContent = countEnemiesLeft();
-      lettersFoundEl.textContent = collectedLetters.length;
-      wordProgressEl.textContent = getWordProgress();
+    function drawBullets() {
+      bullets.forEach(function(bullet) {
+        ctx.fillStyle = varColor("--amber");
+        ctx.shadowColor = varColor("--amber");
+        ctx.shadowBlur = 8;
+        ctx.fillRect(bullet.x, bullet.y, bullet.w, bullet.h);
+        ctx.shadowBlur = 0;
+      });
     }
 
-    function pressMove(direction) {
+    function drawParticles() {
+      particles.forEach(function(particle) {
+        ctx.fillStyle = particle.color;
+        ctx.globalAlpha = Math.max(0, particle.life / 24);
+        ctx.fillRect(particle.x, particle.y, 3, 3);
+        ctx.globalAlpha = 1;
+      });
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawMap();
+      drawVault();
+      drawKeycard();
+      drawWeapon();
+      drawBullets();
+      drawEnemies();
+      drawPlayer();
+      drawParticles();
+    }
+
+    function update() {
+      movePlayer();
+      updateEnemies();
+      updateBullets();
+      updateParticles();
+      updateHud();
+      checkWin();
+    }
+
+    function gameLoop() {
       if (!gameRunning) {
         return;
       }
 
-      if (direction === "up") {
-        player.dx = 0;
-        player.dy = -1;
-        moveEntity(player, 0, -24, playerSize);
-      }
+      update();
+      render();
 
-      if (direction === "down") {
-        player.dx = 0;
-        player.dy = 1;
-        moveEntity(player, 0, 24, playerSize);
-      }
-
-      if (direction === "left") {
-        player.dx = -1;
-        player.dy = 0;
-        moveEntity(player, -24, 0, playerSize);
-      }
-
-      if (direction === "right") {
-        player.dx = 1;
-        player.dy = 0;
-        moveEntity(player, 24, 0, playerSize);
-      }
-
-      player.moving = true;
-      player.walkFrame++;
-
-      handleRoomTransition();
+      animationId = requestAnimationFrame(gameLoop);
     }
 
-    document.addEventListener("keydown", function(event) {
+    window.addEventListener("keydown", function(event) {
       keys[event.key] = true;
 
       if (event.code === "Space") {
         event.preventDefault();
-        shoot();
+        fireBullet();
       }
     });
 
-    document.addEventListener("keyup", function(event) {
+    window.addEventListener("keyup", function(event) {
       keys[event.key] = false;
     });
 
-    startGame();
+    restartGame();
+    showStart();
   </script>
-
 </body>
 </html>
