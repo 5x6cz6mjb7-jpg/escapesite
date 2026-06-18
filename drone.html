@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Drone Override Interface V2</title>
+  <meta charset="UTF-8">
+  <title>Drone Override Interface</title>
 
   <style>
     :root {
-      --cyan: #00f6ff;
-      --cyan2: #7dfcff;
-      --green: #73ff92;
-      --green2: #b9ffcc;
       --red: #ff264d;
-      --red2: #ff7891;
-      --yellow: #ffe867;
-      --white: #efffff;
-      --muted: #7ba5ab;
-      --dark: #001014;
-      --panel: rgba(4, 20, 26, 0.92);
-      --font: "Courier New", Courier, monospace;
+      --red2: #9d001d;
+      --cyan: #00f6ff;
+      --green: #5dff8b;
+      --yellow: #ffd36a;
+      --white: #ffffff;
+      --muted: #8fb4bc;
+      --dark: #03070a;
+      --panel: rgba(3, 12, 18, 0.92);
+      --border: rgba(0, 246, 255, 0.34);
     }
 
     * {
@@ -29,18 +25,12 @@
     html,
     body {
       margin: 0;
-      padding: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at 10% 10%, rgba(0, 246, 255, 0.07), transparent 22%),
-        radial-gradient(circle at 90% 85%, rgba(255, 38, 77, 0.08), transparent 24%),
-        linear-gradient(180deg, #010304 0%, #031018 100%);
+        radial-gradient(circle at center, rgba(255, 38, 77, 0.16), transparent 42%),
+        linear-gradient(180deg, #061017 0%, #010305 100%);
       color: var(--cyan);
-      font-family: var(--font);
-    }
-
-    body {
-      padding: 12px;
+      font-family: "Courier New", monospace;
       overflow-x: hidden;
     }
 
@@ -48,15 +38,16 @@
       content: "";
       position: fixed;
       inset: 0;
+      z-index: 80;
       pointer-events: none;
-      z-index: 1;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,0.04) 0 1px,
-          transparent 1px 4px
+          rgba(255,255,255,0.035),
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px,
+          transparent 5px
         );
-      opacity: 0.35;
       mix-blend-mode: screen;
     }
 
@@ -64,953 +55,256 @@
       content: "";
       position: fixed;
       inset: 0;
+      z-index: 81;
       pointer-events: none;
-      z-index: 1;
       background:
-        linear-gradient(90deg, rgba(0,246,255,0.03) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,246,255,0.03) 1px, transparent 1px);
-      background-size: 28px 28px;
-      opacity: 0.22;
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.18) 58%, rgba(0,0,0,0.82) 100%);
     }
 
-    .app {
+    .missionIntroOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at center, rgba(255, 38, 77, 0.26), transparent 44%),
+        rgba(0, 0, 0, 0.94);
+      padding: 24px;
+    }
+
+    .missionIntroBox {
+      width: min(720px, 100%);
+      border: 3px solid rgba(255, 38, 77, 0.85);
+      background:
+        radial-gradient(circle at center, rgba(255, 38, 77, 0.14), transparent 62%),
+        rgba(8, 0, 4, 0.98);
+      box-shadow:
+        0 0 44px rgba(255, 38, 77, 0.48),
+        inset 0 0 34px rgba(255, 38, 77, 0.10);
+      color: #ffd7df;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .missionIntroLabel {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 211, 106, 0.7);
+      color: var(--yellow);
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    .missionIntroBox h1 {
+      margin: 0 0 16px;
+      color: var(--white);
+      font-size: 34px;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 14px rgba(255, 38, 77, 0.9),
+        0 0 28px rgba(255, 38, 77, 0.45);
+    }
+
+    .missionIntroBox p {
+      color: #ffb8c5;
+      line-height: 1.55;
+      margin: 12px 0;
+    }
+
+    .missionIntroWarning {
+      margin: 18px 0;
+      padding: 13px;
+      border: 1px dashed rgba(255, 211, 106, 0.85);
+      color: var(--yellow);
+      background: rgba(255, 211, 106, 0.08);
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    .missionIntroBox button {
+      min-width: 260px;
+      padding: 14px 20px;
+      border: 2px solid rgba(255, 38, 77, 0.9);
+      background: rgba(255, 38, 77, 0.15);
+      color: var(--white);
+      font-family: "Courier New", monospace;
+      font-weight: bold;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+
+    .missionIntroBox button:hover {
+      background: rgba(255, 38, 77, 0.28);
+    }
+
+    .shell {
       position: relative;
       z-index: 2;
-      width: 100%;
-      max-width: 1280px;
-      min-height: calc(100vh - 24px);
-      margin: 0 auto;
-      border: 3px solid rgba(0,246,255,0.65);
+      width: min(1380px, calc(100% - 24px));
+      margin: 12px auto;
+      border: 2px solid rgba(0, 246, 255, 0.38);
       background:
-        linear-gradient(180deg, rgba(1, 13, 18, 0.92), rgba(1, 8, 10, 0.95));
+        linear-gradient(180deg, rgba(4, 20, 28, 0.96), rgba(0, 2, 5, 0.97));
       box-shadow:
-        0 0 28px rgba(0,246,255,0.16),
-        inset 0 0 50px rgba(0,246,255,0.05),
-        inset 0 0 80px rgba(255,38,77,0.04);
-      overflow: hidden;
+        0 0 34px rgba(0, 246, 255, 0.16),
+        inset 0 0 42px rgba(0, 246, 255, 0.06);
+      padding: 12px;
     }
 
-    .appInner {
-      position: relative;
-      z-index: 3;
-      padding: 10px;
-    }
-
-    .topBar {
+    .topbar {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: 10px;
       align-items: center;
-      border: 2px solid rgba(0,246,255,0.55);
-      background:
-        linear-gradient(90deg, rgba(0,246,255,0.08), rgba(255,38,77,0.08), rgba(0,246,255,0.08));
-      padding: 8px 12px;
-      box-shadow: inset 0 0 18px rgba(0,246,255,0.06);
+      gap: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.38);
+      padding: 10px 12px;
       margin-bottom: 10px;
     }
 
-    .topBlock {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+    .topSmall {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 1px;
+      line-height: 1.4;
     }
 
-    .topBlock.right {
-      align-items: flex-end;
+    .topSmall.right {
       text-align: right;
     }
 
-    .mainTitle {
+    .title {
       color: var(--white);
       text-align: center;
-      font-size: 20px;
+      font-size: 24px;
+      letter-spacing: 3px;
       font-weight: bold;
-      letter-spacing: 2px;
-      white-space: nowrap;
       text-shadow:
-        0 0 8px rgba(0,246,255,0.7),
-        0 0 18px rgba(255,38,77,0.25);
+        0 0 12px rgba(255, 38, 77, 0.9),
+        0 0 28px rgba(255, 38, 77, 0.45);
     }
 
-    .mainTitle::before,
-    .mainTitle::after {
-      content: " // ";
-      color: var(--red2);
+    .timerBox {
+      margin-top: 5px;
+      color: var(--yellow);
+      font-size: 32px;
+      letter-spacing: 3px;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(255, 211, 106, 0.65);
     }
 
-    .warningFlash {
-      color: var(--red2);
-      animation: warningBlink 0.9s steps(2, end) infinite;
-    }
-
-    @keyframes warningBlink {
-      0%, 45% {
-        opacity: 1;
-      }
-
-      46%, 100% {
-        opacity: 0.4;
-      }
-    }
-
-    .layout {
+    .mainGrid {
       display: grid;
-      grid-template-columns: 310px minmax(0, 1fr) 355px;
+      grid-template-columns: 1.05fr 1.2fr 0.95fr;
       gap: 10px;
-      align-items: stretch;
+      align-items: start;
     }
 
     .panel {
-      position: relative;
-      border: 2px solid rgba(0,246,255,0.55);
+      border: 1px solid var(--border);
       background:
-        linear-gradient(180deg, rgba(7, 29, 38, 0.88), rgba(1, 10, 14, 0.92));
+        radial-gradient(circle at center, rgba(0,246,255,0.07), transparent 62%),
+        var(--panel);
       box-shadow:
-        0 0 18px rgba(0,246,255,0.12),
-        inset 0 0 20px rgba(0,246,255,0.05);
-      overflow: hidden;
-      min-height: 80px;
-    }
-
-    .panel::after {
-      content: "";
-      position: absolute;
-      left: -25%;
-      right: -25%;
-      top: -90px;
-      height: 60px;
-      background: linear-gradient(180deg, transparent, rgba(0,246,255,0.12), transparent);
-      animation: panelScan 4.5s linear infinite;
-      pointer-events: none;
-      opacity: 0.6;
-    }
-
-    @keyframes panelScan {
-      from {
-        top: -90px;
-      }
-
-      to {
-        top: 110%;
-      }
+        0 0 18px rgba(0, 246, 255, 0.10),
+        inset 0 0 22px rgba(0, 246, 255, 0.05);
+      padding: 10px;
+      min-height: 0;
     }
 
     .panelTitle {
-      position: relative;
-      z-index: 2;
-      min-height: 32px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      padding: 0 10px;
-      border-bottom: 1px solid rgba(0,246,255,0.35);
-      background: rgba(0,246,255,0.08);
+      gap: 10px;
       color: var(--white);
-      font-size: 11px;
-      letter-spacing: 1.2px;
-      text-shadow: 0 0 7px rgba(0,246,255,0.45);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(0,246,255,0.25);
+      padding-bottom: 7px;
+      margin-bottom: 9px;
+      text-transform: uppercase;
     }
 
     .panelTitle span:last-child {
-      color: var(--red2);
+      color: var(--yellow);
     }
 
-    .panelBody {
-      position: relative;
-      z-index: 2;
-      padding: 10px;
-    }
-
-    .timerPanel {
-      border-color: rgba(255,38,77,0.7);
-      box-shadow:
-        0 0 18px rgba(255,38,77,0.14),
-        inset 0 0 18px rgba(255,38,77,0.05);
-    }
-
-    .timerLabel {
-      text-align: center;
-      color: var(--red2);
-      font-size: 12px;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      animation: warningBlink 1s steps(2, end) infinite;
-    }
-
-    .megaTimer {
-      width: 100%;
-      text-align: center;
-      color: var(--white);
-      font-size: 68px;
-      line-height: 1;
-      font-weight: bold;
-      letter-spacing: 2px;
-      font-variant-numeric: tabular-nums;
-      padding: 8px 2px;
-      border: 2px solid rgba(255,38,77,0.35);
-      background: rgba(255,38,77,0.08);
-      text-shadow:
-        0 0 10px rgba(255,38,77,0.8),
-        0 0 25px rgba(255,38,77,0.35);
-      box-shadow: inset 0 0 18px rgba(255,38,77,0.08);
-    }
-
-    .megaTimer.low {
-      animation: timerPanic 0.45s steps(2, end) infinite;
-    }
-
-    @keyframes timerPanic {
-      0%, 40% {
-        transform: scale(1);
-        filter: brightness(1);
-      }
-
-      41%, 100% {
-        transform: scale(1.03);
-        filter: brightness(1.25);
-      }
-    }
-
-    .timerBarOuter {
-      height: 18px;
-      margin-top: 10px;
-      border: 1px solid rgba(255,38,77,0.65);
-      background: rgba(255,38,77,0.12);
-      overflow: hidden;
-    }
-
-    .timerBar {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--green), var(--yellow), var(--red));
-      transition: width 0.25s linear;
-      box-shadow: 0 0 12px rgba(255,38,77,0.35);
-    }
-
-    .penaltyFlash {
-      animation: penaltyFlash 0.5s ease;
-    }
-
-    @keyframes penaltyFlash {
-      0% {
-        background-color: transparent;
-      }
-
-      40% {
-        background-color: rgba(255,38,77,0.25);
-      }
-
-      100% {
-        background-color: transparent;
-      }
-    }
-
-    .alertStack {
+    .hudList {
       display: grid;
       gap: 7px;
-      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    .alertLine {
-      padding: 7px 8px;
-      border: 1px solid rgba(255,38,77,0.28);
-      background: rgba(255,38,77,0.08);
-      color: var(--red2);
-      font-size: 11px;
-      letter-spacing: 0.8px;
-    }
-
-    .radarWrap {
-      margin-top: 12px;
-      border: 1px solid rgba(0,246,255,0.28);
-      background: rgba(0,0,0,0.25);
-      padding: 10px;
-    }
-
-    .radar {
-      width: 210px;
-      height: 210px;
-      margin: 0 auto;
-      border-radius: 50%;
-      border: 2px solid rgba(0,246,255,0.72);
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle, transparent 0 18%, rgba(0,246,255,0.1) 18% 19%, transparent 19% 37%, rgba(0,246,255,0.1) 37% 38%, transparent 38% 56%, rgba(0,246,255,0.1) 56% 57%, transparent 57%),
-        radial-gradient(circle at center, rgba(0,246,255,0.14), rgba(0,0,0,0.82));
-      box-shadow:
-        0 0 18px rgba(0,246,255,0.18),
-        inset 0 0 20px rgba(0,246,255,0.12);
-    }
-
-    .radarSweep {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 50%;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(0,246,255,0.95), rgba(0,246,255,0));
-      transform-origin: 0 50%;
-      animation: radarSpin 2.4s linear infinite;
-      box-shadow: 0 0 10px rgba(0,246,255,0.8);
-      z-index: 4;
-    }
-
-    .radarCenter {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 8px;
-      height: 8px;
-      transform: translate(-50%, -50%);
-      background: var(--cyan2);
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(0,246,255,1);
-      z-index: 5;
-    }
-
-    @keyframes radarSpin {
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .radarDot {
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--red);
-      box-shadow:
-        0 0 7px rgba(255,38,77,1),
-        0 0 14px rgba(255,38,77,0.7);
-      animation: radarDotBlink 1s infinite;
-      z-index: 6;
-    }
-
-    .rd1 {
-      left: 38%;
-      top: 45%;
-    }
-
-    .rd2 {
-      left: 51%;
-      top: 52%;
-      animation-delay: 0.2s;
-    }
-
-    .rd3 {
-      left: 70%;
-      top: 41%;
-      animation-delay: 0.4s;
-    }
-
-    .rd4 {
-      left: 71%;
-      top: 48%;
-      animation-delay: 0.6s;
-    }
-
-    @keyframes radarDotBlink {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.35;
-        transform: scale(0.65);
-      }
-    }
-
-    .droneViewBox {
-      margin-top: 12px;
-      border: 1px solid rgba(115,255,146,0.35);
-      background: #001006;
-      height: 210px;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 0 14px rgba(115,255,146,0.12),
-        inset 0 0 24px rgba(115,255,146,0.08);
-    }
-
-    .droneViewTitle {
-      position: relative;
-      z-index: 3;
-      height: 30px;
-      padding: 0 10px;
+    .hudRow {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(115,255,146,0.22);
-      background: rgba(115,255,146,0.08);
-      color: var(--green2);
-      font-size: 11px;
-      letter-spacing: 1px;
+      border-bottom: 1px dashed rgba(0,246,255,0.18);
+      padding-bottom: 5px;
+      gap: 8px;
     }
 
-    .dronePov {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 30px;
-      bottom: 0;
-      overflow: hidden;
-      background:
-        linear-gradient(180deg, #001608 0%, #00210b 36%, #000a03 37%, #000000 100%);
-      color: var(--green);
-    }
-
-    .wireSky {
-      position: absolute;
-      inset: 0 0 55% 0;
-      background:
-        linear-gradient(0deg, rgba(115,255,146,0.05), transparent),
-        radial-gradient(circle at 50% 80%, rgba(115,255,146,0.12), transparent 35%);
-      z-index: 1;
-    }
-
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: var(--green);
-      box-shadow: 0 0 7px rgba(115,255,146,0.85);
-      animation: starBlink 1.8s infinite;
-      z-index: 2;
-    }
-
-    .st1 {
-      left: 10%;
-      top: 12%;
-    }
-
-    .st2 {
-      left: 28%;
-      top: 9%;
-      animation-delay: 0.4s;
-    }
-
-    .st3 {
-      left: 61%;
-      top: 14%;
-      animation-delay: 0.8s;
-    }
-
-    .st4 {
-      left: 84%;
-      top: 19%;
-      animation-delay: 1.2s;
-    }
-
-    @keyframes starBlink {
-      0%,100% {
-        opacity: 0.3;
-      }
-
-      50% {
-        opacity: 1;
-      }
-    }
-
-    .wireMountain {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 23%;
-      height: 35%;
-      z-index: 4;
-      pointer-events: none;
-    }
-
-    .wireMountain svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      filter: drop-shadow(0 0 4px rgba(115,255,146,0.75));
-    }
-
-    .wireHorizon {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 40%;
-      height: 2px;
-      background: rgba(115,255,146,0.75);
-      box-shadow: 0 0 10px rgba(115,255,146,0.85);
-      z-index: 5;
-    }
-
-    .wireGround {
-      position: absolute;
-      left: -45%;
-      right: -45%;
-      top: 40%;
-      bottom: -15%;
-      transform: perspective(260px) rotateX(62deg);
-      transform-origin: top center;
-      z-index: 3;
-      background:
-        linear-gradient(90deg, transparent 49.75%, rgba(115,255,146,0.38) 50%, transparent 50.25%),
-        linear-gradient(78deg, transparent 49.6%, rgba(115,255,146,0.35) 50%, transparent 50.4%),
-        linear-gradient(102deg, transparent 49.6%, rgba(115,255,146,0.35) 50%, transparent 50.4%),
-        repeating-linear-gradient(0deg, transparent 0 18px, rgba(115,255,146,0.28) 19px, transparent 20px);
-      animation: wireGroundMove 0.45s linear infinite;
-    }
-
-    @keyframes wireGroundMove {
-      from {
-        background-position: 0 0, 0 0, 0 0, 0 0;
-      }
-
-      to {
-        background-position: 0 0, 0 0, 0 0, 0 38px;
-      }
-    }
-
-    .wirePolderLines {
-      position: absolute;
-      inset: 43% 0 0 0;
-      z-index: 6;
-      background:
-        linear-gradient(90deg, transparent 20%, rgba(115,255,146,0.12) 21%, transparent 22%),
-        linear-gradient(90deg, transparent 44%, rgba(115,255,146,0.12) 45%, transparent 46%),
-        linear-gradient(90deg, transparent 68%, rgba(115,255,146,0.12) 69%, transparent 70%);
-      opacity: 0.7;
-    }
-
-    .wireKanaal {
-      position: absolute;
-      left: 44%;
-      top: 41%;
-      width: 10%;
-      height: 44%;
-      z-index: 7;
-      border-left: 2px solid rgba(115,255,146,0.7);
-      border-right: 2px solid rgba(115,255,146,0.7);
-      background:
-        repeating-linear-gradient(
-          0deg,
-          rgba(115,255,146,0.12) 0 10px,
-          transparent 10px 20px
-        );
-      transform: perspective(160px) rotateX(50deg);
-      transform-origin: top center;
-      box-shadow: inset 0 0 10px rgba(115,255,146,0.09);
-    }
-
-    .wireDijk {
-      position: absolute;
-      left: 8%;
-      right: 8%;
-      top: 58%;
-      height: 2px;
-      z-index: 8;
-      background: rgba(115,255,146,0.5);
-      box-shadow: 0 0 8px rgba(115,255,146,0.4);
-      transform: skewY(-6deg);
-    }
-
-    .horizonVillage {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 34%;
-      height: 18px;
-      z-index: 5;
-      background:
-        linear-gradient(90deg,
-          transparent 0 7%,
-          rgba(115,255,146,0.55) 7% 9%,
-          transparent 9% 14%,
-          rgba(115,255,146,0.55) 14% 16%,
-          transparent 16% 24%,
-          rgba(115,255,146,0.55) 24% 27%,
-          transparent 27% 35%,
-          rgba(115,255,146,0.55) 35% 37%,
-          transparent 37% 58%,
-          rgba(115,255,146,0.55) 58% 60%,
-          transparent 60% 72%,
-          rgba(115,255,146,0.55) 72% 74%,
-          transparent 74% 100%
-        );
-      opacity: 0.35;
-    }
-
-    .dutchScene {
-      position: absolute;
-      inset: 0;
-      z-index: 8;
-      pointer-events: none;
-    }
-
-    .wireMolen {
-      position: absolute;
-      left: 16%;
-      top: 25%;
-      width: 68px;
-      height: 96px;
-      filter: drop-shadow(0 0 6px rgba(115,255,146,0.8));
-    }
-
-    .wireMolenBase {
-      position: absolute;
-      left: 20px;
-      top: 48px;
-      width: 28px;
-      height: 42px;
-      border: 3px solid rgba(115,255,146,0.95);
-      clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
-    }
-
-    .wireMolenCap {
-      position: absolute;
-      left: 16px;
-      top: 38px;
-      width: 36px;
-      height: 14px;
-      border: 3px solid rgba(115,255,146,0.95);
-      border-bottom: none;
-      clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    }
-
-    .wireMolenHub {
-      position: absolute;
-      left: 29px;
-      top: 31px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px rgba(115,255,146,0.95);
-      z-index: 2;
-    }
-
-    .wireMolenBlades {
-      position: absolute;
-      left: 34px;
-      top: 36px;
-      width: 4px;
-      height: 4px;
-      animation: molenSpin 1.8s linear infinite;
-      transform-origin: center;
-    }
-
-    .wireMolenBlades::before,
-    .wireMolenBlades::after {
-      content: "";
-      position: absolute;
-      left: -28px;
-      top: -2px;
-      width: 60px;
-      height: 4px;
-      background: rgba(115,255,146,0.95);
-      box-shadow: 0 0 6px rgba(115,255,146,0.65);
-    }
-
-    .wireMolenBlades::after {
-      transform: rotate(90deg);
-    }
-
-    @keyframes molenSpin {
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .wireHuis {
-      position: absolute;
-      width: 38px;
-      height: 24px;
-      border: 2px solid rgba(115,255,146,0.85);
-      background: rgba(115,255,146,0.04);
-      box-shadow: 0 0 8px rgba(115,255,146,0.12);
-    }
-
-    .wireHuis::before {
-      content: "";
-      position: absolute;
-      left: -3px;
-      top: -14px;
-      width: 42px;
-      height: 16px;
-      border: 2px solid rgba(115,255,146,0.85);
-      border-bottom: none;
-      background: rgba(115,255,146,0.02);
-      clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    }
-
-    .huis1 {
-      left: 27%;
-      top: 31%;
-      transform: scale(0.68);
-    }
-
-    .huis2 {
-      left: 71%;
-      top: 30%;
-      transform: scale(0.64);
-    }
-
-    .huis3 {
-      left: 60%;
-      top: 35%;
-      transform: scale(0.74);
-    }
-
-    .huis4 {
-      left: 82%;
-      top: 38%;
-      transform: scale(0.5);
-    }
-
-    .wireObstacle {
-      position: absolute;
-      width: 58px;
-      height: 58px;
-      border: 2px solid rgba(115,255,146,0.65);
-      transform: rotate(45deg);
-      box-shadow: 0 0 10px rgba(115,255,146,0.28);
-      z-index: 9;
-      animation: obstacleFly 3.1s linear infinite;
-    }
-
-    .wo1 {
-      left: 18%;
-      top: 47%;
-      animation-delay: 0s;
-    }
-
-    .wo2 {
-      left: 73%;
-      top: 46%;
-      animation-delay: 1s;
-    }
-
-    .wo3 {
-      left: 48%;
-      top: 50%;
-      animation-delay: 2s;
-    }
-
-    @keyframes obstacleFly {
-      0% {
-        transform: translateY(-20px) scale(0.3) rotate(45deg);
-        opacity: 0;
-      }
-
-      15% {
-        opacity: 0.75;
-      }
-
-      100% {
-        transform: translateY(140px) scale(1.7) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    .povReticleHorizontal,
-    .povReticleVertical {
-      position: absolute;
-      background: rgba(115,255,146,0.9);
-      box-shadow: 0 0 8px rgba(115,255,146,0.8);
-      z-index: 12;
-    }
-
-    .povReticleHorizontal {
-      left: 40%;
-      right: 40%;
-      top: 56%;
-      height: 2px;
-    }
-
-    .povReticleVertical {
-      left: 50%;
-      top: 44%;
-      bottom: 30%;
-      width: 2px;
-    }
-
-    .povTargetBox {
-      position: absolute;
-      left: 50%;
-      top: 56%;
-      width: 40px;
-      height: 40px;
-      transform: translate(-50%, -50%);
-      border: 2px solid rgba(115,255,146,0.95);
-      box-shadow:
-        0 0 0 12px rgba(115,255,146,0.06),
-        0 0 12px rgba(115,255,146,0.7);
-      animation: targetLock 0.8s steps(2, end) infinite;
-      z-index: 12;
-    }
-
-    @keyframes targetLock {
-      0%, 45% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      46%, 100% {
-        opacity: 0.45;
-        transform: translate(-50%, -50%) scale(1.08);
-      }
-    }
-
-    .wireDroneWing {
-      position: absolute;
-      left: 50%;
-      bottom: 2px;
-      width: 190px;
-      height: 50px;
-      transform: translateX(-50%);
-      z-index: 13;
-      filter: drop-shadow(0 0 8px rgba(115,255,146,0.75));
-    }
-
-    .wireDroneWing svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .povData {
-      position: absolute;
-      color: rgba(185,255,204,0.92);
-      font-size: 10px;
-      line-height: 1.2;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(115,255,146,0.8);
-      z-index: 14;
-    }
-
-    .povTopLeft {
-      left: 8px;
-      top: 38px;
-    }
-
-    .povTopRight {
-      right: 8px;
-      top: 38px;
+    .hudRow span:last-child {
+      color: var(--cyan);
       text-align: right;
     }
 
-    .povBottomLeft {
-      left: 8px;
-      bottom: 6px;
+    .warningBox {
+      margin-top: 10px;
+      border: 1px solid rgba(255, 38, 77, 0.58);
+      background: rgba(255, 38, 77, 0.08);
+      color: #ff9aad;
+      padding: 9px;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    .povBottomRight {
-      right: 8px;
-      bottom: 6px;
-      text-align: right;
-    }
-
-    .telemetryGrid {
-      margin-top: 12px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7px;
-    }
-
-    .telemetryBox {
-      border: 1px solid rgba(0,246,255,0.28);
-      background: rgba(0,246,255,0.06);
+    .logBox {
+      height: 130px;
+      overflow-y: auto;
+      border: 1px solid rgba(0,246,255,0.25);
+      background: rgba(0,0,0,0.42);
+      color: #9ffbff;
       padding: 8px;
-      min-height: 58px;
-    }
-
-    .telemetryLabel {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-    }
-
-    .telemetryValue {
-      color: var(--cyan2);
-      font-size: 18px;
-      text-shadow: 0 0 8px rgba(0,246,255,0.45);
-    }
-
-    .mapPanel {
-      min-height: 590px;
-      display: flex;
-      flex-direction: column;
+      font-size: 11px;
+      line-height: 1.45;
+      white-space: pre-line;
+      margin-top: 10px;
     }
 
     .mapWrap {
       position: relative;
-      flex: 1;
-      min-height: 520px;
-      margin: 10px;
-      border: 2px solid rgba(0,246,255,0.38);
-      background:
-        radial-gradient(circle at center, rgba(0,246,255,0.08), transparent 60%),
-        rgba(0,0,0,0.22);
+      height: clamp(250px, 39vh, 360px);
+      border: 1px solid rgba(0,246,255,0.32);
       overflow: hidden;
-    }
-
-    .mapWrap::before {
-      content: "";
-      position: absolute;
-      inset: 0;
       background:
-        linear-gradient(90deg, rgba(0,246,255,0.045) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,246,255,0.045) 1px, transparent 1px);
-      background-size: 24px 24px;
-      pointer-events: none;
-      z-index: 4;
+        radial-gradient(circle at center, rgba(0,246,255,0.10), transparent 58%),
+        rgba(0,0,0,0.42);
     }
 
-    .mapImage {
-      position: absolute;
-      inset: 0;
+    .mapWrap img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      z-index: 1;
+      display: block;
       filter:
-        contrast(1.1)
-        brightness(0.9)
-        saturate(1.1)
-        drop-shadow(0 0 16px rgba(0,246,255,0.32));
+        contrast(1.05)
+        saturate(1.15)
+        drop-shadow(0 0 14px rgba(0,246,255,0.22));
     }
 
-    .mapNoise {
+    .targetOverlay {
       position: absolute;
       inset: 0;
-      z-index: 3;
       pointer-events: none;
       background:
-        radial-gradient(circle at 20% 28%, rgba(0,246,255,0.08), transparent 20%),
-        radial-gradient(circle at 82% 70%, rgba(255,38,77,0.08), transparent 18%);
-      mix-blend-mode: screen;
-      animation: mapPulse 2.6s infinite;
-    }
-
-    @keyframes mapPulse {
-      0%,100% {
-        opacity: 0.45;
-      }
-
-      50% {
-        opacity: 0.9;
-      }
+        radial-gradient(circle at 34% 42%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 48% 50%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 78% 31%, rgba(255,38,77,0.18), transparent 8%),
+        radial-gradient(circle at 80% 39%, rgba(255,38,77,0.18), transparent 8%);
     }
 
     .signalPoint {
@@ -1018,200 +312,266 @@
       width: 18px;
       height: 18px;
       transform: translate(-50%, -50%);
-      z-index: 10;
+      pointer-events: none;
     }
 
     .signalPoint::before {
       content: "";
       position: absolute;
-      inset: 0;
+      inset: 4px;
       border-radius: 50%;
       background: var(--red);
       box-shadow:
-        0 0 10px rgba(255,38,77,0.95),
-        0 0 22px rgba(255,38,77,0.55);
-      animation: pointBlink 0.8s infinite;
+        0 0 12px rgba(255, 38, 77, 0.9),
+        0 0 28px rgba(255, 38, 77, 0.55);
+      animation: blinkPoint 0.8s infinite;
     }
 
     .signalPoint::after {
       content: "";
       position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 32px;
-      height: 32px;
-      transform: translate(-50%, -50%);
+      inset: 0;
+      border: 1px solid rgba(255, 38, 77, 0.9);
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.8);
-      animation: pointRing 1.4s infinite;
+      animation: pingPoint 1.4s infinite;
     }
 
-    @keyframes pointBlink {
-      0%,100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .pointA { left: 34%; top: 42%; }
+    .pointB { left: 48%; top: 50%; }
+    .pointC { left: 78%; top: 31%; }
+    .pointD { left: 80%; top: 39%; }
 
-      50% {
-        opacity: 0.35;
-        transform: scale(0.72);
-      }
+    @keyframes blinkPoint {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.38; }
     }
 
-    @keyframes pointRing {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255,38,77,0.75);
-      }
-
-      100% {
-        box-shadow: 0 0 0 20px rgba(255,38,77,0);
-      }
+    @keyframes pingPoint {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(2.6); opacity: 0; }
     }
 
-    /* A = IJmuiden, B = Baarn, C = Groningen, D = Hardenberg */
-    .pointA {
-      left: 34%;
-      top: 42%;
+    .wireView {
+      height: 170px;
+      margin-top: 10px;
+      border: 1px solid rgba(0,246,255,0.28);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.72)),
+        radial-gradient(circle at center, rgba(0,246,255,0.10), transparent 60%);
+      position: relative;
+      overflow: hidden;
     }
 
-    .pointB {
-      left: 48%;
-      top: 50%;
+    .wireHorizon {
+      position: absolute;
+      left: -10%;
+      right: -10%;
+      top: 54%;
+      height: 1px;
+      background: rgba(0,246,255,0.75);
+      box-shadow: 0 0 10px rgba(0,246,255,0.7);
     }
 
-    .pointC {
-      left: 78%;
-      top: 31%;
-    }
-
-    .pointD {
-      left: 80%;
-      top: 39%;
-    }
-
-    .targetOverlay {
+    .wireGrid {
       position: absolute;
       inset: 0;
-      z-index: 6;
-      pointer-events: none;
       background:
-        radial-gradient(circle at 34% 42%, rgba(255,38,77,0.18), transparent 8%),
-        radial-gradient(circle at 48% 50%, rgba(255,38,77,0.18), transparent 8%),
-        radial-gradient(circle at 78% 31%, rgba(255,38,77,0.18), transparent 8%),
-        radial-gradient(circle at 80% 39%, rgba(255,38,77,0.18), transparent 8%);
-      animation: targetPulse 2.3s infinite;
+        linear-gradient(0deg, rgba(0,246,255,0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,246,255,0.12) 1px, transparent 1px);
+      background-size: 28px 18px;
+      transform: perspective(250px) rotateX(58deg) translateY(30px);
+      transform-origin: bottom;
+      animation: gridMove 1.2s linear infinite;
     }
 
-    @keyframes targetPulse {
-      0%,100% {
-        opacity: 0.45;
-      }
-
-      50% {
-        opacity: 0.95;
-      }
+    @keyframes gridMove {
+      from { background-position: 0 0; }
+      to { background-position: 0 18px; }
     }
+
+    .wireMolenBase {
+      position: absolute;
+      left: 15%;
+      top: 45%;
+      width: 36px;
+      height: 76px;
+      border-left: 2px solid var(--cyan);
+      border-right: 2px solid var(--cyan);
+      transform: skewX(-7deg);
+      box-shadow: 0 0 12px rgba(0,246,255,0.35);
+    }
+
+    .wireMolenCap {
+      position: absolute;
+      left: calc(15% - 10px);
+      top: 33%;
+      width: 56px;
+      height: 28px;
+      border: 2px solid var(--cyan);
+      background: rgba(0,246,255,0.05);
+    }
+
+    .wireMolenBlades {
+      position: absolute;
+      left: calc(15% + 18px);
+      top: 33%;
+      width: 90px;
+      height: 90px;
+      margin-left: -45px;
+      margin-top: -45px;
+      animation: molenSpin 2.3s linear infinite;
+    }
+
+    .wireMolenBlades::before,
+    .wireMolenBlades::after {
+      content: "";
+      position: absolute;
+      left: 44px;
+      top: 4px;
+      width: 2px;
+      height: 82px;
+      background: var(--cyan);
+      box-shadow: 0 0 10px rgba(0,246,255,0.8);
+    }
+
+    .wireMolenBlades::after {
+      transform: rotate(90deg);
+    }
+
+    @keyframes molenSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .wireDijk {
+      position: absolute;
+      left: 40%;
+      right: -10%;
+      top: 68%;
+      height: 2px;
+      background: var(--cyan);
+      transform: rotate(-8deg);
+      box-shadow: 0 0 12px rgba(0,246,255,0.65);
+    }
+
+    .wireCanal {
+      position: absolute;
+      left: 34%;
+      right: -8%;
+      top: 76%;
+      height: 18px;
+      border-top: 2px solid rgba(0,246,255,0.75);
+      border-bottom: 2px solid rgba(0,246,255,0.45);
+      transform: rotate(-8deg);
+    }
+
+    .wireHouse {
+      position: absolute;
+      width: 32px;
+      height: 22px;
+      border: 2px solid var(--cyan);
+      bottom: 36px;
+    }
+
+    .wireHouse::before {
+      content: "";
+      position: absolute;
+      left: -3px;
+      top: -15px;
+      width: 24px;
+      height: 24px;
+      border-left: 2px solid var(--cyan);
+      border-top: 2px solid var(--cyan);
+      transform: rotate(45deg);
+    }
+
+    .h1 { left: 54%; }
+    .h2 { left: 62%; bottom: 48px; }
+    .h3 { left: 73%; bottom: 32px; }
 
     .inputGrid {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid rgba(0,246,255,0.38);
+      background: rgba(0,0,0,0.55);
+      color: var(--cyan);
+      padding: 9px;
+      font-family: "Courier New", monospace;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--yellow);
+      color: var(--white);
+    }
+
+    .checkButton,
+    .finalButton,
+    .resetButton {
+      width: 100%;
+      border: 1px solid rgba(0,246,255,0.5);
+      background: rgba(0,246,255,0.10);
+      color: var(--cyan);
+      padding: 10px;
+      font-family: "Courier New", monospace;
+      font-weight: bold;
+      letter-spacing: 1px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .checkButton:hover,
+    .finalButton:hover,
+    .resetButton:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    .finalButton {
+      border-color: rgba(255,38,77,0.75);
+      background: rgba(255,38,77,0.16);
+      color: #ffb8c5;
+      font-size: 15px;
+    }
+
+    .finalButton.ready {
+      border-color: rgba(93,255,139,0.9);
+      background: rgba(93,255,139,0.14);
+      color: var(--green);
+      box-shadow: 0 0 18px rgba(93,255,139,0.22);
+    }
+
+    .sliderBlock {
+      margin-top: 10px;
       display: grid;
       gap: 9px;
     }
 
-    .inputBlock {
-      border: 1px solid rgba(0,246,255,0.28);
-      background: linear-gradient(90deg, rgba(0,246,255,0.06), rgba(0,0,0,0.22));
-      padding: 9px;
+    .rangeRow {
+      border: 1px solid rgba(0,246,255,0.22);
+      padding: 8px;
+      background: rgba(0,0,0,0.28);
     }
 
-    .inputBlock.solved {
-      border-color: rgba(115,255,146,0.8);
-      background: rgba(115,255,146,0.08);
-    }
-
-    .inputBlock.error {
-      border-color: rgba(255,38,77,0.9);
-      background: rgba(255,38,77,0.10);
-      animation: errorShake 0.35s ease;
-    }
-
-    @keyframes errorShake {
-      0%,100% {
-        transform: translateX(0);
-      }
-
-      25% {
-        transform: translateX(-4px);
-      }
-
-      75% {
-        transform: translateX(4px);
-      }
-    }
-
-    .inputLabel {
+    .rangeTop {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 7px;
-      margin-bottom: 7px;
-      color: var(--white);
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    .inputLabel strong {
-      color: var(--cyan2);
-      font-size: 14px;
-      text-shadow: 0 0 7px rgba(0,246,255,0.45);
-    }
-
-    .inputLabel span {
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .checkRow {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: center;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      border: 2px solid rgba(0,246,255,0.55);
-      background: rgba(0,0,0,0.5);
-      color: var(--cyan2);
-      padding: 9px 10px;
-      font-family: var(--font);
-      font-size: 18px;
-      text-align: center;
-      letter-spacing: 2px;
-      outline: none;
-      box-shadow: inset 0 0 14px rgba(0,246,255,0.06);
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--yellow);
-      color: var(--white);
-      box-shadow:
-        0 0 12px rgba(255,232,103,0.18),
-        inset 0 0 14px rgba(255,232,103,0.08);
-    }
-
-    .controlSection {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .sliderLine {
-      display: grid;
-      grid-template-columns: 74px 1fr 36px;
-      gap: 8px;
-      align-items: center;
       color: var(--muted);
       font-size: 11px;
+      margin-bottom: 5px;
     }
 
     input[type="range"] {
@@ -1220,43 +580,45 @@
     }
 
     .gridlockPanel {
-      border: 1px solid rgba(0,246,255,0.28);
+      margin-top: 10px;
+      border: 1px solid rgba(0,246,255,0.36);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.08), transparent 60%),
-        rgba(0,0,0,0.32);
+        radial-gradient(circle at center, rgba(0,246,255,0.12), transparent 60%),
+        rgba(0,0,0,0.35);
       padding: 8px;
     }
 
     .gridlockHeader {
       color: var(--muted);
-      font-size: 10px;
-      line-height: 1.35;
-      letter-spacing: 0.7px;
-      margin-bottom: 8px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+      line-height: 1.4;
     }
 
     .gridlock {
       display: grid;
-      grid-template-columns: 18px repeat(10, 1fr);
-      gap: 3px;
+      grid-template-columns: 19px repeat(15, 1fr);
+      gap: 2px;
       align-items: center;
       user-select: none;
     }
 
-    .gridLabel {
-      font-size: 10px;
+    .gridlockLabel {
       color: var(--muted);
+      font-size: 9px;
       text-align: center;
     }
 
     .gridCell {
-      height: 22px;
-      border: 1px solid rgba(0,246,255,0.25);
+      height: 17px;
+      min-width: 15px;
+      border: 1px solid rgba(0,246,255,0.24);
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.09), rgba(0,0,0,0.75));
+        radial-gradient(circle at center, rgba(0,246,255,0.08), rgba(0,0,0,0.72));
       cursor: pointer;
-      box-shadow: inset 0 0 8px rgba(0,246,255,0.04);
       position: relative;
+      padding: 0;
     }
 
     .gridCell:hover {
@@ -1264,12 +626,12 @@
     }
 
     .gridCell.active {
-      border-color: rgba(115,255,146,0.95);
+      border-color: rgba(93,255,139,0.9);
       background:
-        radial-gradient(circle at center, rgba(115,255,146,0.95) 0 18%, rgba(115,255,146,0.3) 19% 40%, rgba(0,0,0,0.76) 41%);
+        radial-gradient(circle at center, rgba(93,255,139,0.95) 0 18%, rgba(93,255,139,0.32) 19% 38%, rgba(0,0,0,0.7) 39%);
       box-shadow:
-        0 0 10px rgba(115,255,146,0.55),
-        inset 0 0 10px rgba(115,255,146,0.18);
+        0 0 8px rgba(93,255,139,0.55),
+        inset 0 0 8px rgba(93,255,139,0.25);
     }
 
     .gridCell.locked {
@@ -1277,834 +639,611 @@
       opacity: 0.85;
     }
 
-    .buttonStack {
+    .solutionGrid {
       display: grid;
-      gap: 9px;
-      margin-top: 12px;
-    }
-
-    button {
-      border: 2px solid rgba(0,246,255,0.62);
-      background:
-        linear-gradient(180deg, rgba(0,246,255,0.16), rgba(0,44,54,0.78));
-      color: var(--cyan2);
-      padding: 11px 10px;
-      font-family: var(--font);
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      cursor: pointer;
-      text-shadow: 0 0 7px rgba(0,246,255,0.45);
-      box-shadow: inset 0 0 14px rgba(0,246,255,0.06);
-    }
-
-    button:hover {
-      border-color: var(--yellow);
-      color: var(--yellow);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      color: var(--green2);
-      border-color: rgba(115,255,146,0.6);
-    }
-
-    .dangerButton {
-      border-color: rgba(255,38,77,0.7);
-      color: var(--red2);
-      background:
-        linear-gradient(180deg, rgba(255,38,77,0.15), rgba(54,0,10,0.78));
-      text-shadow: 0 0 7px rgba(255,38,77,0.45);
-    }
-
-    .statusLog {
-      height: 180px;
-      overflow-y: auto;
-      border: 1px solid rgba(0,246,255,0.28);
-      background: rgba(0,0,0,0.35);
-      padding: 9px;
-      color: var(--green);
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 10px;
       font-size: 11px;
-      line-height: 1.45;
-      white-space: pre-line;
     }
 
-    .overlay {
+    .solutionPill {
+      border: 1px solid rgba(0,246,255,0.28);
+      background: rgba(0,0,0,0.32);
+      color: var(--muted);
+      padding: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .solutionPill.done {
+      color: var(--green);
+      border-color: rgba(93,255,139,0.5);
+      background: rgba(93,255,139,0.08);
+    }
+
+    .endOverlay {
+      display: none;
       position: fixed;
       inset: 0;
-      z-index: 200;
-      display: none;
+      z-index: 18000;
       align-items: center;
       justify-content: center;
-      padding: 20px;
       background:
-        radial-gradient(circle at center, rgba(0,246,255,0.14), transparent 40%),
-        rgba(0,0,0,0.88);
+        radial-gradient(circle at center, rgba(93,255,139,0.22), transparent 44%),
+        rgba(0,0,0,0.94);
+      padding: 22px;
     }
 
-    .resultBox {
-      width: 100%;
-      max-width: 700px;
-      padding: 24px;
+    .endBox {
+      width: min(760px, 100%);
+      border: 3px solid rgba(93,255,139,0.82);
+      background:
+        radial-gradient(circle at center, rgba(93,255,139,0.12), transparent 62%),
+        rgba(0,14,6,0.98);
+      box-shadow:
+        0 0 48px rgba(93,255,139,0.42),
+        inset 0 0 32px rgba(93,255,139,0.10);
+      padding: 28px;
       text-align: center;
-      border: 4px solid var(--cyan);
-      background:
-        linear-gradient(180deg, rgba(6,32,42,0.96), rgba(0,10,14,0.96));
-      box-shadow:
-        0 0 34px rgba(0,246,255,0.45),
-        inset 0 0 30px rgba(0,246,255,0.08);
+      color: #ccffd8;
     }
 
-    .resultBox.win {
-      border-color: var(--green);
-      box-shadow:
-        0 0 34px rgba(115,255,146,0.36),
-        inset 0 0 30px rgba(115,255,146,0.08);
-    }
-
-    .resultBox.fail {
-      border-color: var(--red);
-      box-shadow:
-        0 0 34px rgba(255,38,77,0.36),
-        inset 0 0 30px rgba(255,38,77,0.08);
-    }
-
-    .resultTitle {
+    .endBox h1 {
+      margin: 0 0 14px;
       color: var(--white);
-      font-size: 38px;
+      font-size: 36px;
       letter-spacing: 3px;
-      margin-bottom: 10px;
       text-shadow:
-        0 0 10px rgba(0,246,255,0.7),
-        0 0 22px rgba(115,255,146,0.3);
+        0 0 14px rgba(93,255,139,0.9),
+        0 0 30px rgba(93,255,139,0.45);
     }
 
-    .timeLeftBox {
-      display: inline-block;
-      margin: 12px 0 18px;
-      padding: 12px 18px;
-      border: 2px solid rgba(0,246,255,0.65);
-      background: rgba(0,246,255,0.06);
-      color: var(--cyan2);
-      font-size: 24px;
-      letter-spacing: 2px;
-    }
-
-    .callBox {
-      margin: 16px auto;
-      max-width: 500px;
-      padding: 16px;
-      border: 2px solid rgba(115,255,146,0.7);
-      background: rgba(115,255,146,0.08);
+    .phoneBox {
+      margin: 18px auto;
+      width: fit-content;
+      border: 2px dashed var(--green);
+      padding: 14px 24px;
       color: var(--green);
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    .phoneNumber {
-      display: block;
-      color: var(--white);
-      font-size: 40px;
-      font-weight: bold;
+      font-size: 34px;
       letter-spacing: 3px;
-      margin: 10px 0;
-      text-shadow: 0 0 14px rgba(115,255,146,0.65);
+      font-weight: bold;
+      text-shadow: 0 0 14px rgba(93,255,139,0.8);
     }
 
-    .firework {
+    .failOverlay {
+      display: none;
       position: fixed;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      pointer-events: none;
-      z-index: 300;
-      animation: firework 1s ease-out forwards;
-      box-shadow:
-        0 0 10px var(--green),
-        20px 0 0 var(--cyan),
-        -20px 0 0 var(--yellow),
-        0 20px 0 var(--red),
-        0 -20px 0 var(--white);
+      inset: 0;
+      z-index: 18000;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at center, rgba(255,38,77,0.20), transparent 45%),
+        rgba(0,0,0,0.94);
+      padding: 22px;
     }
 
-    @keyframes firework {
-      0% {
-        transform: scale(0.2);
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(4);
-        opacity: 0;
-      }
+    .failBox {
+      width: min(700px, 100%);
+      border: 3px solid rgba(255,38,77,0.85);
+      background: rgba(18,0,6,0.98);
+      box-shadow: 0 0 48px rgba(255,38,77,0.35);
+      padding: 28px;
+      text-align: center;
+      color: #ffd2da;
     }
 
-    @media (max-width: 1180px) {
-      .layout {
+    .failBox h1 {
+      color: var(--white);
+      margin: 0 0 12px;
+      letter-spacing: 3px;
+      text-shadow: 0 0 14px rgba(255,38,77,0.9);
+    }
+
+    @media (max-width: 1150px) {
+      .mainGrid {
         grid-template-columns: 1fr;
-      }
-
-      .mapPanel {
-        min-height: 480px;
       }
 
       .mapWrap {
-        min-height: 430px;
+        height: 310px;
       }
 
-      .megaTimer {
-        font-size: 64px;
+      .wireView {
+        height: 150px;
       }
     }
 
-    @media (max-width: 700px) {
-      body {
-        padding: 6px;
+    @media (max-width: 650px) {
+      .shell {
+        width: calc(100% - 12px);
+        margin: 6px auto;
+        padding: 8px;
       }
 
-      .appInner {
-        padding: 6px;
-      }
-
-      .topBar {
+      .topbar {
         grid-template-columns: 1fr;
       }
 
-      .topBlock,
-      .topBlock.right {
-        align-items: center;
+      .topSmall,
+      .topSmall.right {
         text-align: center;
       }
 
-      .mainTitle {
-        font-size: 18px;
+      .title {
+        font-size: 20px;
       }
 
-      .megaTimer {
-        font-size: 56px;
+      .timerBox {
+        font-size: 28px;
       }
 
-      .radar {
-        width: 180px;
-        height: 180px;
-      }
-
-      .gridlock {
-        gap: 2px;
+      .mapWrap {
+        height: 250px;
       }
 
       .gridCell {
-        height: 18px;
+        height: 15px;
+        min-width: 12px;
       }
 
-      .phoneNumber {
-        font-size: 28px;
+      .gridlock {
+        grid-template-columns: 16px repeat(15, 1fr);
+        gap: 1px;
+      }
+
+      .solutionGrid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="app">
-    <div class="appInner">
-      <header class="topBar">
-        <div class="topBlock">
-          <span>DRONE COMPUTER NODE</span>
-          <span>CONTROL LINK : UNSTABLE</span>
-        </div>
 
-        <div class="mainTitle">REMOTE OVERRIDE INTERFACE</div>
+  <div class="missionIntroOverlay" id="missionIntroOverlay">
+    <div class="missionIntroBox">
+      <div class="missionIntroLabel">FINAL MISSION</div>
 
-        <div class="topBlock right">
-          <span>PAYLOAD STATUS : ARMED</span>
-          <span class="warningFlash">THREAT VECTOR ACTIVE</span>
-        </div>
-      </header>
+      <h1>LAST TRANSMISSION UNLOCKED</h1>
 
-      <section class="layout">
-        <aside class="panel timerPanel" id="timerPanel">
-          <div class="panelTitle">
-            <span>Countdown</span>
-            <span>CRITICAL</span>
-          </div>
+      <p>
+        This is the final mission. The drone system is active and the payload sequence is preparing.
+      </p>
 
-          <div class="panelBody">
-            <div class="timerLabel">TIME UNTIL DISPERSAL</div>
-            <div class="megaTimer" id="timer">05:00</div>
+      <p>
+        Once this mission starts, the countdown cannot be paused. Solve the override sequence before the timer reaches zero.
+      </p>
 
-            <div class="timerBarOuter">
-              <div class="timerBar" id="timerBar"></div>
-            </div>
-
-            <div class="alertStack">
-              <div class="alertLine">PENALTY : -30 SECONDS PER FAILED CHECK</div>
-              <div class="alertLine">FINAL OVERRIDE OPENS AFTER ALL MODULES PASS</div>
-              <div class="alertLine">ROUTE DATA HAS BEEN PARTIALLY REDACTED</div>
-            </div>
-
-            <div class="radarWrap">
-              <div class="panelTitle" style="margin: -10px -10px 10px;">
-                <span>Radar sweep</span>
-                <span>ACTIVE</span>
-              </div>
-
-              <div class="radar">
-                <div class="radarSweep"></div>
-                <div class="radarCenter"></div>
-                <div class="radarDot rd1"></div>
-                <div class="radarDot rd2"></div>
-                <div class="radarDot rd3"></div>
-                <div class="radarDot rd4"></div>
-              </div>
-            </div>
-
-            <div class="droneViewBox">
-              <div class="droneViewTitle">
-                <span>Retro drone POV</span>
-                <span>WIRE / NL MODE V2</span>
-              </div>
-
-              <div class="dronePov">
-                <div class="wireSky"></div>
-
-                <div class="star st1"></div>
-                <div class="star st2"></div>
-                <div class="star st3"></div>
-                <div class="star st4"></div>
-
-                <div class="wireMountain">
-                  <svg viewBox="0 0 500 120" preserveAspectRatio="none">
-                    <polyline
-                      points="0,94 40,74 82,86 128,42 170,85 222,39 275,88 332,54 386,81 432,49 500,90"
-                      fill="none"
-                      stroke="rgba(115,255,146,0.85)"
-                      stroke-width="3"
-                    />
-                    <polyline
-                      points="0,116 500,116"
-                      fill="none"
-                      stroke="rgba(115,255,146,0.55)"
-                      stroke-width="2"
-                    />
-                  </svg>
-                </div>
-
-                <div class="wireHorizon"></div>
-                <div class="wireGround"></div>
-                <div class="wirePolderLines"></div>
-                <div class="wireKanaal"></div>
-                <div class="wireDijk"></div>
-                <div class="horizonVillage"></div>
-
-                <div class="dutchScene">
-                  <div class="wireMolen">
-                    <div class="wireMolenBase"></div>
-                    <div class="wireMolenCap"></div>
-                    <div class="wireMolenBlades"></div>
-                    <div class="wireMolenHub"></div>
-                  </div>
-
-                  <div class="wireHuis huis1"></div>
-                  <div class="wireHuis huis2"></div>
-                  <div class="wireHuis huis3"></div>
-                  <div class="wireHuis huis4"></div>
-                </div>
-
-                <div class="wireObstacle wo1"></div>
-                <div class="wireObstacle wo2"></div>
-                <div class="wireObstacle wo3"></div>
-
-                <div class="povReticleHorizontal"></div>
-                <div class="povReticleVertical"></div>
-                <div class="povTargetBox"></div>
-
-                <div class="wireDroneWing">
-                  <svg viewBox="0 0 210 54">
-                    <polyline
-                      points="0,45 75,22 105,38 135,22 210,45"
-                      fill="none"
-                      stroke="rgba(115,255,146,0.95)"
-                      stroke-width="3"
-                    />
-                    <polyline
-                      points="75,22 105,8 135,22"
-                      fill="none"
-                      stroke="rgba(115,255,146,0.95)"
-                      stroke-width="3"
-                    />
-                    <line
-                      x1="105"
-                      y1="8"
-                      x2="105"
-                      y2="38"
-                      stroke="rgba(115,255,146,0.95)"
-                      stroke-width="3"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              <div class="povData povTopLeft">
-                CAM-04<br>
-                ALT 118M
-              </div>
-
-              <div class="povData povTopRight">
-                VECTOR RUN<br>
-                LOCK SEARCH
-              </div>
-
-              <div class="povData povBottomLeft">
-                DUTCH LOWLAND<br>
-                GRID FEED 29FPS
-              </div>
-
-              <div class="povData povBottomRight">
-                RETRO WIRE HUD<br>
-                TARGET MODE
-              </div>
-            </div>
-
-            <div class="telemetryGrid">
-              <div class="telemetryBox">
-                <div class="telemetryLabel">SIGNAL</div>
-                <div class="telemetryValue" id="signalValue">87%</div>
-              </div>
-
-              <div class="telemetryBox">
-                <div class="telemetryLabel">MODULES</div>
-                <div class="telemetryValue" id="moduleValue">0/5</div>
-              </div>
-
-              <div class="telemetryBox">
-                <div class="telemetryLabel">VECTOR</div>
-                <div class="telemetryValue" id="vectorValue">OPEN</div>
-              </div>
-
-              <div class="telemetryBox">
-                <div class="telemetryLabel">PENALTY</div>
-                <div class="telemetryValue">-00:30</div>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <section class="panel mapPanel">
-          <div class="panelTitle">
-            <span>Encrypted national scan</span>
-            <span>SIGNAL POINTS</span>
-          </div>
-
-          <div class="mapWrap">
-            <img src="nederland-map.png" class="mapImage" alt="Netherlands Map" />
-            <div class="mapNoise"></div>
-            <div class="targetOverlay"></div>
-
-            <div class="signalPoint pointA"></div>
-            <div class="signalPoint pointB"></div>
-            <div class="signalPoint pointC"></div>
-            <div class="signalPoint pointD"></div>
-          </div>
-        </section>
-
-        <aside class="panel">
-          <div class="panelTitle">
-            <span>Vector override</span>
-            <span>MANUAL INPUT</span>
-          </div>
-
-          <div class="panelBody">
-            <div class="inputGrid">
-              <div class="inputBlock" id="blockAB">
-                <div class="inputLabel">
-                  <strong>POINT A → POINT B</strong>
-                  <span>CM VECTOR</span>
-                </div>
-
-                <div class="checkRow">
-                  <input id="distanceAB" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
-                  <button id="checkAB" onclick="checkVector('AB')">CHECK</button>
-                </div>
-              </div>
-
-              <div class="inputBlock" id="blockBC">
-                <div class="inputLabel">
-                  <strong>POINT B → POINT C</strong>
-                  <span>CM VECTOR</span>
-                </div>
-
-                <div class="checkRow">
-                  <input id="distanceBC" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
-                  <button id="checkBC" onclick="checkVector('BC')">CHECK</button>
-                </div>
-              </div>
-
-              <div class="inputBlock" id="blockCD">
-                <div class="inputLabel">
-                  <strong>POINT C → POINT D</strong>
-                  <span>CM VECTOR</span>
-                </div>
-
-                <div class="checkRow">
-                  <input id="distanceCD" type="text" inputmode="numeric" autocomplete="off" placeholder="--" />
-                  <button id="checkCD" onclick="checkVector('CD')">CHECK</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="controlSection">
-              <div class="panelTitle" style="margin: 0 -10px 0;">
-                <span>Stabilizer matrix</span>
-                <span>CALIBRATE</span>
-              </div>
-
-              <div class="sliderLine">
-                <span>ALT-X</span>
-                <input id="sliderA" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
-                <span id="sliderAValue">50</span>
-              </div>
-
-              <div class="sliderLine">
-                <span>GYRO-Y</span>
-                <input id="sliderB" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
-                <span id="sliderBValue">50</span>
-              </div>
-
-              <div class="sliderLine">
-                <span>LOCK-Z</span>
-                <input id="sliderC" type="range" min="0" max="100" value="50" oninput="updateSliderReadouts()" />
-                <span id="sliderCValue">50</span>
-              </div>
-
-              <button id="checkSliders" onclick="checkSliders()">CHECK STABILIZER MATRIX</button>
-
-              <div class="panelTitle" style="margin: 2px -10px 0;">
-                <span>Gridlock relay matrix</span>
-                <span>A-J / 1-10</span>
-              </div>
-
-              <div class="gridlockPanel">
-                <div class="gridlockHeader">
-                  Activate the correct relay lamps. Rows A-J. Columns 1-10.
-                </div>
-
-                <div class="gridlock" id="gridlock"></div>
-              </div>
-
-              <button id="checkGridlock" onclick="checkGridlock()">CHECK GRIDLOCK MATRIX</button>
-            </div>
-
-            <div class="buttonStack">
-              <button id="overrideButton" onclick="executeFinalOverride()" disabled>
-                EXECUTE FINAL DRONE OVERRIDE
-              </button>
-
-              <button class="dangerButton" onclick="resetTestMode()">
-                RESET TEST MODE
-              </button>
-            </div>
-
-            <div class="panelTitle" style="margin: 12px -10px 0;">
-              <span>System log</span>
-              <span>LIVE</span>
-            </div>
-
-            <div class="statusLog" id="statusLog">&gt; drone computer interface online
-&gt; encrypted map loaded
-&gt; signal points detected
-&gt; route metadata redacted
-&gt; penalty protocol active : -30 seconds per failed check
-&gt; waiting for individual module checks</div>
-          </div>
-        </aside>
-      </section>
-    </div>
-  </main>
-
-  <div class="overlay" id="winOverlay">
-    <div class="resultBox win">
-      <div class="resultTitle">MISSION ACCOMPLISHED</div>
-      <p>DRONE DEACTIVATED · TARGET AREA SECURE</p>
-
-      <div class="timeLeftBox">
-        TIME REMAINING: <span id="winRemainingTime">--:--</span>
+      <div class="missionIntroWarning">
+        TIME-LIMITED OVERRIDE // ONE FINAL ATTEMPT
       </div>
 
-      <div class="callBox">
-        CALL IMMEDIATELY:
-        <span class="phoneNumber">0612345678</span>
-        Report that the drone has been neutralized.
-      </div>
-
-      <button onclick="window.location.href='terminal.html'">RETURN TO TERMINAL</button>
+      <button onclick="startFinalMission()">START FINAL MISSION</button>
     </div>
   </div>
 
-  <div class="overlay" id="failOverlay">
-    <div class="resultBox fail">
-      <div class="resultTitle">MISSION FAILED</div>
-      <p id="failText">The drone sequence reached zero.</p>
-      <button onclick="resetTestMode()">RESET TEST MODE</button>
+  <main class="shell">
+    <header class="topbar">
+      <div class="topSmall">
+        FINAL ENVIRONMENT<br>
+        EXTERNAL DRONE OVERRIDE
+      </div>
+
+      <div>
+        <div class="title">DRONE CONTROL INTERFACE</div>
+        <div class="timerBox" id="timerBox">05:00</div>
+      </div>
+
+      <div class="topSmall right">
+        STATUS: LOCKED<br>
+        PAYLOAD: ARMED
+      </div>
+    </header>
+
+    <section class="mainGrid">
+      <aside class="panel">
+        <div class="panelTitle">
+          <span>System status</span>
+          <span>LIVE</span>
+        </div>
+
+        <div class="hudList">
+          <div class="hudRow"><span>Mission</span><span>Final override</span></div>
+          <div class="hudRow"><span>Target region</span><span>Hardenberg sector</span></div>
+          <div class="hudRow"><span>Route data</span><span>damaged</span></div>
+          <div class="hudRow"><span>Manual input</span><span>required</span></div>
+          <div class="hudRow"><span>Wrong input penalty</span><span>-30 seconds</span></div>
+        </div>
+
+        <div class="warningBox">
+          WARNING: The interface is fictional and part of a game environment.
+          The drone override requires all four systems to be solved before the final abort command becomes available.
+        </div>
+
+        <div class="solutionGrid">
+          <div class="solutionPill" id="pillRoute"><span>Route distance</span><span>LOCKED</span></div>
+          <div class="solutionPill" id="pillSignal"><span>Signal sliders</span><span>LOCKED</span></div>
+          <div class="solutionPill" id="pillGrid"><span>Gridlock</span><span>LOCKED</span></div>
+          <div class="solutionPill" id="pillFinal"><span>Final abort</span><span>LOCKED</span></div>
+        </div>
+
+        <div class="logBox" id="logBox">&gt; drone interface loaded
+&gt; waiting for final mission start
+&gt; timer inactive
+&gt; relay grid offline
+&gt; route solution required</div>
+
+        <button class="resetButton" onclick="resetMission()">RESET MISSION</button>
+      </aside>
+
+      <section class="panel">
+        <div class="panelTitle">
+          <span>Recovered map feed</span>
+          <span>NO LABELS</span>
+        </div>
+
+        <div class="mapWrap">
+          <img src="nederland-map.png" alt="Recovered Netherlands map">
+          <div class="targetOverlay"></div>
+          <div class="signalPoint pointA"></div>
+          <div class="signalPoint pointB"></div>
+          <div class="signalPoint pointC"></div>
+          <div class="signalPoint pointD"></div>
+        </div>
+
+        <div class="wireView">
+          <div class="wireGrid"></div>
+          <div class="wireHorizon"></div>
+          <div class="wireDijk"></div>
+          <div class="wireCanal"></div>
+          <div class="wireMolenBase"></div>
+          <div class="wireMolenCap"></div>
+          <div class="wireMolenBlades"></div>
+          <div class="wireHouse h1"></div>
+          <div class="wireHouse h2"></div>
+          <div class="wireHouse h3"></div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="panelTitle">
+          <span>Override sequence</span>
+          <span>MANUAL</span>
+        </div>
+
+        <div class="inputGrid">
+          <div>
+            <label>ROUTE SEGMENT AB</label>
+            <input id="abInput" type="text" placeholder="distance">
+          </div>
+
+          <div>
+            <label>ROUTE SEGMENT BC</label>
+            <input id="bcInput" type="text" placeholder="distance">
+          </div>
+
+          <div>
+            <label>ROUTE SEGMENT CD</label>
+            <input id="cdInput" type="text" placeholder="distance">
+          </div>
+        </div>
+
+        <button class="checkButton" onclick="checkRoute()">CHECK ROUTE DISTANCES</button>
+
+        <div class="sliderBlock">
+          <div class="rangeRow">
+            <div class="rangeTop">
+              <span>SIGNAL A</span>
+              <span id="sliderAValue">50</span>
+            </div>
+            <input id="sliderA" type="range" min="0" max="100" value="50" oninput="updateSliderLabels()">
+          </div>
+
+          <div class="rangeRow">
+            <div class="rangeTop">
+              <span>SIGNAL B</span>
+              <span id="sliderBValue">50</span>
+            </div>
+            <input id="sliderB" type="range" min="0" max="100" value="50" oninput="updateSliderLabels()">
+          </div>
+
+          <div class="rangeRow">
+            <div class="rangeTop">
+              <span>SIGNAL C</span>
+              <span id="sliderCValue">50</span>
+            </div>
+            <input id="sliderC" type="range" min="0" max="100" value="50" oninput="updateSliderLabels()">
+          </div>
+        </div>
+
+        <button class="checkButton" onclick="checkSliders()">CHECK SIGNAL ALIGNMENT</button>
+
+        <div class="panelTitle" style="margin: 10px 0 0;">
+          <span>Gridlock relay matrix</span>
+          <span>15 × 15</span>
+        </div>
+
+        <div class="gridlockPanel">
+          <div class="gridlockHeader">
+            Activate the correct relay lamps. Rows A-O. Columns 1-15.
+          </div>
+
+          <div class="gridlock" id="gridlock"></div>
+        </div>
+
+        <button class="checkButton" id="checkGridlock" onclick="checkGridlock()">CHECK GRIDLOCK MATRIX</button>
+
+        <button class="finalButton" id="finalButton" onclick="finalAbort()">FINAL ABORT COMMAND</button>
+      </aside>
+    </section>
+  </main>
+
+  <div class="endOverlay" id="endOverlay">
+    <div class="endBox">
+      <h1>DRONE OVERRIDE COMPLETE</h1>
+      <p>
+        Payload sequence interrupted. Hardenberg sector no longer shows active exposure risk.
+      </p>
+      <p>
+        Mission complete. Call the handler immediately:
+      </p>
+      <div class="phoneBox">0612345678</div>
+    </div>
+  </div>
+
+  <div class="failOverlay" id="failOverlay">
+    <div class="failBox">
+      <h1>MISSION FAILED</h1>
+      <p>
+        The timer reached zero. The drone override window has closed.
+      </p>
+      <button class="resetButton" onclick="resetMission()">RESET MISSION</button>
     </div>
   </div>
 
   <script>
-    const CONFIG = {
-      timeLimitSeconds: 300,
-      penaltySeconds: 30,
+    const correctAB = "12";
+    const correctBC = "31";
+    const correctCD = "16";
 
-      correctAB: "12",
-      correctBC: "31",
-      correctCD: "16",
+    const correctSliderA = 72;
+    const correctSliderB = 38;
+    const correctSliderC = 91;
 
-      sliderA: 72,
-      sliderB: 38,
-      sliderC: 91,
+    const gridlockCorrect = [
+      "A1", "A15",
 
-      gridlockCorrect: ["B3", "D7", "G5", "J9"]
-    };
+      "B1", "B4", "B5", "B6", "B10", "B11", "B12", "B13",
 
-    let timeLeft = CONFIG.timeLimitSeconds;
-    let timerInterval = null;
-    let missionEnded = false;
-    let signalPulse = 87;
+      "C3", "C4", "C7", "C9", "C13", "C14",
+
+      "D2", "D3", "D8", "D14", "D15",
+
+      "E1", "E2", "E8", "E14", "E15",
+
+      "F1", "F2", "F6", "F7", "F9", "F12", "F15",
+
+      "G1", "G2", "G7", "G9", "G11", "G14", "G15",
+
+      "H1", "H2", "H7", "H9", "H10", "H14", "H15",
+
+      "I2", "I3", "I5", "I7", "I9", "I11", "I13", "I14",
+
+      "J3", "J4", "J6", "J7", "J9", "J12", "J13",
+
+      "K1", "K4", "K12", "K13", "K15",
+
+      "L4", "L5", "L11", "L12",
+
+      "M1", "M2", "M5", "M6", "M10", "M11", "M13", "M14", "M15",
+
+      "N6", "N7", "N9", "N10",
+
+      "O1", "O2", "O3", "O4", "O8", "O12", "O13", "O14", "O15"
+    ];
 
     const solved = {
-      AB: false,
-      BC: false,
-      CD: false,
-      sliders: false,
-      gridlock: false
+      route: false,
+      signal: false,
+      gridlock: false,
+      final: false
     };
 
     const activeGridCells = new Set();
 
-    function formatSeconds(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = seconds % 60;
+    let timeLeft = 300;
+    let timerInterval = null;
+    let finalMissionStarted = false;
+    let missionFailed = false;
 
-      return String(minutes).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+    function addLog(text) {
+      const logBox = document.getElementById("logBox");
+      logBox.textContent += "\n" + text;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function formatSeconds(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
     }
 
     function updateTimerDisplay() {
-      const timer = document.getElementById("timer");
-      timer.textContent = formatSeconds(timeLeft);
+      document.getElementById("timerBox").textContent = formatSeconds(timeLeft);
+    }
 
-      const percentage = Math.max(0, (timeLeft / CONFIG.timeLimitSeconds) * 100);
-      document.getElementById("timerBar").style.width = percentage + "%";
-
-      if (timeLeft <= 60) {
-        timer.classList.add("low");
-      } else {
-        timer.classList.remove("low");
+    function startFinalMission() {
+      if (finalMissionStarted) {
+        return;
       }
+
+      finalMissionStarted = true;
+
+      document.getElementById("missionIntroOverlay").style.display = "none";
+
+      addLog("> final mission accepted");
+      addLog("> timer started");
+      addLog("> drone override interface active");
+      addLog("> wrong input penalty armed: -30 seconds");
+
+      startTimer();
     }
 
     function startTimer() {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        return;
+      }
 
       timerInterval = setInterval(function() {
-        if (missionEnded) {
+        if (missionFailed || solved.final) {
           return;
         }
 
         timeLeft--;
-
-        if (timeLeft < 0) {
-          timeLeft = 0;
-        }
-
         updateTimerDisplay();
 
         if (timeLeft <= 0) {
-          failMission("TIME EXPIRED // payload sequence completed");
+          timeLeft = 0;
+          updateTimerDisplay();
+          failMission();
         }
       }, 1000);
     }
 
-    function updateSliderReadouts() {
+    function failMission() {
+      missionFailed = true;
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      addLog("> timer expired");
+      addLog("> drone override window closed");
+
+      document.getElementById("failOverlay").style.display = "flex";
+    }
+
+    function applyPenalty(seconds) {
+      if (!finalMissionStarted || missionFailed || solved.final) {
+        return;
+      }
+
+      timeLeft = Math.max(0, timeLeft - seconds);
+      updateTimerDisplay();
+
+      if (timeLeft <= 0) {
+        failMission();
+      }
+    }
+
+    function normalize(value) {
+      return String(value)
+        .trim()
+        .toUpperCase()
+        .replaceAll(" ", "")
+        .replaceAll(",", ".")
+        .replaceAll("CM", "")
+        .replaceAll("M", "");
+    }
+
+    function checkRoute() {
+      if (!finalMissionStarted) {
+        addLog("> mission not started");
+        return;
+      }
+
+      const ab = normalize(document.getElementById("abInput").value);
+      const bc = normalize(document.getElementById("bcInput").value);
+      const cd = normalize(document.getElementById("cdInput").value);
+
+      if (ab === correctAB && bc === correctBC && cd === correctCD) {
+        solved.route = true;
+        addLog("> route distances accepted");
+        updatePills();
+        checkFinalUnlock();
+      } else {
+        addLog("> route distance mismatch");
+        addLog("> penalty applied: -30 seconds");
+        applyPenalty(30);
+      }
+    }
+
+    function updateSliderLabels() {
       document.getElementById("sliderAValue").textContent = document.getElementById("sliderA").value;
       document.getElementById("sliderBValue").textContent = document.getElementById("sliderB").value;
       document.getElementById("sliderCValue").textContent = document.getElementById("sliderC").value;
     }
 
-    function normalizeInput(value) {
-      return String(value)
-        .trim()
-        .replaceAll(" ", "")
-        .replace("cm", "")
-        .replace("CM", "")
-        .replace(",", ".");
-    }
-
-    function appendLog(line) {
-      const log = document.getElementById("statusLog");
-      log.textContent += "\n" + line;
-      log.scrollTop = log.scrollHeight;
-    }
-
-    function applyPenalty(reason) {
-      timeLeft -= CONFIG.penaltySeconds;
-
-      if (timeLeft < 0) {
-        timeLeft = 0;
-      }
-
-      appendLog("> PENALTY // -30 seconds // " + reason);
-
-      const timerPanel = document.getElementById("timerPanel");
-      timerPanel.classList.remove("penaltyFlash");
-      void timerPanel.offsetWidth;
-      timerPanel.classList.add("penaltyFlash");
-
-      updateTimerDisplay();
-
-      if (timeLeft <= 0) {
-        failMission("TIME EXPIRED AFTER PENALTY");
-      }
-    }
-
-    function markBlockSolved(blockId, buttonId, logLine) {
-      const block = document.getElementById(blockId);
-      const button = document.getElementById(buttonId);
-
-      block.classList.remove("error");
-      block.classList.add("solved");
-
-      button.disabled = true;
-      button.textContent = "LOCKED";
-
-      appendLog(logLine);
-      updateModuleCount();
-      checkFinalUnlock();
-    }
-
-    function markBlockError(blockId) {
-      const block = document.getElementById(blockId);
-      block.classList.remove("error");
-      void block.offsetWidth;
-      block.classList.add("error");
-    }
-
-    function checkVector(which) {
-      if (missionEnded || solved[which]) {
-        return;
-      }
-
-      let inputId = "";
-      let correctValue = "";
-      let blockId = "";
-      let buttonId = "";
-
-      if (which === "AB") {
-        inputId = "distanceAB";
-        correctValue = CONFIG.correctAB;
-        blockId = "blockAB";
-        buttonId = "checkAB";
-      }
-
-      if (which === "BC") {
-        inputId = "distanceBC";
-        correctValue = CONFIG.correctBC;
-        blockId = "blockBC";
-        buttonId = "checkBC";
-      }
-
-      if (which === "CD") {
-        inputId = "distanceCD";
-        correctValue = CONFIG.correctCD;
-        blockId = "blockCD";
-        buttonId = "checkCD";
-      }
-
-      const value = normalizeInput(document.getElementById(inputId).value);
-
-      appendLog("> checking vector " + which + "...");
-
-      if (value === correctValue) {
-        solved[which] = true;
-        markBlockSolved(blockId, buttonId, "> vector " + which + " accepted // module locked");
-      } else {
-        markBlockError(blockId);
-        applyPenalty("vector " + which + " mismatch");
-      }
-    }
-
     function checkSliders() {
-      if (missionEnded || solved.sliders) {
+      if (!finalMissionStarted) {
+        addLog("> mission not started");
         return;
       }
 
-      const sliderA = Number(document.getElementById("sliderA").value);
-      const sliderB = Number(document.getElementById("sliderB").value);
-      const sliderC = Number(document.getElementById("sliderC").value);
+      const a = Number(document.getElementById("sliderA").value);
+      const b = Number(document.getElementById("sliderB").value);
+      const c = Number(document.getElementById("sliderC").value);
 
-      appendLog("> checking stabilizer matrix...");
-
-      if (
-        sliderA === CONFIG.sliderA &&
-        sliderB === CONFIG.sliderB &&
-        sliderC === CONFIG.sliderC
-      ) {
-        solved.sliders = true;
-
-        document.getElementById("checkSliders").disabled = true;
-        document.getElementById("checkSliders").textContent = "STABILIZER LOCKED";
-
-        appendLog("> stabilizer matrix accepted // module locked");
-
-        updateModuleCount();
+      if (a === correctSliderA && b === correctSliderB && c === correctSliderC) {
+        solved.signal = true;
+        addLog("> signal alignment accepted");
+        updatePills();
         checkFinalUnlock();
       } else {
-        applyPenalty("stabilizer matrix mismatch");
+        addLog("> signal alignment mismatch");
+        addLog("> penalty applied: -30 seconds");
+        applyPenalty(30);
       }
     }
 
-    function makeGridLabel(text) {
-      const el = document.createElement("div");
-      el.className = "gridLabel";
-      el.textContent = text;
-
-      return el;
-    }
+    const gridRows = "ABCDEFGHIJKLMNO".split("");
+    const gridCols = Array.from({ length: 15 }, function(_, index) {
+      return index + 1;
+    });
 
     function buildGridlock() {
       const grid = document.getElementById("gridlock");
       grid.innerHTML = "";
 
-      const rows = "ABCDEFGHIJ".split("");
-
       grid.appendChild(makeGridLabel(""));
 
-      for (let n = 1; n <= 10; n++) {
-        grid.appendChild(makeGridLabel(String(n)));
-      }
+      gridCols.forEach(function(col) {
+        grid.appendChild(makeGridLabel(col));
+      });
 
-      rows.forEach(function(row) {
+      gridRows.forEach(function(row) {
         grid.appendChild(makeGridLabel(row));
 
-        for (let n = 1; n <= 10; n++) {
-          const id = row + n;
-          const cell = document.createElement("button");
+        gridCols.forEach(function(col) {
+          const id = row + col;
 
+          const cell = document.createElement("button");
           cell.type = "button";
           cell.className = "gridCell";
           cell.dataset.id = id;
-          cell.setAttribute("aria-label", id);
+          cell.setAttribute("aria-label", "Grid " + id);
 
           cell.addEventListener("click", function() {
             toggleGridCell(id, cell);
           });
 
           grid.appendChild(cell);
-        }
+        });
       });
     }
 
+    function makeGridLabel(text) {
+      const label = document.createElement("div");
+      label.className = "gridlockLabel";
+      label.textContent = text;
+      return label;
+    }
+
     function toggleGridCell(id, cell) {
-      if (missionEnded || solved.gridlock) {
+      if (!finalMissionStarted || solved.gridlock || missionFailed) {
         return;
       }
 
@@ -2118,237 +1257,159 @@
     }
 
     function checkGridlock() {
-      if (missionEnded || solved.gridlock) {
+      if (!finalMissionStarted) {
+        addLog("> mission not started");
         return;
       }
 
-      appendLog("> checking gridlock relay matrix...");
-
-      const expected = [...CONFIG.gridlockCorrect].sort().join(",");
-
-      const actual = [...activeGridCells]
-        .sort(function(a, b) {
-          return a.localeCompare(b, undefined, { numeric: true });
-        })
-        .join(",");
+      const actual = Array.from(activeGridCells).sort().join(",");
+      const expected = gridlockCorrect.slice().sort().join(",");
 
       if (actual === expected) {
         solved.gridlock = true;
 
-        document.getElementById("checkGridlock").disabled = true;
-        document.getElementById("checkGridlock").textContent = "GRIDLOCK LOCKED";
-
-        document.querySelectorAll(".gridCell").forEach(function(cell) {
+        const cells = document.querySelectorAll(".gridCell");
+        cells.forEach(function(cell) {
           cell.classList.add("locked");
         });
 
-        appendLog("> gridlock relay matrix accepted // module locked");
+        const button = document.getElementById("checkGridlock");
+        button.disabled = true;
+        button.textContent = "GRIDLOCK MATRIX ACCEPTED";
 
-        updateModuleCount();
+        addLog("> gridlock relay matrix accepted");
+        updatePills();
         checkFinalUnlock();
       } else {
-        applyPenalty("gridlock relay mismatch");
+        addLog("> gridlock relay mismatch");
+        addLog("> penalty applied: -30 seconds");
+        applyPenalty(30);
+        resetGridlockState();
       }
-    }
-
-    function updateModuleCount() {
-      const count = Object.values(solved).filter(Boolean).length;
-      document.getElementById("moduleValue").textContent = count + "/5";
-
-      if (count >= 3) {
-        document.getElementById("vectorValue").textContent = "PARTIAL";
-      }
-
-      if (count === 5) {
-        document.getElementById("vectorValue").textContent = "LOCKED";
-      }
-    }
-
-    function checkFinalUnlock() {
-      const allSolved =
-        solved.AB &&
-        solved.BC &&
-        solved.CD &&
-        solved.sliders &&
-        solved.gridlock;
-
-      if (allSolved) {
-        document.getElementById("overrideButton").disabled = false;
-        appendLog("> all modules locked");
-        appendLog("> final drone override enabled");
-      }
-    }
-
-    function executeFinalOverride() {
-      if (missionEnded) {
-        return;
-      }
-
-      const allSolved =
-        solved.AB &&
-        solved.BC &&
-        solved.CD &&
-        solved.sliders &&
-        solved.gridlock;
-
-      if (!allSolved) {
-        applyPenalty("final override attempted before all modules locked");
-        return;
-      }
-
-      winMission();
-    }
-
-    function winMission() {
-      clearInterval(timerInterval);
-      missionEnded = true;
-
-      localStorage.setItem("droneSolved", "yes");
-      localStorage.setItem("droneFinalRemainingSeconds", String(timeLeft));
-
-      appendLog("> final override accepted");
-      appendLog("> drone command channel seized");
-      appendLog("> payload system disabled");
-      appendLog("> mission accomplished");
-
-      document.getElementById("winRemainingTime").textContent = formatSeconds(timeLeft);
-      document.getElementById("winOverlay").style.display = "flex";
-
-      launchFireworks();
-    }
-
-    function failMission(reason) {
-      clearInterval(timerInterval);
-      missionEnded = true;
-
-      appendLog("> ERROR // " + reason);
-      appendLog("> mission failed");
-
-      document.getElementById("failText").textContent = reason;
-      document.getElementById("failOverlay").style.display = "flex";
-    }
-
-    function resetSolvedState() {
-      solved.AB = false;
-      solved.BC = false;
-      solved.CD = false;
-      solved.sliders = false;
-      solved.gridlock = false;
     }
 
     function resetGridlockState() {
       activeGridCells.clear();
 
-      document.querySelectorAll(".gridCell").forEach(function(cell) {
-        cell.classList.remove("active", "locked");
+      const cells = document.querySelectorAll(".gridCell");
+      cells.forEach(function(cell) {
+        cell.classList.remove("active");
+        cell.classList.remove("locked");
       });
     }
 
-    function resetTestMode() {
-      clearInterval(timerInterval);
+    function updatePills() {
+      updatePill("pillRoute", solved.route);
+      updatePill("pillSignal", solved.signal);
+      updatePill("pillGrid", solved.gridlock);
+      updatePill("pillFinal", solved.final);
+    }
 
-      missionEnded = false;
-      timeLeft = CONFIG.timeLimitSeconds;
+    function updatePill(id, done) {
+      const pill = document.getElementById(id);
+      const status = pill.querySelector("span:last-child");
 
-      resetSolvedState();
-      resetGridlockState();
+      if (done) {
+        pill.classList.add("done");
+        status.textContent = "OK";
+      } else {
+        pill.classList.remove("done");
+        status.textContent = "LOCKED";
+      }
+    }
 
-      document.getElementById("distanceAB").value = "";
-      document.getElementById("distanceBC").value = "";
-      document.getElementById("distanceCD").value = "";
+    function checkFinalUnlock() {
+      const finalButton = document.getElementById("finalButton");
+
+      if (solved.route && solved.signal && solved.gridlock) {
+        finalButton.classList.add("ready");
+        finalButton.textContent = "FINAL ABORT COMMAND READY";
+        addLog("> all override systems accepted");
+        addLog("> final abort command unlocked");
+      }
+    }
+
+    function finalAbort() {
+      if (!finalMissionStarted) {
+        addLog("> mission not started");
+        return;
+      }
+
+      if (!(solved.route && solved.signal && solved.gridlock)) {
+        addLog("> final abort command locked");
+        addLog("> all systems must be accepted first");
+        applyPenalty(30);
+        return;
+      }
+
+      solved.final = true;
+      updatePills();
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      addLog("> final abort command accepted");
+      addLog("> drone payload sequence interrupted");
+      addLog("> mission complete");
+
+      localStorage.setItem("droneSolved", "yes");
+
+      document.getElementById("endOverlay").style.display = "flex";
+    }
+
+    function resetMission() {
+      timeLeft = 300;
+      finalMissionStarted = false;
+      missionFailed = false;
+
+      solved.route = false;
+      solved.signal = false;
+      solved.gridlock = false;
+      solved.final = false;
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+
+      document.getElementById("abInput").value = "";
+      document.getElementById("bcInput").value = "";
+      document.getElementById("cdInput").value = "";
 
       document.getElementById("sliderA").value = 50;
       document.getElementById("sliderB").value = 50;
       document.getElementById("sliderC").value = 50;
 
-      ["blockAB", "blockBC", "blockCD"].forEach(function(id) {
-        document.getElementById(id).classList.remove("solved", "error");
-      });
-
-      [
-        ["checkAB", "CHECK"],
-        ["checkBC", "CHECK"],
-        ["checkCD", "CHECK"],
-        ["checkSliders", "CHECK STABILIZER MATRIX"],
-        ["checkGridlock", "CHECK GRIDLOCK MATRIX"]
-      ].forEach(function(item) {
-        const button = document.getElementById(item[0]);
-        button.disabled = false;
-        button.textContent = item[1];
-      });
-
-      document.getElementById("overrideButton").disabled = true;
-      document.getElementById("failOverlay").style.display = "none";
-      document.getElementById("winOverlay").style.display = "none";
-
-      document.getElementById("statusLog").textContent =
-`> drone computer interface online
-> encrypted map loaded
-> signal points detected
-> route metadata redacted
-> penalty protocol active : -30 seconds per failed check
-> waiting for individual module checks`;
-
-      document.getElementById("vectorValue").textContent = "OPEN";
-      document.getElementById("moduleValue").textContent = "0/5";
-
-      localStorage.removeItem("droneSolved");
-      localStorage.removeItem("droneFinalRemainingSeconds");
-
-      updateSliderReadouts();
+      updateSliderLabels();
       updateTimerDisplay();
-      startTimer();
-    }
+      resetGridlockState();
+      updatePills();
 
-    function launchFireworks() {
-      let count = 0;
+      document.getElementById("checkGridlock").disabled = false;
+      document.getElementById("checkGridlock").textContent = "CHECK GRIDLOCK MATRIX";
 
-      const interval = setInterval(function() {
-        const firework = document.createElement("div");
+      document.getElementById("finalButton").classList.remove("ready");
+      document.getElementById("finalButton").textContent = "FINAL ABORT COMMAND";
 
-        firework.className = "firework";
-        firework.style.left = Math.random() * 100 + "vw";
-        firework.style.top = Math.random() * 80 + "vh";
+      document.getElementById("endOverlay").style.display = "none";
+      document.getElementById("failOverlay").style.display = "none";
+      document.getElementById("missionIntroOverlay").style.display = "flex";
 
-        document.body.appendChild(firework);
-
-        setTimeout(function() {
-          firework.remove();
-        }, 1000);
-
-        count++;
-
-        if (count > 18) {
-          clearInterval(interval);
-        }
-      }, 140);
-    }
-
-    function startTelemetryNoise() {
-      setInterval(function() {
-        if (missionEnded) {
-          return;
-        }
-
-        signalPulse += Math.floor(Math.random() * 7) - 3;
-
-        if (signalPulse < 71) {
-          signalPulse = 71;
-        }
-
-        if (signalPulse > 96) {
-          signalPulse = 96;
-        }
-
-        document.getElementById("signalValue").textContent = signalPulse + "%";
-      }, 850);
+      document.getElementById("logBox").textContent =
+`> drone interface loaded
+> waiting for final mission start
+> timer inactive
+> relay grid offline
+> route solution required`;
     }
 
     buildGridlock();
-    updateSliderReadouts();
+    updateSliderLabels();
     updateTimerDisplay();
-    startTimer();
-    startTelemetryNoise();
+    updatePills();
   </script>
+
 </body>
 </html>
