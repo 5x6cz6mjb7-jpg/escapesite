@@ -1649,7 +1649,7 @@ Last external contact: JASON KRANE</div>
               </div>
 
               <div class="hintLine">
-                Recommended order: Chemistry → Botany → Backup Disk → Private.
+                Recommended order: Chemistry → Botany → Backup Disk → Private → Memory.
               </div>
 
               <div class="commandTerminal">
@@ -1700,7 +1700,9 @@ Then inspect the Backup Disk.
 
 Only open Private after recovering enough context from the first two folders.
 
-The Private folder may contain personal material connected to Jason Krane.</div>
+The Private folder may contain personal material connected to Jason Krane.
+
+The final environment requires a recovered memory code.</div>
 
               <div class="readmeBox"><strong>WARNING</strong>
 
@@ -1708,7 +1710,8 @@ Do not assume Jason Krane is the sender.
 
 Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
 
-Find the diary.</div>
+Find the diary.
+Find the memory code.</div>
             </div>
           </section>
 
@@ -1907,7 +1910,7 @@ Moved to archive.`
     ];
 
     function normalizePassword(value) {
-      return value
+      return String(value)
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
@@ -2126,7 +2129,7 @@ Moved to archive.`
         appendCommandLine("> decoding recovered backup track...");
         appendCommandLine("> command terminal is now confirmed as interactive");
         appendCommandLine("> not all useful commands are visible as icons");
-        appendCommandLine("> system note: some words must be typed manually");
+        appendCommandLine("> system note: final access may require a recovered code");
 
         triggerCommandWakeEffect();
 
@@ -2135,30 +2138,33 @@ Moved to archive.`
         return;
       }
 
-    if (command === "goldeneye") {
-  appendCommandLine("> GOLDENEYE code accepted");
-  appendCommandLine("> final drone environment unlocked");
-  appendCommandLine("> opening external control interface...");
+      if (command === "goldeneye") {
+        appendCommandLine("> GOLDENEYE code accepted");
+        appendCommandLine("> memory code verified");
+        appendCommandLine("> final drone environment unlocked");
+        appendCommandLine("> opening external control interface...");
 
-  localStorage.setItem("goldeneyeEntered", "yes");
+        localStorage.setItem("goldeneyeEntered", "yes");
 
-  setTimeout(function() {
-    window.location.href = "drone.html";
-  }, 1200);
+        setTimeout(function() {
+          window.location.href = "drone.html";
+        }, 1200);
 
-  return;
-}
+        return;
+      }
+
       if (command === "drone") {
-  appendCommandLine("> command rejected");
-  appendCommandLine("> direct drone access disabled");
-  appendCommandLine("> final access requires recovered memory code");
-  return;
-}
+        appendCommandLine("> command rejected");
+        appendCommandLine("> direct drone access disabled");
+        appendCommandLine("> final access requires recovered memory code");
+        return;
       }
 
       if (command === "help") {
         appendCommandLine("> available actions: open desktop folders manually");
         appendCommandLine("> readable directories: Chemistry, Botany, Private");
+        appendCommandLine("> mounted disk: Backup Disk");
+        appendCommandLine("> final environment requires recovered memory code");
         appendCommandLine("> recovery shell is damaged and cannot open folders directly");
         return;
       }
