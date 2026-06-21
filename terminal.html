@@ -454,6 +454,44 @@
       color: var(--yellow);
     }
 
+    .studentClue {
+      border: 1px dashed rgba(255, 238, 102, 0.45);
+      background: rgba(255, 238, 102, 0.06);
+      color: #baffc9;
+      padding: 12px;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    .studentClue strong {
+      color: var(--yellow);
+    }
+
+    .recoveryMessage {
+      min-height: 22px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 13px;
+    }
+
+    .passwordReveal {
+      display: none;
+      margin-top: 14px;
+      border: 2px solid var(--yellow);
+      background: rgba(255, 238, 102, 0.08);
+      color: #d8ffe6;
+      padding: 12px;
+      line-height: 1.6;
+      text-align: center;
+      box-shadow: 0 0 16px rgba(255, 238, 102, 0.16);
+    }
+
+    .passwordReveal strong {
+      color: var(--yellow);
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+
     .desktopTopStrip {
       min-height: 34px;
       background:
@@ -1446,12 +1484,43 @@
             <div class="loginMessage" id="loginMessage"></div>
 
             <div class="hintBox" id="hintBox">
-              <strong>PASSWORD RECOVERY QUESTION</strong><br><br>
-              What is my favourite flower?<br><br>
-              Botanical file hint:<br>
-              <em>Geranium sanguineum</em><br><br>
-              Common name required.<br>
-              Spaces are not required.
+              <strong>PASSWORD RECOVERY PROTOCOL</strong><br><br>
+
+              Student incident verification required.<br>
+              A name alone is not enough.<br><br>
+
+              <div class="studentClue">
+                RECOVERED CONTROL QUESTION<br><br>
+
+                Which student record matches this incident?<br><br>
+
+                Incident:<br>
+                <strong>lettuce sandwiches with hogweed</strong><br>
+                <em>broodjes sla met berenklauw</em><br><br>
+
+                Fill in both recovery fields.
+              </div>
+
+              <div class="loginField" style="margin-top: 14px;">
+                <label for="recoveryName">STUDENT NAME / NAAM LEERLING</label>
+                <input id="recoveryName" type="text" autocomplete="off" placeholder="enter student name">
+              </div>
+
+              <div class="loginField">
+                <label for="recoveryClass">LESSON OR CLASS / VAK OF KLAS</label>
+                <input id="recoveryClass" type="text" autocomplete="off" placeholder="enter lesson or class">
+              </div>
+
+              <button class="oldButton secondary" onclick="checkRecoveryAnswer()">CHECK RECOVERY RECORD</button>
+
+              <div class="recoveryMessage" id="recoveryMessage"></div>
+
+              <div class="passwordReveal" id="passwordReveal">
+                PASSWORD RECOVERY ACCEPTED<br><br>
+
+                Temporary workstation password:<br>
+                <strong>BLOODYCRANESBILL</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -1847,6 +1916,18 @@ Moved to archive.`
         .replaceAll("’", "");
     }
 
+    function normalizeRecoveryValue(value) {
+      return String(value)
+        .trim()
+        .toLowerCase()
+        .replaceAll(" ", "")
+        .replaceAll("-", "")
+        .replaceAll("_", "")
+        .replaceAll("/", "")
+        .replaceAll(".", "")
+        .replaceAll(",", "");
+    }
+
     function openDesktop() {
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("desktop").style.display = "block";
@@ -1885,7 +1966,53 @@ Moved to archive.`
 
       hintBox.style.display = "block";
       message.style.color = "#ffee66";
-      message.textContent = "PASSWORD RECOVERY HINT LOADED.";
+      message.textContent = "PASSWORD RECOVERY PROTOCOL LOADED.";
+
+      setTimeout(function() {
+        const recoveryName = document.getElementById("recoveryName");
+        if (recoveryName) {
+          recoveryName.focus();
+        }
+      }, 150);
+    }
+
+    function checkRecoveryAnswer() {
+      const nameInput = document.getElementById("recoveryName");
+      const classInput = document.getElementById("recoveryClass");
+      const recoveryMessage = document.getElementById("recoveryMessage");
+      const passwordReveal = document.getElementById("passwordReveal");
+
+      if (!nameInput || !classInput || !recoveryMessage || !passwordReveal) {
+        return;
+      }
+
+      const nameAnswer = normalizeRecoveryValue(nameInput.value);
+      const classAnswer = normalizeRecoveryValue(classInput.value);
+
+      const correctName =
+        nameAnswer === "freek";
+
+      const correctClass =
+        classAnswer === "scheikunde" ||
+        classAnswer === "chemistry" ||
+        classAnswer === "chemie" ||
+        classAnswer === "scheikundeles" ||
+        classAnswer === "chemistryclass" ||
+        classAnswer === "chemistrylesson" ||
+        classAnswer === "science" ||
+        classAnswer === "sciencelesson";
+
+      if (correctName && correctClass) {
+        recoveryMessage.style.color = "#ffee66";
+        recoveryMessage.textContent = "STUDENT RECORD ACCEPTED // password recovery unlocked.";
+        passwordReveal.style.display = "block";
+
+        localStorage.setItem("passwordRecoverySolved", "yes");
+      } else {
+        recoveryMessage.style.color = "#ff5555";
+        recoveryMessage.textContent = "RECOVERY RECORD MISMATCH // student name and lesson must both match.";
+        passwordReveal.style.display = "none";
+      }
     }
 
     function updateClock() {
@@ -2097,6 +2224,21 @@ Moved to archive.`
     document.getElementById("emailInput").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         document.getElementById("passwordInput").focus();
+      }
+    });
+
+    document.addEventListener("keydown", function(event) {
+      const recoveryName = document.getElementById("recoveryName");
+      const recoveryClass = document.getElementById("recoveryClass");
+
+      if (
+        event.key === "Enter" &&
+        (
+          document.activeElement === recoveryName ||
+          document.activeElement === recoveryClass
+        )
+      ) {
+        checkRecoveryAnswer();
       }
     });
 
