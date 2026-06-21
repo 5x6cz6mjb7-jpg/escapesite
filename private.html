@@ -2,1408 +2,963 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Nessa's Private Love Archive</title>
+  <title>Private Archive // Nessa Thorne</title>
 
   <style>
     :root {
-      --pink: #ff4fb8;
-      --hotpink: #ff1493;
-      --softpink: #ffd1ec;
-      --purple: #9b3cff;
-      --red: #ff3355;
+      --pink: #ff5fb7;
+      --pink2: #ff9ad5;
+      --hot: #ff2f92;
+      --dark: #12000b;
+      --black: #000000;
+      --soft: #ffd6eb;
       --white: #ffffff;
-      --dark: #2a0018;
-      --text: #5a0034;
-      --glass: rgba(255, 247, 251, 0.58);
+      --purple: #5b1b4c;
+      --red: #ff4d6d;
+      --gold: #ffd36a;
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html,
     body {
       margin: 0;
       min-height: 100vh;
       font-family: "Courier New", monospace;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.85), transparent 16%),
-        radial-gradient(circle at 78% 18%, rgba(255,20,147,0.42), transparent 24%),
-        radial-gradient(circle at 48% 78%, rgba(168,77,255,0.28), transparent 34%),
-        linear-gradient(135deg, #ffb3dc 0%, #ff72c6 34%, #ff2fa8 66%, #7a004a 100%);
-      padding: 16px;
+      background: #000;
+      color: var(--soft);
       overflow-x: hidden;
     }
 
-    body::after {
+    body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
+      z-index: 9000;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,0.035),
-          rgba(255,255,255,0.035) 1px,
+          rgba(255, 255, 255, 0.025),
+          rgba(255, 255, 255, 0.025) 1px,
           transparent 1px,
-          transparent 5px
+          transparent 4px
         );
-      z-index: 80;
       mix-blend-mode: screen;
     }
 
-    .floatingHeart {
+    .privateLoginOverlay {
       position: fixed;
-      pointer-events: none;
-      z-index: 2;
-      color: rgba(255,255,255,0.48);
-      text-shadow: 0 0 18px rgba(255,20,147,0.8);
-      animation: floatHeart 13s linear infinite;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background:
+        radial-gradient(circle at center, rgba(255, 47, 146, 0.10), transparent 34%),
+        linear-gradient(180deg, #050005 0%, #000000 100%);
     }
 
-    .h1 { left: 7%; font-size: 34px; animation-delay: 0s; }
-    .h2 { left: 18%; font-size: 48px; animation-delay: 2s; }
-    .h3 { left: 34%; font-size: 24px; animation-delay: 5s; }
-    .h4 { left: 51%; font-size: 40px; animation-delay: 1s; }
-    .h5 { left: 68%; font-size: 28px; animation-delay: 4s; }
-    .h6 { left: 83%; font-size: 50px; animation-delay: 7s; }
-    .h7 { left: 94%; font-size: 26px; animation-delay: 3s; }
-
-    @keyframes floatHeart {
-      0% {
-        top: 110vh;
-        opacity: 0;
-        transform: rotate(0deg) scale(1);
-      }
-
-      12% {
-        opacity: 1;
-      }
-
-      50% {
-        transform: translateX(42px) rotate(180deg) scale(1.25);
-      }
-
-      90% {
-        opacity: 1;
-      }
-
-      100% {
-        top: -90px;
-        opacity: 0;
-        transform: translateX(-28px) rotate(360deg) scale(1);
-      }
-    }
-
-    .screen {
-      width: 100%;
-      max-width: 1360px;
-      min-height: calc(100vh - 32px);
-      margin: 0 auto;
-      border: 6px double rgba(255,255,255,0.88);
-      border-radius: 32px;
-      background: rgba(255, 209, 236, 0.10);
+    .privateLoginBox {
+      width: min(560px, 100%);
+      border: 2px solid rgba(255, 95, 183, 0.78);
+      background:
+        radial-gradient(circle at center, rgba(255, 47, 146, 0.09), transparent 62%),
+        rgba(0, 0, 0, 0.97);
       box-shadow:
-        0 0 48px rgba(255,20,147,0.68),
-        inset 0 0 60px rgba(255,255,255,0.12);
-      position: relative;
-      overflow: hidden;
-      z-index: 3;
-      padding: 16px;
+        0 0 38px rgba(255, 47, 146, 0.30),
+        inset 0 0 28px rgba(255, 47, 146, 0.08);
+      padding: 26px;
+      text-align: center;
     }
 
-    .screen::before {
-      content: "NESSA ♥ JASON ♥ NESSA ♥ JASON ♥ NESSA ♥ JASON ♥";
-      position: absolute;
-      left: -5%;
-      top: 70px;
-      color: rgba(255,255,255,0.22);
-      font-size: 58px;
+    .privateLoginLabel {
+      display: inline-block;
+      border: 1px solid rgba(255, 211, 106, 0.55);
+      color: var(--gold);
+      padding: 5px 10px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .privateLoginBox h1 {
+      margin: 0 0 12px;
+      color: var(--white);
+      font-size: 30px;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 12px rgba(255, 47, 146, 0.95),
+        0 0 28px rgba(255, 47, 146, 0.45);
+    }
+
+    .privateLoginBox p {
+      color: #d795b8;
+      line-height: 1.55;
+      font-size: 13px;
+      margin: 8px 0 18px;
+    }
+
+    .privateLoginBox label {
+      display: block;
+      text-align: left;
+      color: var(--pink2);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin: 16px 0 6px;
+    }
+
+    .privateLoginBox input {
+      width: 100%;
+      background: #050005;
+      border: 2px solid rgba(255, 95, 183, 0.55);
+      color: var(--soft);
+      padding: 13px;
+      font-family: "Courier New", monospace;
+      font-size: 17px;
+      outline: none;
+      letter-spacing: 2px;
+    }
+
+    .privateLoginBox input:focus {
+      border-color: var(--soft);
+      box-shadow: 0 0 16px rgba(255, 47, 146, 0.38);
+    }
+
+    .privateLoginBox button {
+      width: 100%;
+      margin-top: 16px;
+      border: 2px solid rgba(255, 95, 183, 0.78);
+      background: rgba(255, 47, 146, 0.13);
+      color: var(--soft);
+      padding: 13px;
+      font-family: "Courier New", monospace;
       font-weight: bold;
-      letter-spacing: 5px;
-      white-space: nowrap;
-      transform: rotate(-7deg);
-      z-index: 1;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+
+    .privateLoginBox button:hover {
+      background: rgba(255, 47, 146, 0.24);
+    }
+
+    .privateLoginMessage {
+      min-height: 22px;
+      margin-top: 13px;
+      color: var(--red);
+      font-size: 13px;
+    }
+
+    .privateArchiveLocked {
+      display: none;
+    }
+
+    .privateArchive {
+      min-height: 100vh;
+      position: relative;
+      background:
+        radial-gradient(circle at 30% 18%, rgba(255, 95, 183, 0.24), transparent 28%),
+        radial-gradient(circle at 70% 72%, rgba(255, 47, 146, 0.22), transparent 32%),
+        linear-gradient(180deg, #2d061f 0%, #13000c 56%, #040003 100%);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .privateArchive::after {
+      content: "";
+      position: fixed;
+      inset: 0;
       pointer-events: none;
+      z-index: 5;
+      background:
+        radial-gradient(circle at center, transparent 54%, rgba(0, 0, 0, 0.64) 100%);
     }
 
     .jasonScreensaver {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      z-index: 2;
+      z-index: 1;
       pointer-events: none;
       overflow: hidden;
+      opacity: 0.26;
+      filter: saturate(1.4);
     }
 
-    .screenSaverPhoto {
+    .floatingJason {
       position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
       object-fit: cover;
-      border: 5px solid rgba(255,255,255,0.82);
-      border-radius: 24px;
+      border: 2px solid rgba(255, 214, 235, 0.42);
       box-shadow:
-        0 0 35px rgba(255,20,147,0.85),
-        0 0 80px rgba(255,255,255,0.45);
+        0 0 28px rgba(255, 47, 146, 0.42),
+        inset 0 0 20px rgba(255, 255, 255, 0.18);
       filter:
-        grayscale(1)
-        sepia(1)
+        grayscale(0.15)
+        sepia(0.15)
         hue-rotate(285deg)
-        saturate(3.4)
-        brightness(1.08)
-        contrast(1.14);
+        saturate(1.55)
+        brightness(1.05);
+      animation: floatJason 22s linear infinite;
     }
 
-    .s1 {
-      width: 430px;
-      height: 560px;
-      opacity: 0.66;
-      animation: jasonFloat1 31s linear infinite;
+    .floatingJason.one {
+      left: 4%;
+      top: 12%;
+      animation-duration: 28s;
     }
 
-    .s2 {
-      width: 310px;
-      height: 405px;
-      opacity: 0.48;
-      animation: jasonFloat2 27s linear infinite;
+    .floatingJason.two {
+      left: 72%;
+      top: 10%;
+      width: 230px;
+      height: 230px;
+      animation-duration: 34s;
+      animation-delay: -8s;
     }
 
-    .s3 {
-      width: 250px;
-      height: 330px;
-      opacity: 0.40;
-      animation: jasonFloat3 35s linear infinite;
+    .floatingJason.three {
+      left: 42%;
+      top: 68%;
+      width: 150px;
+      height: 150px;
+      animation-duration: 26s;
+      animation-delay: -14s;
     }
 
-    @keyframes jasonFloat1 {
-      0%   { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
-      20%  { left: 62%; top: 6%;  transform: rotate(6deg) scale(1.03); }
-      42%  { left: 50%; top: 36%; transform: rotate(-4deg) scale(1); }
-      63%  { left: 7%;  top: 40%; transform: rotate(7deg) scale(1.04); }
-      82%  { left: 34%; top: 13%; transform: rotate(-5deg) scale(1); }
-      100% { left: 2%;  top: 7%;  transform: rotate(-7deg) scale(1); }
+    @keyframes floatJason {
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
+
+      25% {
+        transform: translate(42px, 28px) rotate(8deg) scale(1.08);
+      }
+
+      50% {
+        transform: translate(-18px, 54px) rotate(-6deg) scale(0.96);
+      }
+
+      75% {
+        transform: translate(28px, -18px) rotate(5deg) scale(1.04);
+      }
+
+      100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+      }
     }
 
-    @keyframes jasonFloat2 {
-      0%   { left: 74%; top: 58%; transform: rotate(7deg) scale(1); }
-      25%  { left: 54%; top: 14%; transform: rotate(-4deg) scale(1.04); }
-      50%  { left: 12%; top: 20%; transform: rotate(5deg) scale(1); }
-      75%  { left: 22%; top: 62%; transform: rotate(-6deg) scale(1.05); }
-      100% { left: 74%; top: 58%; transform: rotate(7deg) scale(1); }
-    }
-
-    @keyframes jasonFloat3 {
-      0%   { left: 42%; top: 64%; transform: rotate(-5deg) scale(1); }
-      30%  { left: 78%; top: 30%; transform: rotate(5deg) scale(1.02); }
-      55%  { left: 32%; top: 8%;  transform: rotate(-7deg) scale(1.04); }
-      80%  { left: 8%;  top: 50%; transform: rotate(4deg) scale(1); }
-      100% { left: 42%; top: 64%; transform: rotate(-5deg) scale(1); }
-    }
-
-    .topBar,
-    .loginScreen,
-    .archiveScreen,
-    .bottomDock {
+    .archiveShell {
       position: relative;
-      z-index: 10;
+      z-index: 4;
+      width: min(1320px, 100%);
+      margin: 0 auto;
+      min-height: calc(100vh - 40px);
+      border: 2px solid rgba(255, 154, 213, 0.44);
+      background:
+        linear-gradient(180deg, rgba(70, 10, 50, 0.88), rgba(10, 0, 7, 0.88));
+      box-shadow:
+        0 0 42px rgba(255, 47, 146, 0.24),
+        inset 0 0 38px rgba(255, 47, 146, 0.08);
+      padding: 14px;
     }
 
     .topBar {
-      min-height: 44px;
-      border: 3px solid rgba(255,255,255,0.9);
-      border-radius: 22px;
-      background: rgba(255,20,147,0.72);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 0 14px;
-      margin-bottom: 14px;
-      font-size: 12px;
-      box-shadow:
-        0 0 22px rgba(255,20,147,0.55),
-        inset 0 0 20px rgba(255,255,255,0.28);
-      text-shadow: 0 0 8px rgba(90,0,52,0.65);
-      backdrop-filter: blur(5px);
-    }
-
-    .window {
-      border: 4px solid rgba(255,255,255,0.88);
-      border-radius: 28px;
-      background: var(--glass);
-      box-shadow:
-        6px 6px 0 rgba(122,0,74,0.18),
-        0 0 32px rgba(255,20,147,0.32),
-        inset 0 0 24px rgba(255,255,255,0.38);
-      overflow: hidden;
-      backdrop-filter: blur(5px);
-    }
-
-    .windowTitle {
-      min-height: 36px;
-      border-bottom: 3px solid rgba(255,255,255,0.86);
-      background: rgba(255,20,147,0.72);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 0 12px;
-      font-size: 12px;
-      font-weight: bold;
-      text-shadow: 0 0 8px rgba(90,0,52,0.65);
-    }
-
-    .windowTitle span:first-child::before {
-      content: "♥ ";
-    }
-
-    .windowTitle span:last-child::after {
-      content: " ♥";
-    }
-
-    .content {
-      padding: 16px;
-    }
-
-    h1 {
-      color: var(--hotpink);
-      font-size: 34px;
-      margin: 0 0 8px;
-      letter-spacing: 3px;
-      text-shadow:
-        0 0 8px rgba(255,255,255,0.88),
-        0 0 18px rgba(255,20,147,0.42);
-    }
-
-    h1::before,
-    h1::after {
-      content: " ♥ ";
-      color: var(--pink);
-    }
-
-    h2 {
-      color: var(--purple);
-      font-size: 16px;
-      margin: 0 0 12px;
-    }
-
-    p {
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .loginScreen {
-      max-width: 660px;
-      margin: 70px auto;
-      background: rgba(255, 247, 251, 0.72);
-    }
-
-    label {
-      display: block;
-      color: var(--hotpink);
-      font-size: 12px;
-      margin-top: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      background: rgba(255,255,255,0.86);
-      color: var(--text);
-      border: 3px solid var(--pink);
-      border-radius: 16px;
-      padding: 13px;
-      font-family: "Courier New", monospace;
-      font-size: 16px;
-      outline: none;
-      box-shadow:
-        inset 0 0 12px rgba(255,20,147,0.14),
-        0 0 14px rgba(255,255,255,0.5);
-    }
-
-    input:focus {
-      border-color: var(--purple);
-      box-shadow:
-        inset 0 0 16px rgba(255,20,147,0.22),
-        0 0 20px rgba(168,77,255,0.35);
-    }
-
-    button,
-    .buttonLink {
-      color: var(--white);
-      background:
-        linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 45%, #ff1493 100%);
-      border-top: 3px solid #ffffff;
-      border-left: 3px solid #ffffff;
-      border-right: 3px solid #9f0060;
-      border-bottom: 3px solid #9f0060;
-      border-radius: 999px;
-      padding: 12px 17px;
-      font-family: "Courier New", monospace;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
-      box-shadow:
-        0 0 18px rgba(255,20,147,0.35),
-        inset 0 0 14px rgba(255,255,255,0.32);
-      text-shadow: 0 0 8px rgba(90,0,52,0.65);
-    }
-
-    button:hover,
-    .buttonLink:hover {
-      filter: brightness(1.12);
-      transform: translateY(-1px);
-    }
-
-    .error {
-      min-height: 22px;
-      color: var(--red);
-      margin-top: 12px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .fragmentBox {
-      border: 3px dashed var(--pink);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.48);
-      color: var(--text);
-      padding: 12px;
-      margin: 14px 0;
-      font-size: 13px;
-      line-height: 1.55;
-      box-shadow: inset 0 0 18px rgba(255,20,147,0.12);
-    }
-
-    .fragmentLine {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       gap: 12px;
-      border-bottom: 1px dotted rgba(255,20,147,0.35);
-      padding: 5px 0;
+      align-items: center;
+      border: 1px solid rgba(255, 154, 213, 0.42);
+      background: rgba(0, 0, 0, 0.34);
+      padding: 10px 12px;
+      margin-bottom: 14px;
     }
 
-    .fragmentLine:last-child {
-      border-bottom: none;
-    }
-
-    .fragmentValue {
-      color: var(--hotpink);
-      font-weight: bold;
-    }
-
-    .loveStamp {
-      display: inline-block;
-      color: var(--white);
-      background: var(--hotpink);
-      border: 3px solid var(--white);
-      border-radius: 999px;
-      padding: 6px 12px;
+    .topSmall {
+      color: #d795b8;
       font-size: 12px;
-      transform: rotate(-4deg);
-      box-shadow: 0 0 18px rgba(255,20,147,0.4);
-      margin: 8px 0;
+      letter-spacing: 1px;
+      line-height: 1.35;
     }
 
-    .archiveScreen {
-      display: none;
-      min-height: 760px;
-      padding-bottom: 118px;
+    .topSmall.right {
+      text-align: right;
+    }
+
+    .archiveTitle {
+      text-align: center;
+      color: var(--white);
+      font-size: 25px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      text-shadow:
+        0 0 12px rgba(255, 47, 146, 0.95),
+        0 0 28px rgba(255, 47, 146, 0.50);
     }
 
     .archiveLayout {
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
+      min-height: 640px;
     }
 
     .viewer {
       display: none;
-      min-height: 640px;
-    }
-
-    .viewerBody {
+      border: 1px solid rgba(255, 154, 213, 0.42);
+      background:
+        radial-gradient(circle at center, rgba(255, 95, 183, 0.10), transparent 62%),
+        rgba(0, 0, 0, 0.38);
+      min-height: 500px;
       padding: 18px;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.6;
-      white-space: pre-line;
-      min-height: 580px;
-      max-height: 680px;
-      overflow-y: auto;
-      background: rgba(255, 247, 251, 0.12);
-    }
-
-    .viewerBody strong {
-      color: var(--hotpink);
-    }
-
-    .viewerBody em {
-      color: var(--purple);
-      font-style: normal;
-      font-weight: bold;
+      box-shadow: inset 0 0 22px rgba(255, 47, 146, 0.08);
     }
 
     .emptyStage {
-      min-height: 640px;
-      border: 4px dashed rgba(255,255,255,0.35);
-      border-radius: 28px;
-      background: rgba(255,255,255,0.04);
-      display: grid;
-      place-items: center;
-      text-align: center;
-      color: rgba(255,255,255,0.86);
-      text-shadow: 0 0 14px rgba(255,20,147,0.9);
-      letter-spacing: 2px;
-      font-weight: bold;
-      font-size: 16px;
-      backdrop-filter: blur(0.5px);
-    }
-
-    .photoCard {
-      max-width: 560px;
-      margin: 0 auto;
-      border: 5px double var(--pink);
-      border-radius: 26px;
-      background: rgba(255,255,255,0.54);
-      padding: 16px;
-      text-align: center;
-      white-space: normal;
-      box-shadow:
-        0 0 28px rgba(255,20,147,0.38),
-        inset 0 0 24px rgba(255,255,255,0.65);
-    }
-
-    .photoCard img {
-      width: 100%;
-      max-height: 470px;
-      object-fit: cover;
-      border: 5px solid rgba(255,255,255,0.85);
-      border-radius: 22px;
-      background: #000;
-      filter:
-        grayscale(1)
-        sepia(1)
-        hue-rotate(285deg)
-        saturate(3)
-        brightness(1.05)
-        contrast(1.08);
-      box-shadow:
-        0 0 24px rgba(255,20,147,0.55),
-        0 0 60px rgba(255,255,255,0.45);
-    }
-
-    .photoCard.wedding img {
-      max-height: 520px;
-      filter:
-        sepia(0.18)
-        hue-rotate(295deg)
-        saturate(1.7)
-        brightness(1.04)
-        contrast(1.05);
-    }
-
-    .photoCaption {
-      color: var(--text);
-      font-size: 13px;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    .phoneShell {
-      width: 100%;
-      max-width: 460px;
-      margin: 0 auto;
-      border: 7px solid #7a004a;
-      border-radius: 34px;
-      background: #2a0018;
-      box-shadow:
-        0 0 30px rgba(255,20,147,0.38),
-        inset 0 0 20px rgba(0,0,0,0.65);
-      overflow: hidden;
-      white-space: normal;
-    }
-
-    .phoneTop {
-      min-height: 58px;
-      background: linear-gradient(180deg, #ff89cf, #ff1493);
-      color: white;
-      padding: 10px 14px;
+      min-height: 500px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      text-shadow: 0 0 8px rgba(90,0,52,0.75);
-    }
-
-    .phoneContact {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .phoneName {
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .phoneSub {
-      font-size: 11px;
-      opacity: 0.9;
-    }
-
-    .phoneHeart {
-      font-size: 26px;
-      animation: phoneBeat 1.2s infinite;
-    }
-
-    @keyframes phoneBeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.18); }
-    }
-
-    .chapterControls {
-      background: rgba(255,255,255,0.88);
-      border-bottom: 2px solid #ff89cf;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-
-    .chapterTitle {
-      color: var(--hotpink);
-      font-weight: bold;
-      font-size: 13px;
-      text-align: center;
-    }
-
-    .chapterButtons {
-      display: flex;
       justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      text-align: center;
+      border: 1px dashed rgba(255, 154, 213, 0.34);
+      background: rgba(0, 0, 0, 0.20);
+      color: rgba(255, 214, 235, 0.74);
+      padding: 30px;
     }
 
-    .chapterButton {
-      margin: 0;
-      padding: 7px 10px;
-      font-size: 11px;
-      border-radius: 999px;
+    .emptyStage h2 {
+      color: var(--white);
+      letter-spacing: 3px;
+      text-shadow: 0 0 14px rgba(255, 47, 146, 0.85);
+      margin-bottom: 10px;
     }
 
-    .chatMessages {
-      height: 420px;
-      overflow-y: auto;
+    .fileTitle {
+      color: var(--white);
+      font-size: 24px;
+      letter-spacing: 2px;
+      margin: 0 0 12px;
+      text-shadow: 0 0 12px rgba(255, 47, 146, 0.75);
+    }
+
+    .fileSub {
+      color: #d795b8;
+      margin-bottom: 18px;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .fileBox {
+      border: 1px solid rgba(255, 154, 213, 0.38);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 16px;
+      color: #ffd6eb;
+      line-height: 1.62;
+      white-space: pre-line;
+      box-shadow: inset 0 0 18px rgba(255, 47, 146, 0.06);
+    }
+
+    .fileBox strong {
+      color: var(--gold);
+    }
+
+    .photoFrame {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .photoFrame img {
+      width: 100%;
+      border: 3px solid rgba(255, 214, 235, 0.72);
+      box-shadow:
+        0 0 24px rgba(255, 47, 146, 0.35),
+        8px 8px 0 rgba(0, 0, 0, 0.35);
+      background: #000;
+    }
+
+    .chatLog {
+      display: grid;
+      gap: 14px;
+    }
+
+    .chatChapter {
+      border: 1px solid rgba(255, 154, 213, 0.34);
+      background: rgba(0, 0, 0, 0.30);
       padding: 14px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.7), transparent 70%),
-        linear-gradient(180deg, #ffeaf7, #ffd1ec);
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
+    }
+
+    .chatDate {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
     .bubble {
-      max-width: 82%;
-      padding: 9px 11px;
+      max-width: 86%;
+      padding: 10px 12px;
+      margin: 8px 0;
       border-radius: 16px;
-      font-size: 13px;
-      line-height: 1.35;
-      box-shadow: 0 0 10px rgba(90,0,52,0.12);
-      position: relative;
-    }
-
-    .bubble.nessa {
-      align-self: flex-start;
-      background: #ffffff;
-      border: 2px solid #ff9ad7;
-      color: var(--text);
-      border-bottom-left-radius: 4px;
+      line-height: 1.45;
+      font-size: 14px;
     }
 
     .bubble.jason {
-      align-self: flex-end;
-      background: linear-gradient(180deg, #ff70c5, #ff1493);
-      border: 2px solid #ffffff;
-      color: white;
-      border-bottom-right-radius: 4px;
-      text-shadow: 0 0 4px rgba(90,0,52,0.5);
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 214, 235, 0.30);
+      color: #fff1f9;
     }
 
-    .bubbleName {
-      display: block;
-      font-size: 10px;
+    .bubble.nessa {
+      margin-left: auto;
+      background: rgba(255, 47, 146, 0.22);
+      border: 1px solid rgba(255, 95, 183, 0.45);
+      color: var(--soft);
+    }
+
+    .deathNotice {
+      border: 2px solid rgba(255, 77, 109, 0.78);
+      background:
+        radial-gradient(circle at center, rgba(255, 77, 109, 0.10), transparent 60%),
+        rgba(0, 0, 0, 0.46);
+      padding: 18px;
+      color: #ffd2d9;
+      line-height: 1.6;
+    }
+
+    .deathNotice h3 {
+      color: var(--white);
+      letter-spacing: 2px;
+      margin-top: 0;
+      text-shadow: 0 0 10px rgba(255, 77, 109, 0.85);
+    }
+
+    .memoryPrompt {
+      border: 2px solid rgba(255, 211, 106, 0.64);
+      background: rgba(255, 211, 106, 0.08);
+      color: #fff1c4;
+      padding: 18px;
+      line-height: 1.6;
+    }
+
+    .memoryPrompt a {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--black);
+      background: var(--gold);
+      text-decoration: none;
+      padding: 12px 16px;
+      font-weight: bold;
       letter-spacing: 1px;
-      font-weight: bold;
-      opacity: 0.72;
-      margin-bottom: 3px;
     }
 
-    .chatTime {
-      display: block;
-      font-size: 10px;
-      opacity: 0.68;
-      text-align: right;
-      margin-top: 5px;
-    }
-
-    .phoneInputFake {
-      background: #fff7fb;
-      border-top: 2px solid #ff89cf;
-      padding: 10px;
+    .dock {
+      margin-top: 14px;
       display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .fakeInput {
-      flex: 1;
-      background: white;
-      border: 2px solid #ff9ad7;
-      border-radius: 999px;
-      padding: 8px 12px;
-      color: rgba(90,0,52,0.55);
-      font-size: 12px;
-    }
-
-    .fakeSend {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: var(--hotpink);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-weight: bold;
-    }
-
-    .bottomDock {
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      z-index: 12;
-      border: 4px solid white;
-      border-radius: 28px;
-      background: rgba(255,247,251,0.66);
-      box-shadow:
-        0 0 24px rgba(255,20,147,0.42),
-        inset 0 0 18px rgba(255,255,255,0.52);
-      padding: 10px;
-      overflow-x: auto;
-      display: none;
-      backdrop-filter: blur(5px);
-    }
-
-    .dockInner {
-      display: flex;
-      gap: 12px;
-      min-width: max-content;
-      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      border: 1px solid rgba(255, 154, 213, 0.34);
+      background: rgba(0, 0, 0, 0.34);
+      padding: 12px;
     }
 
     .heartIconButton {
-      width: 94px;
-      border: none;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      font-family: "Courier New", monospace;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-      box-shadow: none;
-      text-shadow: none;
-      display: grid;
-      gap: 5px;
-      justify-items: center;
+      width: 98px;
+      min-height: 84px;
+      border: 1px solid rgba(255, 154, 213, 0.40);
+      background:
+        radial-gradient(circle at center, rgba(255, 95, 183, 0.18), rgba(0,0,0,0.28));
+      color: var(--soft);
       text-decoration: none;
+      font-family: "Courier New", monospace;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      padding: 8px;
+    }
+
+    button.heartIconButton {
+      appearance: none;
     }
 
     .heartIconButton:hover {
-      transform: translateY(-3px);
-      filter: none;
+      border-color: var(--white);
+      background:
+        radial-gradient(circle at center, rgba(255, 95, 183, 0.32), rgba(0,0,0,0.32));
+      transform: translateY(-2px);
     }
 
     .heartIcon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at 30% 25%, #ffffff, #ff9ad7 30%, #ff1493 72%);
-      border: 3px solid white;
-      box-shadow:
-        0 0 16px rgba(255,20,147,0.45),
-        inset 0 0 10px rgba(255,255,255,0.45);
-      font-size: 22px;
+      font-size: 28px;
       line-height: 1;
-      color: white;
-      text-shadow: 0 0 8px rgba(90,0,52,0.7);
-    }
-
-    .heartIconButton.active .heartIcon {
-      background:
-        radial-gradient(circle at 30% 25%, #ffffff, #c99cff 28%, #9b3cff 75%);
-      animation: activePulse 1s infinite;
-    }
-
-    @keyframes activePulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
+      color: var(--pink2);
+      text-shadow:
+        0 0 10px rgba(255, 47, 146, 0.9),
+        0 0 22px rgba(255, 47, 146, 0.42);
     }
 
     .heartLabel {
-      font-size: 10px;
-      line-height: 1.15;
-      color: #7a004a;
-      font-weight: bold;
-      width: 92px;
-      text-shadow: 0 0 8px rgba(255,255,255,0.7);
+      font-size: 11px;
+      line-height: 1.2;
     }
 
-    @media (max-width: 680px) {
-      body {
-        padding: 8px;
-      }
+    .backButton {
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      z-index: 11000;
+      color: var(--soft);
+      border: 1px solid rgba(255, 154, 213, 0.48);
+      background: rgba(0, 0, 0, 0.70);
+      text-decoration: none;
+      padding: 9px 12px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
 
-      .screen {
-        min-height: calc(100vh - 16px);
-        border-radius: 20px;
+    .backButton:hover {
+      border-color: var(--white);
+    }
+
+    @media (max-width: 850px) {
+      .privateArchive {
         padding: 10px;
       }
 
       .topBar {
-        flex-direction: column;
-        padding: 9px;
-        font-size: 10px;
+        grid-template-columns: 1fr;
+        text-align: center;
       }
 
-      h1 {
-        font-size: 24px;
-        letter-spacing: 1px;
+      .topSmall.right {
+        text-align: center;
       }
 
-      .loginScreen {
-        margin: 30px auto;
+      .photoFrame {
+        grid-template-columns: 1fr;
       }
 
-      .archiveScreen {
-        padding-bottom: 140px;
+      .archiveTitle {
+        font-size: 20px;
       }
 
-      .viewerBody {
-        min-height: 460px;
-      }
-
-      .emptyStage {
-        min-height: 460px;
-      }
-
-      .chatMessages {
-        height: 370px;
-      }
-
-      .screenSaverPhoto.s1 {
-        width: 280px;
-        height: 365px;
-      }
-
-      .screenSaverPhoto.s2 {
-        width: 190px;
-        height: 250px;
-      }
-
-      .screenSaverPhoto.s3 {
-        width: 150px;
-        height: 200px;
+      .heartIconButton {
+        width: 86px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="floatingHeart h1">♥</div>
-  <div class="floatingHeart h2">♥</div>
-  <div class="floatingHeart h3">♡</div>
-  <div class="floatingHeart h4">♥</div>
-  <div class="floatingHeart h5">♡</div>
-  <div class="floatingHeart h6">♥</div>
-  <div class="floatingHeart h7">♡</div>
 
-  <main class="screen">
-    <div class="jasonScreensaver" aria-hidden="true">
-      <img class="screenSaverPhoto s1" src="jason-krane.jpg" alt="">
-      <img class="screenSaverPhoto s2" src="jason-krane.jpg" alt="">
-      <img class="screenSaverPhoto s3" src="jason-krane.jpg" alt="">
+  <a class="backButton" href="terminal.html">← TERMINAL</a>
+
+  <div class="privateLoginOverlay" id="privateLoginOverlay">
+    <div class="privateLoginBox">
+      <div class="privateLoginLabel">PRIVATE DIRECTORY</div>
+
+      <h1>ARCHIVE LOCKED</h1>
+
+      <p>
+        This folder contains personal files belonging to Dr. Nessa Thorne.
+        A recovered private access password is required.
+      </p>
+
+      <label for="privatePassword">PRIVATE PASSWORD</label>
+      <input id="privatePassword" type="password" autocomplete="off" placeholder="enter private password">
+
+      <button onclick="checkPrivatePassword()">UNLOCK PRIVATE ARCHIVE</button>
+
+      <div class="privateLoginMessage" id="privateLoginMessage"></div>
+    </div>
+  </div>
+
+  <main id="privateArchive" class="privateArchive privateArchiveLocked">
+    <div class="jasonScreensaver">
+      <img src="jason-krane.jpg" class="floatingJason one" alt="">
+      <img src="jason-krane.jpg" class="floatingJason two" alt="">
+      <img src="jason-krane.jpg" class="floatingJason three" alt="">
     </div>
 
-    <div class="topBar">
-      <span>NESSA'S PRIVATE LOVE ARCHIVE</span>
-      <span>REAL LOVE // REAL DAMAGE</span>
-      <span>USER: DR. N. THORNE</span>
-    </div>
-
-    <section class="window loginScreen" id="loginScreen">
-      <div class="windowTitle">
-        <span>Private Folder</span>
-        <span>LOCKED WITH LOVE</span>
-      </div>
-
-      <div class="content">
-        <h1>PRIVATE</h1>
-        <h2>Personal archive locked</h2>
-
-        <p>
-          This directory is sealed behind my private recovery code.
-          The archive contains romantic material, operational evidence and emotional contamination.
-        </p>
-
-        <div class="loveStamp">
-          CLASSIFIED ROMANTIC MATERIAL
+    <section class="archiveShell">
+      <header class="topBar">
+        <div class="topSmall">
+          THORNE PRIVATE ARCHIVE<br>
+          LOCAL LOVE CACHE
         </div>
 
-        <div class="fragmentBox">
-          <div class="fragmentLine">
-            <span>Chemistry fragment</span>
-            <span class="fragmentValue" id="chemFragment">missing</span>
-          </div>
-
-          <div class="fragmentLine">
-            <span>Botany fragment</span>
-            <span class="fragmentValue" id="botanyFragment">missing</span>
-          </div>
+        <div class="archiveTitle">
+          PRIVATE FILES // JASON KRANE
         </div>
 
-        <label for="privatePassword">PRIVATE ACCESS CODE</label>
-        <input id="privatePassword" type="password" autocomplete="off" placeholder="enter private code">
+        <div class="topSmall right">
+          USER: DR. N. THORNE<br>
+          STATUS: RESTORED
+        </div>
+      </header>
 
-        <button onclick="unlockPrivate()">OPEN PRIVATE ARCHIVE</button>
-        <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
-
-        <div class="error" id="errorText"></div>
-      </div>
-    </section>
-
-    <section class="archiveScreen" id="archiveScreen">
       <section class="archiveLayout">
-        <section class="window viewer" id="viewerWindow">
-          <div class="windowTitle">
-            <span id="viewerTitle"></span>
-            <span id="viewerStatus"></span>
+        <div class="emptyStage" id="emptyStage">
+          <div>
+            <h2>SELECT A HEART FILE BELOW</h2>
+            <p>
+              Private material recovered from Nessa Thorne’s workstation.
+              Some files appear emotional. Some files appear staged.
+            </p>
           </div>
+        </div>
 
-          <div class="viewerBody" id="viewerBody"></div>
-        </section>
-
-        <section class="emptyStage" id="emptyStage">
-          SELECT A HEART FILE BELOW
-        </section>
+        <article class="viewer" id="viewer">
+          <h2 class="fileTitle" id="viewerTitle">File title</h2>
+          <div class="fileSub" id="viewerSub">file metadata</div>
+          <div id="viewerContent"></div>
+        </article>
       </section>
-    </section>
 
-    <nav class="bottomDock" id="bottomDock">
-      <div class="dockInner">
-        <button class="heartIconButton" onclick="openFile('photo', this)">
-          <span class="heartIcon">♡</span>
+      <nav class="dock">
+        <button class="heartIconButton" onclick="openFile('photo')">
+          <span class="heartIcon">♥</span>
           <span class="heartLabel">Jason Photo</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('secretChat', this)">
-          <span class="heartIcon">💬</span>
+        <button class="heartIconButton" onclick="openFile('chat')">
+          <span class="heartIcon">✉</span>
           <span class="heartLabel">Secret Chat</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('death', this)">
+        <button class="heartIconButton" onclick="openFile('death')">
           <span class="heartIcon">✚</span>
           <span class="heartLabel">Death Notice</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('grief', this)">
+        <button class="heartIconButton" onclick="openFile('note')">
           <span class="heartIcon">✎</span>
           <span class="heartLabel">Private Note</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('mq', this)">
-          <span class="heartIcon">M+Q</span>
+        <button class="heartIconButton" onclick="openFile('weddingNote')">
+          <span class="heartIcon">◆</span>
           <span class="heartLabel">M & Q Note</span>
         </button>
 
-        <button class="heartIconButton" onclick="openFile('mqPhoto', this)">
-          <span class="heartIcon">📷</span>
+        <button class="heartIconButton" onclick="openFile('wedding')">
+          <span class="heartIcon">⌁</span>
           <span class="heartLabel">Wedding Proof</span>
         </button>
 
-        <a href="memory.html" class="heartIconButton">
+        <button class="heartIconButton" onclick="openFile('memory')">
           <span class="heartIcon">★</span>
           <span class="heartLabel">Memory</span>
-        </a>
+        </button>
 
         <a href="terminal.html" class="heartIconButton">
           <span class="heartIcon">⌂</span>
           <span class="heartLabel">Terminal</span>
         </a>
-      </div>
-    </nav>
+      </nav>
+    </section>
   </main>
 
   <script>
     const privatePassword = "THORNENESSA";
-    let currentChatChapter = 0;
-
-    const chatChapters = [
-      {
-        title: "Chapter 1 // First Contact",
-        subtitle: "Encrypted chat // early relationship",
-        date: "14 October 2021",
-        messages: [
-          { speaker: "nessa", time: "22:13", text: "You stayed after the lecture." },
-          { speaker: "jason", time: "22:14", text: "You noticed." },
-          { speaker: "nessa", time: "22:15", text: "You made sure I would." },
-          { speaker: "jason", time: "22:17", text: "Maybe. You were the only person in the room who spoke about poison like it was alive." },
-          { speaker: "nessa", time: "22:19", text: "That should worry you." },
-          { speaker: "jason", time: "22:20", text: "It did. That is why I came back." },
-          { speaker: "nessa", time: "22:22", text: "You are trouble." },
-          { speaker: "jason", time: "22:23", text: "So are you. You just hide it under academic language." },
-          { speaker: "nessa", time: "22:26", text: "Careful, Mr. Krane." },
-          { speaker: "jason", time: "22:27", text: "Too late, Dr. Thorne." }
-        ]
-      },
-
-      {
-        title: "Chapter 2 // Real Love",
-        subtitle: "Encrypted chat // private relationship",
-        date: "3 February 2022",
-        messages: [
-          { speaker: "jason", time: "00:41", text: "I should not be here." },
-          { speaker: "nessa", time: "00:42", text: "But you are." },
-          { speaker: "jason", time: "00:44", text: "You make it difficult to leave." },
-          { speaker: "nessa", time: "00:45", text: "Good." },
-          { speaker: "jason", time: "00:46", text: "That is not safe for either of us." },
-          { speaker: "nessa", time: "00:48", text: "I am tired of safe." },
-          { speaker: "jason", time: "00:50", text: "Nessa." },
-          { speaker: "nessa", time: "00:51", text: "Say it again." },
-          { speaker: "jason", time: "00:52", text: "Nessa." },
-          { speaker: "nessa", time: "00:54", text: "That is the only honest thing you have said tonight." }
-        ]
-      },
-
-      {
-        title: "Chapter 3 // Baarn Water Operation",
-        subtitle: "Encrypted chat // operational planning",
-        date: "9 May 2023",
-        messages: [
-          { speaker: "jason", time: "01:02", text: "I need a compound that disperses in water without announcing itself." },
-          { speaker: "nessa", time: "01:04", text: "That is not a romantic opening." },
-          { speaker: "jason", time: "01:05", text: "I can be romantic after the problem is solved." },
-          { speaker: "nessa", time: "01:07", text: "Where?" },
-          { speaker: "jason", time: "01:09", text: "Baarn." },
-          { speaker: "nessa", time: "01:10", text: "Drinking water?" },
-          { speaker: "jason", time: "01:11", text: "A controlled scare. A signal. A message." },
-          { speaker: "nessa", time: "01:13", text: "Do not soften it for me. You mean poison." },
-          { speaker: "jason", time: "01:14", text: "I mean leverage." },
-          { speaker: "nessa", time: "01:17", text: "You always make cruelty sound strategic." },
-          { speaker: "jason", time: "01:19", text: "And you always understand me faster than anyone else." },
-          { speaker: "nessa", time: "01:21", text: "That does not make me good." },
-          { speaker: "jason", time: "01:22", text: "I never loved you because you were good." }
-        ]
-      },
-
-      {
-        title: "Chapter 4 // Partnership",
-        subtitle: "Encrypted chat // shared guilt",
-        date: "21 June 2023",
-        messages: [
-          { speaker: "nessa", time: "03:12", text: "You used my research." },
-          { speaker: "jason", time: "03:13", text: "I trusted your research." },
-          { speaker: "nessa", time: "03:14", text: "That is not the same thing." },
-          { speaker: "jason", time: "03:15", text: "No. But it is closer to love than anything I know." },
-          { speaker: "nessa", time: "03:17", text: "Did you love me?" },
-          { speaker: "jason", time: "03:19", text: "Yes." },
-          { speaker: "nessa", time: "03:20", text: "Did you know I would help?" },
-          { speaker: "jason", time: "03:21", text: "Yes." },
-          { speaker: "nessa", time: "03:24", text: "Then we are both guilty." },
-          { speaker: "jason", time: "03:25", text: "I never wanted you innocent." },
-          { speaker: "nessa", time: "03:27", text: "Good. I never wanted you harmless." },
-          { speaker: "jason", time: "03:28", text: "That is why this works." }
-        ]
-      },
-
-      {
-        title: "Chapter 5 // After Murder",
-        subtitle: "Recovered draft // Nessa alone",
-        date: "After 22 August 2025",
-        messages: [
-          { speaker: "nessa", time: "02:08", text: "They say you are dead." },
-          { speaker: "nessa", time: "02:09", text: "No. Not dead. Murdered." },
-          { speaker: "nessa", time: "02:10", text: "I know you were cruel." },
-          { speaker: "nessa", time: "02:11", text: "I know you would have poisoned Baarn if it served your message." },
-          { speaker: "nessa", time: "02:12", text: "I know I helped too much." },
-          { speaker: "nessa", time: "02:13", text: "But I also know what your voice sounded like in my kitchen at 03:00." },
-          { speaker: "nessa", time: "02:14", text: "So I kept it." },
-          { speaker: "nessa", time: "02:15", text: "Your messages. Your image. Your recordings." },
-          { speaker: "nessa", time: "02:16", text: "If they took you from the world, then I will make the world hear your echo." }
-        ]
-      }
-    ];
 
     const files = {
       photo: {
-        title: "jason_krane_photo.jpg",
-        status: "IMAGE",
-        type: "photo"
+        title: "JASON_PHOTO_ARCHIVE.JPG",
+        sub: "Recovered personal image // Nessa Thorne private directory",
+        html:
+`<div class="photoFrame">
+  <img src="jason-krane.jpg" alt="Jason Krane">
+  <div class="fileBox"><strong>PRIVATE CAPTION RECOVERED</strong>
+
+I kept this one because he almost looks harmless.
+
+That was always the trick with Jason.
+The smile first.
+The threat later.
+
+He made fear look elegant.
+He made poison sound like a theory.
+He made me believe the world deserved to be punished for not understanding him.
+
+I should have deleted this photo.
+I never did.
+
+- N.</div>
+</div>`
       },
 
-      secretChat: {
-        title: "secret_chat_chapters.log",
-        status: "CHAPTER CHAT",
-        type: "chapterChat"
+      chat: {
+        title: "SECRET_CHAT_EXPORT.LOG",
+        sub: "Recovered encrypted conversation fragments // 2021-2025",
+        html:
+`<div class="chatLog">
+
+  <div class="chatChapter">
+    <div class="chatDate">FIRST CONTACT // 14 October 2021</div>
+    <div class="bubble jason"><strong>Jason:</strong> You asked the only intelligent question in the room.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> You mean the question about plant-derived toxins?</div>
+    <div class="bubble jason"><strong>Jason:</strong> I mean the question about control.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> That is not the same thing.</div>
+    <div class="bubble jason"><strong>Jason:</strong> It always is.</div>
+  </div>
+
+  <div class="chatChapter">
+    <div class="chatDate">REAL LOVE // 3 February 2022</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> I know what people think you are.</div>
+    <div class="bubble jason"><strong>Jason:</strong> And?</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> I think they underestimate you.</div>
+    <div class="bubble jason"><strong>Jason:</strong> That is the first kind thing anyone has said to me all week.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> It was not kind. It was accurate.</div>
+  </div>
+
+  <div class="chatChapter">
+    <div class="chatDate">BAARN WATER OPERATION // 9 May 2023</div>
+    <div class="bubble jason"><strong>Jason:</strong> Baarn gives us a contained model.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> Water is too public. Too unpredictable.</div>
+    <div class="bubble jason"><strong>Jason:</strong> Fear is public too.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> Then use fear. Do not waste the chemistry.</div>
+    <div class="bubble jason"><strong>Jason:</strong> That is why I love you.</div>
+  </div>
+
+  <div class="chatChapter">
+    <div class="chatDate">PARTNERSHIP // 21 June 2023</div>
+    <div class="bubble jason"><strong>Jason:</strong> They will blame me if it fails.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> They already blame you for everything.</div>
+    <div class="bubble jason"><strong>Jason:</strong> And you?</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> I chose this with you.</div>
+    <div class="bubble jason"><strong>Jason:</strong> Say it again.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> I chose you. Even knowing what you are.</div>
+  </div>
+
+  <div class="chatChapter">
+    <div class="chatDate">AFTER MURDER // after 22 August 2025</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> Your voice is still here.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> Your face is still here.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> Your plans are still here.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> If they believe you are alive, then you are not gone.</div>
+    <div class="bubble nessa"><strong>Nessa:</strong> I can make them hear you again.</div>
+  </div>
+
+</div>`
       },
 
       death: {
-        title: "krane_death_notice.pdf.txt",
-        status: "DEATH RECORD",
-        type: "text",
-        body:
-`EXTRACTED NOTICE
+        title: "DEATH_NOTICE_KRANE_22-08-2025.TXT",
+        sub: "Recovered external record // classified import",
+        html:
+`<div class="deathNotice">
+  <h3>DEATH RECORD CONFIRMED</h3>
 
-Subject:
-Jason Krane
+  Subject: Jason Krane
 
-Status:
-Murdered
+  Date of death:
+  <strong>22 August 2025</strong>
 
-Reported date of death:
-22 August 2025
+  Status:
+  <strong>Deceased</strong>
 
-Location:
-Classified field operation, coastal sector
+  Note:
+  Any communication attributed to Jason Krane after this date should be treated as fabricated, reconstructed, staged or transmitted by another party.
 
-Cause:
-Homicide // details redacted
+  Analytical comment:
+  The later transmissions were not proof that Jason Krane survived.
 
-Notification classification:
-Restricted
-
-Personal effects recovered:
-- damaged field watch
-- encrypted message capsule
-- folded chemical note referencing water contamination
-- handwritten note containing the name "Nessa"
-
-Archive conflict:
-Recent transmissions claiming to originate from Jason Krane were created after this date.
-
-System conclusion:
-Jason Krane could not have personally sent the current messages.
-
-Secondary conclusion:
-Someone with access to his words, image, recordings and emotional history reconstructed him.`
+  They were proof that someone knew how to use him.
+</div>`
       },
 
-      grief: {
-        title: "nessa_private_note.txt",
-        status: "PERSONAL NOTE",
-        type: "text",
-        body:
-`I know what Jason was.
+      note: {
+        title: "NESSA_PRIVATE_NOTE.DOC",
+        sub: "Personal writing fragment // not intended for external review",
+        html:
+`<div class="fileBox"><strong>I did not bring Jason back.</strong>
 
-I need to write that plainly, because grief keeps trying to turn him into something softer.
+I know that.
 
-He was not soft.
-He was not innocent.
-Neither was I.
+I know what a body means.
+I know what a date means.
+I know what a death certificate means.
 
-Jason wanted Baarn frightened.
-He wanted the water touched.
-He wanted panic measured like a laboratory result.
+22 August 2025.
 
-I understood what he was asking.
-I understood what it meant.
-I still stayed.
+A clean line for everyone else.
+Before and after.
+Living and dead.
+Threat and memory.
 
-That is the ugliest part.
+But I also know what people believe when they are afraid.
 
-Not that he lied.
-Not that he used people.
-Not even that I helped him more than I should have.
+If they hear his voice, they obey.
+If they see his name, they panic.
+If they think Jason is alive, they stop asking who is really moving the pieces.
 
-The ugliest part is that I knew enough to stop and did not.
+He taught me that fear is a door.
 
-They took him from the world.
-They did not just take him.
-They murdered him.
+I only learned how to open it.
 
-The world became quieter.
-Safer, perhaps.
+The final access does not belong to his name anymore.
+It belongs to memory.
+The pattern is hidden in the game.
+The word from that memory will open the last environment.
 
-But I did not want safe.
-I wanted him.
-
-So I kept his voice.
-His face.
-His old words.
-His cruelty.
-His charm.
-
-Don't trust the map.
-Read what moves above it.
-Only the machine knows the route.
-Name the thing that carries the threat.
-Enter that name where commands are accepted.
-
-If Jason cannot return, then I will build an echo sharp enough to hurt them.
-
-He weaponised fear.
-I will weaponise memory.`
+- N.</div>`
       },
 
-      mq: {
-        title: "observation_m_and_q.txt",
-        status: "RESTRICTED NOTE",
-        type: "text",
-        body:
-`M and Q think nobody notices.
+      weddingNote: {
+        title: "M_Q_PRIVATE_NOTE.TXT",
+        sub: "Recovered note fragment // wedding reference",
+        html:
+`<div class="fileBox"><strong>M & Q</strong>
 
-They are wrong.
+The wedding photo should have been harmless.
 
-People who hide secrets professionally become arrogant about ordinary ones.
+Two smiling people.
+A room full of light.
+A normal day.
 
-Q repairs his glasses whenever M enters the room.
-M stops speaking two seconds before Q interrupts.
-Neither of them uses first names in public.
+Jason hated normal days.
+He said normal people leave the most useful evidence because they never believe they are part of the story.
 
-Jason once laughed at it.
+He was right.
 
-He said:
-"Those two think their glances are invisible. They are practically writing love letters across the room."
+The photo remained in the archive because it connected names, places and habits.
+Not everything important looks dangerous at first.
 
-I kept that line.
+I kept it because Jason noticed it.
+And because I noticed everything he noticed.
 
-Not because Jason was romantic.
-He was not.
-
-Because he noticed weaknesses faster than other people noticed weather.
-
-And because secrets are pressure points.
-
-Later I found the photograph.
-
-A ceremony.
-Two rings.
-One private archive.
-One foolish attempt to pretend that love leaves no evidence.
-
-It always leaves evidence.
-
-I kept the photograph because one day it might matter.`
+- N.</div>`
       },
 
-      mqPhoto: {
-        title: "m-q-wedding_photo.jpg",
-        status: "IMAGE EVIDENCE",
-        type: "mqPhoto"
+      wedding: {
+        title: "M_Q_WEDDING_PHOTO.JPG",
+        sub: "Recovered image // personal archive cross-reference",
+        html:
+`<div class="photoFrame">
+  <img src="m-q-wedding_photo.jpg" alt="M and Q wedding photo">
+  <div class="fileBox"><strong>IMAGE NOTE</strong>
+
+Recovered from private archive.
+
+Filename:
+m-q-wedding_photo.jpg
+
+The image appears to have been saved, copied and re-opened multiple times after Jason Krane's death.
+
+No direct threat detected in the image file.
+
+Metadata comment:
+Nessa kept returning to ordinary memories after reconstructing extraordinary ones.
+
+Possible reason:
+The final code is connected to memory, not command structure.</div>
+</div>`
+      },
+
+      memory: {
+        title: "MEMORY_PROTOCOL_LINK",
+        sub: "Recovered emotional lock // final code source",
+        html:
+`<div class="memoryPrompt">
+  <strong>MEMORY PROTOCOL AVAILABLE</strong>
+
+  The final environment no longer opens by naming the machine.
+
+  Nessa changed the lock after the backup disk woke the terminal.
+
+  The next access code must be recovered from memory.
+
+  Complete the memory protocol.
+  Recover the final word.
+  Return to the command terminal.
+  Type the recovered word.
+
+  <br>
+  <a href="memory.html">OPEN MEMORY PROTOCOL</a>
+</div>`
       }
     };
 
-    function normalizeCode(value) {
+    function normalizePrivatePassword(value) {
       return String(value)
+        .trim()
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
         .replaceAll("_", "")
-        .trim();
+        .replaceAll("/", "");
     }
 
-    function updateFragments() {
-      const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
-      const botanySolved = localStorage.getItem("botanicalSolved") === "yes";
+    function checkPrivatePassword() {
+      const input = document.getElementById("privatePassword");
+      const message = document.getElementById("privateLoginMessage");
+      const overlay = document.getElementById("privateLoginOverlay");
+      const archive = document.getElementById("privateArchive");
 
-      document.getElementById("chemFragment").textContent = chemistrySolved ? "THORNE" : "missing";
-      document.getElementById("botanyFragment").textContent = botanySolved ? "NESSA" : "missing";
-    }
+      const answer = normalizePrivatePassword(input.value);
 
-    function unlockPrivate() {
-      const value = normalizeCode(document.getElementById("privatePassword").value);
-      const errorText = document.getElementById("errorText");
+      if (answer === privatePassword) {
+        message.style.color = "#ffd6eb";
+        message.textContent = "ACCESS GRANTED // opening private archive...";
 
-      if (value === privatePassword) {
         localStorage.setItem("privateOpened", "yes");
-        showArchive();
+
+        setTimeout(function() {
+          overlay.style.display = "none";
+          archive.style.display = "block";
+        }, 650);
       } else {
-        errorText.textContent = "ACCESS DENIED // love hurts, but wrong passwords hurt more.";
+        message.style.color = "#ff4d6d";
+        message.textContent = "ACCESS DENIED // incorrect private password.";
       }
     }
 
-    function showArchive() {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("archiveScreen").style.display = "block";
-      document.getElementById("bottomDock").style.display = "block";
-      document.getElementById("viewerWindow").style.display = "none";
-      document.getElementById("emptyStage").style.display = "grid";
-      clearActiveIcons();
-    }
+    function openFile(type) {
+      const file = files[type];
 
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
-    }
-
-    function makePhotoHtml() {
-      return `
-        <div class="photoCard">
-          <img src="jason-krane.jpg" alt="Recovered photograph of Jason Krane">
-          <div class="photoCaption">
-            Recovered image reference:<br>
-            <strong>JASON KRANE</strong><br><br>
-            My note:<br>
-            "I kept this image running because I could not bear the silence after him."
-          </div>
-        </div>
-      `;
-    }
-
-    function makeMqPhotoHtml() {
-      return `
-        <div class="photoCard wedding">
-          <img src="m-q-wedding_photo.jpg" alt="Recovered wedding photograph of M and Q">
-          <div class="photoCaption">
-            Recovered image evidence:<br>
-            <strong>M + Q</strong><br><br>
-            My note:<br>
-            "They tried to hide the ceremony. They failed."<br><br>
-            I kept this because every secret becomes useful eventually.
-          </div>
-        </div>
-      `;
-    }
-
-    function makeChapterChatHtml() {
-      const chapter = chatChapters[currentChatChapter];
-
-      const messages = chapter.messages.map(function(msg) {
-        const speakerLabel = msg.speaker === "jason" ? "JASON" : "NESSA";
-
-        return `
-          <div class="bubble ${msg.speaker}">
-            <span class="bubbleName">${speakerLabel}</span>
-            ${escapeHtml(msg.text)}
-            <span class="chatTime">${escapeHtml(msg.time)}</span>
-          </div>
-        `;
-      }).join("");
-
-      return `
-        <div class="phoneShell">
-          <div class="phoneTop">
-            <div class="phoneContact">
-              <span class="phoneName">Jason Krane ♥ Nessa Thorne</span>
-              <span class="phoneSub">${escapeHtml(chapter.subtitle)} // ${escapeHtml(chapter.date)}</span>
-            </div>
-            <div class="phoneHeart">♥</div>
-          </div>
-
-          <div class="chapterControls">
-            <div class="chapterTitle">${escapeHtml(chapter.title)}</div>
-
-            <div class="chapterButtons">
-              <button class="chapterButton" onclick="previousChatChapter()">PREVIOUS</button>
-              <button class="chapterButton" onclick="nextChatChapter()">NEXT</button>
-            </div>
-          </div>
-
-          <div class="chatMessages">
-            ${messages}
-          </div>
-
-          <div class="phoneInputFake">
-            <div class="fakeInput">encrypted reply disabled...</div>
-            <div class="fakeSend">♥</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function previousChatChapter() {
-      currentChatChapter--;
-
-      if (currentChatChapter < 0) {
-        currentChatChapter = chatChapters.length - 1;
+      if (!file) {
+        return;
       }
-
-      openFile("secretChat");
-    }
-
-    function nextChatChapter() {
-      currentChatChapter++;
-
-      if (currentChatChapter >= chatChapters.length) {
-        currentChatChapter = 0;
-      }
-
-      openFile("secretChat");
-    }
-
-    function clearActiveIcons() {
-      const buttons = document.querySelectorAll(".heartIconButton");
-      buttons.forEach(function(btn) {
-        btn.classList.remove("active");
-      });
-    }
-
-    function openFile(key, button) {
-      const file = files[key];
 
       document.getElementById("emptyStage").style.display = "none";
-      document.getElementById("viewerWindow").style.display = "block";
+
+      const viewer = document.getElementById("viewer");
+      viewer.style.display = "block";
 
       document.getElementById("viewerTitle").textContent = file.title;
-      document.getElementById("viewerStatus").textContent = file.status;
+      document.getElementById("viewerSub").textContent = file.sub;
+      document.getElementById("viewerContent").innerHTML = file.html;
 
-      const viewerBody = document.getElementById("viewerBody");
-
-      if (file.type === "photo") {
-        viewerBody.innerHTML = makePhotoHtml();
-      } else if (file.type === "mqPhoto") {
-        viewerBody.innerHTML = makeMqPhotoHtml();
-      } else if (file.type === "chapterChat") {
-        viewerBody.innerHTML = makeChapterChatHtml();
-      } else {
-        viewerBody.innerHTML = escapeHtml(file.body);
-      }
-
-      clearActiveIcons();
-
-      if (button) {
-        button.classList.add("active");
-      } else {
-        const matchingButton = document.querySelector("[onclick*='" + key + "']");
-        if (matchingButton) {
-          matchingButton.classList.add("active");
-        }
-      }
+      viewer.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     }
 
     document.getElementById("privatePassword").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
-        unlockPrivate();
+        checkPrivatePassword();
       }
     });
 
-    updateFragments();
-
-    if (localStorage.getItem("privateOpened") === "yes") {
-      showArchive();
-    }
+    window.addEventListener("load", function() {
+      document.getElementById("privateLoginOverlay").style.display = "flex";
+      document.getElementById("privateArchive").style.display = "none";
+      document.getElementById("privatePassword").focus();
+    });
   </script>
+
 </body>
 </html>
