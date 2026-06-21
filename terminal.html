@@ -2135,16 +2135,25 @@ Moved to archive.`
         return;
       }
 
+    if (command === "goldeneye") {
+  appendCommandLine("> GOLDENEYE code accepted");
+  appendCommandLine("> final drone environment unlocked");
+  appendCommandLine("> opening external control interface...");
+
+  localStorage.setItem("goldeneyeEntered", "yes");
+
+  setTimeout(function() {
+    window.location.href = "drone.html";
+  }, 1200);
+
+  return;
+}
       if (command === "drone") {
-        appendCommandLine("> hidden command accepted");
-        appendCommandLine("> final environment unlocked");
-        appendCommandLine("> opening external control interface...");
-
-        setTimeout(function() {
-          window.location.href = "drone.html";
-        }, 1200);
-
-        return;
+  appendCommandLine("> command rejected");
+  appendCommandLine("> direct drone access disabled");
+  appendCommandLine("> final access requires recovered memory code");
+  return;
+}
       }
 
       if (command === "help") {
