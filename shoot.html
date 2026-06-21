@@ -1,302 +1,441 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Backup Disk // Top Down Protocol</title>
 
   <style>
+    :root {
+      --green: #00ff66;
+      --green2: #00aa44;
+      --yellow: #ffee66;
+      --red: #ff4444;
+      --cyan: #78fff0;
+      --dark: #020802;
+      --text: #baffc9;
+      --white: #eaffef;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      background: #050805;
-      color: #00ff66;
+      background:
+        radial-gradient(circle at center, rgba(0, 255, 102, 0.12), transparent 42%),
+        linear-gradient(180deg, #061106 0%, #000000 100%);
+      color: var(--green);
       font-family: "Courier New", monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-      overflow: auto;
+      padding: 16px;
+      overflow-x: hidden;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
+      pointer-events: none;
+      z-index: 50;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(0, 255, 100, 0.06),
-          rgba(0, 255, 100, 0.06) 1px,
+          rgba(255,255,255,0.035),
+          rgba(255,255,255,0.035) 1px,
           transparent 1px,
-          transparent 5px
+          transparent 4px
         );
-      pointer-events: none;
-      z-index: 1;
+      mix-blend-mode: screen;
     }
 
-    .terminal {
-      width: 100%;
-      max-width: 1120px;
-      background: #000900;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 35px rgba(0, 255, 100, 0.35);
-      padding: 24px;
-      box-sizing: border-box;
+    .shell {
       position: relative;
       z-index: 2;
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      border: 2px solid rgba(0,255,102,0.44);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.07), transparent 62%),
+        rgba(0,0,0,0.82);
+      box-shadow:
+        0 0 34px rgba(0,255,102,0.20),
+        inset 0 0 38px rgba(0,255,102,0.06);
+      padding: 14px;
+    }
+
+    .topBar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid rgba(0,255,102,0.34);
+      background: rgba(0,0,0,0.35);
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+
+    .topSmall {
+      color: #8dffb0;
+      font-size: 12px;
+      letter-spacing: 1px;
+      line-height: 1.35;
+    }
+
+    .topSmall.right {
+      text-align: right;
     }
 
     h1 {
-      margin: 0 0 10px 0;
-      text-align: center;
-      color: #00ff66;
+      margin: 0;
+      color: var(--white);
       font-size: 26px;
-      text-shadow: 0 0 8px rgba(0, 255, 100, 0.8);
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      text-align: center;
+      text-shadow:
+        0 0 12px rgba(0,255,102,0.85),
+        0 0 28px rgba(0,255,102,0.34);
     }
 
     .subtitle {
       text-align: center;
-      color: #8dffb0;
-      line-height: 1.6;
-      margin-bottom: 18px;
-      white-space: pre-line;
+      color: #aaffc3;
+      font-size: 13px;
+      margin: 0 0 14px;
+      line-height: 1.5;
     }
 
-    .layout {
+    .gameGrid {
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 20px;
+      grid-template-columns: 1fr 340px;
+      gap: 12px;
       align-items: start;
+    }
+
+    .canvasPanel,
+    .sidePanel {
+      border: 1px solid rgba(0,255,102,0.34);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.06), transparent 62%),
+        rgba(0,0,0,0.38);
+      padding: 10px;
+      box-shadow: inset 0 0 18px rgba(0,255,102,0.05);
     }
 
     canvas {
       width: 100%;
-      max-width: 640px;
-      background: #000;
-      border: 2px solid #00ff66;
-      box-shadow: inset 0 0 28px rgba(0, 255, 100, 0.14);
+      max-width: 768px;
+      aspect-ratio: 4 / 3;
       display: block;
       margin: 0 auto;
+      border: 2px solid rgba(0,255,102,0.55);
+      background: #001000;
       image-rendering: pixelated;
-    }
-
-    .panel {
-      background: rgba(0, 20, 0, 0.9);
-      border: 1px solid #00aa44;
-      padding: 16px;
-      box-sizing: border-box;
-      color: #baffc9;
-      min-height: 480px;
+      box-shadow:
+        0 0 20px rgba(0,255,102,0.20),
+        inset 0 0 20px rgba(0,0,0,0.70);
     }
 
     .panelTitle {
-      color: #00ff66;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--white);
+      font-size: 13px;
       font-weight: bold;
-      margin-bottom: 12px;
-      text-shadow: 0 0 6px rgba(0, 255, 100, 0.7);
-    }
-
-    .statBox {
-      margin-bottom: 12px;
-      padding: 10px;
-      border: 1px dashed #00aa44;
-      background: rgba(0, 40, 0, 0.35);
-      line-height: 1.7;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px 14px;
-      background: #003b16;
-      color: #00ff66;
-      border: 1px solid #00ff66;
-      font-family: "Courier New", monospace;
-      font-size: 14px;
-      cursor: pointer;
       letter-spacing: 1px;
-      margin-top: 10px;
+      border-bottom: 1px solid rgba(0,255,102,0.28);
+      padding-bottom: 7px;
+      margin-bottom: 10px;
     }
 
-    button:hover {
-      background: #005c22;
+    .panelTitle span:last-child {
+      color: var(--yellow);
     }
 
-    .controls {
-      margin-top: 18px;
-      line-height: 1.8;
+    .statGrid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 7px 10px;
+      border: 1px dashed rgba(0,255,102,0.24);
+      padding: 10px;
+      background: rgba(0,0,0,0.34);
+      color: var(--text);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .statGrid div:nth-child(even) {
+      color: var(--yellow);
+      text-align: right;
+    }
+
+    .message {
+      min-height: 54px;
+      border: 1px solid rgba(0,255,102,0.28);
+      background: rgba(0,0,0,0.32);
+      color: #aaffc3;
+      padding: 9px;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+
+    .instructions {
       color: #8dffb0;
-      font-size: 14px;
-    }
-
-    #message {
-      min-height: 24px;
-      margin-top: 14px;
-      color: #8dffb0;
+      font-size: 12px;
       line-height: 1.5;
+      border: 1px dashed rgba(255,238,102,0.28);
+      background: rgba(255,238,102,0.05);
+      padding: 10px;
+      margin-bottom: 10px;
     }
 
-    #gameOverBox {
-      display: none;
-      margin-top: 16px;
-      padding: 16px;
-      border: 1px solid #ff4444;
-      background: rgba(40, 0, 0, 0.92);
-      color: #ff9999;
-      line-height: 1.6;
-      box-shadow: 0 0 18px rgba(255, 0, 0, 0.35);
+    .instructions strong {
+      color: var(--yellow);
     }
 
-    #glitchStatus {
-      display: none;
-      margin-top: 16px;
-      color: #fff4a3;
+    .buttonRow {
+      display: grid;
+      gap: 8px;
+    }
+
+    button,
+    .backLink {
+      border: 1px solid rgba(0,255,102,0.55);
+      background: rgba(0,255,102,0.10);
+      color: var(--green);
+      padding: 10px 12px;
+      font-family: "Courier New", monospace;
       font-weight: bold;
-      animation: blinkStatus 0.3s infinite;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      display: block;
     }
 
-    @keyframes blinkStatus {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.35; }
+    button:hover,
+    .backLink:hover {
+      border-color: var(--white);
+      color: var(--white);
+      background: rgba(0,255,102,0.18);
     }
 
     #winBox {
       display: none;
-      margin-top: 16px;
+      margin-top: 12px;
+      border: 2px solid rgba(255,238,102,0.72);
+      background:
+        radial-gradient(circle at center, rgba(255,238,102,0.10), transparent 62%),
+        rgba(0,0,0,0.62);
+      color: var(--text);
       padding: 16px;
-      border: 1px solid #00ff66;
-      background: rgba(0, 35, 0, 0.95);
-      box-shadow: 0 0 18px rgba(0, 255, 100, 0.45);
-      line-height: 1.7;
-      color: #baffc9;
+      line-height: 1.55;
+      box-shadow:
+        0 0 24px rgba(255,238,102,0.20),
+        inset 0 0 22px rgba(255,238,102,0.06);
     }
 
-    .codeBox {
-      margin: 14px 0;
+    #winBox strong {
+      color: var(--yellow);
+    }
+
+    .letterPuzzle {
+      margin-top: 18px;
       padding: 14px;
-      border: 2px dashed #00ff66;
-      background: rgba(0, 255, 102, 0.08);
-      color: #ffee66;
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 5px;
-      text-shadow: 0 0 12px rgba(255, 238, 102, 0.75);
+      border: 1px dashed var(--yellow);
+      background: rgba(255, 238, 102, 0.06);
     }
 
-    .mobileControls {
-      display: none;
-      grid-template-columns: repeat(3, 72px);
+    .letterPuzzleTitle {
+      color: var(--yellow);
+      font-weight: bold;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .letterSlots {
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
-      justify-content: center;
-      margin-top: 16px;
+      margin: 12px 0;
     }
 
-    .mobileControls button {
-      width: 72px;
-      height: 52px;
-      margin-top: 0;
-      padding: 0;
-      font-size: 18px;
+    .letterTile {
+      width: 52px;
+      border: 1px solid var(--green);
+      background: #001900;
+      color: var(--yellow);
+      text-align: center;
+      padding: 8px 4px;
+      box-shadow: 0 0 10px rgba(0, 255, 100, 0.25);
     }
 
-    .shootWide {
-      grid-column: span 3;
-      width: 232px !important;
-    }
-
-    .backLink {
-      display: inline-block;
-      margin-top: 20px;
-      color: #00ff66;
-      text-decoration: none;
-      border-bottom: 1px solid #00ff66;
+    .letterTileLetter {
+      font-size: 25px;
       font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .letterTileControls {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .letterTileControls button {
+      width: 20px;
+      height: 22px;
+      padding: 0;
+      margin: 0;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .letterPuzzleButtons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .wordSolveMessage {
+      min-height: 22px;
+      margin-top: 12px;
+      color: #ff9999;
+      font-weight: bold;
+    }
+
+    .terminalHint {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border: 2px solid var(--green);
+      background: rgba(0, 255, 100, 0.08);
+      color: var(--text);
+      text-align: center;
+      box-shadow: 0 0 18px rgba(0, 255, 100, 0.35);
+    }
+
+    .terminalHint span {
+      color: var(--yellow);
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 3px;
     }
 
     .glitchOverlay {
       display: none;
       position: fixed;
       inset: 0;
-      z-index: 99;
+      z-index: 5000;
       pointer-events: none;
       background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(255,255,255,0.04),
-          rgba(255,255,255,0.04) 2px,
-          transparent 2px,
-          transparent 8px
-        ),
+        radial-gradient(circle at center, rgba(0,255,102,0.26), transparent 45%),
         repeating-linear-gradient(
           0deg,
-          rgba(255,220,0,0.08),
-          rgba(255,220,0,0.08) 3px,
-          transparent 3px,
-          transparent 11px
+          rgba(255, 0, 70, 0.15),
+          rgba(255, 0, 70, 0.15) 2px,
+          transparent 2px,
+          transparent 8px
         );
-      animation: glitchFlash 0.13s infinite;
+      animation: glitchPulse 0.1s infinite;
     }
 
     .glitchOverlay::before {
-      content: "WAKE CODE RECOVERED";
+      content: "BACKUP LETTERS RECOVERED";
       position: absolute;
-      top: 50%;
       left: 50%;
+      top: 50%;
       transform: translate(-50%, -50%);
-      color: #fff4a3;
-      background: rgba(10,20,0,0.92);
-      border: 2px solid #ffee66;
-      padding: 18px 24px;
+      color: var(--white);
+      font-size: clamp(28px, 6vw, 78px);
       text-align: center;
-      letter-spacing: 2px;
-      font-size: 26px;
-      text-shadow: 0 0 10px rgba(255,230,120,0.8);
-      box-shadow: 0 0 24px rgba(255,230,120,0.35);
-      animation: textSkew 0.18s infinite;
+      letter-spacing: 4px;
+      text-shadow:
+        3px 0 var(--red),
+        -3px 0 var(--cyan),
+        0 0 28px rgba(0,255,102,0.9);
     }
 
-    @keyframes glitchFlash {
-      0% { opacity: 0.35; filter: hue-rotate(0deg); }
-      50% { opacity: 0.8; filter: hue-rotate(40deg); }
-      100% { opacity: 0.45; filter: hue-rotate(0deg); }
+    @keyframes glitchPulse {
+      0% { opacity: 0.82; transform: translate(0, 0); }
+      25% { opacity: 1; transform: translate(-3px, 2px); }
+      50% { opacity: 0.76; transform: translate(3px, -2px); }
+      75% { opacity: 1; transform: translate(-2px, -1px); }
+      100% { opacity: 0.82; transform: translate(0, 0); }
     }
 
-    @keyframes textSkew {
-      0% { transform: translate(-50%, -50%) skewX(0deg); }
-      25% { transform: translate(-49.5%, -50.2%) skewX(3deg); }
-      50% { transform: translate(-50.5%, -49.7%) skewX(-4deg); }
-      75% { transform: translate(-50.1%, -50.3%) skewX(2deg); }
-      100% { transform: translate(-50%, -50%) skewX(0deg); }
+    #glitchStatus {
+      display: none;
+      margin-top: 10px;
+      color: var(--yellow);
+      border: 1px solid rgba(255,238,102,0.42);
+      background: rgba(255,238,102,0.07);
+      padding: 9px;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
-    @media (max-width: 900px) {
-      .layout {
+    .mobileControls {
+      display: none;
+      grid-template-columns: repeat(3, 56px);
+      gap: 7px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .mobileControls button {
+      height: 48px;
+      padding: 0;
+    }
+
+    .mobileControls .wide {
+      grid-column: span 3;
+      width: 100%;
+    }
+
+    @media (max-width: 1040px) {
+      .gameGrid {
         grid-template-columns: 1fr;
       }
 
-      .panel {
-        min-height: auto;
+      .sidePanel {
+        max-width: 768px;
+        margin: 0 auto;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 8px;
+      }
+
+      .shell {
+        padding: 9px;
+      }
+
+      .topBar {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .topSmall.right {
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 20px;
       }
 
       .mobileControls {
         display: grid;
       }
-    }
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 21px;
-      }
-
-      .terminal {
-        padding: 18px;
-      }
-
-      .glitchOverlay::before {
-        font-size: 18px;
-        width: 86%;
+      .letterTile {
+        width: 45px;
       }
     }
   </style>
@@ -306,51 +445,42 @@
 
   <div class="glitchOverlay" id="glitchOverlay"></div>
 
-  <main class="terminal">
-    <h1>BACKUP DISK // TOP-DOWN RANGE</h1>
+  <main class="shell">
+    <header class="topBar">
+      <div class="topSmall">
+        BACKUP DISK<br>
+        RECOVERED SIMULATION
+      </div>
 
-    <div class="subtitle">Top-down laboratory simulation recovered from the external backup disk.
-Find the key in another room.
-Open the weapon chest in the specimen vault.
-Only then can you fire bio-darts.
-Collect all hidden letters and defeat all M/Q security dummies.</div>
+      <h1>BACKUP DISK // TOP-DOWN RANGE</h1>
 
-    <div class="layout">
-      <section>
-        <canvas id="game" width="640" height="480"></canvas>
+      <div class="topSmall right">
+        STATUS: ACTIVE<br>
+        WORD BUFFER: DAMAGED
+      </div>
+    </header>
+
+    <p class="subtitle">
+      Top-down laboratory simulation recovered from the external backup disk.
+      Clear the rooms, recover the letters, then rebuild the terminal wake code.
+    </p>
+
+    <section class="gameGrid">
+      <section class="canvasPanel">
+        <canvas id="gameCanvas" width="768" height="576"></canvas>
 
         <div class="mobileControls">
-          <button onclick="pressMove('up')">▲</button>
-          <button onclick="shoot()">✹</button>
-          <button onclick="pressMove('down')">▼</button>
-          <button onclick="pressMove('left')">◀</button>
-          <button onclick="pressMove('right')">▶</button>
-          <button class="shootWide" onclick="shoot()">FIRE</button>
-        </div>
-      </section>
+          <div></div>
+          <button onpointerdown="pressMobile('up')" onpointerup="releaseMobile('up')" onpointerleave="releaseMobile('up')">▲</button>
+          <div></div>
 
-      <aside class="panel">
-        <div class="panelTitle">BACKUP STATUS</div>
+          <button onpointerdown="pressMobile('left')" onpointerup="releaseMobile('left')" onpointerleave="releaseMobile('left')">◀</button>
+          <button onpointerdown="shoot()" >FIRE</button>
+          <button onpointerdown="pressMobile('right')" onpointerup="releaseMobile('right')" onpointerleave="releaseMobile('right')">▶</button>
 
-        <div class="statBox">
-          ROOM: <span id="roomName">CENTRAL LAB</span><br>
-          STATUS: <span id="status">ACTIVE</span><br>
-          KEY: <span id="keyStatus">NO</span><br>
-          WEAPON: <span id="weaponStatus">NO</span><br>
-          ENEMIES LEFT: <span id="enemiesLeft">0</span><br>
-          LETTERS: <span id="lettersFound">0</span> / 8<br>
-          CODE: <span id="wordProgress">________</span>
-        </div>
-
-        <button onclick="startGame()">START / RESTART LAB</button>
-        <button onclick="shoot()">FIRE BIO-DART</button>
-
-        <div id="message">Simulation standby.</div>
-
-        <div id="gameOverBox">
-          <strong>SIMULATION FAILED</strong><br><br>
-          You were hit by enemy fire.<br>
-          Restart the lab to try again.
+          <div></div>
+          <button onpointerdown="pressMobile('down')" onpointerup="releaseMobile('down')" onpointerleave="releaseMobile('down')">▼</button>
+          <div></div>
         </div>
 
         <div id="glitchStatus">
@@ -361,102 +491,147 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
           <strong>BACKUP SIMULATION COMPLETE</strong><br><br>
 
           Weapon recovered.<br>
-          All rooms cleared.<br>
+          All hostile rooms cleared.<br>
           All letters recovered.<br><br>
 
-          RECOVERED TERMINAL WAKE CODE:
+          The recovered letters are unstable.<br>
+          Slide them into the correct order to rebuild the terminal wake code.
 
-          <div class="codeBox">ECHOSEED</div>
+          <div class="letterPuzzle">
+            <div class="letterPuzzleTitle">RECOVERED LETTER BUFFER</div>
 
-          Return to the workstation.<br>
-          Type this code into the Command Terminal.
+            <div class="letterSlots" id="letterSlots"></div>
+
+            <div class="letterPuzzleButtons">
+              <button onclick="shuffleRecoveredLetters()">SCRAMBLE AGAIN</button>
+              <button onclick="checkRecoveredWord()">CHECK WORD</button>
+            </div>
+
+            <div class="wordSolveMessage" id="wordSolveMessage"></div>
+
+            <div class="terminalHint" id="terminalHint">
+              WORD ACCEPTED:<br>
+              <span>ECHOSEED</span><br><br>
+              Return to the workstation.<br>
+              Type this word into the Command Terminal.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidePanel">
+        <div class="panelTitle">
+          <span>Backup status</span>
+          <span>LIVE</span>
         </div>
 
-        <div class="controls">
-          CONTROLS:<br>
-          W / ↑ = move up<br>
-          S / ↓ = move down<br>
-          A / ← = move left<br>
-          D / → = move right<br>
-          SPACE = fire bio-dart<br><br>
-          First find the key in WEST LAB.<br>
-          Then open the chest in SPECIMEN VAULT.<br>
-          Red shots from M/Q are fatal.
+        <div class="statGrid">
+          <div>Current room</div>
+          <div id="roomName">CENTRAL LAB</div>
+
+          <div>Health</div>
+          <div id="healthStat">100</div>
+
+          <div>Weapon</div>
+          <div id="weaponStat">NO</div>
+
+          <div>Letters</div>
+          <div id="letterStat">0 / 8</div>
+
+          <div>Enemies left</div>
+          <div id="enemyStat">0</div>
+
+          <div>Code</div>
+          <div id="codeStat">LOCKED</div>
         </div>
 
-        <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+        <div class="message" id="message">
+          Move through the rooms. Find the weapon first. Enemies cannot leave their rooms.
+        </div>
+
+        <div class="instructions">
+          <strong>Controls</strong><br>
+          Move: WASD or arrow keys<br>
+          Shoot: Space<br><br>
+
+          <strong>Mission</strong><br>
+          Pick up the weapon.<br>
+          Collect all letter fragments.<br>
+          Clear all hostile rooms.<br>
+          Rebuild the final word after the simulation ends.
+        </div>
+
+        <div class="buttonRow">
+          <button onclick="startGame()">RESTART BACKUP SIMULATION</button>
+          <a class="backLink" href="terminal.html">RETURN TO DATA TERMINAL</a>
+        </div>
       </aside>
-    </div>
+    </section>
   </main>
 
   <script>
-    const canvas = document.getElementById("game");
+    const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const roomNameEl = document.getElementById("roomName");
-    const statusEl = document.getElementById("status");
-    const keyStatusEl = document.getElementById("keyStatus");
-    const weaponStatusEl = document.getElementById("weaponStatus");
-    const enemiesLeftEl = document.getElementById("enemiesLeft");
-    const lettersFoundEl = document.getElementById("lettersFound");
-    const wordProgressEl = document.getElementById("wordProgress");
-    const messageEl = document.getElementById("message");
-    const gameOverBoxEl = document.getElementById("gameOverBox");
-    const glitchStatusEl = document.getElementById("glitchStatus");
-    const winBoxEl = document.getElementById("winBox");
-    const glitchOverlayEl = document.getElementById("glitchOverlay");
-
     const TILE = 32;
-    const COLS = 20;
-    const ROWS = 15;
-
-    const playerSize = 22;
-    const enemySize = 24;
-    const projectileSize = 8;
+    const ROOM_COLS = 24;
+    const ROOM_ROWS = 18;
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
 
     const targetWord = "ECHOSEED";
-    const glitchDuration = 4200;
+    const glitchDuration = 3200;
 
-    let player;
-    let currentRoom;
+    const roomNameEl = document.getElementById("roomName");
+    const healthStatEl = document.getElementById("healthStat");
+    const weaponStatEl = document.getElementById("weaponStat");
+    const letterStatEl = document.getElementById("letterStat");
+    const enemyStatEl = document.getElementById("enemyStat");
+    const codeStatEl = document.getElementById("codeStat");
+    const messageEl = document.getElementById("message");
+    const winBoxEl = document.getElementById("winBox");
+    const glitchOverlayEl = document.getElementById("glitchOverlay");
+    const glitchStatusEl = document.getElementById("glitchStatus");
+
     let keys = {};
-    let projectiles = [];
-    let enemyProjectiles = [];
-    let animationId = null;
     let gameRunning = false;
-    let collectedLetters = [];
-    let frameCount = 0;
-
-    let hasKey = false;
     let hasWeapon = false;
+    let collectedLetters = [];
+    let bullets = [];
+    let totalEnemyCount = 0;
+    let recoveredLetterPuzzle = ["E", "D", "O", "S", "E", "E", "C", "H"];
 
-    const keyItem = {
-      room: "1,0",
-      x: 3,
-      y: 10,
-      collected: false
+    const player = {
+      room: "1,1",
+      x: WIDTH / 2,
+      y: HEIGHT / 2,
+      size: 22,
+      speed: 3.2,
+      health: 100,
+      direction: "right",
+      status: "ACTIVE"
     };
 
-    const weaponChest = {
-      room: "0,2",
-      x: 16,
-      y: 11,
-      opened: false
-    };
+    const baseRooms = {
+      "0,0": {
+        name: "SEALED STORAGE",
+        doors: { right: "0,1", down: "1,0" },
+        letter: null,
+        weapon: null,
+        blocks: [[7,5],[8,5],[9,5],[15,9],[16,9],[17,9]],
+        enemies: [
+          { x: 13, y: 8, vx: 1.2, vy: 0.8 }
+        ]
+      },
 
-    const rooms = {
       "0,1": {
         name: "GREENHOUSE A",
-        doors: { down: "1,1", right: "0,2" },
+        doors: { left: "0,0", right: "0,2", down: "1,1" },
         letter: { value: "E", x: 10, y: 7 },
+        weapon: null,
+        blocks: [[4,4],[5,4],[18,4],[19,4],[12,11],[13,11]],
         enemies: [
-          { x: 5, y: 5, label: "M" },
-          { x: 15, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [4, 3], [5, 3], [6, 3],
-          [13, 4], [14, 4],
-          [9, 10], [10, 10], [11, 10]
+          { x: 17, y: 12, vx: -1.1, vy: 0.9 }
         ]
       },
 
@@ -464,28 +639,21 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         name: "SPECIMEN VAULT",
         doors: { left: "0,1", down: "1,2" },
         letter: { value: "C", x: 14, y: 4 },
+        weapon: null,
+        blocks: [[5,8],[6,8],[7,8],[16,12],[17,12]],
         enemies: [
-          { x: 7, y: 8, label: "Q" }
-        ],
-        blocks: [
-          [3, 5], [4, 5], [5, 5],
-          [10, 3], [10, 4], [10, 5],
-          [15, 9], [16, 9]
+          { x: 9, y: 11, vx: 1.3, vy: -0.9 }
         ]
       },
 
       "1,0": {
         name: "WEST LAB",
-        doors: { right: "1,1", down: "2,0" },
+        doors: { up: "0,0", right: "1,1", down: "2,0" },
         letter: { value: "H", x: 5, y: 10 },
+        weapon: null,
+        blocks: [[11,5],[11,6],[11,7],[17,10],[18,10]],
         enemies: [
-          { x: 13, y: 5, label: "M" }
-        ],
-        blocks: [
-          [7, 4], [8, 4], [9, 4],
-          [7, 5],
-          [4, 9], [5, 9],
-          [14, 11], [15, 11]
+          { x: 16, y: 6, vx: -1.4, vy: 1.0 }
         ]
       },
 
@@ -493,29 +661,22 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         name: "CENTRAL LAB",
         doors: { up: "0,1", right: "1,2", down: "2,1", left: "1,0" },
         letter: { value: "O", x: 15, y: 7 },
+        weapon: { x: 8, y: 8 },
+        blocks: [[4,4],[5,4],[18,4],[19,4],[4,13],[5,13],[18,13],[19,13]],
         enemies: [
-          { x: 4, y: 4, label: "Q" },
-          { x: 16, y: 11, label: "M" }
-        ],
-        blocks: [
-          [8, 6], [9, 6], [10, 6], [11, 6],
-          [8, 8], [9, 8], [10, 8], [11, 8],
-          [5, 11], [14, 3]
+          { x: 17, y: 9, vx: 1.2, vy: 1.1 },
+          { x: 11, y: 13, vx: -1.1, vy: 1.0 }
         ]
       },
 
       "1,2": {
         name: "SERVER GARDEN",
-        doors: { up: "0,2", down: "2,2", left: "1,1" },
+        doors: { up: "0,2", left: "1,1", down: "2,2" },
         letter: { value: "S", x: 6, y: 6 },
+        weapon: null,
+        blocks: [[12,3],[12,4],[12,5],[12,12],[12,13],[12,14]],
         enemies: [
-          { x: 15, y: 5, label: "Q" },
-          { x: 14, y: 11, label: "M" }
-        ],
-        blocks: [
-          [5, 3], [5, 4], [5, 5],
-          [10, 7], [11, 7], [12, 7],
-          [16, 10], [16, 11]
+          { x: 17, y: 11, vx: -1.2, vy: -1.2 }
         ]
       },
 
@@ -523,13 +684,10 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         name: "VENOM STORAGE",
         doors: { up: "1,0", right: "2,1" },
         letter: { value: "E", x: 13, y: 9 },
+        weapon: null,
+        blocks: [[7,6],[8,6],[9,6],[10,6],[16,11],[17,11]],
         enemies: [
-          { x: 5, y: 5, label: "M" }
-        ],
-        blocks: [
-          [6, 8], [7, 8], [8, 8],
-          [12, 3], [13, 3],
-          [15, 11], [16, 11]
+          { x: 6, y: 12, vx: 1.4, vy: -0.8 }
         ]
       },
 
@@ -537,13 +695,10 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         name: "ROOT ARCHIVE",
         doors: { up: "1,1", left: "2,0", right: "2,2" },
         letter: { value: "E", x: 10, y: 11 },
+        weapon: null,
+        blocks: [[6,3],[6,4],[6,5],[16,8],[17,8],[18,8]],
         enemies: [
-          { x: 4, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [3, 4], [4, 4], [5, 4],
-          [10, 5], [10, 6], [10, 7],
-          [14, 9], [15, 9]
+          { x: 18, y: 5, vx: -1.1, vy: 1.3 }
         ]
       },
 
@@ -551,158 +706,139 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         name: "FINAL CONSERVATORY",
         doors: { up: "1,2", left: "2,1" },
         letter: { value: "D", x: 15, y: 5 },
+        weapon: null,
+        blocks: [[5,12],[6,12],[7,12],[14,8],[15,8],[16,8]],
         enemies: [
-          { x: 5, y: 5, label: "M" },
-          { x: 10, y: 10, label: "Q" }
-        ],
-        blocks: [
-          [7, 3], [8, 3], [9, 3],
-          [12, 6], [12, 7], [12, 8],
-          [4, 11], [5, 11], [6, 11]
+          { x: 7, y: 6, vx: 1.3, vy: 1.0 },
+          { x: 18, y: 12, vx: -1.2, vy: -1.1 }
         ]
       }
     };
 
+    let rooms = {};
+
+    function cloneRooms() {
+      const cloned = {};
+
+      Object.keys(baseRooms).forEach(function(key) {
+        const room = baseRooms[key];
+
+        cloned[key] = {
+          name: room.name,
+          doors: Object.assign({}, room.doors),
+          letter: room.letter ? Object.assign({}, room.letter) : null,
+          weapon: room.weapon ? Object.assign({}, room.weapon) : null,
+          blocks: room.blocks.map(function(block) {
+            return [block[0], block[1]];
+          }),
+          enemies: room.enemies.map(function(enemy, index) {
+            return {
+              id: key + "-" + index,
+              x: enemy.x,
+              y: enemy.y,
+              px: enemy.x * TILE + TILE / 2,
+              py: enemy.y * TILE + TILE / 2,
+              vx: enemy.vx,
+              vy: enemy.vy,
+              size: 22,
+              alive: true
+            };
+          })
+        };
+      });
+
+      return cloned;
+    }
+
     function startGame() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-
-      currentRoom = "1,1";
+      rooms = cloneRooms();
+      keys = {};
+      bullets = [];
       collectedLetters = [];
-      projectiles = [];
-      enemyProjectiles = [];
-      frameCount = 0;
-      gameRunning = true;
-
-      hasKey = false;
       hasWeapon = false;
-      keyItem.collected = false;
-      weaponChest.opened = false;
+      gameRunning = true;
+      totalEnemyCount = countEnemies();
+
+      player.room = "1,1";
+      player.x = WIDTH / 2;
+      player.y = HEIGHT / 2;
+      player.health = 100;
+      player.direction = "right";
+      player.status = "ACTIVE";
+
+      winBoxEl.style.display = "none";
+      glitchOverlayEl.style.display = "none";
+      glitchStatusEl.style.display = "none";
+
+      document.getElementById("terminalHint").style.display = "none";
+      document.getElementById("wordSolveMessage").textContent = "";
+
+      messageEl.textContent = "Backup simulation restarted. Find the weapon first.";
+
+      updateStats();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function countEnemies() {
+      let count = 0;
 
       Object.keys(rooms).forEach(function(key) {
-        const room = rooms[key];
-
-        room.letter.collected = false;
-
-        room.enemies.forEach(function(enemy) {
-          enemy.alive = true;
-          enemy.px = enemy.x * TILE + TILE / 2;
-          enemy.py = enemy.y * TILE + TILE / 2;
-          enemy.vx = Math.random() < 0.5 ? 1 : -1;
-          enemy.vy = Math.random() < 0.5 ? 1 : -1;
-          enemy.walkFrame = 0;
-          enemy.shootCooldown = 90 + Math.floor(Math.random() * 100);
+        rooms[key].enemies.forEach(function(enemy) {
+          if (enemy.alive) {
+            count++;
+          }
         });
       });
 
-      player = {
-        x: 3 * TILE + TILE / 2,
-        y: 7 * TILE + TILE / 2,
-        dx: 1,
-        dy: 0,
-        status: "ACTIVE",
-        hurtTimer: 0,
-        walkFrame: 0,
-        moving: false
-      };
-
-      glitchOverlayEl.style.display = "none";
-      glitchStatusEl.style.display = "none";
-      winBoxEl.style.display = "none";
-      gameOverBoxEl.style.display = "none";
-
-      messageEl.textContent = "Find the key in WEST LAB. Then open the chest in SPECIMEN VAULT.";
-      updateHud();
-
-      animationId = requestAnimationFrame(gameLoop);
+      return count;
     }
 
-    function gameLoop() {
-      if (!gameRunning) {
-        drawGame();
-        return;
-      }
-
-      frameCount++;
-
-      updatePlayer();
-      updateEnemies();
-      updateProjectiles();
-      updateEnemyProjectiles();
-      checkKeyPickup();
-      checkChestOpen();
-      checkLetterPickup();
-      checkWinCondition();
-      drawGame();
-      updateHud();
-
-      animationId = requestAnimationFrame(gameLoop);
+    function currentRoom() {
+      return rooms[player.room];
     }
 
-    function updatePlayer() {
-      let moveX = 0;
-      let moveY = 0;
-      const speed = 2.4;
-
-      player.moving = false;
-
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) {
-        moveY -= speed;
-        player.dx = 0;
-        player.dy = -1;
-        player.moving = true;
-      }
-
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) {
-        moveY += speed;
-        player.dx = 0;
-        player.dy = 1;
-        player.moving = true;
-      }
-
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-        moveX -= speed;
-        player.dx = -1;
-        player.dy = 0;
-        player.moving = true;
-      }
-
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-        moveX += speed;
-        player.dx = 1;
-        player.dy = 0;
-        player.moving = true;
-      }
-
-      moveEntity(player, moveX, 0, playerSize);
-      moveEntity(player, 0, moveY, playerSize);
-
-      if (player.moving) {
-        player.walkFrame++;
-      }
-
-      handleRoomTransition();
-
-      if (player.hurtTimer > 0) {
-        player.hurtTimer--;
-      }
+    function roomHasDoor(direction) {
+      return Boolean(currentRoom().doors[direction]);
     }
 
-    function moveEntity(entity, dx, dy, size) {
-      const newX = entity.x + dx;
-      const newY = entity.y + dy;
+    function isDoorArea(px, py) {
+      const doorWidth = TILE * 3;
 
-      if (!collidesWithWalls(newX, entity.y, size)) {
-        entity.x = newX;
-      }
+      const centerX = WIDTH / 2;
+      const centerY = HEIGHT / 2;
 
-      if (!collidesWithWalls(entity.x, newY, size)) {
-        entity.y = newY;
-      }
+      const onTopDoor =
+        py < TILE &&
+        Math.abs(px - centerX) < doorWidth / 2 &&
+        roomHasDoor("up");
+
+      const onBottomDoor =
+        py > HEIGHT - TILE &&
+        Math.abs(px - centerX) < doorWidth / 2 &&
+        roomHasDoor("down");
+
+      const onLeftDoor =
+        px < TILE &&
+        Math.abs(py - centerY) < doorWidth / 2 &&
+        roomHasDoor("left");
+
+      const onRightDoor =
+        px > WIDTH - TILE &&
+        Math.abs(py - centerY) < doorWidth / 2 &&
+        roomHasDoor("right");
+
+      return onTopDoor || onBottomDoor || onLeftDoor || onRightDoor;
     }
 
-    function collidesWithWalls(x, y, size) {
+    function isBlock(tileX, tileY) {
+      const room = currentRoom();
+
+      return room.blocks.some(function(block) {
+        return block[0] === tileX && block[1] === tileY;
+      });
+    }
+
+    function collidesWithWalls(x, y, size, allowDoors = true) {
       const half = size / 2;
 
       const points = [
@@ -717,19 +853,19 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         const py = points[i][1];
 
         if (px < TILE) {
-          if (!isDoorArea(px, py)) return true;
+          if (!allowDoors || !isDoorArea(px, py)) return true;
         }
 
-        if (px > canvas.width - TILE) {
-          if (!isDoorArea(px, py)) return true;
+        if (px > WIDTH - TILE) {
+          if (!allowDoors || !isDoorArea(px, py)) return true;
         }
 
         if (py < TILE) {
-          if (!isDoorArea(px, py)) return true;
+          if (!allowDoors || !isDoorArea(px, py)) return true;
         }
 
-        if (py > canvas.height - TILE) {
-          if (!isDoorArea(px, py)) return true;
+        if (py > HEIGHT - TILE) {
+          if (!allowDoors || !isDoorArea(px, py)) return true;
         }
 
         const tileX = Math.floor(px / TILE);
@@ -743,346 +879,214 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       return false;
     }
 
-    function isDoorArea(x, y) {
-      const room = rooms[currentRoom];
-      const doorMin = 8 * TILE;
-      const doorMax = 12 * TILE;
-
-      if (y < TILE && x >= doorMin && x <= doorMax && room.doors.up) {
-        return true;
-      }
-
-      if (y > canvas.height - TILE && x >= doorMin && x <= doorMax && room.doors.down) {
-        return true;
-      }
-
-      if (x < TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.left) {
-        return true;
-      }
-
-      if (x > canvas.width - TILE && y >= 6 * TILE && y <= 9 * TILE && room.doors.right) {
-        return true;
-      }
-
-      return false;
-    }
-
-    function isBlock(tileX, tileY) {
-      const room = rooms[currentRoom];
-
-      return room.blocks.some(function(block) {
-        return block[0] === tileX && block[1] === tileY;
-      });
-    }
-
-    function handleRoomTransition() {
-      const room = rooms[currentRoom];
+    function handleDoorTransition() {
+      const room = currentRoom();
 
       if (player.y < 0 && room.doors.up) {
-        currentRoom = room.doors.up;
-        player.y = canvas.height - TILE * 2;
-        player.x = canvas.width / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+        player.room = room.doors.up;
+        player.y = HEIGHT - TILE * 2;
+        player.x = WIDTH / 2;
+        bullets = [];
+        messageEl.textContent = "Entered " + currentRoom().name + ".";
       }
 
-      if (player.y > canvas.height && room.doors.down) {
-        currentRoom = room.doors.down;
+      if (player.y > HEIGHT && room.doors.down) {
+        player.room = room.doors.down;
         player.y = TILE * 2;
-        player.x = canvas.width / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+        player.x = WIDTH / 2;
+        bullets = [];
+        messageEl.textContent = "Entered " + currentRoom().name + ".";
       }
 
       if (player.x < 0 && room.doors.left) {
-        currentRoom = room.doors.left;
-        player.x = canvas.width - TILE * 2;
-        player.y = canvas.height / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+        player.room = room.doors.left;
+        player.x = WIDTH - TILE * 2;
+        player.y = HEIGHT / 2;
+        bullets = [];
+        messageEl.textContent = "Entered " + currentRoom().name + ".";
       }
 
-      if (player.x > canvas.width && room.doors.right) {
-        currentRoom = room.doors.right;
+      if (player.x > WIDTH && room.doors.right) {
+        player.room = room.doors.right;
         player.x = TILE * 2;
-        player.y = canvas.height / 2;
-        projectiles = [];
-        enemyProjectiles = [];
-        messageEl.textContent = "Entered " + rooms[currentRoom].name + ".";
+        player.y = HEIGHT / 2;
+        bullets = [];
+        messageEl.textContent = "Entered " + currentRoom().name + ".";
       }
     }
 
+    function updatePlayer() {
+      let dx = 0;
+      let dy = 0;
+
+      if (keys.ArrowUp || keys.KeyW) {
+        dy -= player.speed;
+        player.direction = "up";
+      }
+
+      if (keys.ArrowDown || keys.KeyS) {
+        dy += player.speed;
+        player.direction = "down";
+      }
+
+      if (keys.ArrowLeft || keys.KeyA) {
+        dx -= player.speed;
+        player.direction = "left";
+      }
+
+      if (keys.ArrowRight || keys.KeyD) {
+        dx += player.speed;
+        player.direction = "right";
+      }
+
+      const nextX = player.x + dx;
+      const nextY = player.y + dy;
+
+      if (!collidesWithWalls(nextX, player.y, player.size, true)) {
+        player.x = nextX;
+      }
+
+      if (!collidesWithWalls(player.x, nextY, player.size, true)) {
+        player.y = nextY;
+      }
+
+      handleDoorTransition();
+    }
+
     function updateEnemies() {
-      const room = rooms[currentRoom];
+      const room = currentRoom();
+      const enemySize = 22;
 
       room.enemies.forEach(function(enemy) {
         if (!enemy.alive) {
           return;
         }
 
-        enemy.walkFrame++;
-        enemy.shootCooldown--;
+        const nextX = enemy.px + enemy.vx;
+        const nextY = enemy.py + enemy.vy;
 
-        const dxToPlayer = player.x - enemy.px;
-        const dyToPlayer = player.y - enemy.py;
-        const distance = Math.sqrt(dxToPlayer * dxToPlayer + dyToPlayer * dyToPlayer);
-
-        if (distance < 180 && distance > 0) {
-          enemy.vx = dxToPlayer / distance;
-          enemy.vy = dyToPlayer / distance;
-        }
-
-        const speed = enemy.label === "Q" ? 1.25 : 1.0;
-
-        const nextX = enemy.px + enemy.vx * speed;
-        const nextY = enemy.py + enemy.vy * speed;
-
-        if (!collidesWithWalls(nextX, enemy.py, enemySize)) {
+        if (!collidesWithWalls(nextX, enemy.py, enemySize, false)) {
           enemy.px = nextX;
         } else {
           enemy.vx *= -1;
         }
 
-        if (!collidesWithWalls(enemy.px, nextY, enemySize)) {
+        if (!collidesWithWalls(enemy.px, nextY, enemySize, false)) {
           enemy.py = nextY;
         } else {
           enemy.vy *= -1;
         }
 
-        if (hasWeapon && distance < 260 && enemy.shootCooldown <= 0) {
-          enemyShoot(enemy, dxToPlayer, dyToPlayer, distance);
-          enemy.shootCooldown = enemy.label === "Q"
-            ? 70 + Math.floor(Math.random() * 50)
-            : 95 + Math.floor(Math.random() * 70);
-        }
+        const dist = distance(player.x, player.y, enemy.px, enemy.py);
 
-        if (distance < 26) {
-          loseGame("You were caught by " + enemy.label + " security dummy.");
+        if (dist < 26) {
+          player.health -= 0.45;
+          messageEl.textContent = "Enemy contact detected. Health dropping.";
+
+          if (player.health <= 0) {
+            player.health = 0;
+            gameOver();
+          }
         }
       });
     }
 
-    function enemyShoot(enemy, dxToPlayer, dyToPlayer, distance) {
-      if (distance <= 0) {
-        return;
-      }
-
-      enemyProjectiles.push({
-        x: enemy.px,
-        y: enemy.py,
-        dx: dxToPlayer / distance,
-        dy: dyToPlayer / distance,
-        speed: enemy.label === "Q" ? 3.3 : 2.8,
-        life: 95,
-        label: enemy.label
+    function updateBullets() {
+      bullets.forEach(function(bullet) {
+        bullet.x += bullet.vx;
+        bullet.y += bullet.vy;
+        bullet.life--;
       });
-    }
 
-    function updateProjectiles() {
-      for (let i = projectiles.length - 1; i >= 0; i--) {
-        const projectile = projectiles[i];
+      bullets = bullets.filter(function(bullet) {
+        return bullet.life > 0 &&
+          bullet.x > 0 &&
+          bullet.x < WIDTH &&
+          bullet.y > 0 &&
+          bullet.y < HEIGHT;
+      });
 
-        projectile.x += projectile.dx * projectile.speed;
-        projectile.y += projectile.dy * projectile.speed;
-        projectile.life--;
+      const room = currentRoom();
 
-        const tileX = Math.floor(projectile.x / TILE);
-        const tileY = Math.floor(projectile.y / TILE);
-
-        if (
-          projectile.life <= 0 ||
-          projectile.x < 0 ||
-          projectile.x > canvas.width ||
-          projectile.y < 0 ||
-          projectile.y > canvas.height ||
-          isBlock(tileX, tileY)
-        ) {
-          projectiles.splice(i, 1);
-          continue;
-        }
-
-        const room = rooms[currentRoom];
-
-        for (let j = 0; j < room.enemies.length; j++) {
-          const enemy = room.enemies[j];
-
+      bullets.forEach(function(bullet) {
+        room.enemies.forEach(function(enemy) {
           if (!enemy.alive) {
-            continue;
+            return;
           }
 
-          const dx = projectile.x - enemy.px;
-          const dy = projectile.y - enemy.py;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 22) {
+          if (distance(bullet.x, bullet.y, enemy.px, enemy.py) < 18) {
             enemy.alive = false;
-            projectiles.splice(i, 1);
-            messageEl.textContent = enemy.label + " security dummy disabled.";
-            break;
+            bullet.life = 0;
+            totalEnemyCount = countEnemies();
+            messageEl.textContent = "Hostile target neutralized.";
           }
-        }
-      }
+        });
+      });
     }
 
-    function updateEnemyProjectiles() {
-      for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
-        const projectile = enemyProjectiles[i];
+    function collectItems() {
+      const room = currentRoom();
 
-        projectile.x += projectile.dx * projectile.speed;
-        projectile.y += projectile.dy * projectile.speed;
-        projectile.life--;
+      if (room.weapon) {
+        const wx = room.weapon.x * TILE + TILE / 2;
+        const wy = room.weapon.y * TILE + TILE / 2;
 
-        const tileX = Math.floor(projectile.x / TILE);
-        const tileY = Math.floor(projectile.y / TILE);
-
-        if (
-          projectile.life <= 0 ||
-          projectile.x < 0 ||
-          projectile.x > canvas.width ||
-          projectile.y < 0 ||
-          projectile.y > canvas.height ||
-          isBlock(tileX, tileY)
-        ) {
-          enemyProjectiles.splice(i, 1);
-          continue;
+        if (distance(player.x, player.y, wx, wy) < 26) {
+          hasWeapon = true;
+          room.weapon = null;
+          messageEl.textContent = "Weapon recovered. Spacebar now fires.";
         }
+      }
 
-        const dx = projectile.x - player.x;
-        const dy = projectile.y - player.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+      if (room.letter) {
+        const lx = room.letter.x * TILE + TILE / 2;
+        const ly = room.letter.y * TILE + TILE / 2;
 
-        if (distance < 17) {
-          loseGame("You were hit by " + projectile.label + " enemy fire.");
-          return;
+        if (distance(player.x, player.y, lx, ly) < 26) {
+          collectedLetters.push(room.letter.value);
+          messageEl.textContent = "Letter recovered: " + room.letter.value;
+          room.letter = null;
         }
       }
     }
 
     function shoot() {
-      if (!gameRunning) {
+      if (!gameRunning || !hasWeapon) {
+        messageEl.textContent = "Weapon not recovered yet.";
         return;
       }
 
-      if (!hasWeapon) {
-        messageEl.textContent = "NO WEAPON // Find the key in WEST LAB and open the chest in SPECIMEN VAULT.";
-        return;
-      }
+      let vx = 0;
+      let vy = 0;
 
-      projectiles.push({
-        x: player.x + player.dx * 16,
-        y: player.y + player.dy * 16,
-        dx: player.dx,
-        dy: player.dy,
-        speed: 6,
-        life: 55
+      if (player.direction === "up") vy = -7;
+      if (player.direction === "down") vy = 7;
+      if (player.direction === "left") vx = -7;
+      if (player.direction === "right") vx = 7;
+
+      bullets.push({
+        x: player.x,
+        y: player.y,
+        vx: vx,
+        vy: vy,
+        life: 60
       });
-    }
-
-    function checkKeyPickup() {
-      if (keyItem.collected || currentRoom !== keyItem.room) {
-        return;
-      }
-
-      const kx = keyItem.x * TILE + TILE / 2;
-      const ky = keyItem.y * TILE + TILE / 2;
-      const dx = player.x - kx;
-      const dy = player.y - ky;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 28) {
-        keyItem.collected = true;
-        hasKey = true;
-        messageEl.textContent = "KEY RECOVERED // Travel to SPECIMEN VAULT and open the chest.";
-      }
-    }
-
-    function checkChestOpen() {
-      if (weaponChest.opened || currentRoom !== weaponChest.room) {
-        return;
-      }
-
-      const cx = weaponChest.x * TILE + TILE / 2;
-      const cy = weaponChest.y * TILE + TILE / 2;
-      const dx = player.x - cx;
-      const dy = player.y - cy;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 32) {
-        if (!hasKey) {
-          messageEl.textContent = "CHEST LOCKED // Key required from WEST LAB.";
-          return;
-        }
-
-        weaponChest.opened = true;
-        hasWeapon = true;
-        messageEl.textContent = "CHEST OPENED // BIO-DART WEAPON ACQUIRED.";
-      }
-    }
-
-    function checkLetterPickup() {
-      const room = rooms[currentRoom];
-      const letter = room.letter;
-
-      if (letter.collected) {
-        return;
-      }
-
-      const lx = letter.x * TILE + TILE / 2;
-      const ly = letter.y * TILE + TILE / 2;
-      const dx = player.x - lx;
-      const dy = player.y - ly;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 28) {
-        letter.collected = true;
-        collectedLetters.push(letter.value);
-        messageEl.textContent = "Letter recovered: " + letter.value;
-      }
     }
 
     function checkWinCondition() {
-      const allLettersCollected = collectedLetters.length >= targetWord.length;
-      const enemiesLeft = countEnemiesLeft();
-
-      if (allLettersCollected && enemiesLeft === 0 && hasWeapon) {
+      if (
+        gameRunning &&
+        hasWeapon &&
+        collectedLetters.length >= targetWord.length &&
+        countEnemies() === 0
+      ) {
         winGame();
       }
-    }
-
-    function countEnemiesLeft() {
-      let count = 0;
-
-      Object.keys(rooms).forEach(function(key) {
-        rooms[key].enemies.forEach(function(enemy) {
-          if (enemy.alive) {
-            count++;
-          }
-        });
-      });
-
-      return count;
-    }
-
-    function loseGame(reason) {
-      gameRunning = false;
-      player.status = "FAILED";
-      messageEl.textContent = reason;
-      gameOverBoxEl.style.display = "block";
-      enemyProjectiles = [];
-      projectiles = [];
-      updateHud();
     }
 
     function winGame() {
       gameRunning = false;
       player.status = "CLEARED";
-
-      localStorage.setItem("shootSolved", "yes");
-      localStorage.setItem("backupWakeCode", "ECHOSEED");
-
       glitchStatusEl.style.display = "block";
       glitchOverlayEl.style.display = "block";
 
@@ -1090,72 +1094,113 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         glitchOverlayEl.style.display = "none";
         winBoxEl.style.display = "block";
         winBoxEl.scrollIntoView({ behavior: "smooth" });
-        messageEl.textContent = "Wake code recovered: ECHOSEED.";
+
+        messageEl.textContent = "Recovered letters are unstable. Rebuild the terminal wake code.";
+
+        recoveredLetterPuzzle = ["E", "D", "O", "S", "E", "E", "C", "H"];
+        renderRecoveredLetters();
       }, glitchDuration);
     }
 
-    function drawGame() {
-      drawRoom();
-      drawLetters();
-      drawKey();
-      drawChest();
-      drawEnemies();
-      drawProjectiles();
-      drawEnemyProjectiles();
-      drawPlayer();
-      drawHudOnCanvas();
+    function gameOver() {
+      gameRunning = false;
+      player.status = "FAILED";
+      messageEl.textContent = "Simulation failed. Restart the backup disk.";
+    }
+
+    function updateStats() {
+      roomNameEl.textContent = currentRoom().name;
+      healthStatEl.textContent = Math.ceil(player.health);
+      weaponStatEl.textContent = hasWeapon ? "YES" : "NO";
+      letterStatEl.textContent = collectedLetters.length + " / " + targetWord.length;
+      enemyStatEl.textContent = countEnemies();
+      codeStatEl.textContent = player.status === "CLEARED" ? "BUFFER" : "LOCKED";
     }
 
     function drawRoom() {
-      const room = rooms[currentRoom];
+      const room = currentRoom();
+
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
       ctx.fillStyle = "#001100";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          ctx.fillStyle = (x + y) % 2 === 0 ? "#001600" : "#001000";
-          ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+      ctx.strokeStyle = "rgba(0,255,102,0.12)";
+      ctx.lineWidth = 1;
 
-          ctx.strokeStyle = "rgba(0,255,100,0.05)";
-          ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
-        }
+      for (let x = 0; x <= WIDTH; x += TILE) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, HEIGHT);
+        ctx.stroke();
       }
 
-      drawWallsAndDoors(room);
+      for (let y = 0; y <= HEIGHT; y += TILE) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(WIDTH, y);
+        ctx.stroke();
+      }
+
+      drawWalls();
+      drawDoors();
       drawBlocks(room);
-      drawLabDetails();
+      drawItems(room);
+      drawEnemies(room);
+      drawBullets();
+      drawPlayer();
+      drawRoomLabel(room);
     }
 
-    function drawWallsAndDoors(room) {
-      ctx.fillStyle = "#005522";
+    function drawWalls() {
+      ctx.fillStyle = "#063b18";
 
-      ctx.fillRect(0, 0, canvas.width, TILE);
-      ctx.fillRect(0, canvas.height - TILE, canvas.width, TILE);
-      ctx.fillRect(0, 0, TILE, canvas.height);
-      ctx.fillRect(canvas.width - TILE, 0, TILE, canvas.height);
+      ctx.fillRect(0, 0, WIDTH, TILE);
+      ctx.fillRect(0, HEIGHT - TILE, WIDTH, TILE);
+      ctx.fillRect(0, 0, TILE, HEIGHT);
+      ctx.fillRect(WIDTH - TILE, 0, TILE, HEIGHT);
+    }
 
-      ctx.fillStyle = "#000000";
+    function drawDoors() {
+      const room = currentRoom();
+      const doorSize = TILE * 3;
+
+      ctx.fillStyle = "#001100";
 
       if (room.doors.up) {
-        ctx.fillRect(8 * TILE, 0, 4 * TILE, TILE);
+        ctx.fillRect(WIDTH / 2 - doorSize / 2, 0, doorSize, TILE);
       }
 
       if (room.doors.down) {
-        ctx.fillRect(8 * TILE, canvas.height - TILE, 4 * TILE, TILE);
+        ctx.fillRect(WIDTH / 2 - doorSize / 2, HEIGHT - TILE, doorSize, TILE);
       }
 
       if (room.doors.left) {
-        ctx.fillRect(0, 6 * TILE, TILE, 3 * TILE);
+        ctx.fillRect(0, HEIGHT / 2 - doorSize / 2, TILE, doorSize);
       }
 
       if (room.doors.right) {
-        ctx.fillRect(canvas.width - TILE, 6 * TILE, TILE, 3 * TILE);
+        ctx.fillRect(WIDTH - TILE, HEIGHT / 2 - doorSize / 2, TILE, doorSize);
       }
 
-      ctx.strokeStyle = "#00ff66";
+      ctx.strokeStyle = varColor("yellow");
       ctx.lineWidth = 2;
-      ctx.strokeRect(TILE, TILE, canvas.width - TILE * 2, canvas.height - TILE * 2);
+
+      if (room.doors.up) {
+        ctx.strokeRect(WIDTH / 2 - doorSize / 2, 0, doorSize, TILE);
+      }
+
+      if (room.doors.down) {
+        ctx.strokeRect(WIDTH / 2 - doorSize / 2, HEIGHT - TILE, doorSize, TILE);
+      }
+
+      if (room.doors.left) {
+        ctx.strokeRect(0, HEIGHT / 2 - doorSize / 2, TILE, doorSize);
+      }
+
+      if (room.doors.right) {
+        ctx.strokeRect(WIDTH - TILE, HEIGHT / 2 - doorSize / 2, TILE, doorSize);
+      }
     }
 
     function drawBlocks(room) {
@@ -1163,387 +1208,255 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
         const x = block[0] * TILE;
         const y = block[1] * TILE;
 
-        ctx.fillStyle = "#003b16";
+        ctx.fillStyle = "#0b5e27";
         ctx.fillRect(x, y, TILE, TILE);
 
-        ctx.strokeStyle = "#00aa44";
+        ctx.strokeStyle = "rgba(186,255,201,0.45)";
         ctx.strokeRect(x + 2, y + 2, TILE - 4, TILE - 4);
-
-        ctx.fillStyle = "rgba(0,255,100,0.15)";
-        ctx.fillRect(x + 6, y + 6, TILE - 12, 6);
       });
     }
 
-    function drawLabDetails() {
-      ctx.fillStyle = "#00240d";
-      ctx.fillRect(2 * TILE, 2 * TILE, 22, 22);
-      ctx.fillRect(17 * TILE, 12 * TILE, 22, 22);
+    function drawItems(room) {
+      if (room.weapon) {
+        const x = room.weapon.x * TILE + TILE / 2;
+        const y = room.weapon.y * TILE + TILE / 2;
 
-      ctx.strokeStyle = "#00aa44";
-      ctx.strokeRect(2 * TILE, 2 * TILE, 22, 22);
-      ctx.strokeRect(17 * TILE, 12 * TILE, 22, 22);
+        ctx.fillStyle = varColor("cyan");
+        ctx.fillRect(x - 13, y - 5, 26, 10);
 
-      ctx.fillStyle = "#66ff99";
-      ctx.fillRect(2 * TILE + 7, 2 * TILE + 6, 8, 10);
-      ctx.fillRect(17 * TILE + 7, 12 * TILE + 6, 8, 10);
-    }
+        ctx.fillStyle = varColor("yellow");
+        ctx.fillRect(x + 4, y - 10, 8, 20);
 
-    function drawLetters() {
-      const room = rooms[currentRoom];
-      const letter = room.letter;
-
-      if (letter.collected) {
-        return;
+        ctx.font = "12px Courier New";
+        ctx.fillStyle = varColor("white");
+        ctx.fillText("WEAPON", x - 24, y - 18);
       }
 
-      const x = letter.x * TILE + TILE / 2;
-      const y = letter.y * TILE + TILE / 2;
+      if (room.letter) {
+        const x = room.letter.x * TILE + TILE / 2;
+        const y = room.letter.y * TILE + TILE / 2;
 
-      ctx.fillStyle = "#ffee66";
-      ctx.beginPath();
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = "rgba(255,238,102,0.12)";
+        ctx.fillRect(x - 18, y - 18, 36, 36);
 
-      ctx.strokeStyle = "#000000";
-      ctx.stroke();
+        ctx.strokeStyle = varColor("yellow");
+        ctx.strokeRect(x - 18, y - 18, 36, 36);
 
-      ctx.fillStyle = "#000000";
-      ctx.font = "bold 20px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(letter.value, x, y + 1);
+        ctx.font = "bold 25px Courier New";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = varColor("yellow");
+        ctx.fillText(room.letter.value, x, y + 1);
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
+      }
     }
 
-    function drawKey() {
-      if (keyItem.collected || currentRoom !== keyItem.room) {
-        return;
-      }
-
-      const x = keyItem.x * TILE + TILE / 2;
-      const y = keyItem.y * TILE + TILE / 2;
-
-      ctx.fillStyle = "#ffee66";
-      ctx.fillRect(x - 4, y - 12, 8, 24);
-      ctx.fillRect(x - 4, y + 6, 18, 6);
-
-      ctx.strokeStyle = "#000000";
-      ctx.strokeRect(x - 4, y - 12, 8, 24);
-      ctx.strokeRect(x - 4, y + 6, 18, 6);
-
-      ctx.beginPath();
-      ctx.arc(x, y - 16, 8, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.fillStyle = "#ffee66";
-      ctx.font = "bold 12px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText("KEY", x, y + 28);
-    }
-
-    function drawChest() {
-      if (currentRoom !== weaponChest.room) {
-        return;
-      }
-
-      const x = weaponChest.x * TILE;
-      const y = weaponChest.y * TILE;
-
-      if (weaponChest.opened) {
-        ctx.fillStyle = "#3b2500";
-        ctx.fillRect(x + 4, y + 14, TILE - 8, TILE - 10);
-
-        ctx.fillStyle = "#111111";
-        ctx.fillRect(x + 6, y + 6, TILE - 12, 10);
-
-        ctx.strokeStyle = "#ffee66";
-        ctx.strokeRect(x + 4, y + 14, TILE - 8, TILE - 10);
-
-        ctx.fillStyle = "#66ff99";
-        ctx.fillRect(x + 13, y + 18, 6, 10);
-        ctx.fillRect(x + 18, y + 15, 10, 6);
-      } else {
-        ctx.fillStyle = "#5c3500";
-        ctx.fillRect(x + 4, y + 9, TILE - 8, TILE - 8);
-
-        ctx.fillStyle = "#8a5200";
-        ctx.fillRect(x + 4, y + 4, TILE - 8, 11);
-
-        ctx.strokeStyle = "#ffee66";
-        ctx.strokeRect(x + 4, y + 9, TILE - 8, TILE - 8);
-        ctx.strokeRect(x + 4, y + 4, TILE - 8, 11);
-
-        ctx.fillStyle = "#ffee66";
-        ctx.fillRect(x + 14, y + 15, 6, 8);
-      }
-
-      ctx.fillStyle = "#ffee66";
-      ctx.font = "bold 12px Courier New";
-      ctx.textAlign = "center";
-      ctx.fillText(weaponChest.opened ? "OPEN" : "CHEST", x + TILE / 2, y + TILE + 12);
-    }
-
-    function drawEnemies() {
-      const room = rooms[currentRoom];
-
+    function drawEnemies(room) {
       room.enemies.forEach(function(enemy) {
         if (!enemy.alive) {
           return;
         }
 
-        drawSecurityDummy(enemy);
+        ctx.fillStyle = varColor("red");
+        ctx.beginPath();
+        ctx.arc(enemy.px, enemy.py, 13, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#ffb0b0";
+        ctx.stroke();
+
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(enemy.px - 6, enemy.py - 4, 4, 4);
+        ctx.fillRect(enemy.px + 2, enemy.py - 4, 4, 4);
       });
     }
 
-    function drawSecurityDummy(enemy) {
-      const x = enemy.px;
-      const y = enemy.py;
-      const walk = Math.sin(enemy.walkFrame * 0.25) * 2;
-
-      ctx.save();
-      ctx.translate(x, y);
-
-      ctx.fillStyle = "rgba(0,0,0,0.45)";
-      ctx.fillRect(-14, 15, 28, 7);
-
-      ctx.fillStyle = "#080808";
-      ctx.fillRect(-10, 4 + walk, 7, 13);
-      ctx.fillRect(3, 4 - walk, 7, 13);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.strokeRect(-10, 4 + walk, 7, 13);
-      ctx.strokeRect(3, 4 - walk, 7, 13);
-
-      ctx.fillStyle = "#111111";
-      ctx.fillRect(-13, -13, 26, 24);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-13, -13, 26, 24);
-
-      ctx.fillStyle = "#050505";
-      ctx.fillRect(-9, -27, 18, 15);
-
-      ctx.strokeStyle = "#ffeeee";
-      ctx.strokeRect(-9, -27, 18, 15);
-
-      ctx.fillStyle = "#ff5555";
-      ctx.fillRect(-6, -22, 12, 4);
-
-      ctx.fillStyle = "#0b0b0b";
-      ctx.fillRect(-18, -9, 5, 17);
-      ctx.fillRect(13, -9, 5, 17);
-
-      ctx.strokeStyle = "#ff5555";
-      ctx.strokeRect(-18, -9, 5, 17);
-      ctx.strokeRect(13, -9, 5, 17);
-
-      ctx.fillStyle = "#300000";
-      ctx.fillRect(-8, -7, 16, 14);
-
-      ctx.fillStyle = "#ff5555";
-      ctx.font = "bold 14px Courier New";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(enemy.label, 0, 1);
-
-      ctx.restore();
-    }
-
-    function drawProjectiles() {
-      projectiles.forEach(function(projectile) {
-        ctx.fillStyle = "#66ff99";
+    function drawBullets() {
+      bullets.forEach(function(bullet) {
+        ctx.fillStyle = varColor("yellow");
         ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = "#baffc9";
-        ctx.stroke();
-      });
-    }
-
-    function drawEnemyProjectiles() {
-      enemyProjectiles.forEach(function(projectile) {
-        ctx.fillStyle = "#ff3333";
-        ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.strokeStyle = "#ff9999";
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(255,0,0,0.25)";
-        ctx.beginPath();
-        ctx.arc(projectile.x, projectile.y, projectileSize, 0, Math.PI * 2);
+        ctx.arc(bullet.x, bullet.y, 4, 0, Math.PI * 2);
         ctx.fill();
       });
     }
 
     function drawPlayer() {
-      const walk = player.moving ? Math.sin(player.walkFrame * 0.25) * 2 : 0;
+      ctx.fillStyle = varColor("cyan");
+      ctx.fillRect(player.x - 11, player.y - 11, 22, 22);
 
-      ctx.save();
-      ctx.translate(player.x, player.y);
+      ctx.strokeStyle = varColor("white");
+      ctx.strokeRect(player.x - 11, player.y - 11, 22, 22);
 
-      if (player.hurtTimer > 0 || player.status === "FAILED") {
-        ctx.globalAlpha = 0.45;
+      ctx.fillStyle = varColor("white");
+
+      if (player.direction === "up") {
+        ctx.fillRect(player.x - 3, player.y - 17, 6, 8);
       }
 
-      ctx.fillStyle = "rgba(0,0,0,0.45)";
-      ctx.fillRect(-13, 15, 26, 7);
-
-      ctx.fillStyle = "#001f0b";
-      ctx.fillRect(-9, 4 + walk, 7, 13);
-      ctx.fillRect(2, 4 - walk, 7, 13);
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.strokeRect(-9, 4 + walk, 7, 13);
-      ctx.strokeRect(2, 4 - walk, 7, 13);
-
-      ctx.fillStyle = "#003b16";
-      ctx.fillRect(-12, -13, 24, 25);
-
-      ctx.strokeStyle = "#baffc9";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-12, -13, 24, 25);
-
-      ctx.fillStyle = "#00280f";
-      ctx.fillRect(-17, -9, 5, 17);
-      ctx.fillRect(12, -9, 5, 17);
-
-      ctx.strokeStyle = "#00ff66";
-      ctx.strokeRect(-17, -9, 5, 17);
-      ctx.strokeRect(12, -9, 5, 17);
-
-      ctx.fillStyle = "#d7b07a";
-      ctx.fillRect(-8, -28, 16, 15);
-
-      ctx.strokeStyle = "#001100";
-      ctx.strokeRect(-8, -28, 16, 15);
-
-      ctx.fillStyle = "#1a0f05";
-      ctx.fillRect(-8, -30, 16, 5);
-
-      ctx.fillStyle = "#001100";
-
-      if (player.dy === -1) {
-        ctx.fillRect(-5, -24, 10, 2);
-      } else if (player.dy === 1) {
-        ctx.fillRect(-5, -22, 3, 3);
-        ctx.fillRect(2, -22, 3, 3);
-      } else if (player.dx === -1) {
-        ctx.fillRect(-6, -22, 4, 3);
-      } else if (player.dx === 1) {
-        ctx.fillRect(2, -22, 4, 3);
+      if (player.direction === "down") {
+        ctx.fillRect(player.x - 3, player.y + 9, 6, 8);
       }
 
-      if (hasWeapon) {
-        ctx.fillStyle = "#ffee66";
-
-        if (player.dy === -1) {
-          ctx.fillRect(-3, -38, 6, 10);
-        }
-
-        if (player.dy === 1) {
-          ctx.fillRect(-3, 12, 6, 10);
-        }
-
-        if (player.dx === -1) {
-          ctx.fillRect(-25, -5, 10, 6);
-        }
-
-        if (player.dx === 1) {
-          ctx.fillRect(15, -5, 10, 6);
-        }
+      if (player.direction === "left") {
+        ctx.fillRect(player.x - 17, player.y - 3, 8, 6);
       }
 
-      if (hasKey) {
-        ctx.fillStyle = "#ffee66";
-        ctx.fillRect(7, -8, 5, 10);
+      if (player.direction === "right") {
+        ctx.fillRect(player.x + 9, player.y - 3, 8, 6);
       }
-
-      ctx.fillStyle = hasWeapon ? "#00ff66" : "#006b2a";
-      ctx.fillRect(-4, -6, 8, 4);
-
-      ctx.restore();
     }
 
-    function drawHudOnCanvas() {
-      const room = rooms[currentRoom];
+    function drawRoomLabel(room) {
+      ctx.fillStyle = "rgba(0,0,0,0.62)";
+      ctx.fillRect(10, 10, 300, 34);
 
-      ctx.fillStyle = "rgba(0,0,0,0.7)";
-      ctx.fillRect(8, 8, 330, 90);
+      ctx.strokeStyle = "rgba(0,255,102,0.42)";
+      ctx.strokeRect(10, 10, 300, 34);
 
-      ctx.fillStyle = "#00ff66";
       ctx.font = "14px Courier New";
-      ctx.textAlign = "left";
-      ctx.fillText(room.name, 18, 28);
-      ctx.fillText("CODE: " + getWordProgress(), 18, 48);
-      ctx.fillText("KEY: " + (hasKey ? "YES" : "NO") + " // WEAPON: " + (hasWeapon ? "YES" : "NO"), 18, 68);
-
-      if (hasWeapon) {
-        ctx.fillText("WARNING: ENEMIES FIRE BACK", 18, 88);
-      } else {
-        ctx.fillText("KEY: WEST LAB // CHEST: VAULT", 18, 88);
-      }
+      ctx.fillStyle = varColor("green");
+      ctx.fillText(room.name, 22, 32);
     }
 
-    function getWordProgress() {
-      let result = "";
+    function varColor(name) {
+      const colors = {
+        green: "#00ff66",
+        yellow: "#ffee66",
+        red: "#ff4444",
+        cyan: "#78fff0",
+        white: "#eaffef"
+      };
 
-      for (let i = 0; i < targetWord.length; i++) {
-        result += collectedLetters[i] ? collectedLetters[i] : "_";
-      }
-
-      return result;
+      return colors[name];
     }
 
-    function updateHud() {
-      roomNameEl.textContent = rooms[currentRoom].name;
-      statusEl.textContent = player.status;
-      keyStatusEl.textContent = hasKey ? "YES" : "NO";
-      weaponStatusEl.textContent = hasWeapon ? "YES" : "NO";
-      enemiesLeftEl.textContent = countEnemiesLeft();
-      lettersFoundEl.textContent = collectedLetters.length;
-      wordProgressEl.textContent = getWordProgress();
+    function distance(x1, y1, x2, y2) {
+      const dx = x1 - x2;
+      const dy = y1 - y2;
+
+      return Math.sqrt(dx * dx + dy * dy);
     }
 
-    function pressMove(direction) {
+    function gameLoop() {
       if (!gameRunning) {
+        updateStats();
+        drawRoom();
         return;
       }
 
-      if (direction === "up") {
-        player.dx = 0;
-        player.dy = -1;
-        moveEntity(player, 0, -24, playerSize);
-      }
+      updatePlayer();
+      updateEnemies();
+      updateBullets();
+      collectItems();
+      checkWinCondition();
+      updateStats();
+      drawRoom();
 
-      if (direction === "down") {
-        player.dx = 0;
-        player.dy = 1;
-        moveEntity(player, 0, 24, playerSize);
-      }
-
-      if (direction === "left") {
-        player.dx = -1;
-        player.dy = 0;
-        moveEntity(player, -24, 0, playerSize);
-      }
-
-      if (direction === "right") {
-        player.dx = 1;
-        player.dy = 0;
-        moveEntity(player, 24, 0, playerSize);
-      }
-
-      player.moving = true;
-      player.walkFrame++;
-
-      handleRoomTransition();
+      requestAnimationFrame(gameLoop);
     }
 
-    document.addEventListener("keydown", function(event) {
-      keys[event.key] = true;
+    function renderRecoveredLetters() {
+      const letterSlots = document.getElementById("letterSlots");
+
+      if (!letterSlots) {
+        return;
+      }
+
+      letterSlots.innerHTML = "";
+
+      recoveredLetterPuzzle.forEach(function(letter, index) {
+        const tile = document.createElement("div");
+        tile.className = "letterTile";
+
+        tile.innerHTML =
+          '<div class="letterTileLetter">' + letter + '</div>' +
+          '<div class="letterTileControls">' +
+            '<button onclick="moveRecoveredLetter(' + index + ', -1)">◀</button>' +
+            '<button onclick="moveRecoveredLetter(' + index + ', 1)">▶</button>' +
+          '</div>';
+
+        letterSlots.appendChild(tile);
+      });
+    }
+
+    function moveRecoveredLetter(index, direction) {
+      const newIndex = index + direction;
+
+      if (newIndex < 0 || newIndex >= recoveredLetterPuzzle.length) {
+        return;
+      }
+
+      const temp = recoveredLetterPuzzle[index];
+      recoveredLetterPuzzle[index] = recoveredLetterPuzzle[newIndex];
+      recoveredLetterPuzzle[newIndex] = temp;
+
+      renderRecoveredLetters();
+
+      const message = document.getElementById("wordSolveMessage");
+      const terminalHint = document.getElementById("terminalHint");
+
+      if (message) {
+        message.textContent = "";
+      }
+
+      if (terminalHint) {
+        terminalHint.style.display = "none";
+      }
+    }
+
+    function shuffleRecoveredLetters() {
+      recoveredLetterPuzzle = ["E", "D", "O", "S", "E", "E", "C", "H"];
+      renderRecoveredLetters();
+
+      const message = document.getElementById("wordSolveMessage");
+      const terminalHint = document.getElementById("terminalHint");
+
+      if (message) {
+        message.textContent = "Recovered buffer scrambled again.";
+        message.style.color = varColor("yellow");
+      }
+
+      if (terminalHint) {
+        terminalHint.style.display = "none";
+      }
+    }
+
+    function checkRecoveredWord() {
+      const word = recoveredLetterPuzzle.join("");
+      const message = document.getElementById("wordSolveMessage");
+      const terminalHint = document.getElementById("terminalHint");
+
+      if (word === "ECHOSEED") {
+        message.style.color = varColor("green");
+        message.textContent = "WORD ACCEPTED // terminal wake code restored.";
+
+        terminalHint.style.display = "block";
+
+        localStorage.setItem("shootSolved", "yes");
+        localStorage.setItem("backupWakeCode", "ECHOSEED");
+      } else {
+        message.style.color = "#ff9999";
+        message.textContent = "WORD REJECTED // letter order incorrect.";
+      }
+    }
+
+    function pressMobile(direction) {
+      if (direction === "up") keys.ArrowUp = true;
+      if (direction === "down") keys.ArrowDown = true;
+      if (direction === "left") keys.ArrowLeft = true;
+      if (direction === "right") keys.ArrowRight = true;
+    }
+
+    function releaseMobile(direction) {
+      if (direction === "up") keys.ArrowUp = false;
+      if (direction === "down") keys.ArrowDown = false;
+      if (direction === "left") keys.ArrowLeft = false;
+      if (direction === "right") keys.ArrowRight = false;
+    }
+
+    window.addEventListener("keydown", function(event) {
+      keys[event.code] = true;
 
       if (event.code === "Space") {
         event.preventDefault();
@@ -1551,8 +1464,8 @@ Collect all hidden letters and defeat all M/Q security dummies.</div>
       }
     });
 
-    document.addEventListener("keyup", function(event) {
-      keys[event.key] = false;
+    window.addEventListener("keyup", function(event) {
+      keys[event.code] = false;
     });
 
     startGame();
