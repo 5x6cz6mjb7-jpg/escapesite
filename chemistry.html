@@ -116,14 +116,15 @@
     }
 
     .topBar {
-      height: 34px;
+      min-height: 34px;
       background: linear-gradient(180deg, #13843b 0%, #0b3d1d 100%);
       border: 2px solid #d8ffe6;
       color: var(--white);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 10px;
+      gap: 10px;
+      padding: 8px 10px;
       font-size: 12px;
       margin-bottom: 14px;
       position: relative;
@@ -192,150 +193,147 @@
       line-height: 1.5;
     }
 
-    .labGrid {
+    .experimentGrid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 14px;
+      margin-bottom: 14px;
     }
 
-    .labMachine {
+    .experimentCard {
       border: 2px solid rgba(0,255,102,0.45);
       background:
-        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 60%),
-        rgba(0,0,0,0.34);
-      min-height: 180px;
-      padding: 12px;
-      cursor: pointer;
+        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 62%),
+        rgba(0,0,0,0.36);
+      min-height: 340px;
+      padding: 14px;
       position: relative;
       overflow: hidden;
-      color: var(--text);
-      font-family: "Courier New", monospace;
-      text-align: left;
-      transition: 0.15s;
     }
 
-    .labMachine:hover {
-      border-color: var(--yellow);
-      background:
-        radial-gradient(circle at center, rgba(255,238,102,0.12), transparent 60%),
-        rgba(0,0,0,0.38);
-      transform: translateY(-2px);
-    }
-
-    .labMachine.active {
-      border-color: var(--yellow);
-      box-shadow: 0 0 20px rgba(255,238,102,0.20);
-    }
-
-    .labMachine.seen .seenBadge {
-      display: block;
-    }
-
-    .labMachine.scanning {
-      animation: scanFlash 0.45s ease-out;
-    }
-
-    @keyframes scanFlash {
-      0% {
-        filter: brightness(2);
-        transform: scale(1.02);
-      }
-
-      100% {
-        filter: brightness(1);
-        transform: scale(1);
-      }
-    }
-
-    .clickLabel {
-      position: absolute;
-      right: 8px;
-      top: 8px;
-      color: var(--yellow);
-      font-size: 11px;
-      animation: blink 1.2s infinite;
-    }
-
-    .seenBadge {
-      display: none;
-      position: absolute;
-      right: 8px;
-      bottom: 8px;
-      width: 22px;
-      height: 22px;
-      border: 1px solid var(--yellow);
-      color: var(--yellow);
-      background: rgba(0,0,0,0.65);
-      text-align: center;
-      line-height: 20px;
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(255,238,102,0.35);
-    }
-
-    @keyframes blink {
-      0%, 48%, 100% { opacity: 1; }
-      49%, 85% { opacity: 0.25; }
-    }
-
-    .machineTitle {
-      color: var(--yellow);
-      font-size: 15px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .machineSub {
-      font-size: 12px;
-      color: #9dffbd;
-      margin-bottom: 10px;
-    }
-
-    .bubblingFlask {
-      width: 90px;
-      height: 110px;
-      margin: 6px auto 4px;
-      position: relative;
-    }
-
-    .flaskNeck {
-      position: absolute;
-      left: 36px;
-      top: 0;
-      width: 18px;
-      height: 42px;
-      border-left: 3px solid #d8ffe6;
-      border-right: 3px solid #d8ffe6;
-      background: rgba(0,255,102,0.08);
-    }
-
-    .flaskBody {
-      position: absolute;
-      left: 13px;
-      bottom: 0;
-      width: 64px;
-      height: 72px;
-      border: 3px solid #d8ffe6;
-      border-radius: 8px 8px 30px 30px;
-      background:
-        linear-gradient(180deg, transparent 22%, rgba(0,255,102,0.72) 23%, rgba(0,170,68,0.82) 100%);
-      box-shadow: 0 0 18px rgba(0,255,102,0.35);
-      overflow: hidden;
-    }
-
-    .flaskBody::before {
+    .experimentCard::before {
       content: "";
       position: absolute;
-      left: -20px;
-      right: -20px;
-      bottom: 22px;
-      height: 18px;
-      background: rgba(255,238,102,0.22);
-      border-radius: 50%;
-      animation: liquidWave 2s ease-in-out infinite;
+      left: -30%;
+      right: -30%;
+      top: -70px;
+      height: 60px;
+      background: linear-gradient(180deg, transparent, rgba(255,238,102,0.16), transparent);
+      animation: cardSweep 4.5s linear infinite;
+      pointer-events: none;
     }
 
-    @keyframes liquidWave {
-      0%, 100% { transform: translateX(-6px) rotate(-2deg); }
+    @keyframes cardSweep {
+      0% { top: -70px; }
+      100% { top: 110%; }
+    }
+
+    .experimentTitle {
+      color: var(--yellow);
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .experimentSub {
+      color: #9dffbd;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .experimentImage {
+      height: 190px;
+      border: 1px solid rgba(0,255,102,0.36);
+      background:
+        radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 62%),
+        rgba(0,0,0,0.48);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .tubeRack {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      width: 230px;
+      height: 130px;
+      transform: translateX(-50%);
+    }
+
+    .rackBase {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 0;
+      height: 18px;
+      border: 2px solid #d8ffe6;
+      background: rgba(0,255,102,0.12);
+      box-shadow: 0 0 15px rgba(0,255,102,0.18);
+    }
+
+    .tube {
+      position: absolute;
+      bottom: 12px;
+      width: 34px;
+      height: 112px;
+      border: 3px solid #d8ffe6;
+      border-top: none;
+      border-radius: 0 0 18px 18px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      box-shadow:
+        inset 0 0 18px rgba(255,255,255,0.08),
+        0 0 14px rgba(0,255,102,0.18);
+    }
+
+    .tube::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      right: 3px;
+      bottom: 0;
+      height: 68%;
+      background:
+        linear-gradient(180deg, rgba(125,252,255,0.30), rgba(0,255,102,0.72));
+      border-radius: 0 0 15px 15px;
+      animation: tubeWater 2.8s ease-in-out infinite;
+    }
+
+    .tube::after {
+      content: "";
+      position: absolute;
+      left: -12px;
+      right: -12px;
+      bottom: 70px;
+      height: 15px;
+      background: rgba(255,238,102,0.20);
+      border-radius: 50%;
+      animation: waterWave 2.2s ease-in-out infinite;
+    }
+
+    .tube.t1 { left: 18px; transform: rotate(-4deg); }
+    .tube.t2 { left: 68px; transform: rotate(2deg); }
+    .tube.t3 { left: 118px; transform: rotate(-1deg); }
+    .tube.t4 { left: 168px; transform: rotate(4deg); }
+
+    .tube.t2::before { height: 55%; animation-delay: 0.3s; }
+    .tube.t3::before { height: 75%; animation-delay: 0.6s; }
+    .tube.t4::before { height: 63%; animation-delay: 0.9s; }
+
+    @keyframes tubeWater {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.35); }
+    }
+
+    @keyframes waterWave {
+      0%, 100% { transform: translateX(-5px) rotate(-2deg); }
       50% { transform: translateX(6px) rotate(2deg); }
     }
 
@@ -345,225 +343,160 @@
       height: 8px;
       border: 1px solid var(--yellow);
       border-radius: 50%;
-      background: rgba(255,238,102,0.16);
-      bottom: 14px;
-      animation: bubbleRise 2s infinite;
+      background: rgba(255,238,102,0.17);
+      bottom: 18px;
+      opacity: 0;
+      animation: bubbleRise 2.2s infinite;
+      z-index: 3;
     }
 
-    .bubble.b1 { left: 26px; animation-delay: 0s; }
-    .bubble.b2 { left: 45px; animation-delay: 0.4s; }
-    .bubble.b3 { left: 57px; animation-delay: 0.8s; }
+    .tube .b1 { left: 8px; animation-delay: 0s; }
+    .tube .b2 { left: 18px; animation-delay: 0.45s; }
+    .tube .b3 { left: 12px; animation-delay: 0.9s; }
 
     @keyframes bubbleRise {
-      0% { transform: translateY(0) scale(0.7); opacity: 0.2; }
-      30% { opacity: 1; }
-      100% { transform: translateY(-56px) scale(1.2); opacity: 0; }
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-78px) scale(1.25); opacity: 0; }
     }
 
-    .scanner {
-      height: 96px;
-      border: 1px solid rgba(0,255,102,0.40);
-      background:
-        linear-gradient(90deg, rgba(0,255,102,0.08) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,255,102,0.08) 1px, transparent 1px),
-        rgba(0,0,0,0.48);
-      background-size: 16px 16px;
-      position: relative;
-      overflow: hidden;
-      margin-top: 12px;
-    }
-
-    .scanner::before {
-      content: "";
+    .reactionCloud {
       position: absolute;
-      left: 0;
-      right: 0;
-      top: -18px;
-      height: 18px;
-      background: rgba(255,238,102,0.45);
-      box-shadow: 0 0 18px rgba(255,238,102,0.55);
-      animation: scanDown 2.2s linear infinite;
+      left: 50%;
+      top: 12px;
+      width: 160px;
+      height: 42px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: rgba(255,238,102,0.08);
+      filter: blur(1px);
+      animation: cloudPulse 2s ease-in-out infinite;
     }
 
-    @keyframes scanDown {
-      0% { top: -18px; }
-      100% { top: 100%; }
+    @keyframes cloudPulse {
+      0%, 100% { opacity: 0.35; transform: translateX(-50%) scale(0.9); }
+      50% { opacity: 0.8; transform: translateX(-50%) scale(1.12); }
     }
 
-    .elementRow {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      margin-top: 22px;
-    }
-
-    .elementTile {
-      width: 44px;
-      height: 50px;
-      border: 2px solid var(--green);
+    .moleculeStage {
+      position: absolute;
+      inset: 0;
       background:
-        linear-gradient(180deg, rgba(216,255,230,0.16), rgba(0,170,68,0.45)),
-        rgba(0,0,0,0.5);
-      display: grid;
-      grid-template-rows: 12px 23px 10px;
-      align-items: center;
-      justify-items: center;
-      box-shadow: 0 0 12px rgba(0,255,102,0.20);
-      animation: tilePulse 2.4s ease-in-out infinite;
+        linear-gradient(90deg, rgba(0,255,102,0.055) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,255,102,0.055) 1px, transparent 1px);
+      background-size: 22px 22px;
     }
 
-    .elementTile:nth-child(2) { animation-delay: 0.2s; }
-    .elementTile:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes tilePulse {
-      0%, 100% { transform: translateY(0); filter: brightness(1); }
-      50% { transform: translateY(-3px); filter: brightness(1.3); }
+    .molecule {
+      position: absolute;
+      width: 92px;
+      height: 92px;
+      animation: driftMolecule 6s ease-in-out infinite alternate;
     }
 
-    .elementTile .num {
-      font-size: 8px;
-      color: var(--white);
+    .molecule.m1 {
+      left: 25px;
+      top: 34px;
     }
 
-    .elementTile .sym {
-      font-size: 17px;
-      color: var(--yellow);
-      font-weight: bold;
+    .molecule.m2 {
+      right: 30px;
+      top: 58px;
+      animation-delay: 1s;
+      transform: scale(0.8);
     }
 
-    .elementTile .name {
-      font-size: 6px;
-      color: var(--white);
+    .molecule.m3 {
+      left: 50%;
+      bottom: 12px;
+      animation-delay: 2s;
+      transform: scale(0.7);
     }
 
-    .waveBox {
-      height: 96px;
-      display: flex;
-      align-items: end;
-      gap: 5px;
-      border: 1px solid rgba(0,255,102,0.35);
-      background: rgba(0,0,0,0.45);
-      padding: 8px;
-      margin-top: 12px;
+    @keyframes driftMolecule {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(12px, -10px) rotate(18deg); }
+      100% { transform: translate(-9px, 8px) rotate(-16deg); }
     }
 
-    .waveBox span {
-      flex: 1;
-      background: var(--green);
-      min-height: 8px;
-      box-shadow: 0 0 8px rgba(0,255,102,0.35);
-      animation: wave 1.2s ease-in-out infinite alternate;
-    }
-
-    .waveBox span:nth-child(2n) { animation-delay: 0.2s; }
-    .waveBox span:nth-child(3n) { animation-delay: 0.4s; }
-
-    @keyframes wave {
-      from { height: 15%; opacity: 0.5; }
-      to { height: 90%; opacity: 1; }
-    }
-
-    .meter {
-      margin-top: 14px;
-      display: grid;
-      gap: 7px;
-    }
-
-    .meterRow {
-      display: grid;
-      grid-template-columns: 80px 1fr 38px;
-      gap: 8px;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text);
-    }
-
-    .meterTrack {
-      height: 12px;
-      border: 1px solid rgba(0,255,102,0.35);
-      background: rgba(0,0,0,0.5);
-      overflow: hidden;
-    }
-
-    .meterFill {
-      height: 100%;
+    .atom {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #d8ffe6;
       background:
-        repeating-linear-gradient(
-          90deg,
-          rgba(0,255,102,0.9),
-          rgba(0,255,102,0.9) 5px,
-          rgba(255,238,102,0.9) 5px,
-          rgba(255,238,102,0.9) 8px
-        );
-      animation: meterFlicker 2s ease-in-out infinite;
+        radial-gradient(circle at 30% 28%, #ffffff, var(--blue) 26%, #007a85 75%);
+      box-shadow:
+        0 0 14px rgba(125,252,255,0.45),
+        inset 0 0 9px rgba(255,255,255,0.25);
+      z-index: 2;
     }
 
-    @keyframes meterFlicker {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.35); }
+    .atom.a1 { left: 32px; top: 4px; }
+    .atom.a2 { left: 4px; top: 48px; background: radial-gradient(circle at 30% 28%, #ffffff, var(--yellow) 26%, #8a6d00 75%); }
+    .atom.a3 { left: 60px; top: 48px; background: radial-gradient(circle at 30% 28%, #ffffff, var(--green) 26%, #006b2a 75%); }
+
+    .bond {
+      position: absolute;
+      height: 5px;
+      width: 54px;
+      background: rgba(216,255,230,0.74);
+      left: 22px;
+      top: 42px;
+      transform-origin: center;
+      box-shadow: 0 0 8px rgba(216,255,230,0.35);
+      z-index: 1;
     }
 
-    .scanStatus {
-      margin-top: 12px;
-      border: 1px solid rgba(0,255,102,0.32);
-      background: rgba(0,0,0,0.42);
+    .bond.bond1 { transform: rotate(-52deg); }
+    .bond.bond2 { transform: rotate(52deg); top: 43px; }
+
+    .orbit {
+      position: absolute;
+      left: 4px;
+      top: 10px;
+      width: 82px;
+      height: 72px;
+      border: 1px dashed rgba(255,238,102,0.44);
+      border-radius: 50%;
+      animation: orbitSpin 3.6s linear infinite;
+    }
+
+    @keyframes orbitSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .moleculeLabel {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
       color: var(--yellow);
-      padding: 9px;
       font-size: 12px;
-      min-height: 32px;
-      line-height: 1.4;
+      letter-spacing: 1px;
+      animation: blink 1.3s infinite;
     }
 
-    .scanStatus.complete {
-      border-color: var(--yellow);
-      background: rgba(255,238,102,0.06);
-      animation: completePulse 1.4s ease-in-out infinite;
+    @keyframes blink {
+      0%, 48%, 100% { opacity: 1; }
+      49%, 85% { opacity: 0.25; }
     }
 
-    @keyframes completePulse {
-      0%, 100% {
-        box-shadow: 0 0 0 rgba(255,238,102,0);
-      }
-
-      50% {
-        box-shadow: 0 0 14px rgba(255,238,102,0.25);
-      }
-    }
-
-    .viewer {
-      margin-top: 14px;
-      min-height: 160px;
-      border: 2px solid rgba(0,255,102,0.32);
-      background: rgba(0,0,0,0.46);
-      padding: 12px;
-      color: var(--text);
-      line-height: 1.45;
-      font-size: 14px;
-    }
-
-    .viewer h3 {
-      margin: 0 0 8px;
-      color: var(--yellow);
-      font-size: 16px;
-    }
-
-    .viewer strong {
-      color: var(--yellow);
-    }
-
-    .checkBlock {
+    .experimentInputBox {
       border: 1px solid rgba(0,255,102,0.32);
       background: rgba(0,0,0,0.26);
       padding: 10px;
-      margin-bottom: 12px;
+      position: relative;
+      z-index: 3;
     }
 
-    .checkBlock.correct {
+    .experimentInputBox.correct {
       border-color: var(--yellow);
       background: rgba(255,238,102,0.06);
     }
 
-    .checkBlock.wrong {
+    .experimentInputBox.wrong {
       border-color: var(--red);
       background: rgba(255,85,85,0.05);
       animation: shake 0.25s;
@@ -658,6 +591,34 @@
       color: var(--yellow);
     }
 
+    .sideInfo {
+      border: 1px dashed rgba(255,238,102,0.4);
+      background: rgba(255,238,102,0.05);
+      color: var(--yellow);
+      padding: 10px;
+      line-height: 1.5;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .checkBlock {
+      border: 1px solid rgba(0,255,102,0.32);
+      background: rgba(0,0,0,0.26);
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+
+    .checkBlock.correct {
+      border-color: var(--yellow);
+      background: rgba(255,238,102,0.06);
+    }
+
+    .checkBlock.wrong {
+      border-color: var(--red);
+      background: rgba(255,85,85,0.05);
+      animation: shake 0.25s;
+    }
+
     .masterStatus {
       border: 1px dashed rgba(255,238,102,0.4);
       background: rgba(255,238,102,0.05);
@@ -706,12 +667,13 @@
 
     @media (max-width: 950px) {
       .layout,
-      .labGrid {
+      .experimentGrid {
         grid-template-columns: 1fr;
       }
 
       .topBar {
         font-size: 10px;
+        flex-direction: column;
       }
     }
   </style>
@@ -737,112 +699,104 @@
 
           <div class="simpleIntro">
             LOCAL CHEMISTRY CACHE DETECTED<br>
-            Three inputs required before deeper archive layer can be restored.
+            Complete the physical chemistry experiments and the external chemistry game to restore the first private archive fragment.
           </div>
 
-          <div class="labGrid">
-            <button class="labMachine active" id="machine-flask" onclick="openPanel('flask', this)">
-              <span class="clickLabel">SCAN</span>
-              <span class="seenBadge" id="seen-flask">✓</span>
-              <div class="machineTitle">REAGENT FLASK</div>
-              <div class="machineSub">Liquid sample active</div>
-
-              <div class="bubblingFlask">
-                <div class="flaskNeck"></div>
-                <div class="flaskBody"></div>
-                <div class="bubble b1"></div>
-                <div class="bubble b2"></div>
-                <div class="bubble b3"></div>
+          <div class="experimentGrid">
+            <section class="experimentCard">
+              <div class="experimentTitle">PUZZLE 1 // REAGENT TUBE TEST</div>
+              <div class="experimentSub">
+                Physical experiment detected: test tubes, water reaction and rising bubbles.
               </div>
-            </button>
 
-            <button class="labMachine" id="machine-scanner" onclick="openPanel('scanner', this)">
-              <span class="clickLabel">SCAN</span>
-              <span class="seenBadge" id="seen-scanner">✓</span>
-              <div class="machineTitle">ELEMENT SCANNER</div>
-              <div class="machineSub">Periodic trace detected</div>
+              <div class="experimentImage" aria-label="Animated test tubes with bubbles in water">
+                <div class="reactionCloud"></div>
 
-              <div class="scanner">
-                <div class="elementRow">
-                  <div class="elementTile">
-                    <div class="num">6</div>
-                    <div class="sym">C</div>
-                    <div class="name">Carbon</div>
+                <div class="tubeRack">
+                  <div class="tube t1">
+                    <span class="bubble b1"></span>
+                    <span class="bubble b2"></span>
+                    <span class="bubble b3"></span>
                   </div>
 
-                  <div class="elementTile">
-                    <div class="num">8</div>
-                    <div class="sym">O</div>
-                    <div class="name">Oxygen</div>
+                  <div class="tube t2">
+                    <span class="bubble b1"></span>
+                    <span class="bubble b2"></span>
+                    <span class="bubble b3"></span>
                   </div>
 
-                  <div class="elementTile">
-                    <div class="num">7</div>
-                    <div class="sym">N</div>
-                    <div class="name">Nitrogen</div>
+                  <div class="tube t3">
+                    <span class="bubble b1"></span>
+                    <span class="bubble b2"></span>
+                    <span class="bubble b3"></span>
                   </div>
+
+                  <div class="tube t4">
+                    <span class="bubble b1"></span>
+                    <span class="bubble b2"></span>
+                    <span class="bubble b3"></span>
+                  </div>
+
+                  <div class="rackBase"></div>
                 </div>
               </div>
-            </button>
 
-            <button class="labMachine" id="machine-signal" onclick="openPanel('signal', this)">
-              <span class="clickLabel">SCAN</span>
-              <span class="seenBadge" id="seen-signal">✓</span>
-              <div class="machineTitle">SAMPLE SIGNAL</div>
-              <div class="machineSub">Compound instability</div>
-
-              <div class="waveBox">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+              <div class="experimentInputBox" id="blockA">
+                <div class="checkHeader">INPUT A</div>
+                <label for="answerA">Code from test tube experiment</label>
+                <input id="answerA" type="text" autocomplete="off" placeholder="input A">
+                <button class="checkButton" onclick="checkA()">CHECK INPUT A</button>
+                <div class="status" id="statusA">Awaiting input.</div>
               </div>
-            </button>
+            </section>
 
-            <button class="labMachine" id="machine-meter" onclick="openPanel('meter', this)">
-              <span class="clickLabel">SCAN</span>
-              <span class="seenBadge" id="seen-meter">✓</span>
-              <div class="machineTitle">REACTION METER</div>
-              <div class="machineSub">Archive residue</div>
+            <section class="experimentCard">
+              <div class="experimentTitle">PUZZLE 2 // MOLECULAR TRACE</div>
+              <div class="experimentSub">
+                Molecular image active. The compound pattern is unstable and keeps moving.
+              </div>
 
-              <div class="meter">
-                <div class="meterRow">
-                  <span>Trace</span>
-                  <div class="meterTrack"><div class="meterFill" style="width: 78%;"></div></div>
-                  <span>78%</span>
-                </div>
+              <div class="experimentImage" aria-label="Animated moving molecules">
+                <div class="moleculeStage">
+                  <div class="molecule m1">
+                    <div class="orbit"></div>
+                    <div class="bond bond1"></div>
+                    <div class="bond bond2"></div>
+                    <div class="atom a1"></div>
+                    <div class="atom a2"></div>
+                    <div class="atom a3"></div>
+                  </div>
 
-                <div class="meterRow">
-                  <span>Memory</span>
-                  <div class="meterTrack"><div class="meterFill" style="width: 92%;"></div></div>
-                  <span>92%</span>
-                </div>
+                  <div class="molecule m2">
+                    <div class="orbit"></div>
+                    <div class="bond bond1"></div>
+                    <div class="bond bond2"></div>
+                    <div class="atom a1"></div>
+                    <div class="atom a2"></div>
+                    <div class="atom a3"></div>
+                  </div>
 
-                <div class="meterRow">
-                  <span>Jason</span>
-                  <div class="meterTrack"><div class="meterFill" style="width: 64%;"></div></div>
-                  <span>64%</span>
+                  <div class="molecule m3">
+                    <div class="orbit"></div>
+                    <div class="bond bond1"></div>
+                    <div class="bond bond2"></div>
+                    <div class="atom a1"></div>
+                    <div class="atom a2"></div>
+                    <div class="atom a3"></div>
+                  </div>
+
+                  <div class="moleculeLabel">MOLECULAR PATTERN ACTIVE</div>
                 </div>
               </div>
-            </button>
-          </div>
 
-          <div class="scanStatus" id="scanStatus">
-            REAGENT FLASK // scan loaded
-          </div>
-
-          <div class="viewer" id="viewer">
-            <h3>REAGENT FLASK</h3>
-            Scan result:<br>
-            liquid marker unstable.<br><br>
-            Input channel:<br>
-            A<br><br>
-            Archive response:<br>
-            waiting for chemical marker.
+              <div class="experimentInputBox" id="blockB">
+                <div class="checkHeader">INPUT B</div>
+                <label for="answerB">Code from molecular puzzle</label>
+                <input id="answerB" type="text" autocomplete="off" placeholder="input B">
+                <button class="checkButton" onclick="checkB()">CHECK INPUT B</button>
+                <div class="status" id="statusB">Awaiting input.</div>
+              </div>
+            </section>
           </div>
 
           <div class="recoveredEnvironment" id="recoveredEnvironment">
@@ -864,26 +818,20 @@
       </section>
 
       <aside class="window">
-        <div class="windowTitle">Access Sequence</div>
+        <div class="windowTitle">
+          <span>Access Sequence</span>
+          <span>3 CHANNELS</span>
+        </div>
 
         <div class="content">
+          <div class="sideInfo">
+            Three chemistry channels are required:<br><br>
+            1. Test tube experiment code<br>
+            2. Molecular puzzle code<br>
+            3. External chemistry game code
+          </div>
+
           <a class="gameLink" href="tetris.html">OPEN CHEMISTRY GAME</a>
-
-          <div class="checkBlock" id="blockA">
-            <div class="checkHeader">INPUT A</div>
-            <label for="answerA">Chemical marker</label>
-            <input id="answerA" type="text" autocomplete="off" placeholder="input A">
-            <button class="checkButton" onclick="checkA()">CHECK INPUT A</button>
-            <div class="status" id="statusA">Awaiting input.</div>
-          </div>
-
-          <div class="checkBlock" id="blockB">
-            <div class="checkHeader">INPUT B</div>
-            <label for="answerB">Reagent marker</label>
-            <input id="answerB" type="text" autocomplete="off" placeholder="input B">
-            <button class="checkButton" onclick="checkB()">CHECK INPUT B</button>
-            <div class="status" id="statusB">Awaiting input.</div>
-          </div>
 
           <div class="checkBlock" id="blockGame">
             <div class="checkHeader">PROTOCOL CODE</div>
@@ -912,104 +860,13 @@
     let bSolved = false;
     let gameSolved = false;
 
-    const inspectedPanels = {
-      flask: false,
-      scanner: false,
-      signal: false,
-      meter: false
-    };
-
-    const panels = {
-      flask:
-`<h3>REAGENT FLASK</h3>
-Scan result:<br>
-liquid marker unstable.<br><br>
-Input channel:<br>
-A<br><br>
-Archive response:<br>
-waiting for chemical marker.`,
-
-      scanner:
-`<h3>ELEMENT SCANNER</h3>
-Scan result:<br>
-periodic trace found.<br><br>
-Input channel:<br>
-B<br><br>
-Archive response:<br>
-waiting for reagent-linked identifier.`,
-
-      signal:
-`<h3>SAMPLE SIGNAL</h3>
-Scan result:<br>
-external protocol missing.<br><br>
-Archive note:<br>
-"Stack the unstable elements until the missing word returns."`,
-
-      meter:
-`<h3>REACTION METER</h3>
-Scan result:<br>
-three channels detected.<br><br>
-A: unresolved<br>
-B: unresolved<br>
-Protocol: unresolved`
-    };
-
     function normalize(value) {
-      return value
+      return String(value)
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
         .replaceAll("_", "")
         .trim();
-    }
-
-    function openPanel(id, button) {
-      const machines = document.querySelectorAll(".labMachine");
-
-      machines.forEach(function(machine) {
-        machine.classList.remove("active");
-        machine.classList.remove("scanning");
-      });
-
-      button.classList.add("active");
-      button.classList.add("seen");
-
-      setTimeout(function() {
-        button.classList.add("scanning");
-      }, 10);
-
-      inspectedPanels[id] = true;
-
-      document.getElementById("viewer").innerHTML = panels[id];
-
-      const scanStatus = document.getElementById("scanStatus");
-
-      if (id === "flask") {
-        scanStatus.textContent = "REAGENT FLASK // scan complete";
-      }
-
-      if (id === "scanner") {
-        scanStatus.textContent = "ELEMENT SCANNER // scan complete";
-      }
-
-      if (id === "signal") {
-        scanStatus.textContent = "SAMPLE SIGNAL // scan complete";
-      }
-
-      if (id === "meter") {
-        scanStatus.textContent = "REACTION METER // scan complete";
-      }
-
-      const allInspected =
-        inspectedPanels.flask &&
-        inspectedPanels.scanner &&
-        inspectedPanels.signal &&
-        inspectedPanels.meter;
-
-      if (allInspected) {
-        scanStatus.textContent = "LOCAL CHEMISTRY CACHE FULLY INSPECTED // access sequence still sealed";
-        scanStatus.classList.add("complete");
-      }
     }
 
     function setCorrect(blockId, inputId, statusId, message) {
