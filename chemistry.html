@@ -15,6 +15,7 @@
       --red: #ff5555;
       --blue: #7dfcff;
       --orange: #ffb347;
+      --purple: #d48cff;
     }
 
     * {
@@ -205,7 +206,7 @@
       background:
         radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 62%),
         rgba(0,0,0,0.36);
-      min-height: 340px;
+      min-height: 360px;
       padding: 14px;
       position: relative;
       overflow: hidden;
@@ -248,7 +249,7 @@
     }
 
     .experimentImage {
-      height: 190px;
+      height: 205px;
       border: 1px solid rgba(0,255,102,0.36);
       background:
         radial-gradient(circle at center, rgba(0,255,102,0.10), transparent 62%),
@@ -263,7 +264,7 @@
       left: 50%;
       bottom: 18px;
       width: 230px;
-      height: 130px;
+      height: 135px;
       transform: translateX(-50%);
     }
 
@@ -278,11 +279,23 @@
       box-shadow: 0 0 15px rgba(0,255,102,0.18);
     }
 
+    .rackTop {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 72px;
+      height: 12px;
+      border: 2px solid rgba(216,255,230,0.82);
+      background: rgba(216,255,230,0.08);
+      box-shadow: 0 0 12px rgba(0,255,102,0.16);
+      z-index: 4;
+    }
+
     .tube {
       position: absolute;
       bottom: 12px;
       width: 34px;
-      height: 112px;
+      height: 116px;
       border: 3px solid #d8ffe6;
       border-top: none;
       border-radius: 0 0 18px 18px;
@@ -311,7 +324,7 @@
       position: absolute;
       left: -12px;
       right: -12px;
-      bottom: 70px;
+      bottom: 72px;
       height: 15px;
       background: rgba(255,238,102,0.20);
       border-radius: 50%;
@@ -357,13 +370,13 @@
     @keyframes bubbleRise {
       0% { transform: translateY(0) scale(0.6); opacity: 0; }
       20% { opacity: 1; }
-      100% { transform: translateY(-78px) scale(1.25); opacity: 0; }
+      100% { transform: translateY(-82px) scale(1.25); opacity: 0; }
     }
 
     .reactionCloud {
       position: absolute;
       left: 50%;
-      top: 12px;
+      top: 15px;
       width: 160px;
       height: 42px;
       transform: translateX(-50%);
@@ -383,89 +396,172 @@
       inset: 0;
       background:
         linear-gradient(90deg, rgba(0,255,102,0.055) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,255,102,0.055) 1px, transparent 1px);
-      background-size: 22px 22px;
+        linear-gradient(0deg, rgba(0,255,102,0.055) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(125,252,255,0.08), transparent 60%);
+      background-size: 22px 22px, 22px 22px, auto;
+      overflow: hidden;
     }
 
-    .molecule {
+    .chemicalMolecule {
       position: absolute;
-      width: 92px;
-      height: 92px;
-      animation: driftMolecule 6s ease-in-out infinite alternate;
+      width: 180px;
+      height: 130px;
+      border: 1px dashed rgba(255,238,102,0.25);
+      background: rgba(0,0,0,0.20);
+      box-shadow:
+        inset 0 0 18px rgba(0,255,102,0.06),
+        0 0 18px rgba(0,255,102,0.10);
+      animation: moleculeFloat 5.5s ease-in-out infinite alternate;
     }
 
-    .molecule.m1 {
-      left: 25px;
+    .chemicalMolecule.water {
+      left: 22px;
+      top: 28px;
+    }
+
+    .chemicalMolecule.n2s1 {
+      right: 22px;
       top: 34px;
+      animation-delay: 1.2s;
     }
 
-    .molecule.m2 {
-      right: 30px;
-      top: 58px;
-      animation-delay: 1s;
-      transform: scale(0.8);
+    @keyframes moleculeFloat {
+      0% {
+        transform: translate(0, 0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translate(8px, -7px) rotate(3deg);
+      }
+
+      100% {
+        transform: translate(-6px, 8px) rotate(-3deg);
+      }
     }
 
-    .molecule.m3 {
-      left: 50%;
-      bottom: 12px;
-      animation-delay: 2s;
-      transform: scale(0.7);
-    }
-
-    @keyframes driftMolecule {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(12px, -10px) rotate(18deg); }
-      100% { transform: translate(-9px, 8px) rotate(-16deg); }
-    }
-
-    .atom {
+    .atomLetter {
       position: absolute;
-      width: 28px;
-      height: 28px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       border: 2px solid #d8ffe6;
-      background:
-        radial-gradient(circle at 30% 28%, #ffffff, var(--blue) 26%, #007a85 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 21px;
+      color: #001100;
+      text-shadow: none;
       box-shadow:
-        0 0 14px rgba(125,252,255,0.45),
-        inset 0 0 9px rgba(255,255,255,0.25);
+        0 0 16px rgba(255,255,255,0.22),
+        inset 0 0 10px rgba(255,255,255,0.25);
+      z-index: 3;
+    }
+
+    .atomLetter.h {
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #7dfcff 28%, #008c99 78%);
+    }
+
+    .atomLetter.o {
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #00ff66 28%, #007a32 78%);
+    }
+
+    .atomLetter.n {
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #ffee66 28%, #8a6d00 78%);
+    }
+
+    .atomLetter.s {
+      background:
+        radial-gradient(circle at 30% 25%, #ffffff, #d48cff 28%, #5d227c 78%);
+    }
+
+    .water .o {
+      left: 69px;
+      top: 35px;
+    }
+
+    .water .h1 {
+      left: 24px;
+      top: 75px;
+    }
+
+    .water .h2 {
+      right: 24px;
+      top: 75px;
+    }
+
+    .n2s1 .s {
+      left: 69px;
+      top: 35px;
+    }
+
+    .n2s1 .n1 {
+      left: 22px;
+      top: 72px;
+    }
+
+    .n2s1 .n2 {
+      right: 22px;
+      top: 72px;
+    }
+
+    .bondLine {
+      position: absolute;
+      height: 5px;
+      background: rgba(216,255,230,0.78);
+      box-shadow: 0 0 8px rgba(216,255,230,0.42);
+      transform-origin: center;
       z-index: 2;
     }
 
-    .atom.a1 { left: 32px; top: 4px; }
-    .atom.a2 { left: 4px; top: 48px; background: radial-gradient(circle at 30% 28%, #ffffff, var(--yellow) 26%, #8a6d00 75%); }
-    .atom.a3 { left: 60px; top: 48px; background: radial-gradient(circle at 30% 28%, #ffffff, var(--green) 26%, #006b2a 75%); }
-
-    .bond {
-      position: absolute;
-      height: 5px;
-      width: 54px;
-      background: rgba(216,255,230,0.74);
-      left: 22px;
-      top: 42px;
-      transform-origin: center;
-      box-shadow: 0 0 8px rgba(216,255,230,0.35);
-      z-index: 1;
+    .water .bondLeft {
+      width: 58px;
+      left: 50px;
+      top: 78px;
+      transform: rotate(-38deg);
     }
 
-    .bond.bond1 { transform: rotate(-52deg); }
-    .bond.bond2 { transform: rotate(52deg); top: 43px; }
-
-    .orbit {
-      position: absolute;
-      left: 4px;
-      top: 10px;
-      width: 82px;
-      height: 72px;
-      border: 1px dashed rgba(255,238,102,0.44);
-      border-radius: 50%;
-      animation: orbitSpin 3.6s linear infinite;
+    .water .bondRight {
+      width: 58px;
+      right: 50px;
+      top: 78px;
+      transform: rotate(38deg);
     }
 
-    @keyframes orbitSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .n2s1 .bondLeft {
+      width: 60px;
+      left: 48px;
+      top: 76px;
+      transform: rotate(-36deg);
+    }
+
+    .n2s1 .bondRight {
+      width: 60px;
+      right: 48px;
+      top: 76px;
+      transform: rotate(36deg);
+    }
+
+    .moleculeFormula {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 7px;
+      text-align: center;
+      color: var(--yellow);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px rgba(255,238,102,0.5);
+    }
+
+    .moleculeFormula sub {
+      font-size: 9px;
+      vertical-align: baseline;
+      position: relative;
+      bottom: -2px;
     }
 
     .moleculeLabel {
@@ -675,6 +771,49 @@
         font-size: 10px;
         flex-direction: column;
       }
+
+      .experimentCard {
+        min-height: auto;
+      }
+
+      .chemicalMolecule.water {
+        left: 10px;
+      }
+
+      .chemicalMolecule.n2s1 {
+        right: 10px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 8px;
+      }
+
+      .screen {
+        padding: 8px;
+      }
+
+      .experimentImage {
+        height: 300px;
+      }
+
+      .chemicalMolecule.water {
+        left: 50%;
+        top: 18px;
+        transform: translateX(-50%);
+      }
+
+      .chemicalMolecule.n2s1 {
+        left: 50%;
+        right: auto;
+        top: 154px;
+        transform: translateX(-50%);
+      }
+
+      .tubeRack {
+        transform: translateX(-50%) scale(0.9);
+      }
     }
   </style>
 </head>
@@ -737,6 +876,7 @@
                     <span class="bubble b3"></span>
                   </div>
 
+                  <div class="rackTop"></div>
                   <div class="rackBase"></div>
                 </div>
               </div>
@@ -756,33 +896,28 @@
                 Molecular image active. The compound pattern is unstable and keeps moving.
               </div>
 
-              <div class="experimentImage" aria-label="Animated moving molecules">
+              <div class="experimentImage" aria-label="Animated H2O and N2S1 molecules">
                 <div class="moleculeStage">
-                  <div class="molecule m1">
-                    <div class="orbit"></div>
-                    <div class="bond bond1"></div>
-                    <div class="bond bond2"></div>
-                    <div class="atom a1"></div>
-                    <div class="atom a2"></div>
-                    <div class="atom a3"></div>
+                  <div class="chemicalMolecule water">
+                    <div class="bondLine bondLeft"></div>
+                    <div class="bondLine bondRight"></div>
+
+                    <div class="atomLetter o">O</div>
+                    <div class="atomLetter h h1">H</div>
+                    <div class="atomLetter h h2">H</div>
+
+                    <div class="moleculeFormula">H<sub>2</sub>O</div>
                   </div>
 
-                  <div class="molecule m2">
-                    <div class="orbit"></div>
-                    <div class="bond bond1"></div>
-                    <div class="bond bond2"></div>
-                    <div class="atom a1"></div>
-                    <div class="atom a2"></div>
-                    <div class="atom a3"></div>
-                  </div>
+                  <div class="chemicalMolecule n2s1">
+                    <div class="bondLine bondLeft"></div>
+                    <div class="bondLine bondRight"></div>
 
-                  <div class="molecule m3">
-                    <div class="orbit"></div>
-                    <div class="bond bond1"></div>
-                    <div class="bond bond2"></div>
-                    <div class="atom a1"></div>
-                    <div class="atom a2"></div>
-                    <div class="atom a3"></div>
+                    <div class="atomLetter s">S</div>
+                    <div class="atomLetter n n1">N</div>
+                    <div class="atomLetter n n2">N</div>
+
+                    <div class="moleculeFormula">N<sub>2</sub>S<sub>1</sub></div>
                   </div>
 
                   <div class="moleculeLabel">MOLECULAR PATTERN ACTIVE</div>
