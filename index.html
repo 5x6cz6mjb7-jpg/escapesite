@@ -44,7 +44,7 @@
 
     .screen {
       width: 100%;
-      max-width: 760px;
+      max-width: 880px;
       padding: 28px;
       border: 2px solid #5f0000;
       background: rgba(5, 5, 5, 0.92);
@@ -68,6 +68,12 @@
       margin: 10px 0;
       text-shadow: 0 0 12px rgba(255, 0, 0, 0.8);
       animation: glitch 1.8s infinite;
+    }
+
+    h2 {
+      color: #ff3333;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.65);
     }
 
     @keyframes glitch {
@@ -129,6 +135,8 @@
       justify-content: center;
       align-items: center;
       z-index: 10;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     #startOverlay button {
@@ -160,6 +168,31 @@
       margin-top: 18px;
     }
 
+    .videoBox {
+      width: 100%;
+      max-width: 820px;
+      margin-top: 18px;
+      border: 2px solid #5f0000;
+      background: #000;
+      box-shadow:
+        0 0 30px rgba(255, 0, 0, 0.35),
+        inset 0 0 20px rgba(255, 0, 0, 0.18);
+    }
+
+    .videoNote {
+      color: #999;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 14px;
+    }
+
+    .nextHint {
+      margin-top: 18px;
+      color: #ff3333;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
     @media (max-width: 500px) {
       .screen {
         padding: 20px;
@@ -180,6 +213,11 @@
       .button {
         font-size: 15px;
         padding: 16px 20px;
+      }
+
+      #startOverlay button {
+        font-size: 18px;
+        padding: 16px 22px;
       }
     }
   </style>
@@ -217,7 +255,20 @@
 
     <section id="unlockedArea">
       <h2>TRANSMISSION UNLOCKED</h2>
-      <a class="button" href="video.html">OPEN CLASSIFIED VIDEO</a>
+
+      <video id="classifiedVideo" class="videoBox" controls playsinline preload="metadata">
+        <source src="JasonKraneisalive.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <p class="videoNote">
+        Classified video file loaded locally.<br>
+        No external login required.
+      </p>
+
+      <div class="nextHint">
+        WATCH THE FULL TRANSMISSION.
+      </div>
     </section>
   </main>
 
@@ -279,6 +330,12 @@
 
       document.getElementById("lockedArea").style.display = "none";
       document.getElementById("unlockedArea").style.display = "block";
+
+      const video = document.getElementById("classifiedVideo");
+
+      setTimeout(function() {
+        video.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
     }
   </script>
 
