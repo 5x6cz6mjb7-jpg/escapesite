@@ -241,8 +241,8 @@
       <h1>Did you miss me?</h1>
       <div class="hashtag">#JasonIsAlive</div>
 
-      <div class="countdown-title">TRANSMISSION UNLOCKS IN</div>
-      <div id="countdown">00:00:05</div>
+      <div class="countdown-title">TRANSMISSION UNLOCKS ON 01-07 // 20:00</div>
+      <div id="countdown">--D --:--:--</div>
 
       <p>
         The system is locked.<br>
@@ -274,8 +274,8 @@
   </main>
 
   <script>
-    const countdownSeconds = 5;
-    let remainingSeconds = countdownSeconds;
+    const targetDate = new Date("2026-07-01T20:00:00+02:00").getTime();
+
     let countdownInterval;
     let unlocked = false;
 
@@ -289,33 +289,40 @@
         console.log("Music could not start automatically.");
       });
 
-      updateCountdownDisplay();
+      updateCountdown();
       countdownInterval = setInterval(updateCountdown, 1000);
     }
 
     function updateCountdown() {
-      remainingSeconds--;
+      const now = new Date().getTime();
+      const distance = targetDate - now;
 
-      if (remainingSeconds <= 0) {
-        remainingSeconds = 0;
-        updateCountdownDisplay();
+      if (distance <= 0) {
         clearInterval(countdownInterval);
+        document.getElementById("countdown").textContent = "00:00:00";
         unlockTransmission();
         return;
       }
 
-      updateCountdownDisplay();
-    }
+      const totalSeconds = Math.floor(distance / 1000);
 
-    function updateCountdownDisplay() {
-      const hours = Math.floor(remainingSeconds / 3600);
-      const minutes = Math.floor((remainingSeconds % 3600) / 60);
-      const seconds = remainingSeconds % 60;
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
 
-      document.getElementById("countdown").textContent =
-        String(hours).padStart(2, "0") + ":" +
-        String(minutes).padStart(2, "0") + ":" +
-        String(seconds).padStart(2, "0");
+      if (days > 0) {
+        document.getElementById("countdown").textContent =
+          String(days).padStart(2, "0") + "D " +
+          String(hours).padStart(2, "0") + ":" +
+          String(minutes).padStart(2, "0") + ":" +
+          String(seconds).padStart(2, "0");
+      } else {
+        document.getElementById("countdown").textContent =
+          String(hours).padStart(2, "0") + ":" +
+          String(minutes).padStart(2, "0") + ":" +
+          String(seconds).padStart(2, "0");
+      }
     }
 
     function unlockTransmission() {
