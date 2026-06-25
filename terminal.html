@@ -14,6 +14,7 @@
       --yellow: #ffee66;
       --red: #ff5555;
       --purple: #d48cff;
+      --blue: #7dfcff;
     }
 
     * {
@@ -847,6 +848,7 @@
 
     .systemWindow,
     .readmeWindow,
+    .myComputerWindow,
     .recycleWindow,
     .easterEggWindow {
       border: 2px solid #d8ffe6;
@@ -861,6 +863,7 @@
     }
 
     .readmeWindow,
+    .myComputerWindow,
     .recycleWindow,
     .easterEggWindow {
       display: none;
@@ -873,6 +876,13 @@
     .readmeWindow {
       left: 42%;
       top: 104px;
+    }
+
+    .myComputerWindow {
+      left: 28%;
+      top: 82px;
+      width: 520px;
+      z-index: 32;
     }
 
     .recycleWindow {
@@ -912,6 +922,7 @@
 
     .systemBody,
     .readmeBody,
+    .myComputerBody,
     .recycleBody,
     .easterEggBody {
       padding: 14px;
@@ -922,6 +933,7 @@
 
     .systemBox,
     .readmeBox,
+    .myComputerBox,
     .recycleBox,
     .easterEggBox {
       border: 1px dashed var(--green2);
@@ -932,6 +944,7 @@
     }
 
     .readmeBox strong,
+    .myComputerBox strong,
     .recycleBox strong,
     .easterEggBox strong {
       color: var(--yellow);
@@ -1025,7 +1038,8 @@
       font-size: 12px;
     }
 
-    .deletedItem {
+    .deletedItem,
+    .driveItem {
       width: 100%;
       text-align: left;
       border: 1px solid rgba(0,255,102,0.24);
@@ -1040,9 +1054,63 @@
       gap: 8px;
     }
 
-    .deletedItem:hover {
+    .deletedItem:hover,
+    .driveItem:hover {
       background: rgba(0,255,102,0.10);
       border-color: var(--yellow);
+    }
+
+    .driveIcon {
+      width: 26px;
+      height: 18px;
+      display: inline-block;
+      border: 2px solid #d8ffe6;
+      background:
+        linear-gradient(180deg, rgba(0,255,102,0.45), rgba(0,80,25,0.85));
+      box-shadow: 0 0 8px rgba(0,255,102,0.22);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .driveIcon::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      bottom: -7px;
+      height: 5px;
+      border: 1px solid #d8ffe6;
+      background: rgba(0,0,0,0.75);
+    }
+
+    .archiveDrive {
+      background:
+        linear-gradient(180deg, rgba(255,238,102,0.55), rgba(90,75,0,0.85));
+    }
+
+    .backupDrive {
+      background:
+        linear-gradient(180deg, rgba(125,252,255,0.55), rgba(0,70,80,0.85));
+    }
+
+    .lockedDrive {
+      background:
+        linear-gradient(180deg, rgba(212,140,255,0.55), rgba(60,20,80,0.85));
+    }
+
+    .driveOutput {
+      min-height: 118px;
+      margin-top: 12px;
+      border: 1px solid rgba(255,238,102,0.35);
+      background: rgba(255,238,102,0.055);
+      color: #d8ffe6;
+      padding: 11px;
+      white-space: pre-line;
+      line-height: 1.55;
+    }
+
+    .driveOutput strong {
+      color: var(--yellow);
     }
 
     .tinyTextIcon {
@@ -1345,6 +1413,10 @@
         top: 120px;
       }
 
+      .myComputerWindow {
+        top: 100px;
+      }
+
       .recycleWindow {
         top: 190px;
       }
@@ -1406,11 +1478,16 @@
       }
 
       .readmeWindow,
+      .myComputerWindow,
       .recycleWindow,
       .easterEggWindow {
         width: calc(100% - 28px);
         top: 150px;
         left: 14px;
+      }
+
+      .myComputerWindow {
+        top: 130px;
       }
 
       .recycleWindow {
@@ -1562,10 +1639,10 @@
               <span class="iconName">Private</span>
             </a>
 
-            <div class="desktopIcon">
+            <button class="desktopIcon" onclick="openMyComputer()">
               <span class="oldIcon computerIcon"></span>
               <span class="iconName">My Computer</span>
-            </div>
+            </button>
 
             <a class="desktopIcon" href="shoot.html">
               <span class="oldIcon diskIcon"></span>
@@ -1645,11 +1722,11 @@ Last external contact: JASON KRANE</div>
                 <div>&gt; Jason Krane reference count: abnormal</div>
                 <div>&gt; warning: staged transmission residue found</div>
                 <div>&gt; external backup disk mounted</div>
-                <div>&gt; open Readme.txt for recovery order</div>
+                <div>&gt; open files manually // order unknown</div>
               </div>
 
               <div class="hintLine">
-                Recommended order: Chemistry → Botany → Backup Disk → Private → Memory.
+                Local workstation unstable. Open files manually. Trust nothing that looks too obvious.
               </div>
 
               <div class="commandTerminal">
@@ -1690,17 +1767,15 @@ Main directories are available:
 
 An external Backup Disk has also been mounted.</div>
 
-              <div class="readmeBox"><strong>RECOMMENDED RECOVERY ORDER</strong>
+              <div class="readmeBox"><strong>RECOVERY NOTE</strong>
 
-Open Chemistry first.
+The workstation is fragmented.
 
-Then open Botany.
+Some folders contain scientific records.
+Some files contain personal material.
+Some mounted disks may contain corrupted simulations.
 
-Then inspect the Backup Disk.
-
-Only open Private after recovering enough context from the first two folders.
-
-The Private folder may contain personal material connected to Jason Krane.
+Do not assume every file tells the truth.
 
 The final environment requires a recovered memory code.</div>
 
@@ -1712,6 +1787,52 @@ Recovered data suggests the transmissions may have been edited, staged or recons
 
 Find the diary.
 Find the memory code.</div>
+            </div>
+          </section>
+
+          <section class="myComputerWindow" id="myComputerWindow">
+            <div class="windowTitleBar">
+              <span>My Computer</span>
+              <div class="windowButtons">
+                <span class="winButton"></span>
+                <span class="winButton"></span>
+                <span class="winButton close" onclick="closeMyComputer()"></span>
+              </div>
+            </div>
+
+            <div class="myComputerBody">
+              <div class="myComputerBox"><strong>LOCAL MACHINE INDEX</strong>
+
+Recovered workstation structure:
+Dr. Nessa Thorne's private lab machine.
+
+Several drives are mounted.
+Some are damaged.
+Some are lying.</div>
+
+              <button class="driveItem" onclick="openDriveInfo('cdrive')">
+                <span class="driveIcon"></span>
+                <span>Local Disk C: // THORNE_OS</span>
+              </button>
+
+              <button class="driveItem" onclick="openDriveInfo('archive')">
+                <span class="driveIcon archiveDrive"></span>
+                <span>Archive D: // BOTANICAL_CHEMISTRY</span>
+              </button>
+
+              <button class="driveItem" onclick="openDriveInfo('backup')">
+                <span class="driveIcon backupDrive"></span>
+                <span>Backup Disk E: // EXTERNAL_RECOVERY</span>
+              </button>
+
+              <button class="driveItem" onclick="openDriveInfo('locked')">
+                <span class="driveIcon lockedDrive"></span>
+                <span>Hidden Volume ?: // LOVE_ARCHIVE</span>
+              </button>
+
+              <div class="driveOutput" id="driveOutput">
+                Select a drive to inspect recovered metadata.
+              </div>
             </div>
           </section>
 
@@ -2028,6 +2149,7 @@ Moved to archive.`
 
     function openReadme() {
       document.getElementById("readmeWindow").style.display = "block";
+      document.getElementById("myComputerWindow").style.display = "none";
       document.getElementById("recycleWindow").style.display = "none";
       document.getElementById("easterEggWindow").style.display = "none";
     }
@@ -2036,8 +2158,73 @@ Moved to archive.`
       document.getElementById("readmeWindow").style.display = "none";
     }
 
+    function openMyComputer() {
+      document.getElementById("myComputerWindow").style.display = "block";
+      document.getElementById("readmeWindow").style.display = "none";
+      document.getElementById("recycleWindow").style.display = "none";
+      document.getElementById("easterEggWindow").style.display = "none";
+
+      const driveOutput = document.getElementById("driveOutput");
+      driveOutput.textContent = "Select a drive to inspect recovered metadata.";
+    }
+
+    function closeMyComputer() {
+      document.getElementById("myComputerWindow").style.display = "none";
+    }
+
+    function openDriveInfo(type) {
+      const output = document.getElementById("driveOutput");
+
+      if (type === "cdrive") {
+        output.innerHTML =
+          "<strong>LOCAL DISK C: // THORNE_OS</strong>\n\n" +
+          "System owner: DR. N. THORNE\n" +
+          "Login cache: active\n" +
+          "University profile: detached\n" +
+          "Last manual access: after Jason Krane disappearance\n\n" +
+          "Recovered note:\n" +
+          "\"I did not lose access. I kept the machine awake.\"";
+        return;
+      }
+
+      if (type === "archive") {
+        output.innerHTML =
+          "<strong>ARCHIVE D: // BOTANICAL_CHEMISTRY</strong>\n\n" +
+          "Chemistry records: fragmented\n" +
+          "Botany records: fragmented\n" +
+          "Cross-reference: plant-derived compounds\n\n" +
+          "Warning:\n" +
+          "Scientific records contain personal annotations.";
+        return;
+      }
+
+      if (type === "backup") {
+        output.innerHTML =
+          "<strong>BACKUP DISK E: // EXTERNAL_RECOVERY</strong>\n\n" +
+          "Mounted simulation detected.\n" +
+          "Status: playable\n" +
+          "Recovered letters: unstable\n\n" +
+          "System note:\n" +
+          "Some words are not opened by clicking.\n" +
+          "Some words are entered where commands are accepted.";
+        return;
+      }
+
+      if (type === "locked") {
+        output.innerHTML =
+          "<strong>HIDDEN VOLUME ?: // LOVE_ARCHIVE</strong>\n\n" +
+          "Volume label damaged.\n" +
+          "Access layer: emotional encryption\n" +
+          "Jason Krane references: excessive\n\n" +
+          "Partial phrase recovered:\n" +
+          "\"He is not alive. I kept him present.\"";
+        return;
+      }
+    }
+
     function openRecycle() {
       document.getElementById("recycleWindow").style.display = "block";
+      document.getElementById("myComputerWindow").style.display = "none";
       document.getElementById("readmeWindow").style.display = "none";
       document.getElementById("easterEggWindow").style.display = "none";
     }
