@@ -313,7 +313,7 @@
       background:
         radial-gradient(circle at 36% 43%, rgba(255,38,77,0.15), transparent 7%),
         radial-gradient(circle at 48% 49%, rgba(255,38,77,0.15), transparent 7%),
-        radial-gradient(circle at 69% 24%, rgba(255,38,77,0.15), transparent 7%),
+        radial-gradient(circle at 69% 17%, rgba(255,38,77,0.15), transparent 7%),
         radial-gradient(circle at 70% 39%, rgba(255,38,77,0.15), transparent 7%);
     }
 
@@ -353,7 +353,7 @@
     .pointB { left: 48%; top: 49%; }
 
     /* C = Groningen */
-    .pointC { left: 69%; top: 24%; }
+    .pointC { left: 69%; top: 17%; }
 
     /* D = Hardenberg */
     .pointD { left: 70%; top: 39%; }
@@ -455,6 +455,56 @@
       font-size: 10px;
       letter-spacing: 1px;
       text-align: center;
+    }
+
+    .distanceOverlay {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 46px;
+      z-index: 5;
+      border: 1px solid rgba(255, 211, 106, 0.7);
+      background:
+        linear-gradient(90deg, rgba(255,211,106,0.15), rgba(0,0,0,0.70));
+      color: var(--yellow);
+      padding: 8px 10px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(255,211,106,0.55);
+    }
+
+    .distanceTop {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .distanceValue {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow:
+        0 0 10px rgba(255,211,106,0.75),
+        0 0 20px rgba(255,38,77,0.35);
+    }
+
+    .distanceBar {
+      height: 8px;
+      border: 1px solid rgba(255,211,106,0.45);
+      background: rgba(0,0,0,0.48);
+      overflow: hidden;
+    }
+
+    .distanceFill {
+      height: 100%;
+      width: 100%;
+      background:
+        linear-gradient(90deg, var(--green), var(--yellow), var(--red));
+      box-shadow: 0 0 12px rgba(255,211,106,0.45);
+      transition: width 0.35s linear;
     }
 
     @keyframes warningPulse {
@@ -803,6 +853,15 @@
         grid-template-columns: 1fr;
       }
 
+      .distanceOverlay {
+        top: 42px;
+        font-size: 11px;
+      }
+
+      .distanceValue {
+        font-size: 14px;
+      }
+
       .gridCell {
         height: 15px;
         min-width: 12px;
@@ -935,6 +994,16 @@
           </video>
 
           <div class="feedWarning">COURSE LOCKED</div>
+
+          <div class="distanceOverlay">
+            <div class="distanceTop">
+              <span>DISTANCE TO HARDENBERG</span>
+              <span class="distanceValue" id="distanceValue">24.0 KM</span>
+            </div>
+            <div class="distanceBar">
+              <div class="distanceFill" id="distanceFill"></div>
+            </div>
+          </div>
 
           <div class="feedTelemetry">
             <div>ALTITUDE: UNSTABLE</div>
@@ -1082,6 +1151,8 @@
     const correctSliderB = 38;
     const correctSliderC = 91;
 
+    const startingDroneDistanceKm = 24.0;
+
     const gridlockCorrect = [
       "A1", "A15",
 
@@ -1142,6 +1213,23 @@
 
     function updateTimerDisplay() {
       document.getElementById("timerBox").textContent = formatSeconds(timeLeft);
+      updateDroneDistance();
+    }
+
+    function updateDroneDistance() {
+      const distanceValue = document.getElementById("distanceValue");
+      const distanceFill = document.getElementById("distanceFill");
+
+      if (!distanceValue || !distanceFill) {
+        return;
+      }
+
+      const timeRatio = Math.max(0, Math.min(1, timeLeft / 300));
+      const currentDistance = startingDroneDistanceKm * timeRatio;
+      const fillPercent = timeRatio * 100;
+
+      distanceValue.textContent = currentDistance.toFixed(1) + " KM";
+      distanceFill.style.width = fillPercent + "%";
     }
 
     function startFinalMission() {
@@ -1158,10 +1246,12 @@
       addLog("> live drone feed connected");
       addLog("> visual contact restored");
       addLog("> route locked toward Hardenberg sector");
+      addLog("> distance telemetry linked to countdown");
       addLog("> wrong input penalty armed: -30 seconds");
 
       startTimer();
       startDroneVideo();
+      updateDroneDistance();
     }
 
     function startDroneVideo() {
@@ -1209,6 +1299,7 @@
       }
 
       addLog("> timer expired");
+      addLog("> drone reached Hardenberg sector");
       addLog("> drone override window closed");
 
       document.getElementById("failOverlay").style.display = "flex";
@@ -1497,6 +1588,7 @@
     updateSliderLabels();
     updateTimerDisplay();
     updatePills();
+    updateDroneDistance();
   </script>
 
 </body>
