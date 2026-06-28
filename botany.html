@@ -2,25 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Nessa Thorne - Irish Herbarium</title>
+  <title>Nessa Thorne - Travel Field Notes</title>
 
   <style>
     :root {
       --dark: #050704;
-      --dark2: #0a1209;
       --paper: #e9ddbc;
       --paper2: #d7c8a2;
       --paper3: #f4ead0;
       --ink: #2d2417;
-      --ink2: #493821;
       --green: #61784c;
-      --green2: #8faa72;
       --gold: #b8944e;
       --red: #8b2839;
-      --red2: #b34a5d;
-      --brown: #4a321c;
       --muted: #8b8069;
-      --cream: #f4ead0;
       --font: "Courier New", monospace;
       --hand: "Georgia", "Times New Roman", serif;
     }
@@ -195,7 +189,7 @@
       margin-bottom: 10px;
     }
 
-    .plantBtn {
+    .entryBtn {
       width: 100%;
       text-align: left;
       margin-bottom: 9px;
@@ -209,14 +203,14 @@
       transition: 0.15s ease;
     }
 
-    .plantBtn:hover,
-    .plantBtn.active {
+    .entryBtn:hover,
+    .entryBtn.active {
       border-color: rgba(184,148,78,0.78);
       background: rgba(184,148,78,0.085);
       transform: translateX(3px);
     }
 
-    .plantBtn strong {
+    .entryBtn strong {
       display: block;
       color: #f4ead0;
       font-size: 13px;
@@ -224,27 +218,10 @@
       letter-spacing: 1px;
     }
 
-    .plantBtn em {
+    .entryBtn em {
       font-size: 12px;
       color: #a8c291;
-    }
-
-    .looseNoteButton {
-      width: 100%;
-      margin-top: 12px;
-      padding: 11px;
-      border: 1px solid rgba(179,74,93,0.45);
-      background: rgba(179,74,93,0.10);
-      color: #f1d2d8;
-      cursor: pointer;
-      font-family: var(--font);
-      text-align: left;
-    }
-
-    .looseNoteButton:hover,
-    .looseNoteButton.active {
-      border-color: rgba(233,221,188,0.55);
-      background: rgba(179,74,93,0.18);
+      font-style: normal;
     }
 
     .smallHint {
@@ -283,7 +260,7 @@
 
     .book {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 0.85fr 1.15fr;
       min-height: 710px;
     }
 
@@ -339,50 +316,7 @@
       margin-bottom: 10px;
     }
 
-    .photoFrame {
-      position: relative;
-      width: min(100%, 310px);
-      margin: 0 auto 14px;
-      padding: 12px 12px 30px;
-      background: #f5f0e3;
-      border: 1px solid rgba(70,54,30,0.24);
-      box-shadow: 0 11px 22px rgba(0,0,0,0.17);
-      transform: rotate(-2deg);
-    }
-
-    .photoFrame img {
-      display: block;
-      width: 100%;
-      height: 310px;
-      object-fit: cover;
-      border: 1px solid rgba(70,54,30,0.25);
-      background: #ddd;
-      filter: saturate(0.92) contrast(1.03);
-    }
-
-    .photoCaption {
-      margin-top: 8px;
-      text-align: center;
-      font-family: var(--hand);
-      font-style: italic;
-      color: #5b4930;
-      font-size: 18px;
-    }
-
-    .tape {
-      position: absolute;
-      width: 74px;
-      height: 22px;
-      background: rgba(246,240,220,0.48);
-      border: 1px solid rgba(70,54,30,0.14);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-      z-index: 4;
-    }
-
-    .tape.t1 { top: 10px; left: 10px; transform: rotate(-12deg); }
-    .tape.t2 { top: 12px; right: 12px; transform: rotate(10deg); }
-
-    .clip {
+    .paperClip {
       position: absolute;
       right: 24px;
       top: 44px;
@@ -393,18 +327,6 @@
       border-radius: 0 18px 18px 0;
       z-index: 5;
       transform: rotate(6deg);
-    }
-
-    .stamp {
-      display: inline-block;
-      border: 2px solid rgba(139,40,57,0.46);
-      color: rgba(139,40,57,0.76);
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 6px 10px;
-      transform: rotate(-5deg);
-      margin-top: 4px;
     }
 
     .coffeeStain {
@@ -418,7 +340,64 @@
       transform: rotate(18deg);
     }
 
-    .plantName {
+    .stamp {
+      display: inline-block;
+      border: 2px solid rgba(139,40,57,0.46);
+      color: rgba(139,40,57,0.76);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      transform: rotate(-5deg);
+      margin-top: 14px;
+    }
+
+    .travelMeta {
+      border: 1px dashed rgba(70,54,30,0.25);
+      background: rgba(255,255,255,0.12);
+      padding: 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .travelMeta strong {
+      color: #6f2634;
+    }
+
+    .ticketStub {
+      margin-top: 14px;
+      padding: 12px;
+      border: 2px dashed rgba(70,54,30,0.24);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.20), rgba(255,255,255,0.05));
+      transform: rotate(-2deg);
+      font-family: var(--font);
+      font-size: 12px;
+      line-height: 1.55;
+      color: #3c2e1b;
+    }
+
+    .ticketStub h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #84283a;
+    }
+
+    .redThread {
+      margin-top: 18px;
+      border-left: 4px solid rgba(139,40,57,0.55);
+      padding: 10px 12px;
+      color: #6e2330;
+      font-family: var(--hand);
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.5;
+      background: rgba(139,40,57,0.07);
+    }
+
+    .entryTitle {
       margin: 0;
       color: #1e170e;
       font-family: var(--hand);
@@ -426,7 +405,7 @@
       letter-spacing: 1px;
     }
 
-    .latin {
+    .entrySubtitle {
       margin: 5px 0 14px;
       font-family: var(--hand);
       font-style: italic;
@@ -434,50 +413,25 @@
       font-size: 18px;
     }
 
-    .facts {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .factRow {
-      display: grid;
-      grid-template-columns: 108px 1fr;
-      gap: 8px;
-      padding-bottom: 5px;
-      border-bottom: 1px dashed rgba(43,36,24,0.18);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .factRow strong {
-      color: rgba(43,36,24,0.66);
-    }
-
-    .nessaBox {
-      border: 2px solid rgba(139,40,57,0.32);
-      background: rgba(139,40,57,0.08);
-      color: #6e2330;
-      padding: 12px;
-      transform: rotate(-1deg);
+    .journalText {
+      border: 2px solid rgba(139,40,57,0.20);
+      background: rgba(255,255,255,0.10);
+      color: #2d2417;
+      padding: 14px;
+      transform: rotate(-0.6deg);
       font-family: var(--hand);
       font-size: 18px;
-      line-height: 1.58;
+      line-height: 1.62;
       box-shadow: inset 0 0 10px rgba(139,40,57,0.04);
+      white-space: pre-line;
     }
 
-    .nessaBox strong {
-      display: block;
-      color: #872837;
-      font-family: var(--font);
-      font-size: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+    .journalText strong {
+      color: #7e2635;
     }
 
     .marginScratch {
-      margin-top: 12px;
+      margin-top: 14px;
       color: rgba(139,40,57,0.78);
       font-family: var(--hand);
       font-style: italic;
@@ -519,74 +473,6 @@
       color: #4a4030;
       font-size: 11px;
       line-height: 1.35;
-    }
-
-    .mqPage {
-      display: none;
-    }
-
-    .mqPaper {
-      background:
-        radial-gradient(circle at 90% 15%, rgba(139,40,57,0.08), transparent 20%),
-        linear-gradient(180deg, var(--paper3), var(--paper2));
-      border: 1px solid rgba(70,54,30,0.22);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-      padding: 16px;
-      transform: rotate(-1deg);
-      min-height: 620px;
-      color: var(--ink);
-      font-family: var(--hand);
-      font-size: 18px;
-      line-height: 1.58;
-      position: relative;
-    }
-
-    .mqPaper::before {
-      content: "";
-      position: absolute;
-      left: 20px;
-      top: 18px;
-      width: 72px;
-      height: 20px;
-      background: rgba(246,240,220,0.55);
-      border: 1px solid rgba(70,54,30,0.14);
-      transform: rotate(-10deg);
-    }
-
-    .mqPaper h2 {
-      margin: 26px 0 8px;
-      color: #21170d;
-      font-size: 28px;
-      letter-spacing: 1px;
-    }
-
-    .mqPaper .dateLine {
-      color: rgba(43,36,24,0.60);
-      font-size: 14px;
-      font-family: var(--font);
-      margin-bottom: 14px;
-    }
-
-    .mqPaper p {
-      margin: 0 0 13px;
-    }
-
-    .mqPaper .redLine {
-      color: #7e2635;
-      font-style: italic;
-    }
-
-    .mqPaper .underlined {
-      text-decoration: underline;
-      text-decoration-color: rgba(139,40,57,0.45);
-      text-decoration-thickness: 2px;
-    }
-
-    .mqPaper .signature {
-      margin-top: 18px;
-      color: #7e2635;
-      font-style: italic;
-      font-size: 21px;
     }
 
     .checkStack {
@@ -731,6 +617,16 @@
       color: #fff2d5;
     }
 
+    .gameNote {
+      border: 1px dashed rgba(184,148,78,0.40);
+      background: rgba(184,148,78,0.06);
+      color: #d8cdb0;
+      font-size: 11px;
+      line-height: 1.45;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
     .unlock {
       display: none;
       margin-top: 10px;
@@ -808,10 +704,6 @@
         border-bottom: 4px solid rgba(72,52,22,0.52);
       }
 
-      .photoFrame img {
-        height: 240px;
-      }
-
       .miniField {
         grid-template-columns: 1fr;
       }
@@ -820,8 +712,7 @@
         grid-template-columns: 1fr;
       }
 
-      .mqPaper {
-        min-height: auto;
+      .journalText {
         font-size: 16px;
       }
     }
@@ -838,183 +729,119 @@
         <span>DR. NESSA THORNE</span>
       </div>
 
-      <div class="mainTitle">Irish Herbarium Field Book</div>
-      <div class="subTitle">PRIVATE PLANT RECORDS // HANDWRITTEN NOTES</div>
+      <div class="mainTitle">Nessa Thorne Travel Field Notes</div>
+      <div class="subTitle">BOTANY LESSON JOURNAL // PRIVATE REVENGE THREAD</div>
     </header>
 
     <section class="layout">
       <aside class="panel">
-        <div class="panelTitle">Plant Index</div>
+        <div class="panelTitle">Travel Entries</div>
 
         <div class="panelBody">
           <div class="indexNote">
-            A recovered notebook from Nessa’s private workstation.
-            Some pages are scientific. Others are not.
+            Recovered personal teaching journal from Nessa’s workstation.
+            These entries were filed under botany fieldwork.
           </div>
 
-          <button class="plantBtn active" id="btn-digitalis" onclick="selectPlant('digitalis')">
-            <strong>FOXGLOVE</strong>
-            <em>Digitalis purpurea</em>
+          <button class="entryBtn active" id="btn-entry1" onclick="selectEntry('entry1')">
+            <strong>01 // DUBLIN</strong>
+            <em>classroom preparation</em>
           </button>
 
-          <button class="plantBtn" id="btn-geranium" onclick="selectPlant('geranium')">
-            <strong>BLOODY CRANE’S-BILL</strong>
-            <em>Geranium sanguineum</em>
+          <button class="entryBtn" id="btn-entry2" onclick="selectEntry('entry2')">
+            <strong>02 // WALES</strong>
+            <em>coastal plant lesson</em>
           </button>
 
-          <button class="plantBtn" id="btn-oenanthe" onclick="selectPlant('oenanthe')">
-            <strong>HEMLOCK WATER DROPWORT</strong>
-            <em>Oenanthe crocata</em>
+          <button class="entryBtn" id="btn-entry3" onclick="selectEntry('entry3')">
+            <strong>03 // TRAIN TO SPAIN</strong>
+            <em>M and Q observed</em>
           </button>
 
-          <button class="plantBtn" id="btn-trifolium" onclick="selectPlant('trifolium')">
-            <strong>WHITE CLOVER</strong>
-            <em>Trifolium repens</em>
+          <button class="entryBtn" id="btn-entry4" onclick="selectEntry('entry4')">
+            <strong>04 // SPAIN</strong>
+            <em>dry garden notes</em>
           </button>
 
-          <button class="plantBtn" id="btn-aconitum" onclick="selectPlant('aconitum')">
-            <strong>MONKSHOOD</strong>
-            <em>Aconitum napellus</em>
-          </button>
-
-          <button class="plantBtn" id="btn-taxus" onclick="selectPlant('taxus')">
-            <strong>EUROPEAN YEW</strong>
-            <em>Taxus baccata</em>
-          </button>
-
-          <button class="looseNoteButton" id="btn-mq" onclick="openMqNote()">
-            RECOVERED LOOSE PAGE<br>
-            <strong>M / Q TRACKING NOTE</strong>
+          <button class="entryBtn" id="btn-entry5" onclick="selectEntry('entry5')">
+            <strong>05 // RETURN NORTH</strong>
+            <em>final lesson plan</em>
           </button>
 
           <div class="smallHint">
-            The right word may be a plant.<br>
-            The right method may be older than computers.<br>
-            The final growth code comes from the field game.
+            Nessa writes like a teacher first.<br>
+            Then like a witness.<br>
+            Then like someone planning revenge.
           </div>
         </div>
       </aside>
 
       <section class="bookWrap">
-        <div class="book" id="plantBook">
+        <div class="book">
           <div class="page left">
             <div class="coffeeStain"></div>
-            <div class="clip"></div>
+            <div class="paperClip"></div>
 
             <div class="pageInner">
-              <div class="pageLabel">Pressed specimen</div>
+              <div class="pageLabel">Recovered travel record</div>
 
-              <div class="photoFrame">
-                <div class="tape t1"></div>
-                <div class="tape t2"></div>
-                <img id="plantPhoto" src="digitalis.jpg" alt="Digitalis purpurea">
-                <div class="photoCaption" id="photoCaption">Digitalis purpurea</div>
+              <div class="travelMeta">
+                <strong>Entry:</strong> <span id="entryNumber">01</span><br>
+                <strong>Location:</strong> <span id="entryLocation">Dublin</span><br>
+                <strong>Teaching focus:</strong> <span id="entryFocus">botany lesson planning</span><br>
+                <strong>Private marker:</strong> <span id="entryMarker">Jason reference detected</span>
               </div>
 
-              <div class="stamp" id="stampText">TOXIC BLOOM</div>
+              <div class="ticketStub">
+                <h3 id="ticketTitle">FIELDWORK RECEIPT</h3>
+                <div id="ticketText">
+                  Staff travel approved.<br>
+                  Department of Botanical Chemistry.<br>
+                  Notes transferred to private archive.
+                </div>
+              </div>
+
+              <div class="redThread" id="redThread">
+                I taught them how to identify living systems. Jason taught me how easily systems can be used against people.
+              </div>
+
+              <div class="stamp" id="stampText">PRIVATE COPY</div>
             </div>
           </div>
 
           <div class="page right">
             <div class="pageInner">
-              <div class="pageLabel">Field notes</div>
+              <div class="pageLabel">Handwritten journal</div>
 
-              <h1 class="plantName" id="plantName">Foxglove</h1>
-              <div class="latin" id="latinName">Digitalis purpurea</div>
+              <h1 class="entryTitle" id="entryTitle">Dublin // After the lecture</h1>
+              <div class="entrySubtitle" id="entrySubtitle">Botany is easier when students still believe plants are innocent.</div>
 
-              <div class="facts">
-                <div class="factRow">
-                  <strong>Location</strong>
-                  <span id="locationText">Wicklow Mountains</span>
-                </div>
-
-                <div class="factRow">
-                  <strong>Use</strong>
-                  <span id="compoundText">cardiac glycosides</span>
-                </div>
-
-                <div class="factRow">
-                  <strong>Risk</strong>
-                  <span id="riskText">dangerous if misused</span>
-                </div>
-
-                <div class="factRow">
-                  <strong>Tag</strong>
-                  <span id="tagText">bloom marker</span>
-                </div>
-              </div>
-
-              <div class="nessaBox">
-                <strong>Nessa’s note</strong>
-                <span id="noteText">
-                  Beautiful things should always be handled carefully.
-                  Jason never understood that. Or maybe he did.
-                </span>
-              </div>
+              <div class="journalText" id="journalText"></div>
 
               <div class="marginScratch" id="scratchText">
-                Do not forget the genus. It opens more than the page.
+                The lesson was never only about plants.
               </div>
 
               <div class="miniField">
                 <div class="miniCard">
-                  <small>Specimen</small>
-                  <strong id="specimenCode">D-17</strong>
-                  <span>Filed by hand.</span>
-                </div>
-
-                <div class="miniCard">
-                  <small>Condition</small>
-                  <strong id="conditionCode">WET</strong>
-                  <span>Weather residue still present.</span>
-                </div>
-
-                <div class="miniCard">
                   <small>Archive</small>
-                  <strong id="archiveCode">ACTIVE</strong>
-                  <span>Record accessible.</span>
+                  <strong id="archiveCode">T-01</strong>
+                  <span>Personal copy.</span>
+                </div>
+
+                <div class="miniCard">
+                  <small>Status</small>
+                  <strong id="statusCode">OPEN</strong>
+                  <span>Recovered note.</span>
+                </div>
+
+                <div class="miniCard">
+                  <small>Risk</small>
+                  <strong id="riskCode">LOW</strong>
+                  <span>Still hidden.</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="mqPage" id="mqPage">
-          <div class="mqPaper">
-            <h2>M / Q tracking note</h2>
-            <div class="dateLine">Recovered loose page // N. Thorne // after Jason’s death</div>
-
-            <p>
-              They were not hard to find once I stopped looking for agents and started looking for habits.
-            </p>
-
-            <p>
-              M leaves structure everywhere: times, routes, repeated decisions.
-              Q leaves traces in systems: repair logs, device registrations, curious little errors.
-            </p>
-
-            <p>
-              I followed the overlap. A name in an old municipal request. A timing pattern.
-              A message that should have been deleted but was only moved.
-            </p>
-
-            <p class="redLine">
-              They thought Jason was the ghost in the machine.
-              That helped.
-            </p>
-
-            <p>
-              By the time they watched the first transmission, I already knew where to push.
-              Not where they lived. Not yet. But where they would go when frightened.
-            </p>
-
-            <p class="underlined">
-              Fear is a route. Love is a map. Grief is a key.
-            </p>
-
-            <p class="signature">
-              — N.
-            </p>
           </div>
         </div>
       </section>
@@ -1025,9 +852,10 @@
         <div class="panelBody">
           <div class="resultBox">
             <h3>Status</h3>
-            <div class="resultRow"><span>Bloom marker</span><span id="resultA">unconfirmed</span></div>
-            <div class="resultRow"><span>Archive method</span><span id="resultB">unconfirmed</span></div>
-            <div class="resultRow"><span>Growth code</span><span id="resultC">unconfirmed</span></div>
+            <div class="resultRow"><span>Missing piece code</span><span id="resultA">unconfirmed</span></div>
+            <div class="resultRow"><span>Card game code</span><span id="resultB">unconfirmed</span></div>
+            <div class="resultRow"><span>Latin name</span><span id="resultC">unconfirmed</span></div>
+            <div class="resultRow"><span>Field game</span><span id="resultGame">not completed</span></div>
             <div class="resultRow"><span>Private fragment</span><span id="resultFinal">locked</span></div>
           </div>
 
@@ -1035,10 +863,10 @@
             <div class="checkBlock" id="blockA">
               <div class="checkHead">
                 <span>Input A</span>
-                <span>bloom</span>
+                <span>missing piece</span>
               </div>
               <div class="inputRow">
-                <input id="answerA" autocomplete="off" placeholder="enter answer">
+                <input id="answerA" autocomplete="off" placeholder="enter missing piece code">
                 <button id="buttonA" onclick="checkA()">CHECK</button>
               </div>
             </div>
@@ -1046,21 +874,21 @@
             <div class="checkBlock" id="blockB">
               <div class="checkHead">
                 <span>Input B</span>
-                <span>archive</span>
+                <span>card game</span>
               </div>
               <div class="inputRow">
-                <input id="answerB" autocomplete="off" placeholder="enter answer">
+                <input id="answerB" autocomplete="off" placeholder="enter card game code">
                 <button id="buttonB" onclick="checkB()">CHECK</button>
               </div>
             </div>
 
             <div class="checkBlock" id="blockC">
               <div class="checkHead">
-                <span>Growth Code</span>
-                <span>external</span>
+                <span>Input C</span>
+                <span>latin name</span>
               </div>
               <div class="inputRow">
-                <input id="answerC" autocomplete="off" placeholder="enter answer">
+                <input id="answerC" autocomplete="off" placeholder="enter latin name">
                 <button id="buttonC" onclick="checkC()">CHECK</button>
               </div>
             </div>
@@ -1068,16 +896,21 @@
 
           <a class="gameLink" href="snake.html">OPEN FIELD GAME</a>
 
+          <div class="gameNote">
+            The private code fragment is only released when all three verification inputs are correct
+            and the field game has been completed.
+          </div>
+
           <div class="unlock" id="unlockBox">
             <h2>Recovered</h2>
             <div class="fragment">PRIVATE CODE PART 2: NESSA</div>
           </div>
 
-          <div class="log" id="logBox">&gt; herbarium field book loaded
-&gt; specimen pages restored
-&gt; loose page detected
-&gt; personal notes active
-&gt; verification pending</div>
+          <div class="log" id="logBox">&gt; travel field notes loaded
+&gt; teaching journal restored
+&gt; private revenge thread detected
+&gt; verification pending
+&gt; field game completion required</div>
 
           <a class="back" href="terminal.html">← RETURN TO TERMINAL</a>
         </div>
@@ -1086,105 +919,149 @@
   </main>
 
   <script>
-    const correctAnswerA = "DIGITALIS";
-    const correctAnswerB = "HERBARIUM";
-    const correctAnswerC = "WITTEKLAVER";
+    const correctAnswerA = "614128";
+    const correctAnswerB = "35721";
+    const correctAnswerC = "GERANIUMSANGUINEUM";
 
-    const plants = {
-      digitalis: {
-        file: "digitalis.jpg",
-        name: "Foxglove",
-        latin: "Digitalis purpurea",
-        location: "Wicklow Mountains",
-        compound: "cardiac glycosides",
-        risk: "dangerous if misused",
-        tag: "bloom marker",
-        note: "Beautiful things should always be handled carefully. Jason never understood that. Or maybe he did.",
-        scratch: "Do not forget the genus. It opens more than the page.",
-        stamp: "TOXIC BLOOM",
-        specimen: "D-17",
-        condition: "WET",
-        archive: "ACTIVE"
+    const entries = {
+      entry1: {
+        number: "01",
+        location: "Dublin",
+        focus: "botany lesson planning",
+        marker: "Jason reference detected",
+        title: "Dublin // After the lecture",
+        subtitle: "Botany is easier when students still believe plants are innocent.",
+        ticketTitle: "LECTURE NOTES",
+        ticketText:
+`Staff room copy.
+Department of Botanical Chemistry.
+Topic: plant defence systems.
+Filed after Jason's disappearance.`,
+        redThread:
+"I taught them how plants defend themselves when damaged. I did not tell them that people learn the same lesson.",
+        stamp: "PRIVATE COPY",
+        archive: "T-01",
+        status: "OPEN",
+        risk: "LOW",
+        scratch: "The first lesson was never about revenge. Not yet.",
+        text:
+`Today I prepared the first-year lesson on plant defence. I wrote “adaptation” on the board and watched the students copy it as if the word were harmless. Thorns, bitter leaves, poisons, warning colours: all ordinary things when a plant uses them to survive.
+
+Jason used to laugh at my examples. He said I made flowers sound like spies. I told him nature had invented secrecy long before governments did.
+
+Since his death, the lecture notes feel different. Every margin seems to ask the same question: what does a living thing do after it is wounded? I know the answer. It protects what is left. It changes shape. It makes itself dangerous.`
       },
 
-      geranium: {
-        file: "geranium.jpg",
-        name: "Bloody Crane’s-bill",
-        latin: "Geranium sanguineum",
-        location: "Dublin garden wall",
-        compound: "blood-red pigment trace",
-        risk: "low toxicity",
-        tag: "favourite flower",
-        note: "Blood-red, loyal, difficult to forget. Jason remembered this one. Of course he did.",
-        scratch: "He called it dramatic. I called it accurate.",
-        stamp: "PERSONAL",
-        specimen: "G-09",
-        condition: "DRY",
-        archive: "MARKED"
+      entry2: {
+        number: "02",
+        location: "Wales",
+        focus: "coastal plant lesson",
+        marker: "fieldwork entry modified",
+        title: "Wales // Salt wind",
+        subtitle: "A lesson on survival at the edge of the sea.",
+        ticketTitle: "FIELD TRIP RECORD",
+        ticketText:
+`Route: Dublin to Wales.
+Student worksheet draft.
+Coastal species comparison.
+Personal notes hidden in margins.`,
+        redThread:
+"Some plants survive by bending. Others survive by becoming impossible to eat.",
+        stamp: "FIELD COPY",
+        archive: "T-02",
+        status: "MARKED",
+        risk: "MED",
+        scratch: "Jason would have noticed the pattern before the students did.",
+        text:
+`The coastal path was wet, bright and cruel. I collected notes for a lesson about salt-tolerant plants and asked myself how much pressure a root can take before it twists into something new. My students will enjoy that question. They always like science more when it sounds like a riddle.
+
+In the evening I reread Jason’s last message. There are gaps in it. Not technical gaps. Emotional ones. Someone wanted him silent and thought I would only grieve.
+
+I looked at the shore plants again. They do not complain about the wind. They adapt around it. That is what I will do. I will move around the people who took him from me until I find the weak place.`
       },
 
-      oenanthe: {
-        file: "oenanthe.jpg",
-        name: "Hemlock Water Dropwort",
-        latin: "Oenanthe crocata",
-        location: "western bogland",
-        compound: "oenanthotoxin",
-        risk: "extreme",
-        tag: "wetland poison",
-        note: "The bog keeps what people try to bury. Roots below water. Evidence below memory.",
-        scratch: "Some things do not need to be hidden. They only need to be left where no one wants to look.",
-        stamp: "WETLAND POISON",
-        specimen: "O-31",
-        condition: "SATURATED",
-        archive: "RESTRICTED"
+      entry3: {
+        number: "03",
+        location: "Train to Spain",
+        focus: "mobile botany notes",
+        marker: "M and Q observed",
+        title: "Train to Spain // Two familiar strangers",
+        subtitle: "Botany notes written between stations.",
+        ticketTitle: "RAIL RECEIPT",
+        ticketText:
+`Route: northbound connection changed.
+Seat reservation altered.
+Two passengers observed.
+Initials used in private note: M / Q.`,
+        redThread:
+"They did not recognize me. That was useful. Grief makes an excellent disguise.",
+        stamp: "OBSERVATION",
+        archive: "T-03",
+        status: "ACTIVE",
+        risk: "HIGH",
+        scratch: "M keeps time. Q keeps devices. Together they leave a trail.",
+        text:
+`On the train to Spain, I planned a lesson about seed dispersal: hooks, hairs, wings, pressure, accident. A seed only needs the right carrier. People are not so different. They carry habits, devices, routes, fears.
+
+I saw M first. Controlled posture, repeated checks of the platform clock. Then Q, pretending not to worry about the small case under the seat. They were careful, but careful people leave patterns because they trust their own methods too much.
+
+I kept my notebook open on Mediterranean plant adaptations and wrote beside the diagram: “They are real. They are reachable.” Jason’s death had been a wound until that moment. On that train it became a direction.`
       },
 
-      trifolium: {
-        file: "trifolium.jpg",
-        name: "White Clover",
-        latin: "Trifolium repens",
-        location: "greenhouse field strip",
-        compound: "stable marker",
-        risk: "minimal",
-        tag: "growth code",
-        note: "Small, common, easy to overlook. Useful things often are.",
-        scratch: "The field game knows this one by another language.",
-        stamp: "FIELD GAME",
-        specimen: "T-04",
-        condition: "FRESH",
-        archive: "ACTIVE"
+      entry4: {
+        number: "04",
+        location: "Spain",
+        focus: "dry garden lesson",
+        marker: "revenge language increasing",
+        title: "Spain // Dry garden",
+        subtitle: "A lesson on water, pressure and patience.",
+        ticketTitle: "BOTANY WORKSHOP",
+        ticketText:
+`Local garden visit.
+Topic: drought resistance.
+Teaching examples copied.
+Private planning layer detected.`,
+        redThread:
+"A dry plant does not waste energy. It waits. Then it acts when conditions change.",
+        stamp: "RESTRICTED",
+        archive: "T-04",
+        status: "SEALED",
+        risk: "HIGH",
+        scratch: "I no longer need Jason to be alive. I need them to believe he is.",
+        text:
+`The Spanish garden was built around absence: little water, hard soil, roots that search deeper than anyone expects. I told myself it was perfect material for class. Students understand drought because it looks simple. They do not see the hidden labour underground.
+
+I began shaping the first false transmission that night. Jason’s voice existed in old files, unfinished messages, recordings he never meant anyone else to hear. I did not create him from nothing. I preserved what they tried to erase.
+
+If M and Q followed the voice, they would think they were chasing a ghost. They would not look for the botanist arranging the conditions. A lesson plan is also a trap when every step has been prepared.`
       },
 
-      aconitum: {
-        file: "aconitum.jpg",
-        name: "Monkshood",
-        latin: "Aconitum napellus",
-        location: "private root bed",
-        compound: "aconitine",
-        risk: "high",
-        tag: "root toxin",
-        note: "Pretty enough to invite touch. Dangerous enough to punish it.",
-        scratch: "Not everything beautiful forgives being handled.",
-        stamp: "ROOT TOXIN",
-        specimen: "A-12",
-        condition: "SEALED",
-        archive: "LIMITED"
-      },
+      entry5: {
+        number: "05",
+        location: "Return north",
+        focus: "final botany lesson",
+        marker: "revenge plan confirmed",
+        title: "Return north // Final lesson",
+        subtitle: "Every system has a breaking point.",
+        ticketTitle: "PRIVATE ITINERARY",
+        ticketText:
+`Return route hidden.
+Teaching journal encrypted.
+Final lesson sequence prepared.
+Jason Krane revenge thread confirmed.`,
+        redThread:
+"Jason is gone. That is the missing piece they will understand too late.",
+        stamp: "FINAL COPY",
+        archive: "T-05",
+        status: "LOCKED",
+        risk: "CRITICAL",
+        scratch: "Fear is a route. Love is a map. Grief is a key.",
+        text:
+`I wrote the final lesson on the return journey. Officially it concerns invasive species: how one small introduction can alter an entire ecosystem. Unofficially, it is about revenge. Jason is dead. I can write that now without my hand shaking.
 
-      taxus: {
-        file: "taxus.jpg",
-        name: "European Yew",
-        latin: "Taxus baccata",
-        location: "old churchyard",
-        compound: "taxine alkaloids",
-        risk: "toxic foliage",
-        tag: "needle assay",
-        note: "Old trees make excellent witnesses. They outlive grief. They outlive men.",
-        scratch: "A graveyard is just an archive that learned to grow.",
-        stamp: "CHURCHYARD",
-        specimen: "Y-22",
-        condition: "AGED",
-        archive: "ARCHIVED"
+The people who ended him believed death would close the file. They forgot that love is an archive. I have his plans, his mistakes, his voice, his anger, and enough of his brilliance to make them look in the wrong direction.
+
+M and Q will see patterns because I want them to. They will solve fragments because I will leave fragments. By the time they understand that Jason is not behind this, they will already be inside my lesson.`
       }
     };
 
@@ -1194,7 +1071,9 @@
         .toUpperCase()
         .replaceAll(" ", "")
         .replaceAll("-", "")
-        .replaceAll("_", "");
+        .replaceAll("_", "")
+        .replaceAll(".", "")
+        .replaceAll(",", "");
     }
 
     function appendLog(text) {
@@ -1204,18 +1083,13 @@
     }
 
     function clearActiveButtons() {
-      document.querySelectorAll(".plantBtn").forEach(function(button) {
+      document.querySelectorAll(".entryBtn").forEach(function(button) {
         button.classList.remove("active");
       });
-
-      document.getElementById("btn-mq").classList.remove("active");
     }
 
-    function selectPlant(key) {
-      const plant = plants[key];
-
-      document.getElementById("plantBook").style.display = "grid";
-      document.getElementById("mqPage").style.display = "none";
+    function selectEntry(key) {
+      const entry = entries[key];
 
       clearActiveButtons();
 
@@ -1224,34 +1098,23 @@
         active.classList.add("active");
       }
 
-      document.getElementById("plantPhoto").src = plant.file;
-      document.getElementById("plantPhoto").alt = plant.latin;
-      document.getElementById("photoCaption").textContent = plant.latin;
+      document.getElementById("entryNumber").textContent = entry.number;
+      document.getElementById("entryLocation").textContent = entry.location;
+      document.getElementById("entryFocus").textContent = entry.focus;
+      document.getElementById("entryMarker").textContent = entry.marker;
+      document.getElementById("entryTitle").textContent = entry.title;
+      document.getElementById("entrySubtitle").textContent = entry.subtitle;
+      document.getElementById("ticketTitle").textContent = entry.ticketTitle;
+      document.getElementById("ticketText").textContent = entry.ticketText;
+      document.getElementById("redThread").textContent = entry.redThread;
+      document.getElementById("stampText").textContent = entry.stamp;
+      document.getElementById("archiveCode").textContent = entry.archive;
+      document.getElementById("statusCode").textContent = entry.status;
+      document.getElementById("riskCode").textContent = entry.risk;
+      document.getElementById("scratchText").textContent = entry.scratch;
+      document.getElementById("journalText").textContent = entry.text;
 
-      document.getElementById("plantName").textContent = plant.name;
-      document.getElementById("latinName").textContent = plant.latin;
-      document.getElementById("locationText").textContent = plant.location;
-      document.getElementById("compoundText").textContent = plant.compound;
-      document.getElementById("riskText").textContent = plant.risk;
-      document.getElementById("tagText").textContent = plant.tag;
-      document.getElementById("noteText").textContent = plant.note;
-      document.getElementById("scratchText").textContent = plant.scratch;
-      document.getElementById("stampText").textContent = plant.stamp;
-      document.getElementById("specimenCode").textContent = plant.specimen;
-      document.getElementById("conditionCode").textContent = plant.condition;
-      document.getElementById("archiveCode").textContent = plant.archive;
-
-      appendLog("> page opened // " + plant.latin);
-    }
-
-    function openMqNote() {
-      document.getElementById("plantBook").style.display = "none";
-      document.getElementById("mqPage").style.display = "block";
-
-      clearActiveButtons();
-      document.getElementById("btn-mq").classList.add("active");
-
-      appendLog("> loose page opened // M / Q tracking note");
+      appendLog("> travel entry opened // " + entry.location);
     }
 
     function markError(id, text) {
@@ -1282,9 +1145,9 @@
       const value = normalize(document.getElementById("answerA").value);
 
       if (value === normalize(correctAnswerA)) {
-        markSolved("blockA", "buttonA", "resultA", "DIGITALIS", "botanicalA", "> bloom marker accepted");
+        markSolved("blockA", "buttonA", "resultA", "614128", "botanicalA", "> missing piece code accepted");
       } else {
-        markError("blockA", "> incorrect bloom marker");
+        markError("blockA", "> incorrect missing piece code");
       }
     }
 
@@ -1292,9 +1155,9 @@
       const value = normalize(document.getElementById("answerB").value);
 
       if (value === normalize(correctAnswerB)) {
-        markSolved("blockB", "buttonB", "resultB", "HERBARIUM", "botanicalB", "> archive method accepted");
+        markSolved("blockB", "buttonB", "resultB", "35721", "botanicalB", "> card game code accepted");
       } else {
-        markError("blockB", "> incorrect archive method");
+        markError("blockB", "> incorrect card game code");
       }
     }
 
@@ -1302,45 +1165,56 @@
       const value = normalize(document.getElementById("answerC").value);
 
       if (value === normalize(correctAnswerC)) {
-        markSolved("blockC", "buttonC", "resultC", "WITTEKLAVER", "botanicalC", "> growth code accepted");
+        markSolved("blockC", "buttonC", "resultC", "GERANIUM SANGUINEUM", "botanicalC", "> latin name accepted");
       } else {
-        markError("blockC", "> incorrect growth code");
+        markError("blockC", "> incorrect latin name");
       }
     }
 
     function updateSolvedState() {
       const solvedA = localStorage.getItem("botanicalA") === "yes";
       const solvedB = localStorage.getItem("botanicalB") === "yes";
-      const solvedC =
-        localStorage.getItem("botanicalC") === "yes" ||
-        localStorage.getItem("botanicalGame") === "yes";
+      const solvedC = localStorage.getItem("botanicalC") === "yes";
+
+      const gameSolved =
+        localStorage.getItem("botanicalGame") === "yes" ||
+        localStorage.getItem("botanicalGameSolved") === "yes" ||
+        localStorage.getItem("snakeSolved") === "yes";
 
       if (solvedA) {
         document.getElementById("blockA").classList.add("solved");
         document.getElementById("buttonA").disabled = true;
         document.getElementById("buttonA").textContent = "LOCKED";
-        document.getElementById("resultA").textContent = "DIGITALIS";
+        document.getElementById("resultA").textContent = "614128";
       }
 
       if (solvedB) {
         document.getElementById("blockB").classList.add("solved");
         document.getElementById("buttonB").disabled = true;
         document.getElementById("buttonB").textContent = "LOCKED";
-        document.getElementById("resultB").textContent = "HERBARIUM";
+        document.getElementById("resultB").textContent = "35721";
       }
 
       if (solvedC) {
         document.getElementById("blockC").classList.add("solved");
         document.getElementById("buttonC").disabled = true;
         document.getElementById("buttonC").textContent = "LOCKED";
-        document.getElementById("resultC").textContent = "WITTEKLAVER";
+        document.getElementById("resultC").textContent = "GERANIUM SANGUINEUM";
       }
 
-      if (solvedA && solvedB && solvedC) {
+      if (gameSolved) {
+        document.getElementById("resultGame").textContent = "completed";
+      } else {
+        document.getElementById("resultGame").textContent = "not completed";
+      }
+
+      if (solvedA && solvedB && solvedC && gameSolved) {
         document.getElementById("unlockBox").style.display = "block";
         document.getElementById("resultFinal").textContent = "released";
         localStorage.setItem("botanicalSolved", "yes");
-        localStorage.setItem("botanicalGame", "yes");
+      } else {
+        document.getElementById("unlockBox").style.display = "none";
+        document.getElementById("resultFinal").textContent = "locked";
       }
     }
 
@@ -1362,6 +1236,7 @@
       }
     });
 
+    selectEntry("entry1");
     updateSolvedState();
   </script>
 </body>
