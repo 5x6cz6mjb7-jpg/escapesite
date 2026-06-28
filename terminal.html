@@ -1672,7 +1672,7 @@
               <div class="warningBody">
                 Three main directories remain accessible:
                 Chemistry, Botany and Private.
-                The Private folder appears to contain personal material connected to Jason Krane.
+                Some private material appears to have been moved or hidden.
               </div>
             </div>
           </section>
@@ -1692,7 +1692,7 @@
 Signal source: private workstation
 Local cache: partially restored
 Operator: DR. N. THORNE
-Last external contact: JASON KRANE</div>
+Last external contact: UNKNOWN</div>
 
               <div class="statusGrid">
                 <div>Main folders</div>
@@ -1719,7 +1719,7 @@ Last external contact: JASON KRANE</div>
                 <div>&gt; scanning chemical notebooks...</div>
                 <div>&gt; botanical index partially restored</div>
                 <div>&gt; private correspondence detected</div>
-                <div>&gt; Jason Krane reference count: abnormal</div>
+                <div>&gt; external contact references: abnormal</div>
                 <div>&gt; warning: staged transmission residue found</div>
                 <div>&gt; external backup disk mounted</div>
                 <div>&gt; open files manually // order unknown</div>
@@ -1778,15 +1778,6 @@ Some mounted disks may contain corrupted simulations.
 Do not assume every file tells the truth.
 
 The final environment requires a recovered memory code.</div>
-
-              <div class="readmeBox"><strong>WARNING</strong>
-
-Do not assume Jason Krane is the sender.
-
-Recovered data suggests the transmissions may have been edited, staged or reconstructed from older material.
-
-Find the diary.
-Find the memory code.</div>
             </div>
           </section>
 
@@ -1827,7 +1818,7 @@ Some are lying.</div>
 
               <button class="driveItem" onclick="openDriveInfo('locked')">
                 <span class="driveIcon lockedDrive"></span>
-                <span>Hidden Volume ?: // LOVE_ARCHIVE</span>
+                <span>Hidden Volume ?: // PRIVATE_ARCHIVE</span>
               </button>
 
               <div class="driveOutput" id="driveOutput">
@@ -1854,12 +1845,12 @@ Click an item to recover readable text.</div>
 
               <button class="deletedItem" onclick="openEasterEgg('poem')">
                 <span class="tinyTextIcon"></span>
-                <span>krane_love_poem_final_FINAL2.txt</span>
+                <span>old_poem_fragment_final2.txt</span>
               </button>
 
-              <button class="deletedItem" onclick="openEasterEgg('revenge')">
+              <button class="deletedItem" onclick="openEasterEgg('notes')">
                 <span class="tinyTextIcon"></span>
-                <span>definitely_not_a_revenge_plan.txt</span>
+                <span>field_notes_unsorted.txt</span>
               </button>
 
               <button class="deletedItem" onclick="openEasterEgg('plants')">
@@ -1949,17 +1940,15 @@ Click an item to recover readable text.</div>
 
     const easterEggs = {
       poem: {
-        title: "krane_love_poem_final_FINAL2.txt",
-        header: "RECOVERED ROMANTIC DOCUMENT",
+        title: "old_poem_fragment_final2.txt",
+        header: "RECOVERED POEM FRAGMENT",
         text:
-`Jason,
-
-Roses are red.
+`Roses are red.
 Violets are blue.
-Your cover was terrible,
-but I still covered for you.
+Some things are buried,
+but still growing through.
 
-I tried to write something romantic.
+I tried to write something ordinary.
 The rhododendron judged me.
 
 Delete this before anyone from the department finds it.
@@ -1967,26 +1956,28 @@ Delete this before anyone from the department finds it.
 - N.`
       },
 
-      revenge: {
-        title: "definitely_not_a_revenge_plan.txt",
-        header: "RECOVERED SUSPICIOUS DOCUMENT",
+      notes: {
+        title: "field_notes_unsorted.txt",
+        header: "RECOVERED FIELD NOTES",
         text:
-`This is absolutely not a revenge plan.
+`Unsorted observations:
 
-Step 1:
-Do not fake a Jason transmission.
+1.
+Students notice colour before structure.
+Useful reminder.
 
-Step 2:
-Do not lure agents into following emotional clues.
+2.
+People trust official labels too quickly.
+Also useful.
 
-Step 3:
-Do not leave obvious files on your desktop.
+3.
+If a route looks natural, no one asks who planted it.
 
-Step 4:
-Do not name this file definitely_not_a_revenge_plan.txt.
+4.
+Do not leave obvious files on the desktop.
 
-Note to self:
-Rename file later.`
+5.
+Rename this before the archive scan runs again.`
       },
 
       plants: {
@@ -2007,9 +1998,8 @@ Reason: looks harmless, keeps secrets.
 4. Office fern
 Reason: emotionally unavailable, but consistent.
 
-5. Jason
-Reason: technically not a plant.
-Moved to archive.`
+5. Moss
+Reason: survives quietly where no one pays attention.`
       }
     };
 
@@ -2179,7 +2169,7 @@ Moved to archive.`
           "System owner: DR. N. THORNE\n" +
           "Login cache: active\n" +
           "University profile: detached\n" +
-          "Last manual access: after Jason Krane disappearance\n\n" +
+          "Last manual access: after system disruption\n\n" +
           "Recovered note:\n" +
           "\"I did not lose access. I kept the machine awake.\"";
         return;
@@ -2210,12 +2200,12 @@ Moved to archive.`
 
       if (type === "locked") {
         output.innerHTML =
-          "<strong>HIDDEN VOLUME ?: // LOVE_ARCHIVE</strong>\n\n" +
+          "<strong>HIDDEN VOLUME ?: // PRIVATE_ARCHIVE</strong>\n\n" +
           "Volume label damaged.\n" +
-          "Access layer: emotional encryption\n" +
-          "Jason Krane references: excessive\n\n" +
+          "Access layer: personal encryption\n" +
+          "External reference count: excessive\n\n" +
           "Partial phrase recovered:\n" +
-          "\"He is not alive. I kept him present.\"";
+          "\"Not everything lost is gone.\"";
         return;
       }
     }
@@ -2374,9 +2364,9 @@ Moved to archive.`
       }
 
       if (command.includes("jason")) {
-        appendCommandLine("> Jason Krane reference found");
-        appendCommandLine("> reference count abnormal");
-        appendCommandLine("> open Private folder after recovering both archive fragments");
+        appendCommandLine("> external name reference found");
+        appendCommandLine("> context unavailable from terminal shell");
+        appendCommandLine("> open archive folders manually");
         return;
       }
 
