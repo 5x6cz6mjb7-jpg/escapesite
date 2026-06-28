@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Nessa's Private Love Archive</title>
+  <title>N. Thorne Private Archive</title>
 
   <style>
     :root {
@@ -14,7 +14,7 @@
       --white: #ffffff;
       --dark: #2a0018;
       --text: #5a0034;
-      --glass: rgba(255, 247, 251, 0.58);
+      --glass: rgba(255, 247, 251, 0.62);
     }
 
     * {
@@ -117,11 +117,6 @@
         0 0 28px rgba(255, 20, 147, 0.45);
     }
 
-    .blackStartBox h1::before,
-    .blackStartBox h1::after {
-      content: "";
-    }
-
     .blackStartBox p {
       color: #d795b8;
       line-height: 1.55;
@@ -142,7 +137,6 @@
       width: 100%;
       background: #050005;
       border: 2px solid rgba(255, 79, 184, 0.58);
-      border-radius: 0;
       color: #ffd1ec;
       padding: 13px;
       font-family: "Courier New", monospace;
@@ -163,7 +157,6 @@
       width: 100%;
       margin-top: 16px;
       border: 2px solid rgba(255, 79, 184, 0.78);
-      border-radius: 0;
       background: rgba(255, 20, 147, 0.13);
       color: #ffd1ec;
       padding: 13px;
@@ -171,14 +164,10 @@
       font-weight: bold;
       letter-spacing: 2px;
       cursor: pointer;
-      box-shadow: none;
-      text-shadow: none;
     }
 
     .blackStartBox button:hover {
       background: rgba(255, 20, 147, 0.24);
-      transform: none;
-      filter: none;
     }
 
     .blackStartMessage {
@@ -250,7 +239,7 @@
     }
 
     .screen::before {
-      content: "NESSA ♥ JASON ♥ NESSA ♥ JASON ♥ NESSA ♥ JASON ♥";
+      content: "N. THORNE ♥ JASON ♥ N. THORNE ♥ JASON ♥";
       position: absolute;
       left: -5%;
       top: 70px;
@@ -336,7 +325,6 @@
     }
 
     .topBar,
-    .loginScreen,
     .archiveScreen,
     .bottomDock {
       position: relative;
@@ -398,157 +386,7 @@
       content: " ♥";
     }
 
-    .content {
-      padding: 16px;
-    }
-
-    h1 {
-      color: var(--hotpink);
-      font-size: 34px;
-      margin: 0 0 8px;
-      letter-spacing: 3px;
-      text-shadow:
-        0 0 8px rgba(255,255,255,0.88),
-        0 0 18px rgba(255,20,147,0.42);
-    }
-
-    h1::before,
-    h1::after {
-      content: " ♥ ";
-      color: var(--pink);
-    }
-
-    h2 {
-      color: var(--purple);
-      font-size: 16px;
-      margin: 0 0 12px;
-    }
-
-    p {
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .loginScreen {
-      max-width: 660px;
-      margin: 70px auto;
-      background: rgba(255, 247, 251, 0.72);
-    }
-
-    label {
-      display: block;
-      color: var(--hotpink);
-      font-size: 12px;
-      margin-top: 12px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      background: rgba(255,255,255,0.86);
-      color: var(--text);
-      border: 3px solid var(--pink);
-      border-radius: 16px;
-      padding: 13px;
-      font-family: "Courier New", monospace;
-      font-size: 16px;
-      outline: none;
-      box-shadow:
-        inset 0 0 12px rgba(255,20,147,0.14),
-        0 0 14px rgba(255,255,255,0.5);
-    }
-
-    input:focus {
-      border-color: var(--purple);
-      box-shadow:
-        inset 0 0 16px rgba(255,20,147,0.22),
-        0 0 20px rgba(168,77,255,0.35);
-    }
-
-    button,
-    .buttonLink {
-      color: var(--white);
-      background:
-        linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 45%, #ff1493 100%);
-      border-top: 3px solid #ffffff;
-      border-left: 3px solid #ffffff;
-      border-right: 3px solid #9f0060;
-      border-bottom: 3px solid #9f0060;
-      border-radius: 999px;
-      padding: 12px 17px;
-      font-family: "Courier New", monospace;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
-      box-shadow:
-        0 0 18px rgba(255,20,147,0.35),
-        inset 0 0 14px rgba(255,255,255,0.32);
-      text-shadow: 0 0 8px rgba(90,0,52,0.65);
-    }
-
-    button:hover,
-    .buttonLink:hover {
-      filter: brightness(1.12);
-      transform: translateY(-1px);
-    }
-
-    .error {
-      min-height: 22px;
-      color: var(--red);
-      margin-top: 12px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .fragmentBox {
-      border: 3px dashed var(--pink);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.48);
-      color: var(--text);
-      padding: 12px;
-      margin: 14px 0;
-      font-size: 13px;
-      line-height: 1.55;
-      box-shadow: inset 0 0 18px rgba(255,20,147,0.12);
-    }
-
-    .fragmentLine {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px dotted rgba(255,20,147,0.35);
-      padding: 5px 0;
-    }
-
-    .fragmentLine:last-child {
-      border-bottom: none;
-    }
-
-    .fragmentValue {
-      color: var(--hotpink);
-      font-weight: bold;
-    }
-
-    .loveStamp {
-      display: inline-block;
-      color: var(--white);
-      background: var(--hotpink);
-      border: 3px solid var(--white);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      transform: rotate(-4deg);
-      box-shadow: 0 0 18px rgba(255,20,147,0.4);
-      margin: 8px 0;
-    }
-
     .archiveScreen {
-      display: none;
       min-height: 760px;
       padding-bottom: 118px;
     }
@@ -820,6 +658,36 @@
       font-weight: bold;
     }
 
+    button,
+    .buttonLink {
+      color: var(--white);
+      background:
+        linear-gradient(180deg, #ffb7e4 0%, #ff4fb8 45%, #ff1493 100%);
+      border-top: 3px solid #ffffff;
+      border-left: 3px solid #ffffff;
+      border-right: 3px solid #9f0060;
+      border-bottom: 3px solid #9f0060;
+      border-radius: 999px;
+      padding: 12px 17px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      box-shadow:
+        0 0 18px rgba(255,20,147,0.35),
+        inset 0 0 14px rgba(255,255,255,0.32);
+      text-shadow: 0 0 8px rgba(90,0,52,0.65);
+    }
+
+    button:hover,
+    .buttonLink:hover {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+    }
+
     .bottomDock {
       position: absolute;
       left: 16px;
@@ -834,7 +702,7 @@
         inset 0 0 18px rgba(255,255,255,0.52);
       padding: 10px;
       overflow-x: auto;
-      display: none;
+      display: block;
       backdrop-filter: blur(5px);
     }
 
@@ -923,15 +791,6 @@
         font-size: 10px;
       }
 
-      h1 {
-        font-size: 24px;
-        letter-spacing: 1px;
-      }
-
-      .loginScreen {
-        margin: 30px auto;
-      }
-
       .archiveScreen {
         padding-bottom: 140px;
       }
@@ -975,7 +834,11 @@
       <h1>ARCHIVE LOCKED</h1>
 
       <p>
-        This private love archive is hidden behind Nessa Thorne's recovered access password.
+        This private archive is hidden behind Professor N. Thorne's recovered access password.
+      </p>
+
+      <p>
+        Enter the combined private code only once.
       </p>
 
       <label for="blackStartPassword">PRIVATE PASSWORD</label>
@@ -1003,51 +866,10 @@
     </div>
 
     <div class="topBar">
-      <span>NESSA'S PRIVATE LOVE ARCHIVE</span>
+      <span>N. THORNE PRIVATE ARCHIVE</span>
       <span>REAL LOVE // REAL DAMAGE</span>
       <span>USER: DR. N. THORNE</span>
     </div>
-
-    <section class="window loginScreen" id="loginScreen">
-      <div class="windowTitle">
-        <span>Private Folder</span>
-        <span>LOCKED WITH LOVE</span>
-      </div>
-
-      <div class="content">
-        <h1>PRIVATE</h1>
-        <h2>Personal archive locked</h2>
-
-        <p>
-          This directory is sealed behind my private recovery code.
-          The archive contains romantic material, operational evidence and emotional contamination.
-        </p>
-
-        <div class="loveStamp">
-          CLASSIFIED ROMANTIC MATERIAL
-        </div>
-
-        <div class="fragmentBox">
-          <div class="fragmentLine">
-            <span>Chemistry fragment</span>
-            <span class="fragmentValue" id="chemFragment">missing</span>
-          </div>
-
-          <div class="fragmentLine">
-            <span>Botany fragment</span>
-            <span class="fragmentValue" id="botanyFragment">missing</span>
-          </div>
-        </div>
-
-        <label for="privatePassword">PRIVATE ACCESS CODE</label>
-        <input id="privatePassword" type="password" autocomplete="off" placeholder="enter private code">
-
-        <button onclick="unlockPrivate()">OPEN PRIVATE ARCHIVE</button>
-        <a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
-
-        <div class="error" id="errorText"></div>
-      </div>
-    </section>
 
     <section class="archiveScreen" id="archiveScreen">
       <section class="archiveLayout">
@@ -1061,6 +883,7 @@
         </section>
 
         <section class="emptyStage" id="emptyStage">
+          PRIVATE ARCHIVE UNLOCKED<br><br>
           SELECT A HEART FILE BELOW
         </section>
       </section>
@@ -1086,6 +909,11 @@
         <button class="heartIconButton" onclick="openFile('grief', this)">
           <span class="heartIcon">✎</span>
           <span class="heartLabel">Private Note</span>
+        </button>
+
+        <button class="heartIconButton" onclick="openFile('dronePlan', this)">
+          <span class="heartIcon">⌁</span>
+          <span class="heartLabel">Drone Plan</span>
         </button>
 
         <button class="heartIconButton" onclick="openFile('mq', this)">
@@ -1145,9 +973,9 @@
           { speaker: "nessa", time: "00:45", text: "Good." },
           { speaker: "jason", time: "00:46", text: "That is not safe for either of us." },
           { speaker: "nessa", time: "00:48", text: "I am tired of safe." },
-          { speaker: "jason", time: "00:50", text: "Nessa." },
+          { speaker: "jason", time: "00:50", text: "N." },
           { speaker: "nessa", time: "00:51", text: "Say it again." },
-          { speaker: "jason", time: "00:52", text: "Nessa." },
+          { speaker: "jason", time: "00:52", text: "N." },
           { speaker: "nessa", time: "00:54", text: "That is the only honest thing you have said tonight." }
         ]
       },
@@ -1195,7 +1023,7 @@
 
       {
         title: "Chapter 5 // After Murder",
-        subtitle: "Recovered draft // Nessa alone",
+        subtitle: "Recovered draft // N. alone",
         date: "After 22 August 2025",
         messages: [
           { speaker: "nessa", time: "02:08", text: "They say you are dead." },
@@ -1253,7 +1081,7 @@ Personal effects recovered:
 - damaged field watch
 - encrypted message capsule
 - folded chemical note referencing water contamination
-- handwritten note containing the name "Nessa"
+- handwritten note containing the initial "N."
 
 Archive conflict:
 Recent transmissions claiming to originate from Jason Krane were created after this date.
@@ -1266,7 +1094,7 @@ Someone with access to his words, image, recordings and emotional history recons
       },
 
       grief: {
-        title: "nessa_private_note.txt",
+        title: "n_private_note.txt",
         status: "PERSONAL NOTE",
         type: "text",
         body:
@@ -1310,16 +1138,64 @@ His old words.
 His cruelty.
 His charm.
 
-Don't trust the map.
-Read what moves above it.
-Only the machine knows the route.
-Name the thing that carries the threat.
-Enter that name where commands are accepted.
-
 If Jason cannot return, then I will build an echo sharp enough to hurt them.
 
 He weaponised fear.
 I will weaponise memory.`
+      },
+
+      dronePlan: {
+        title: "drone_route_reconstruction.txt",
+        status: "REVENGE ROUTE",
+        type: "text",
+        body:
+`RECOVERED PRIVATE PLAN
+
+Working title:
+HARDENBERG APPROACH
+
+Primary target:
+M and Q
+
+Delivery method:
+Autonomous drone route
+
+Recovered route intention:
+The drone is not simply flying to a city.
+It is being guided toward the place where M and Q are expected to be.
+
+Payload description:
+A sealed dispersal container is mounted below the drone.
+The archive describes the contents only as a plant-derived compound.
+
+N.'s own note:
+"Jason used water because water spreads quietly.
+I will use air because air cannot be locked away."
+
+Operational meaning:
+The drone will approach the target zone.
+When it reaches the correct location, the container will open.
+The material will be scattered from above.
+
+Purpose:
+Not random damage.
+Not a warning to the public.
+A message aimed at M and Q.
+
+Why M and Q:
+N. believes they know more about Jason's murder than they admitted.
+She believes they hid behind procedure, silence and secrecy.
+She wants them to feel what Jason always understood:
+fear moves people faster than truth.
+
+Important:
+This file does not contain the full route.
+The route must be reconstructed from the recovered map, signal values and gridlock matrix.
+
+Final note:
+"Let them follow the ghost.
+Let them solve the trail.
+By the time they understand the drone is not Jason's plan, it will already be above them."`
       },
 
       mq: {
@@ -1387,10 +1263,13 @@ I kept the photograph because one day it might matter.`
 
       if (value === privatePassword) {
         message.style.color = "#ffd1ec";
-        message.textContent = "ACCESS GRANTED // opening archive layer...";
+        message.textContent = "ACCESS GRANTED // opening private archive...";
+
+        localStorage.setItem("privateOpened", "yes");
 
         setTimeout(function() {
           overlay.style.display = "none";
+          showArchive();
         }, 650);
       } else {
         message.style.color = "#ff3355";
@@ -1398,28 +1277,7 @@ I kept the photograph because one day it might matter.`
       }
     }
 
-    function updateFragments() {
-      const chemistrySolved = localStorage.getItem("chemistrySolved") === "yes";
-      const botanySolved = localStorage.getItem("botanicalSolved") === "yes";
-
-      document.getElementById("chemFragment").textContent = chemistrySolved ? "THORNE" : "missing";
-      document.getElementById("botanyFragment").textContent = botanySolved ? "NESSA" : "missing";
-    }
-
-    function unlockPrivate() {
-      const value = normalizeCode(document.getElementById("privatePassword").value);
-      const errorText = document.getElementById("errorText");
-
-      if (value === privatePassword) {
-        localStorage.setItem("privateOpened", "yes");
-        showArchive();
-      } else {
-        errorText.textContent = "ACCESS DENIED // love hurts, but wrong passwords hurt more.";
-      }
-    }
-
     function showArchive() {
-      document.getElementById("loginScreen").style.display = "none";
       document.getElementById("archiveScreen").style.display = "block";
       document.getElementById("bottomDock").style.display = "block";
       document.getElementById("viewerWindow").style.display = "none";
@@ -1441,7 +1299,7 @@ I kept the photograph because one day it might matter.`
           <div class="photoCaption">
             Recovered image reference:<br>
             <strong>JASON KRANE</strong><br><br>
-            My note:<br>
+            Private note:<br>
             "I kept this image running because I could not bear the silence after him."
           </div>
         </div>
@@ -1455,9 +1313,9 @@ I kept the photograph because one day it might matter.`
           <div class="photoCaption">
             Recovered image evidence:<br>
             <strong>M + Q</strong><br><br>
-            My note:<br>
+            Private note:<br>
             "They tried to hide the ceremony. They failed."<br><br>
-            I kept this because every secret becomes useful eventually.
+            Every secret becomes useful eventually.
           </div>
         </div>
       `;
@@ -1467,7 +1325,7 @@ I kept the photograph because one day it might matter.`
       const chapter = chatChapters[currentChatChapter];
 
       const messages = chapter.messages.map(function(msg) {
-        const speakerLabel = msg.speaker === "jason" ? "JASON" : "NESSA";
+        const speakerLabel = msg.speaker === "jason" ? "JASON" : "N.";
 
         return `
           <div class="bubble ${msg.speaker}">
@@ -1482,7 +1340,7 @@ I kept the photograph because one day it might matter.`
         <div class="phoneShell">
           <div class="phoneTop">
             <div class="phoneContact">
-              <span class="phoneName">Jason Krane ♥ Nessa Thorne</span>
+              <span class="phoneName">Jason Krane ♥ N. Thorne</span>
               <span class="phoneSub">${escapeHtml(chapter.subtitle)} // ${escapeHtml(chapter.date)}</span>
             </div>
             <div class="phoneHeart">♥</div>
@@ -1575,25 +1433,19 @@ I kept the photograph because one day it might matter.`
       }
     });
 
-    document.getElementById("privatePassword").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        unlockPrivate();
-      }
-    });
-
     window.addEventListener("load", function() {
       const blackStartPassword = document.getElementById("blackStartPassword");
+
+      if (localStorage.getItem("privateOpened") === "yes") {
+        document.getElementById("blackStartOverlay").style.display = "none";
+        showArchive();
+        return;
+      }
 
       if (blackStartPassword) {
         blackStartPassword.focus();
       }
     });
-
-    updateFragments();
-
-    if (localStorage.getItem("privateOpened") === "yes") {
-      showArchive();
-    }
   </script>
 </body>
 </html>
