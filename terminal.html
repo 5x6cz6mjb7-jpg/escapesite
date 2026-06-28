@@ -1572,8 +1572,8 @@
                 Which student record matches this incident?<br><br>
 
                 Incident:<br>
-                <strong>lettuce sandwiches with hogweed</strong><br>
-                <em>broodjes sla met berenklauw</em><br><br>
+                <strong>poisoned coffee</strong><br>
+                <em>giftige koffie</em><br><br>
 
                 Fill in both recovery fields.
               </div>
@@ -2114,27 +2114,25 @@ Moved to archive.`
       const classAnswer = normalizeRecoveryValue(classInput.value);
 
       const correctName =
-        nameAnswer === "freek";
+        nameAnswer === "jan";
 
       const correctClass =
-        classAnswer === "scheikunde" ||
-        classAnswer === "chemistry" ||
-        classAnswer === "chemie" ||
-        classAnswer === "scheikundeles" ||
-        classAnswer === "chemistryclass" ||
-        classAnswer === "chemistrylesson" ||
-        classAnswer === "science" ||
-        classAnswer === "sciencelesson";
+        classAnswer === "mentoruur" ||
+        classAnswer === "mentor" ||
+        classAnswer === "mentorles" ||
+        classAnswer === "mentorhour" ||
+        classAnswer === "mentoring" ||
+        classAnswer === "begeleidingsuur";
 
       if (correctName && correctClass) {
         recoveryMessage.style.color = "#ffee66";
-        recoveryMessage.textContent = "STUDENT RECORD ACCEPTED // password recovery unlocked.";
+        recoveryMessage.textContent = "STUDENT RECORD ACCEPTED // poisoned coffee incident confirmed.";
         passwordReveal.style.display = "block";
 
         localStorage.setItem("passwordRecoverySolved", "yes");
       } else {
         recoveryMessage.style.color = "#ff5555";
-        recoveryMessage.textContent = "RECOVERY RECORD MISMATCH // student name and lesson must both match.";
+        recoveryMessage.textContent = "RECOVERY RECORD MISMATCH // name and lesson must both match the poisoned coffee incident.";
         passwordReveal.style.display = "none";
       }
     }
