@@ -187,13 +187,13 @@
         0 0 28px rgba(255, 38, 77, 0.45);
     }
 
-    .timerBox {
-      margin-top: 5px;
+    .missionProgressLabel {
+      margin-top: 6px;
       color: var(--yellow);
-      font-size: 32px;
-      letter-spacing: 3px;
+      font-size: 13px;
+      letter-spacing: 2px;
       text-align: center;
-      text-shadow: 0 0 14px rgba(255, 211, 106, 0.65);
+      text-shadow: 0 0 10px rgba(255, 211, 106, 0.45);
     }
 
     .mainGrid {
@@ -837,8 +837,8 @@
         font-size: 20px;
       }
 
-      .timerBox {
-        font-size: 28px;
+      .missionProgressLabel {
+        font-size: 11px;
       }
 
       .mapWrap {
@@ -900,16 +900,17 @@
       </p>
 
       <p>
-        Before starting, make sure you have literally completed every puzzle.
-        Do not begin this final override until all previous puzzles are solved.
+        Before starting, make sure all recovered pieces fit together.
+        The final picture must be complete before you begin this override.
       </p>
 
       <div class="missionIntroWarning">
-        ONLY START AFTER LITERALLY EVERY PUZZLE HAS BEEN COMPLETED
+        ONLY START WHEN ALL PIECES FIT TOGETHER
       </div>
 
       <p>
-        Once this mission starts, the countdown cannot be paused. Solve the override sequence before the timer reaches zero.
+        Once this mission starts, the approach bar cannot be paused.
+        Stop the drone before it reaches Hardenberg.
       </p>
 
       <button onclick="startFinalMission()">START FINAL MISSION</button>
@@ -925,7 +926,9 @@
 
       <div>
         <div class="title">DRONE CONTROL INTERFACE</div>
-        <div class="timerBox" id="timerBox">05:00</div>
+        <div class="missionProgressLabel">
+          DRONE APPROACH ACTIVE
+        </div>
       </div>
 
       <div class="topSmall right">
@@ -951,8 +954,8 @@
         </div>
 
         <div class="warningBox">
-          WARNING: This fictional game interface shows a live visual feed of the drone moving toward the Hardenberg sector.
-          Complete all override systems before the timer reaches zero.
+          WARNING: The drone approach is shown in the live feed. The distance bar is the active countdown.
+          Complete all override systems before the drone reaches Hardenberg.
         </div>
 
         <div class="solutionGrid">
@@ -964,7 +967,7 @@
 
         <div class="logBox" id="logBox">&gt; drone interface loaded
 &gt; waiting for final mission start
-&gt; timer inactive
+&gt; approach bar inactive
 &gt; live drone feed standing by
 &gt; route solution required</div>
 
@@ -997,7 +1000,7 @@
 
           <div class="distanceOverlay">
             <div class="distanceTop">
-              <span>DISTANCE TO HARDENBERG</span>
+              <span>DRONE APPROACH // DISTANCE TO HARDENBERG</span>
               <span class="distanceValue" id="distanceValue">24.0 KM</span>
             </div>
             <div class="distanceBar">
@@ -1136,7 +1139,7 @@
     <div class="failBox">
       <h1>MISSION FAILED</h1>
       <p>
-        The timer reached zero. The drone override window has closed.
+        The drone reached Hardenberg. The override window has closed.
       </p>
       <button class="resetButton" onclick="resetMission()">RESET MISSION</button>
     </div>
@@ -1205,14 +1208,7 @@
       logBox.scrollTop = logBox.scrollHeight;
     }
 
-    function formatSeconds(seconds) {
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-      return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
-    }
-
     function updateTimerDisplay() {
-      document.getElementById("timerBox").textContent = formatSeconds(timeLeft);
       updateDroneDistance();
     }
 
@@ -1242,11 +1238,11 @@
       document.getElementById("missionIntroOverlay").style.display = "none";
 
       addLog("> final mission accepted");
-      addLog("> timer started");
+      addLog("> approach bar started");
       addLog("> live drone feed connected");
       addLog("> visual contact restored");
       addLog("> route locked toward Hardenberg sector");
-      addLog("> distance telemetry linked to countdown");
+      addLog("> distance telemetry linked to approach bar");
       addLog("> wrong input penalty armed: -30 seconds");
 
       startTimer();
@@ -1298,7 +1294,6 @@
         timerInterval = null;
       }
 
-      addLog("> timer expired");
       addLog("> drone reached Hardenberg sector");
       addLog("> drone override window closed");
 
@@ -1579,7 +1574,7 @@
       document.getElementById("logBox").textContent =
 `> drone interface loaded
 > waiting for final mission start
-> timer inactive
+> approach bar inactive
 > live drone feed standing by
 > route solution required`;
     }
