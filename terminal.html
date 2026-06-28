@@ -67,33 +67,6 @@
       z-index: 2;
     }
 
-    .computerShell::before {
-      content: "";
-      position: absolute;
-      left: 38px;
-      right: 38px;
-      top: 12px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .computerShell::after {
-      content: "";
-      display: block;
-      width: 210px;
-      height: 20px;
-      background: #090d09;
-      border: 2px solid #273527;
-      border-radius: 0 0 18px 18px;
-      position: absolute;
-      left: 50%;
-      bottom: 5px;
-      transform: translateX(-50%);
-      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
-    }
-
     .monitorLabel {
       text-align: center;
       color: #9fc29f;
@@ -1539,7 +1512,7 @@
             <div class="loginHeader">
               <h1>THORNE PRIVATE WORKSTATION</h1>
               <p>Botanical Chemistry Archive</p>
-              <p>Owner: Dr. Nessa Thorne</p>
+              <p>Owner: Professor N. Thorne</p>
               <p>St. Brigid's University, Dublin</p>
             </div>
 
@@ -1757,7 +1730,7 @@ Last external contact: UNKNOWN</div>
             <div class="readmeBody">
               <div class="readmeBox"><strong>PRIVATE WORKSTATION RECOVERY INSTRUCTIONS</strong>
 
-This workstation belongs to Dr. Nessa Thorne.
+This workstation belongs to Professor N. Thorne.
 
 Main directories are available:
 
@@ -1795,7 +1768,7 @@ The final environment requires a recovered memory code.</div>
               <div class="myComputerBox"><strong>LOCAL MACHINE INDEX</strong>
 
 Recovered workstation structure:
-Dr. Nessa Thorne's private lab machine.
+Professor N. Thorne's private lab machine.
 
 Several drives are mounted.
 Some are damaged.
@@ -2370,7 +2343,7 @@ Reason: survives quietly where no one pays attention.`
         return;
       }
 
-      if (command.includes("nessa") || command.includes("thorne")) {
+      if (command.includes("thorne") || command.includes("professor") || command.includes("n.thorne")) {
         appendCommandLine("> user profile: DR. N. THORNE");
         appendCommandLine("> former lecturer // botanical chemistry");
         appendCommandLine("> private archive integrity: unstable");
