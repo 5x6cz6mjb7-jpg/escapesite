@@ -1037,10 +1037,11 @@
         <div class="warningBox">
           WARNING: The danger meter above is linked to the drone approach.
           Complete all override systems before the drone reaches Hardenberg.
+          Route order is based on wind directions.
         </div>
 
         <div class="solutionGrid">
-          <div class="solutionPill" id="pillRoute"><span>Route distance</span><span>LOCKED</span></div>
+          <div class="solutionPill" id="pillRoute"><span>Route direction</span><span>LOCKED</span></div>
           <div class="solutionPill" id="pillSignal"><span>Signal sliders</span><span>LOCKED</span></div>
           <div class="solutionPill" id="pillGrid"><span>Gridlock</span><span>LOCKED</span></div>
           <div class="solutionPill" id="pillFinal"><span>Final abort</span><span>LOCKED</span></div>
@@ -1049,6 +1050,7 @@
         <div class="logBox" id="logBox">&gt; drone interface loaded
 &gt; waiting for final mission start
 &gt; danger meter inactive
+&gt; suspense audio standing by
 &gt; live drone feed standing by
 &gt; route solution required</div>
 
@@ -1090,27 +1092,27 @@
       <aside class="panel">
         <div class="panelTitle">
           <span>Override sequence</span>
-          <span>MANUAL</span>
+          <span>WIND DIRECTIONS</span>
         </div>
 
         <div class="inputGrid">
           <div>
-            <label>ROUTE SEGMENT AB</label>
+            <label>ROUTE W → Z</label>
             <input id="abInput" type="text" placeholder="distance">
           </div>
 
           <div>
-            <label>ROUTE SEGMENT BC</label>
+            <label>ROUTE Z → N</label>
             <input id="bcInput" type="text" placeholder="distance">
           </div>
 
           <div>
-            <label>ROUTE SEGMENT CD</label>
+            <label>ROUTE N → O</label>
             <input id="cdInput" type="text" placeholder="distance">
           </div>
         </div>
 
-        <button class="checkButton" onclick="checkRoute()">CHECK ROUTE DISTANCES</button>
+        <button class="checkButton" onclick="checkRoute()">CHECK ROUTE DIRECTIONS</button>
 
         <div class="sliderBlock">
           <div class="rangeRow">
@@ -1216,6 +1218,8 @@
     </div>
   </div>
 
+  <audio id="suspenseAudio" src="suspense.mp3" preload="auto" loop></audio>
+
   <script>
     const correctAB = "12";
     const correctBC = "31";
@@ -1299,6 +1303,35 @@
       distanceFill.style.width = fillPercent + "%";
     }
 
+    function startSuspenseAudio() {
+      const audio = document.getElementById("suspenseAudio");
+
+      if (!audio) {
+        return;
+      }
+
+      audio.volume = 0.55;
+      audio.currentTime = 0;
+
+      audio.play().then(function() {
+        addLog("> suspense audio started");
+      }).catch(function() {
+        addLog("> suspense audio blocked by browser");
+        addLog("> tap the screen once and restart if audio is needed");
+      });
+    }
+
+    function stopSuspenseAudio() {
+      const audio = document.getElementById("suspenseAudio");
+
+      if (!audio) {
+        return;
+      }
+
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
     function startFinalMission() {
       if (finalMissionStarted) {
         return;
@@ -1310,12 +1343,15 @@
 
       addLog("> final mission accepted");
       addLog("> danger meter started");
+      addLog("> suspense audio armed");
       addLog("> live drone feed connected");
       addLog("> visual contact restored");
       addLog("> route locked toward Hardenberg sector");
+      addLog("> route sequence uses wind directions: W-Z / Z-N / N-O");
       addLog("> distance telemetry linked to danger meter");
       addLog("> wrong input penalty armed: -30 seconds");
 
+      startSuspenseAudio();
       startTimer();
       startDroneVideo();
       updateDroneDistance();
@@ -1365,6 +1401,8 @@
         timerInterval = null;
       }
 
+      stopSuspenseAudio();
+
       addLog("> drone reached Hardenberg sector");
       addLog("> drone override window closed");
 
@@ -1406,11 +1444,12 @@
 
       if (ab === correctAB && bc === correctBC && cd === correctCD) {
         solved.route = true;
-        addLog("> route distances accepted");
+        addLog("> route wind-direction sequence accepted");
+        addLog("> W-Z / Z-N / N-O distances verified");
         updatePills();
         checkFinalUnlock();
       } else {
-        addLog("> route distance mismatch");
+        addLog("> route wind-direction mismatch");
         addLog("> penalty applied: -30 seconds");
         applyPenalty(30);
       }
@@ -1595,6 +1634,8 @@
         timerInterval = null;
       }
 
+      stopSuspenseAudio();
+
       addLog("> final abort command accepted");
       addLog("> drone payload sequence interrupted");
       addLog("> physical lockbox protocol released");
@@ -1618,6 +1659,8 @@
         clearInterval(timerInterval);
         timerInterval = null;
       }
+
+      stopSuspenseAudio();
 
       document.getElementById("abInput").value = "";
       document.getElementById("bcInput").value = "";
@@ -1646,6 +1689,7 @@
 `> drone interface loaded
 > waiting for final mission start
 > danger meter inactive
+> suspense audio standing by
 > live drone feed standing by
 > route solution required`;
     }
