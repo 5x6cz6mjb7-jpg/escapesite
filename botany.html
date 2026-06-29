@@ -10,7 +10,6 @@
       --brown: #2a1c10;
       --brown2: #4a321f;
       --paper: #ead9ae;
-      --paper2: #c9b078;
       --ink: #21170d;
       --gold: #d4aa4f;
       --red: #8f2130;
@@ -399,49 +398,8 @@
         0 0 30px rgba(0,0,0,0.62),
         inset 0 0 28px rgba(234,217,174,0.04);
       min-height: 760px;
-    }
-
-    .mapImage {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(rgba(24,15,7,0.06), rgba(24,15,7,0.30)),
-        url("botanic-garden-map.jpg") center center / cover no-repeat;
-      filter:
-        sepia(0.24)
-        contrast(1.05)
-        brightness(0.86)
-        saturate(0.85);
-      transform: scale(1.03);
-    }
-
-    .mapPanel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.62) 100%),
-        linear-gradient(90deg, rgba(212,170,79,0.08), transparent 30%, transparent 70%, rgba(143,33,48,0.10));
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .mapPanel::after {
-      content: "";
-      position: absolute;
-      left: -10%;
-      right: -10%;
-      top: -120px;
-      height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(234,217,174,0.16), transparent);
-      animation: mapScan 5.5s linear infinite;
-      z-index: 4;
-      pointer-events: none;
-    }
-
-    @keyframes mapScan {
-      from { top: -120px; }
-      to { top: 110%; }
+      display: grid;
+      grid-template-rows: auto auto minmax(360px, 1fr) auto;
     }
 
     .mapHeader {
@@ -449,7 +407,7 @@
       z-index: 5;
       padding: 12px 14px;
       border-bottom: 1px solid rgba(234,217,174,0.30);
-      background: rgba(20,12,6,0.78);
+      background: rgba(20,12,6,0.86);
       display: flex;
       justify-content: space-between;
       gap: 12px;
@@ -462,157 +420,158 @@
 
     .mapHeader span:last-child {
       color: var(--red2);
-      animation: blink 1.2s infinite;
     }
 
-    @keyframes blink {
-      0%, 48%, 100% { opacity: 1; }
-      49%, 85% { opacity: 0.28; }
+    .diaryTabs {
+      position: relative;
+      z-index: 8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(234,217,174,0.25);
+      background: rgba(14,8,4,0.86);
     }
 
-    .personalNote {
-      position: absolute;
-      left: 24px;
-      top: 70px;
-      width: min(500px, calc(100% - 48px));
-      z-index: 6;
-      border: 2px solid rgba(234,217,174,0.42);
-      background: rgba(14,8,4,0.82);
-      padding: 14px;
-      color: #ead8aa;
-      box-shadow: 0 0 18px rgba(0,0,0,0.45);
-      backdrop-filter: blur(2px);
-    }
-
-    .personalNote h2 {
-      margin: 0 0 8px;
-      color: var(--gold);
-      font-family: var(--hand);
-      font-size: 25px;
-      letter-spacing: 1px;
-    }
-
-    .personalNote p {
-      margin: 0 0 9px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .personalNote strong {
-      color: var(--white);
-    }
-
-    .clickLayer {
-      position: absolute;
-      inset: 0;
-      z-index: 7;
-    }
-
-    .mapHotspot {
-      position: absolute;
-      border: 2px solid rgba(212,170,79,0.48);
-      background: rgba(212,170,79,0.08);
-      color: var(--white);
-      font-family: var(--font);
-      cursor: pointer;
-      padding: 0;
-      box-shadow:
-        0 0 14px rgba(0,0,0,0.40),
-        inset 0 0 16px rgba(212,170,79,0.08);
-      transition: 0.16s ease;
-    }
-
-    .mapHotspot:hover,
-    .mapHotspot.active {
-      border-color: rgba(255,244,208,0.95);
-      background: rgba(143,33,48,0.22);
-      box-shadow:
-        0 0 20px rgba(212,170,79,0.35),
-        inset 0 0 16px rgba(143,33,48,0.15);
-      transform: scale(1.02);
-    }
-
-    .mapHotspot span {
-      position: absolute;
-      left: 8px;
-      top: 8px;
-      display: inline-block;
-      border: 1px solid rgba(234,217,174,0.50);
-      background: rgba(12,7,3,0.72);
-      color: var(--gold);
-      padding: 5px 7px;
+    .diaryTab {
+      flex: 1 1 140px;
+      border: 1px solid rgba(234,217,174,0.34);
+      background: rgba(43,29,16,0.72);
+      color: var(--paper);
+      padding: 9px 10px;
       font-size: 11px;
       letter-spacing: 1px;
       text-transform: uppercase;
+      box-shadow: none;
+    }
+
+    .diaryTab:hover,
+    .diaryTab.active {
+      color: var(--gold);
+      border-color: rgba(212,170,79,0.95);
+      background: rgba(143,33,48,0.18);
+      box-shadow: 0 0 14px rgba(212,170,79,0.18);
+    }
+
+    .mapStage {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      background: #1a1209;
+    }
+
+    .mapImage {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(24,15,7,0.04), rgba(24,15,7,0.22)),
+        url("botanic-garden-map.jpg") center center / contain no-repeat;
+      filter:
+        sepia(0.20)
+        contrast(1.04)
+        brightness(0.92)
+        saturate(0.86);
+    }
+
+    .mapStage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.38) 100%);
+      z-index: 2;
       pointer-events: none;
     }
 
-    .hotspotA { left: 34%; top: 26%; width: 28%; height: 28%; }
-    .hotspotB { left: 8%; top: 28%; width: 24%; height: 28%; }
-    .hotspotC { left: 50%; top: 58%; width: 32%; height: 24%; }
-    .hotspotD { left: 68%; top: 18%; width: 22%; height: 26%; }
-    .hotspotE { left: 18%; top: 62%; width: 26%; height: 22%; }
-
-    .infoCard {
+    .mapStage::after {
+      content: "";
       position: absolute;
-      right: 24px;
-      top: 70px;
-      width: min(430px, calc(100% - 48px));
-      z-index: 8;
-      border: 2px solid rgba(234,217,174,0.44);
-      background:
-        radial-gradient(circle at center, rgba(212,170,79,0.08), transparent 70%),
-        rgba(14,8,4,0.88);
-      padding: 15px;
-      color: #ead8aa;
-      box-shadow: 0 0 22px rgba(0,0,0,0.50);
-      backdrop-filter: blur(3px);
-      min-height: 200px;
+      left: -10%;
+      right: -10%;
+      top: -120px;
+      height: 120px;
+      background: linear-gradient(180deg, transparent, rgba(234,217,174,0.13), transparent);
+      animation: mapScan 6s linear infinite;
+      z-index: 4;
+      pointer-events: none;
     }
 
-    .infoCardLabel {
+    @keyframes mapScan {
+      from { top: -120px; }
+      to { top: 110%; }
+    }
+
+    .smallMapLabel {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 5;
+      border: 1px solid rgba(234,217,174,0.38);
+      background: rgba(14,8,4,0.76);
+      color: #ead8aa;
+      padding: 8px 10px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      max-width: 360px;
+    }
+
+    .diaryPanel {
+      position: relative;
+      z-index: 7;
+      border-top: 1px solid rgba(234,217,174,0.28);
+      background:
+        radial-gradient(circle at center, rgba(212,170,79,0.08), transparent 70%),
+        rgba(14,8,4,0.90);
+      padding: 16px;
+      min-height: 210px;
+    }
+
+    .diaryMeta {
       color: var(--muted);
       font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
     }
 
-    .infoCard h2 {
-      margin: 0 0 8px;
+    .diaryPanel h2 {
+      margin: 0 0 10px;
       color: var(--gold);
       font-family: var(--hand);
-      font-size: 25px;
+      font-size: 28px;
       letter-spacing: 1px;
     }
 
-    .infoCard p {
-      margin: 0 0 9px;
+    .diaryText {
       color: #ead8aa;
-      font-size: 13px;
-      line-height: 1.48;
+      font-family: var(--hand);
+      font-size: 17px;
+      line-height: 1.55;
+      white-space: pre-line;
+      max-width: 980px;
     }
 
-    .infoCard .myNote {
-      margin-top: 11px;
-      border-left: 4px solid rgba(143,33,48,0.74);
+    .diaryQuote {
+      margin-top: 12px;
+      border-left: 4px solid rgba(143,33,48,0.72);
       background: rgba(143,33,48,0.12);
-      padding: 9px 10px;
+      padding: 10px 12px;
       color: #f1c1b8;
       font-family: var(--hand);
       font-size: 16px;
       line-height: 1.45;
+      max-width: 900px;
     }
 
     .bottomDeck {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: 14px;
+      position: relative;
       z-index: 8;
       display: grid;
       grid-template-columns: 1fr 1fr 260px;
       gap: 12px;
+      padding: 14px;
+      border-top: 1px solid rgba(234,217,174,0.25);
+      background: rgba(8,5,3,0.84);
     }
 
     .miniPanel {
@@ -691,14 +650,6 @@
       .mapPanel {
         min-height: 800px;
       }
-
-      .bottomDeck {
-        position: relative;
-        left: auto;
-        right: auto;
-        bottom: auto;
-        margin: 14px;
-      }
     }
 
     @media (max-width: 760px) {
@@ -720,33 +671,20 @@
         font-size: 25px;
       }
 
-      .mapPanel {
-        min-height: 1000px;
-      }
-
-      .personalNote,
-      .infoCard {
-        position: relative;
-        left: auto;
-        right: auto;
-        top: auto;
-        width: auto;
-        margin: 14px;
-      }
-
-      .clickLayer {
-        position: relative;
-        height: 380px;
-        margin: 14px;
-        border: 1px dashed rgba(234,217,174,0.24);
-      }
-
-      .mapHotspot span {
-        font-size: 9px;
+      .mapStage {
+        min-height: 300px;
       }
 
       .bottomDeck {
         grid-template-columns: 1fr;
+      }
+
+      .diaryPanel h2 {
+        font-size: 23px;
+      }
+
+      .diaryText {
+        font-size: 15px;
       }
     }
   </style>
@@ -855,65 +793,41 @@
       </aside>
 
       <section class="mapPanel">
-        <div class="mapImage"></div>
-
         <div class="mapHeader">
           <span>Historical Garden Map</span>
-          <span>click the archive zones</span>
+          <span>open diary notes above the drawing</span>
         </div>
 
-        <section class="personalNote">
-          <h2>My archive note</h2>
-
-          <p>
-            I returned to the old botanic records because gardens keep better secrets than people.
-          </p>
-
-          <p>
-            Trinity’s botanic garden is now connected with Dartry, south of the main campus. But its story reaches back through older herb gardens, teaching collections and archive plans.
-          </p>
-
-          <p>
-            I marked this map for myself. Not as a puzzle. As a reminder: every collection has a hidden order, if you know where to look.
-          </p>
-        </section>
-
-        <div class="clickLayer">
-          <button class="mapHotspot hotspotA active" onclick="openMapInfo('origin', this)">
-            <span>Old Herb Garden</span>
-          </button>
-
-          <button class="mapHotspot hotspotB" onclick="openMapInfo('dartry', this)">
-            <span>Dartry</span>
-          </button>
-
-          <button class="mapHotspot hotspotC" onclick="openMapInfo('trinityHall', this)">
-            <span>Trinity Hall</span>
-          </button>
-
-          <button class="mapHotspot hotspotD" onclick="openMapInfo('research', this)">
-            <span>Teaching Archive</span>
-          </button>
-
-          <button class="mapHotspot hotspotE" onclick="openMapInfo('visit', this)">
-            <span>Field Visit</span>
-          </button>
+        <div class="diaryTabs">
+          <button class="diaryTab active" onclick="openDiary('physic', this)">1687 Physic Garden</button>
+          <button class="diaryTab" onclick="openDiary('ballsbridge', this)">Ballsbridge</button>
+          <button class="diaryTab" onclick="openDiary('dartry', this)">Dartry</button>
+          <button class="diaryTab" onclick="openDiary('collections', this)">Living Collections</button>
+          <button class="diaryTab" onclick="openDiary('visit', this)">Field Visit</button>
         </div>
 
-        <section class="infoCard" id="infoCard">
-          <div class="infoCardLabel">selected archive zone</div>
-          <h2 id="infoTitle">Old Herb Garden</h2>
+        <div class="mapStage">
+          <div class="mapImage"></div>
 
-          <p id="infoTextA">
-            Trinity’s botanic garden developed from an earlier herb garden on the main college site.
-          </p>
+          <div class="smallMapLabel">
+            Recovered drawing from the garden history archive. I left the image mostly untouched.
+          </div>
+        </div>
 
-          <p id="infoTextB">
-            This matters because botany at Trinity was not only decorative. Herb gardens were connected with teaching, classification and the study of useful plants.
-          </p>
+        <section class="diaryPanel">
+          <div class="diaryMeta" id="diaryMeta">private diary fragment // archive note 01</div>
+          <h2 id="diaryTitle">1687 Physic Garden</h2>
 
-          <div class="myNote" id="infoPersonal">
-            My note: the oldest layers are never the cleanest. They are where people stop looking.
+          <div class="diaryText" id="diaryText">
+I started with the oldest layer.
+
+The garden began as a physic garden more than three centuries ago, meant to provide plant material for the teaching of medicine at Trinity. That detail matters. Before anyone called it beautiful, useful or academic, it was a place where plants were connected to bodies, treatment, dosage and risk.
+
+The old records are incomplete. No one even seems certain which plants were grown in the earliest garden. That absence is useful. Empty spaces in an archive are not empty. They are invitations.
+          </div>
+
+          <div class="diaryQuote" id="diaryQuote">
+My note: a garden built for medicine can also teach other lessons.
           </div>
         </section>
 
@@ -921,15 +835,15 @@
           <div class="miniPanel">
             <div class="miniTitle">Archive Note</div>
             <div class="miniText">
-              Click the marked archive zones on the map. The information is background for the real garden visit. The code inputs remain the main task.
+              Click the diary tabs above the drawing. The map stays visible; the notes appear underneath.
             </div>
           </div>
 
           <div class="miniPanel">
             <div class="miniTitle">System Log</div>
             <div class="logBox" id="logBox">&gt; historical botanic map loaded
+&gt; diary layer active
 &gt; archive locks waiting
-&gt; interactive map layer active
 &gt; field game code required
 &gt; private fragment sealed</div>
           </div>
@@ -953,40 +867,65 @@
     const correctAnswerC = "GERANIUMSANGUINEUM";
     const correctGameCode = "WITTEKLAVER";
 
-    const mapInfo = {
-      origin: {
-        title: "Old Herb Garden",
-        textA: "Trinity’s botanic garden developed from an earlier herb garden on the main college site.",
-        textB: "That older herb-garden tradition matters: these gardens were used for teaching, classification and the study of useful plants, not just decoration.",
-        personal: "My note: the oldest layers are never the cleanest. They are where people stop looking."
+    const diaryEntries = {
+      physic: {
+        meta: "private diary fragment // archive note 01",
+        title: "1687 Physic Garden",
+        text:
+`I started with the oldest layer.
+
+The garden began as a physic garden more than three centuries ago, meant to provide plant material for the teaching of medicine at Trinity. That detail matters. Before anyone called it beautiful, useful or academic, it was a place where plants were connected to bodies, treatment, dosage and risk.
+
+The old records are incomplete. No one even seems certain which plants were grown in the earliest garden. That absence is useful. Empty spaces in an archive are not empty. They are invitations.`,
+        quote: "My note: a garden built for medicine can also teach other lessons."
+      },
+
+      ballsbridge: {
+        meta: "private diary fragment // archive note 02",
+        title: "Ballsbridge Garden",
+        text:
+`The next layer led me to Ballsbridge.
+
+In the early nineteenth century, Trinity moved the botanic garden onto a larger leased site there. Trees, shrubs and medicinal plants were enclosed, ordered and labelled. Later, the garden held glasshouses and a wide range of plants: orchids, ferns, palms, cacti and more.
+
+A garden like that is not just a garden. It is a controlled system. A place where living things are collected, named, moved and kept under observation.`,
+        quote: "My note: control looks innocent when it is written on a plant label."
       },
 
       dartry: {
-        title: "Dartry Site",
-        textA: "The present Trinity College Botanic Garden is in Dartry, about four kilometres south of Trinity’s main campus in Dublin.",
-        textB: "That distance makes the garden feel separate from the college, but it is still part of Trinity’s academic landscape.",
-        personal: "My note: distance is useful. It makes a place feel forgotten, even when it is still connected."
+        meta: "private diary fragment // archive note 03",
+        title: "Dartry",
+        text:
+`The present garden is in Dartry.
+
+The move from Ballsbridge to Trinity Hall in Dartry was approved in the 1960s and completed in 1966 and 1967. Important specimens were moved there too, including a tall Ginkgo biloba and cycads.
+
+That interested me most: a garden can be uprooted and still remain the same institution. A collection can move. A secret can move with it.`,
+        quote: "My note: relocation is not disappearance. Sometimes it is protection."
       },
 
-      trinityHall: {
-        title: "Trinity Hall Grounds",
-        textA: "The botanic garden shares the Dartry site with Trinity Hall, Trinity College Dublin’s student residence.",
-        textB: "The garden became linked with the Dartry grounds after land connected with Trinity Hall was added in the 1960s.",
-        personal: "My note: students pass through places like this without seeing what has been buried in the records."
-      },
+      collections: {
+        meta: "private diary fragment // archive note 04",
+        title: "Living Collections",
+        text:
+`Today the garden still supports teaching and research.
 
-      research: {
-        title: "Teaching and Research",
-        textA: "Botanic gardens are living collections. They support teaching, observation and scientific study of plant life.",
-        textB: "A garden like this is not only a place to walk through. It is also an organised archive of living specimens, labels, histories and hidden connections.",
-        personal: "My note: a living collection is still an archive. It just breathes."
+It holds living plant material, glasshouses, controlled environments, experimental plots and collections used for botanical work. It is also linked with conservation, including threatened plant material and seed banking.
+
+This is why I kept returning to the archive. A living collection is more than a display. It is evidence that breathes, grows, fails, survives and waits.`,
+        quote: "My note: dried records are useful. Living records are better."
       },
 
       visit: {
-        title: "Field Visit",
-        textA: "When you visit the garden, look at it as more than a green space. Notice paths, labels, old structures, plant groupings and quiet corners.",
-        textB: "The real garden gives context to the archive: a place where botany, history and private research can overlap.",
-        personal: "My note: let them walk the garden. Let them think they are only looking at plants."
+        meta: "private diary fragment // field visit note",
+        title: "When They Visit",
+        text:
+`If they go there, they should look carefully.
+
+Not just at flowers. At labels. Glasshouses. Old structures. The way paths divide the garden. The way collections are arranged. The quiet places where research hides in plain sight.
+
+Most people visit a botanic garden and think they are looking at plants. That is their mistake.`,
+        quote: "My note: let them walk through the archive before they understand it is an archive."
       }
     };
 
@@ -1007,31 +946,31 @@
       log.scrollTop = log.scrollHeight;
     }
 
-    function clearActiveHotspots() {
-      document.querySelectorAll(".mapHotspot").forEach(function(button) {
+    function clearActiveDiaryTabs() {
+      document.querySelectorAll(".diaryTab").forEach(function(button) {
         button.classList.remove("active");
       });
     }
 
-    function openMapInfo(key, button) {
-      const item = mapInfo[key];
+    function openDiary(key, button) {
+      const entry = diaryEntries[key];
 
-      if (!item) {
+      if (!entry) {
         return;
       }
 
-      clearActiveHotspots();
+      clearActiveDiaryTabs();
 
       if (button) {
         button.classList.add("active");
       }
 
-      document.getElementById("infoTitle").textContent = item.title;
-      document.getElementById("infoTextA").textContent = item.textA;
-      document.getElementById("infoTextB").textContent = item.textB;
-      document.getElementById("infoPersonal").textContent = item.personal;
+      document.getElementById("diaryMeta").textContent = entry.meta;
+      document.getElementById("diaryTitle").textContent = entry.title;
+      document.getElementById("diaryText").textContent = entry.text;
+      document.getElementById("diaryQuote").textContent = entry.quote;
 
-      appendLog("> archive zone opened // " + item.title);
+      appendLog("> diary note opened // " + entry.title);
     }
 
     function markError(id, text) {
