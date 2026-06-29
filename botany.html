@@ -2,23 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Botanical Quarantine Lock</title>
+  <title>Botanical Archive Map</title>
 
   <style>
     :root {
-      --bg: #020402;
-      --panel: #07130a;
-      --panel2: #0d2011;
-      --green: #7cff9b;
-      --green2: #2ea65a;
-      --yellow: #ffd76a;
-      --red: #ff3158;
-      --red2: #8b1026;
-      --cyan: #8effff;
-      --white: #f3fff0;
-      --muted: #8fa58c;
-      --dark: #000000;
+      --dark: #080604;
+      --brown: #2a1d12;
+      --brown2: #4b321d;
+      --paper: #e8d6aa;
+      --paper2: #c9b07a;
+      --ink: #21170d;
+      --gold: #d2a94e;
+      --red: #8f2130;
+      --red2: #d7364f;
+      --green: #536b3e;
+      --green2: #9fb47b;
+      --white: #fff4d0;
+      --muted: #9d8b68;
       --font: "Courier New", monospace;
+      --hand: "Georgia", "Times New Roman", serif;
     }
 
     * {
@@ -29,13 +31,12 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(124,255,155,0.12), transparent 24%),
-        radial-gradient(circle at 82% 20%, rgba(255,49,88,0.18), transparent 28%),
-        radial-gradient(circle at 50% 85%, rgba(255,215,106,0.10), transparent 30%),
-        linear-gradient(135deg, #000 0%, #031006 45%, #150208 78%, #000 100%);
-      color: var(--white);
       font-family: var(--font);
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(210,169,78,0.18), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(143,33,48,0.18), transparent 28%),
+        linear-gradient(135deg, #030201 0%, #171008 45%, #080302 100%);
       overflow-x: hidden;
     }
 
@@ -43,18 +44,17 @@
       content: "";
       position: fixed;
       inset: 0;
-      z-index: 90;
       pointer-events: none;
+      z-index: 90;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(255,255,255,0.032),
-          rgba(255,255,255,0.032) 1px,
+          rgba(255,255,255,0.025),
+          rgba(255,255,255,0.025) 1px,
           transparent 1px,
           transparent 5px
         );
       mix-blend-mode: screen;
-      animation: scanlines 7s linear infinite;
     }
 
     body::after {
@@ -64,77 +64,44 @@
       z-index: 91;
       pointer-events: none;
       background:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.22) 55%, rgba(0,0,0,0.86) 100%);
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.20) 52%, rgba(0,0,0,0.82) 100%);
     }
 
-    @keyframes scanlines {
-      from { transform: translateY(0); }
-      to { transform: translateY(14px); }
-    }
-
-    .fog {
-      position: fixed;
-      inset: -20%;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 12% 30%, rgba(124,255,155,0.12), transparent 26%),
-        radial-gradient(circle at 80% 46%, rgba(255,49,88,0.15), transparent 28%),
-        radial-gradient(circle at 45% 76%, rgba(255,215,106,0.08), transparent 32%);
-      filter: blur(10px);
-      animation: fogMove 9s ease-in-out infinite alternate;
-    }
-
-    @keyframes fogMove {
-      from {
-        transform: translate(-2%, -1%) scale(1);
-        opacity: 0.42;
-      }
-
-      to {
-        transform: translate(3%, 2%) scale(1.06);
-        opacity: 0.82;
-      }
-    }
-
-    .spores {
+    .dust {
       position: fixed;
       inset: 0;
-      z-index: 2;
       pointer-events: none;
+      z-index: 1;
       overflow: hidden;
     }
 
-    .spores span {
+    .dust span {
       position: absolute;
-      width: 7px;
-      height: 7px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      background: rgba(255,215,106,0.72);
-      box-shadow:
-        0 0 12px rgba(255,215,106,0.75),
-        0 0 24px rgba(124,255,155,0.25);
-      animation: sporeFloat 7s ease-in-out infinite;
+      background: rgba(232,214,170,0.42);
+      box-shadow: 0 0 10px rgba(232,214,170,0.45);
+      animation: drift 9s ease-in-out infinite;
     }
 
-    .spores span:nth-child(1) { left: 8%; top: 18%; animation-delay: 0s; }
-    .spores span:nth-child(2) { left: 19%; top: 76%; animation-delay: 1s; }
-    .spores span:nth-child(3) { left: 31%; top: 35%; animation-delay: 2s; }
-    .spores span:nth-child(4) { left: 48%; top: 82%; animation-delay: 0.6s; }
-    .spores span:nth-child(5) { left: 63%; top: 23%; animation-delay: 1.7s; }
-    .spores span:nth-child(6) { left: 78%; top: 68%; animation-delay: 2.8s; }
-    .spores span:nth-child(7) { left: 91%; top: 15%; animation-delay: 4s; }
-    .spores span:nth-child(8) { left: 86%; top: 47%; animation-delay: 3.1s; }
+    .dust span:nth-child(1) { left: 9%; top: 18%; animation-delay: 0s; }
+    .dust span:nth-child(2) { left: 18%; top: 72%; animation-delay: 1s; }
+    .dust span:nth-child(3) { left: 34%; top: 38%; animation-delay: 2.2s; }
+    .dust span:nth-child(4) { left: 51%; top: 84%; animation-delay: 0.7s; }
+    .dust span:nth-child(5) { left: 67%; top: 22%; animation-delay: 1.8s; }
+    .dust span:nth-child(6) { left: 79%; top: 66%; animation-delay: 3s; }
+    .dust span:nth-child(7) { left: 91%; top: 15%; animation-delay: 4s; }
 
-    @keyframes sporeFloat {
+    @keyframes drift {
       0%, 100% {
-        opacity: 0.18;
-        transform: translate(0, 0) scale(0.65);
+        opacity: 0.12;
+        transform: translate(0, 0) scale(0.6);
       }
 
       50% {
-        opacity: 1;
-        transform: translate(20px, -34px) scale(1.28);
+        opacity: 0.8;
+        transform: translate(18px, -32px) scale(1.2);
       }
     }
 
@@ -144,22 +111,22 @@
       min-height: 100vh;
       padding: 14px;
       display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 12px;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
     }
 
     .header {
-      border: 2px solid rgba(124,255,155,0.28);
+      border: 3px double rgba(232,214,170,0.45);
       background:
-        linear-gradient(90deg, rgba(255,49,88,0.20), rgba(124,255,155,0.08), rgba(255,49,88,0.20));
+        linear-gradient(90deg, rgba(143,33,48,0.22), rgba(232,214,170,0.08), rgba(83,107,62,0.14), rgba(143,33,48,0.22));
       box-shadow:
-        0 0 28px rgba(255,49,88,0.18),
-        inset 0 0 22px rgba(124,255,155,0.04);
-      padding: 13px 16px;
+        0 0 28px rgba(0,0,0,0.55),
+        inset 0 0 24px rgba(232,214,170,0.05);
+      padding: 14px 18px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
       align-items: center;
-      gap: 14px;
     }
 
     .headerSmall {
@@ -180,156 +147,137 @@
 
     .mainTitle {
       color: var(--white);
-      font-size: 30px;
-      font-weight: bold;
+      font-family: var(--hand);
+      font-size: 34px;
       letter-spacing: 3px;
       text-shadow:
-        0 0 12px rgba(124,255,155,0.55),
-        0 0 30px rgba(255,49,88,0.35);
+        0 0 14px rgba(210,169,78,0.35),
+        0 0 28px rgba(143,33,48,0.25);
     }
 
     .subTitle {
       margin-top: 5px;
-      color: var(--yellow);
+      color: var(--gold);
       font-size: 12px;
       letter-spacing: 2px;
       text-transform: uppercase;
-    }
-
-    .warningBanner {
-      border: 2px solid rgba(255,49,88,0.52);
-      background:
-        repeating-linear-gradient(
-          45deg,
-          rgba(255,49,88,0.17) 0,
-          rgba(255,49,88,0.17) 12px,
-          rgba(0,0,0,0.28) 12px,
-          rgba(0,0,0,0.28) 24px
-        );
-      color: #ffb8c4;
-      padding: 9px 12px;
-      text-align: center;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      animation: warningPulse 1.35s ease-in-out infinite;
-    }
-
-    @keyframes warningPulse {
-      0%, 100% {
-        opacity: 0.72;
-      }
-
-      50% {
-        opacity: 1;
-        box-shadow: 0 0 18px rgba(255,49,88,0.28);
-      }
     }
 
     .mainGrid {
       display: grid;
       grid-template-columns: 420px minmax(0, 1fr);
-      gap: 12px;
+      gap: 14px;
       min-height: 0;
     }
 
-    .panel {
-      border: 2px solid rgba(124,255,155,0.22);
+    .lockPanel {
+      border: 3px double rgba(232,214,170,0.42);
       background:
-        radial-gradient(circle at center, rgba(124,255,155,0.06), transparent 64%),
-        linear-gradient(180deg, rgba(9,24,13,0.94), rgba(2,8,3,0.98));
+        radial-gradient(circle at center, rgba(210,169,78,0.08), transparent 68%),
+        linear-gradient(180deg, rgba(40,26,14,0.96), rgba(9,5,3,0.98));
       box-shadow:
-        0 0 24px rgba(0,0,0,0.46),
-        inset 0 0 20px rgba(255,255,255,0.02);
+        0 0 26px rgba(0,0,0,0.58),
+        inset 0 0 28px rgba(232,214,170,0.04);
       overflow: hidden;
     }
 
     .panelTitle {
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(124,255,155,0.18);
+      padding: 12px 14px;
+      border-bottom: 2px solid rgba(232,214,170,0.22);
       background:
-        linear-gradient(90deg, rgba(255,49,88,0.20), rgba(124,255,155,0.06));
+        linear-gradient(90deg, rgba(143,33,48,0.24), rgba(232,214,170,0.06));
       color: var(--white);
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 2px;
       text-transform: uppercase;
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
     }
 
     .panelTitle span:last-child {
-      color: var(--yellow);
+      color: var(--gold);
     }
 
     .panelBody {
-      padding: 12px;
+      padding: 14px;
     }
 
     .priorityNote {
-      border: 1px dashed rgba(255,215,106,0.55);
-      background: rgba(255,215,106,0.075);
-      color: #f7dd95;
-      padding: 10px;
+      border: 1px dashed rgba(210,169,78,0.62);
+      background: rgba(210,169,78,0.08);
+      color: #eed99b;
+      padding: 11px;
       font-size: 12px;
       line-height: 1.45;
       text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .lockStack {
       display: grid;
-      gap: 12px;
+      gap: 13px;
     }
 
     .lockCard {
       position: relative;
-      border: 2px solid rgba(124,255,155,0.28);
+      border: 2px solid rgba(232,214,170,0.36);
       background:
-        radial-gradient(circle at 88% 20%, rgba(255,49,88,0.13), transparent 32%),
-        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(5,19,9,0.88));
-      padding: 12px;
+        radial-gradient(circle at 86% 22%, rgba(143,33,48,0.14), transparent 34%),
+        linear-gradient(180deg, rgba(0,0,0,0.28), rgba(43,29,16,0.88));
+      padding: 13px;
       min-height: 142px;
       box-shadow:
-        inset 0 0 18px rgba(124,255,155,0.04),
-        0 0 14px rgba(0,0,0,0.32);
+        inset 0 0 20px rgba(232,214,170,0.035),
+        0 0 16px rgba(0,0,0,0.34);
       overflow: hidden;
     }
 
     .lockCard::before {
       content: "";
       position: absolute;
-      right: -38px;
-      top: -38px;
-      width: 96px;
-      height: 96px;
-      border: 2px dashed rgba(255,49,88,0.32);
+      right: -42px;
+      top: -42px;
+      width: 105px;
+      height: 105px;
+      border: 2px dashed rgba(143,33,48,0.38);
       border-radius: 50%;
-      animation: rotateRing 5s linear infinite;
+      animation: rotateSeal 6s linear infinite;
     }
 
-    @keyframes rotateRing {
+    .lockCard::after {
+      content: "ARCHIVE SEAL";
+      position: absolute;
+      right: 11px;
+      top: 12px;
+      color: rgba(232,214,170,0.18);
+      font-size: 10px;
+      letter-spacing: 2px;
+      transform: rotate(8deg);
+    }
+
+    @keyframes rotateSeal {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
 
     .lockCard.solved {
-      border-color: rgba(124,255,155,0.90);
+      border-color: rgba(159,180,123,0.95);
       background:
-        radial-gradient(circle at center, rgba(124,255,155,0.14), transparent 70%),
-        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(10,45,20,0.88));
+        radial-gradient(circle at center, rgba(159,180,123,0.16), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0.30), rgba(27,56,28,0.88));
       box-shadow:
-        0 0 18px rgba(124,255,155,0.24),
-        inset 0 0 18px rgba(124,255,155,0.08);
+        0 0 20px rgba(159,180,123,0.28),
+        inset 0 0 18px rgba(159,180,123,0.08);
     }
 
     .lockCard.error {
-      border-color: rgba(255,49,88,0.95);
+      border-color: rgba(215,54,79,0.95);
       background:
-        radial-gradient(circle at center, rgba(255,49,88,0.16), transparent 70%),
-        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(49,5,14,0.84));
+        radial-gradient(circle at center, rgba(215,54,79,0.16), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0.30), rgba(55,5,14,0.88));
       animation: shake 0.34s ease;
     }
 
@@ -354,7 +302,7 @@
     }
 
     .lockHeader span:last-child {
-      color: var(--yellow);
+      color: var(--gold);
       font-size: 11px;
     }
 
@@ -371,8 +319,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      background: rgba(0,0,0,0.66);
-      border: 2px solid rgba(124,255,155,0.32);
+      background: rgba(0,0,0,0.58);
+      border: 2px solid rgba(232,214,170,0.34);
       color: var(--white);
       padding: 12px;
       font-family: var(--font);
@@ -383,8 +331,8 @@
     }
 
     input:focus {
-      border-color: rgba(255,215,106,0.90);
-      box-shadow: 0 0 12px rgba(255,215,106,0.25);
+      border-color: rgba(210,169,78,0.95);
+      box-shadow: 0 0 12px rgba(210,169,78,0.25);
     }
 
     button,
@@ -392,9 +340,9 @@
     .backButton {
       position: relative;
       z-index: 2;
-      border: 2px solid rgba(124,255,155,0.32);
+      border: 2px solid rgba(232,214,170,0.34);
       background:
-        linear-gradient(180deg, rgba(124,255,155,0.14), rgba(18,55,28,0.92));
+        linear-gradient(180deg, rgba(210,169,78,0.14), rgba(75,50,29,0.92));
       color: var(--white);
       padding: 11px 12px;
       font-family: var(--font);
@@ -410,9 +358,9 @@
     button:hover,
     .gameButton:hover,
     .backButton:hover {
-      border-color: rgba(255,215,106,0.90);
-      color: var(--yellow);
-      box-shadow: 0 0 14px rgba(255,215,106,0.22);
+      border-color: rgba(210,169,78,0.95);
+      color: var(--gold);
+      box-shadow: 0 0 14px rgba(210,169,78,0.22);
     }
 
     button:disabled {
@@ -426,284 +374,189 @@
 
     .gameButton {
       width: 100%;
-      border-color: rgba(255,215,106,0.46);
+      border-color: rgba(210,169,78,0.52);
       background:
-        radial-gradient(circle at center, rgba(255,215,106,0.14), transparent 70%),
+        radial-gradient(circle at center, rgba(210,169,78,0.14), transparent 70%),
         linear-gradient(180deg, rgba(86,61,16,0.96), rgba(29,20,6,0.96));
-      color: var(--yellow);
+      color: var(--gold);
       margin-top: 8px;
     }
 
     .gameButton small {
       display: block;
-      color: #e2d5aa;
+      color: #ddcda2;
       font-size: 10px;
       font-weight: normal;
       margin-top: 4px;
     }
 
-    .rightZone {
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
-      gap: 12px;
-      min-height: 0;
-    }
-
-    .visualPanel {
+    .mapPanel {
       position: relative;
-      border: 2px solid rgba(255,215,106,0.26);
-      background:
-        radial-gradient(circle at center, rgba(124,255,155,0.07), transparent 58%),
-        linear-gradient(180deg, rgba(5,14,7,0.96), rgba(0,0,0,0.98));
-      box-shadow:
-        inset 0 0 46px rgba(124,255,155,0.05),
-        0 0 28px rgba(0,0,0,0.44);
+      border: 3px double rgba(232,214,170,0.42);
+      background: #1a1209;
       overflow: hidden;
-      min-height: 620px;
+      box-shadow:
+        0 0 30px rgba(0,0,0,0.62),
+        inset 0 0 28px rgba(232,214,170,0.04);
+      min-height: 720px;
     }
 
-    .visualPanel::before {
+    .mapImage {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(24,15,7,0.10), rgba(24,15,7,0.42)),
+        url("botanic-garden-map.jpg") center center / cover no-repeat;
+      filter:
+        sepia(0.28)
+        contrast(1.05)
+        brightness(0.82)
+        saturate(0.82);
+      transform: scale(1.03);
+    }
+
+    .mapPanel::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(124,255,155,0.055) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(124,255,155,0.055) 1px, transparent 1px);
-      background-size: 36px 36px;
-      opacity: 0.76;
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.70) 100%),
+        linear-gradient(90deg, rgba(210,169,78,0.10), transparent 30%, transparent 70%, rgba(143,33,48,0.12));
+      z-index: 2;
       pointer-events: none;
     }
 
-    .visualPanel::after {
+    .mapPanel::after {
       content: "";
       position: absolute;
       left: -10%;
       right: -10%;
       top: -120px;
       height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(124,255,155,0.22), transparent);
-      animation: verticalScan 4s linear infinite;
-      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(232,214,170,0.16), transparent);
+      animation: mapScan 5.5s linear infinite;
       z-index: 4;
+      pointer-events: none;
     }
 
-    @keyframes verticalScan {
+    @keyframes mapScan {
       from { top: -120px; }
       to { top: 110%; }
     }
 
-    .visualHeader {
+    .mapHeader {
       position: relative;
       z-index: 5;
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,215,106,0.24);
-      background: rgba(255,215,106,0.06);
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(232,214,170,0.30);
+      background: rgba(20,12,6,0.78);
       display: flex;
       justify-content: space-between;
-      gap: 10px;
-      color: var(--yellow);
+      gap: 12px;
+      color: var(--gold);
       font-size: 12px;
       letter-spacing: 2px;
       text-transform: uppercase;
       font-weight: bold;
     }
 
-    .visualHeader span:last-child {
-      color: var(--red);
+    .mapHeader span:last-child {
+      color: var(--red2);
       animation: blink 1.2s infinite;
     }
 
     @keyframes blink {
       0%, 48%, 100% { opacity: 1; }
-      49%, 85% { opacity: 0.26; }
+      49%, 85% { opacity: 0.28; }
     }
 
-    .tankArea {
-      position: relative;
-      z-index: 3;
-      min-height: 520px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-    }
-
-    .bioRing {
+    .mapLabels {
       position: absolute;
-      width: 500px;
-      height: 500px;
-      border: 2px dashed rgba(255,49,88,0.22);
-      border-radius: 50%;
-      animation: ringSpin 16s linear infinite;
-    }
-
-    .bioRing.two {
-      width: 380px;
-      height: 380px;
-      border-color: rgba(124,255,155,0.20);
-      animation-duration: 11s;
-      animation-direction: reverse;
-    }
-
-    @keyframes ringSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .glassTube {
-      position: relative;
-      width: min(340px, 72vw);
-      height: 390px;
-      border: 5px solid rgba(201,255,213,0.65);
-      border-radius: 165px 165px 42px 42px;
-      background:
-        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.22), transparent 18%),
-        linear-gradient(90deg, rgba(255,255,255,0.14), transparent 18%, transparent 82%, rgba(255,255,255,0.10)),
-        rgba(124,255,155,0.05);
-      box-shadow:
-        inset 0 0 28px rgba(255,255,255,0.12),
-        0 0 32px rgba(124,255,155,0.26),
-        0 0 62px rgba(255,49,88,0.16);
-      overflow: hidden;
+      inset: 0;
       z-index: 5;
+      pointer-events: none;
     }
 
-    .glassTube::before {
+    .mapMarker {
+      position: absolute;
+      min-width: 145px;
+      border: 1px solid rgba(232,214,170,0.48);
+      background: rgba(12,7,3,0.72);
+      color: var(--paper);
+      padding: 8px 9px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 16px rgba(0,0,0,0.40);
+      backdrop-filter: blur(2px);
+    }
+
+    .mapMarker strong {
+      display: block;
+      color: var(--gold);
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .mapMarker.one { left: 9%; top: 20%; }
+    .mapMarker.two { right: 10%; top: 24%; }
+    .mapMarker.three { left: 14%; bottom: 18%; }
+    .mapMarker.four { right: 13%; bottom: 21%; }
+
+    .redPin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--red2);
+      box-shadow:
+        0 0 14px rgba(215,54,79,0.95),
+        0 0 28px rgba(215,54,79,0.45);
+      animation: pinPulse 1.2s ease-in-out infinite;
+    }
+
+    .redPin::after {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 36%;
-      background:
-        linear-gradient(180deg, rgba(124,255,155,0.12), rgba(124,255,155,0.44));
-      animation: liquidPulse 2.2s ease-in-out infinite;
-    }
-
-    @keyframes liquidPulse {
-      0%, 100% { filter: brightness(1); height: 35%; }
-      50% { filter: brightness(1.35); height: 40%; }
-    }
-
-    .plant {
-      position: absolute;
-      left: 50%;
-      top: 47%;
-      width: 225px;
-      height: 290px;
-      transform: translate(-50%, -50%);
-      filter:
-        drop-shadow(0 0 16px rgba(124,255,155,0.48))
-        drop-shadow(0 0 28px rgba(255,215,106,0.12));
-    }
-
-    .stem {
-      position: absolute;
-      left: 108px;
-      top: 50px;
-      width: 8px;
-      height: 220px;
-      background: linear-gradient(180deg, var(--yellow), var(--green2));
-      border-radius: 999px;
-      transform: rotate(-5deg);
-    }
-
-    .leaf {
-      position: absolute;
-      width: 92px;
-      height: 42px;
-      border-radius: 90% 10% 90% 10%;
-      background:
-        radial-gradient(ellipse at 30% 35%, rgba(255,255,255,0.28), transparent 35%),
-        linear-gradient(135deg, rgba(124,255,155,0.88), rgba(46,166,90,0.80));
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.24);
-    }
-
-    .leaf.l1 { left: 20px; top: 92px; transform: rotate(-18deg); }
-    .leaf.l2 { right: 24px; top: 127px; transform: scaleX(-1) rotate(-15deg); }
-    .leaf.l3 { left: 30px; top: 178px; transform: rotate(-12deg); }
-    .leaf.l4 { right: 32px; top: 216px; transform: scaleX(-1) rotate(-20deg); }
-
-    .flower {
-      position: absolute;
-      left: 84px;
-      top: 12px;
-      width: 62px;
-      height: 62px;
+      inset: -9px;
+      border: 1px solid rgba(215,54,79,0.7);
       border-radius: 50%;
-      background:
-        radial-gradient(circle at center, var(--yellow) 0 12%, var(--red) 13% 42%, transparent 43%),
-        radial-gradient(ellipse at 50% 8%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 92% 50%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 50% 92%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 8% 50%, rgba(255,49,88,0.95) 0 25%, transparent 26%);
-      filter: drop-shadow(0 0 15px rgba(255,49,88,0.62));
+      animation: pinRing 1.4s ease-out infinite;
     }
 
-    .tubeLabel {
+    .pinA { left: 46%; top: 39%; }
+    .pinB { left: 58%; top: 54%; }
+    .pinC { left: 38%; top: 62%; }
+
+    @keyframes pinPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 1; }
+    }
+
+    @keyframes pinRing {
+      from { transform: scale(0.6); opacity: 1; }
+      to { transform: scale(2.2); opacity: 0; }
+    }
+
+    .bottomDeck {
       position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 16px;
-      border: 1px solid rgba(255,215,106,0.42);
-      background: rgba(0,0,0,0.52);
-      padding: 10px;
-      color: var(--yellow);
-      font-size: 12px;
-      line-height: 1.45;
-      text-align: center;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
       z-index: 6;
-    }
-
-    .statusBar {
-      position: relative;
-      z-index: 5;
-      border-top: 1px solid rgba(255,215,106,0.24);
-      background: rgba(0,0,0,0.38);
-      padding: 12px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .statusCell {
-      border: 1px solid rgba(124,255,155,0.22);
-      background: rgba(0,0,0,0.28);
-      padding: 10px;
-      min-height: 66px;
-    }
-
-    .statusCell small {
-      display: block;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-size: 10px;
-      margin-bottom: 5px;
-    }
-
-    .statusCell strong {
-      display: block;
-      color: var(--yellow);
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-
-    .bottomGrid {
       display: grid;
       grid-template-columns: 1fr 1fr 260px;
       gap: 12px;
     }
 
     .miniPanel {
-      border: 2px solid rgba(124,255,155,0.22);
-      background:
-        radial-gradient(circle at center, rgba(124,255,155,0.06), transparent 64%),
-        linear-gradient(180deg, rgba(9,24,13,0.94), rgba(2,8,3,0.98));
+      border: 2px solid rgba(232,214,170,0.30);
+      background: rgba(14,8,4,0.82);
       padding: 12px;
+      backdrop-filter: blur(2px);
     }
 
     .miniTitle {
-      color: var(--yellow);
+      color: var(--gold);
       text-transform: uppercase;
       letter-spacing: 2px;
       font-size: 12px;
@@ -712,7 +565,7 @@
     }
 
     .miniText {
-      color: #c7dac4;
+      color: #e2d2a4;
       font-size: 12px;
       line-height: 1.45;
     }
@@ -720,10 +573,10 @@
     .logBox {
       height: 98px;
       overflow-y: auto;
-      border: 1px solid rgba(124,255,155,0.18);
+      border: 1px solid rgba(232,214,170,0.18);
       background: rgba(0,0,0,0.36);
       padding: 9px;
-      color: #b8ffc9;
+      color: #ead8aa;
       font-size: 11px;
       line-height: 1.45;
       white-space: pre-line;
@@ -731,12 +584,13 @@
 
     .unlockBox {
       display: none;
-      border: 2px solid rgba(124,255,155,0.84);
+      border: 2px solid rgba(159,180,123,0.86);
       background:
-        radial-gradient(circle at center, rgba(124,255,155,0.13), transparent 70%),
-        rgba(0,0,0,0.36);
+        radial-gradient(circle at center, rgba(159,180,123,0.13), transparent 70%),
+        rgba(0,0,0,0.38);
       padding: 12px;
-      box-shadow: 0 0 18px rgba(124,255,155,0.20);
+      box-shadow: 0 0 18px rgba(159,180,123,0.22);
+      margin-bottom: 10px;
     }
 
     .unlockBox h2 {
@@ -748,9 +602,9 @@
     }
 
     .fragment {
-      border: 2px dashed rgba(255,215,106,0.78);
-      background: rgba(255,215,106,0.08);
-      color: var(--yellow);
+      border: 2px dashed rgba(210,169,78,0.78);
+      background: rgba(210,169,78,0.08);
+      color: var(--gold);
       padding: 12px;
       text-align: center;
       font-weight: bold;
@@ -767,12 +621,20 @@
         grid-template-columns: 1fr;
       }
 
-      .bottomGrid {
-        grid-template-columns: 1fr;
+      .mapPanel {
+        min-height: 620px;
+      }
+
+      .bottomDeck {
+        position: relative;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin: 14px;
       }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
       .app {
         padding: 8px;
       }
@@ -788,22 +650,19 @@
       }
 
       .mainTitle {
-        font-size: 23px;
+        font-size: 25px;
       }
 
-      .visualPanel {
-        min-height: 500px;
+      .mapPanel {
+        min-height: 720px;
       }
 
-      .tankArea {
-        min-height: 390px;
+      .mapMarker {
+        min-width: 120px;
+        font-size: 10px;
       }
 
-      .glassTube {
-        height: 315px;
-      }
-
-      .statusBar {
+      .bottomDeck {
         grid-template-columns: 1fr;
       }
     }
@@ -811,10 +670,7 @@
 </head>
 
 <body>
-  <div class="fog"></div>
-
-  <div class="spores" aria-hidden="true">
-    <span></span>
+  <div class="dust" aria-hidden="true">
     <span></span>
     <span></span>
     <span></span>
@@ -828,35 +684,31 @@
     <header class="header">
       <div class="headerSmall">
         St. Brigid's University<br>
-        Botanical Chemistry Wing
+        Historical Botanic Archive
       </div>
 
       <div class="titleBlock">
-        <div class="mainTitle">BOTANICAL LOCKDOWN</div>
-        <div class="subTitle">User: Dr. N. Thorne // quarantine access panel</div>
+        <div class="mainTitle">BOTANIC GARDEN ARCHIVE</div>
+        <div class="subTitle">User: Dr. N. Thorne // restricted historical map</div>
       </div>
 
       <div class="headerSmall right">
-        Containment: unstable<br>
-        Access: restricted
+        Archive: sealed<br>
+        Fragment: locked
       </div>
     </header>
 
-    <div class="warningBanner">
-      Complete the three inputs and the field game to release the private fragment.
-    </div>
-
     <section class="mainGrid">
-      <aside class="panel">
+      <aside class="lockPanel">
         <div class="panelTitle">
-          <span>Main Inputs</span>
+          <span>Main Archive Locks</span>
           <span>Required</span>
         </div>
 
         <div class="panelBody">
           <div class="priorityNote">
-            This is the important part of the page.
-            The right side is only atmosphere.
+            Complete the three inputs and the field game.
+            The map is atmosphere and archive context.
           </div>
 
           <div class="lockStack">
@@ -916,70 +768,54 @@
         </div>
       </aside>
 
-      <section class="rightZone">
-        <section class="visualPanel">
-          <div class="visualHeader">
-            <span>Quarantine Chamber</span>
-            <span>biohazard trace active</span>
+      <section class="mapPanel">
+        <div class="mapImage"></div>
+
+        <div class="mapHeader">
+          <span>Historical Garden Map</span>
+          <span>private layer detected</span>
+        </div>
+
+        <div class="mapLabels">
+          <div class="redPin pinA"></div>
+          <div class="redPin pinB"></div>
+          <div class="redPin pinC"></div>
+
+          <div class="mapMarker one">
+            <strong>ARCHIVE WING</strong>
+            sealed botany records
           </div>
 
-          <div class="tankArea">
-            <div class="bioRing"></div>
-            <div class="bioRing two"></div>
-
-            <div class="glassTube">
-              <div class="plant">
-                <div class="stem"></div>
-                <div class="leaf l1"></div>
-                <div class="leaf l2"></div>
-                <div class="leaf l3"></div>
-                <div class="leaf l4"></div>
-                <div class="flower"></div>
-              </div>
-
-              <div class="tubeLabel">
-                ACTIVE SPECIMEN<br>
-                locked behind verification sequence
-              </div>
-            </div>
+          <div class="mapMarker two">
+            <strong>OLD GARDEN PLAN</strong>
+            restricted map layer
           </div>
 
-          <div class="statusBar">
-            <div class="statusCell">
-              <small>Specimen</small>
-              <strong>QH-05</strong>
-            </div>
-
-            <div class="statusCell">
-              <small>Archive</small>
-              <strong>BOTANY</strong>
-            </div>
-
-            <div class="statusCell">
-              <small>Status</small>
-              <strong>SEALED</strong>
-            </div>
-
-            <div class="statusCell">
-              <small>Risk</small>
-              <strong>HIGH</strong>
-            </div>
+          <div class="mapMarker three">
+            <strong>FIELD CACHE</strong>
+            specimen route unknown
           </div>
-        </section>
 
-        <section class="bottomGrid">
+          <div class="mapMarker four">
+            <strong>PRIVATE FRAGMENT</strong>
+            locked behind inputs
+          </div>
+        </div>
+
+        <div class="bottomDeck">
           <div class="miniPanel">
-            <div class="miniTitle">System Note</div>
+            <div class="miniTitle">Archive Note</div>
             <div class="miniText">
-              Quarantine lock is active. Verification inputs must be completed before the private fragment can be released.
+              The historical botanic garden map has been recovered from Dr. N. Thorne’s private cache.
+              The image is used as visual context for the botany lock.
             </div>
           </div>
 
           <div class="miniPanel">
             <div class="miniTitle">System Log</div>
-            <div class="logBox" id="logBox">&gt; botanical lockdown loaded
-&gt; quarantine chamber sealed
-&gt; verification inputs waiting
+            <div class="logBox" id="logBox">&gt; historical botanic map loaded
+&gt; archive locks waiting
+&gt; private fragment sealed
 &gt; field game completion required</div>
           </div>
 
@@ -991,7 +827,7 @@
 
             <a class="backButton" href="terminal.html">RETURN TO TERMINAL</a>
           </div>
-        </section>
+        </div>
       </section>
     </section>
   </main>
@@ -1099,7 +935,6 @@
       if (solvedC) {
         document.getElementById("blockC").classList.add("solved");
         document.getElementById("buttonC").disabled = true;
-        document.getElementById("buttonC").textContent = "LOCKED";
         document.getElementById("resultC").textContent = "Status: GERANIUM SANGUINEUM accepted";
       }
 
