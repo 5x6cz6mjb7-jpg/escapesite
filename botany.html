@@ -2,27 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Botanical Containment Control</title>
+  <title>Botanical Quarantine Lock</title>
 
   <style>
     :root {
-      --bg: #020403;
-      --bg2: #07110b;
-      --panel: #0b1710;
-      --panel2: #101f15;
-      --glass: rgba(11, 23, 16, 0.86);
-      --green: #79ff9f;
-      --green2: #28aa57;
-      --yellow: #ffd66b;
-      --red: #ff315a;
-      --red2: #8b1128;
-      --cyan: #7dfcff;
-      --paper: #e8d6aa;
-      --ink: #271c10;
-      --white: #f4fff0;
-      --muted: #93aa91;
+      --bg: #020402;
+      --panel: #07130a;
+      --panel2: #0d2011;
+      --green: #7cff9b;
+      --green2: #2ea65a;
+      --yellow: #ffd76a;
+      --red: #ff3158;
+      --red2: #8b1026;
+      --cyan: #8effff;
+      --white: #f3fff0;
+      --muted: #8fa58c;
+      --dark: #000000;
       --font: "Courier New", monospace;
-      --hand: "Georgia", "Times New Roman", serif;
     }
 
     * {
@@ -34,10 +30,10 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at 22% 18%, rgba(121,255,159,0.13), transparent 25%),
-        radial-gradient(circle at 78% 16%, rgba(255,49,90,0.20), transparent 24%),
-        radial-gradient(circle at 50% 85%, rgba(255,214,107,0.10), transparent 32%),
-        linear-gradient(135deg, #000 0%, #031006 44%, #160209 78%, #000 100%);
+        radial-gradient(circle at 18% 18%, rgba(124,255,155,0.12), transparent 24%),
+        radial-gradient(circle at 82% 20%, rgba(255,49,88,0.18), transparent 28%),
+        radial-gradient(circle at 50% 85%, rgba(255,215,106,0.10), transparent 30%),
+        linear-gradient(135deg, #000 0%, #031006 45%, #150208 78%, #000 100%);
       color: var(--white);
       font-family: var(--font);
       overflow-x: hidden;
@@ -47,8 +43,8 @@
       content: "";
       position: fixed;
       inset: 0;
-      pointer-events: none;
       z-index: 90;
+      pointer-events: none;
       background:
         repeating-linear-gradient(
           0deg,
@@ -68,7 +64,7 @@
       z-index: 91;
       pointer-events: none;
       background:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.20) 54%, rgba(0,0,0,0.86) 100%);
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.22) 55%, rgba(0,0,0,0.86) 100%);
     }
 
     @keyframes scanlines {
@@ -76,62 +72,69 @@
       to { transform: translateY(14px); }
     }
 
-    .mist {
+    .fog {
       position: fixed;
       inset: -20%;
-      pointer-events: none;
       z-index: 1;
+      pointer-events: none;
       background:
-        radial-gradient(circle at 15% 25%, rgba(121,255,159,0.13), transparent 26%),
-        radial-gradient(circle at 82% 44%, rgba(255,49,90,0.13), transparent 28%),
-        radial-gradient(circle at 44% 72%, rgba(255,214,107,0.10), transparent 30%);
+        radial-gradient(circle at 12% 30%, rgba(124,255,155,0.12), transparent 26%),
+        radial-gradient(circle at 80% 46%, rgba(255,49,88,0.15), transparent 28%),
+        radial-gradient(circle at 45% 76%, rgba(255,215,106,0.08), transparent 32%);
       filter: blur(10px);
-      animation: mistMove 10s ease-in-out infinite alternate;
+      animation: fogMove 9s ease-in-out infinite alternate;
     }
 
-    @keyframes mistMove {
-      0% { transform: translate(-2%, -1%) scale(1); opacity: 0.42; }
-      100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.78; }
+    @keyframes fogMove {
+      from {
+        transform: translate(-2%, -1%) scale(1);
+        opacity: 0.42;
+      }
+
+      to {
+        transform: translate(3%, 2%) scale(1.06);
+        opacity: 0.82;
+      }
     }
 
     .spores {
       position: fixed;
       inset: 0;
-      overflow: hidden;
-      pointer-events: none;
       z-index: 2;
+      pointer-events: none;
+      overflow: hidden;
     }
 
     .spores span {
       position: absolute;
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: rgba(255,214,107,0.72);
+      background: rgba(255,215,106,0.72);
       box-shadow:
-        0 0 12px rgba(255,214,107,0.78),
-        0 0 24px rgba(121,255,159,0.20);
-      animation: floatSpore 8s ease-in-out infinite;
+        0 0 12px rgba(255,215,106,0.75),
+        0 0 24px rgba(124,255,155,0.25);
+      animation: sporeFloat 7s ease-in-out infinite;
     }
 
-    .spores span:nth-child(1) { left: 7%; top: 18%; animation-delay: 0s; }
-    .spores span:nth-child(2) { left: 19%; top: 74%; animation-delay: 1.1s; }
-    .spores span:nth-child(3) { left: 33%; top: 32%; animation-delay: 2.3s; }
-    .spores span:nth-child(4) { left: 49%; top: 82%; animation-delay: 0.6s; }
-    .spores span:nth-child(5) { left: 62%; top: 26%; animation-delay: 1.8s; }
-    .spores span:nth-child(6) { left: 78%; top: 68%; animation-delay: 3s; }
-    .spores span:nth-child(7) { left: 91%; top: 19%; animation-delay: 4s; }
-    .spores span:nth-child(8) { left: 86%; top: 46%; animation-delay: 2.7s; }
+    .spores span:nth-child(1) { left: 8%; top: 18%; animation-delay: 0s; }
+    .spores span:nth-child(2) { left: 19%; top: 76%; animation-delay: 1s; }
+    .spores span:nth-child(3) { left: 31%; top: 35%; animation-delay: 2s; }
+    .spores span:nth-child(4) { left: 48%; top: 82%; animation-delay: 0.6s; }
+    .spores span:nth-child(5) { left: 63%; top: 23%; animation-delay: 1.7s; }
+    .spores span:nth-child(6) { left: 78%; top: 68%; animation-delay: 2.8s; }
+    .spores span:nth-child(7) { left: 91%; top: 15%; animation-delay: 4s; }
+    .spores span:nth-child(8) { left: 86%; top: 47%; animation-delay: 3.1s; }
 
-    @keyframes floatSpore {
+    @keyframes sporeFloat {
       0%, 100% {
-        transform: translate(0, 0) scale(0.6);
-        opacity: 0.16;
+        opacity: 0.18;
+        transform: translate(0, 0) scale(0.65);
       }
 
       50% {
-        transform: translate(20px, -38px) scale(1.25);
-        opacity: 0.95;
+        opacity: 1;
+        transform: translate(20px, -34px) scale(1.28);
       }
     }
 
@@ -145,18 +148,18 @@
       gap: 12px;
     }
 
-    .commandHeader {
-      border: 2px solid rgba(121,255,159,0.30);
+    .header {
+      border: 2px solid rgba(124,255,155,0.28);
       background:
-        linear-gradient(90deg, rgba(255,49,90,0.20), rgba(121,255,159,0.08), rgba(255,49,90,0.20));
+        linear-gradient(90deg, rgba(255,49,88,0.20), rgba(124,255,155,0.08), rgba(255,49,88,0.20));
       box-shadow:
-        0 0 26px rgba(255,49,90,0.20),
-        inset 0 0 24px rgba(121,255,159,0.04);
-      padding: 12px 14px;
+        0 0 28px rgba(255,49,88,0.18),
+        inset 0 0 22px rgba(124,255,155,0.04);
+      padding: 13px 16px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: 14px;
       align-items: center;
+      gap: 14px;
     }
 
     .headerSmall {
@@ -176,13 +179,13 @@
     }
 
     .mainTitle {
-      font-size: 28px;
       color: var(--white);
-      letter-spacing: 3px;
+      font-size: 30px;
       font-weight: bold;
+      letter-spacing: 3px;
       text-shadow:
-        0 0 12px rgba(121,255,159,0.52),
-        0 0 30px rgba(255,49,90,0.30);
+        0 0 12px rgba(124,255,155,0.55),
+        0 0 30px rgba(255,49,88,0.35);
     }
 
     .subTitle {
@@ -194,22 +197,22 @@
     }
 
     .warningBanner {
-      border: 2px solid rgba(255,49,90,0.52);
+      border: 2px solid rgba(255,49,88,0.52);
       background:
         repeating-linear-gradient(
           45deg,
-          rgba(255,49,90,0.16) 0,
-          rgba(255,49,90,0.16) 12px,
+          rgba(255,49,88,0.17) 0,
+          rgba(255,49,88,0.17) 12px,
           rgba(0,0,0,0.28) 12px,
           rgba(0,0,0,0.28) 24px
         );
-      color: #ffb7c2;
+      color: #ffb8c4;
       padding: 9px 12px;
       text-align: center;
       font-size: 12px;
       letter-spacing: 2px;
       text-transform: uppercase;
-      animation: warningPulse 1.3s ease-in-out infinite;
+      animation: warningPulse 1.35s ease-in-out infinite;
     }
 
     @keyframes warningPulse {
@@ -219,33 +222,33 @@
 
       50% {
         opacity: 1;
-        box-shadow: 0 0 18px rgba(255,49,90,0.26);
+        box-shadow: 0 0 18px rgba(255,49,88,0.28);
       }
     }
 
     .mainGrid {
       display: grid;
-      grid-template-columns: 310px minmax(0, 1fr) 330px;
+      grid-template-columns: 420px minmax(0, 1fr);
       gap: 12px;
       min-height: 0;
     }
 
     .panel {
-      border: 2px solid rgba(121,255,159,0.22);
+      border: 2px solid rgba(124,255,155,0.22);
       background:
-        radial-gradient(circle at center, rgba(121,255,159,0.06), transparent 64%),
-        linear-gradient(180deg, rgba(9,24,13,0.93), rgba(2,8,3,0.98));
+        radial-gradient(circle at center, rgba(124,255,155,0.06), transparent 64%),
+        linear-gradient(180deg, rgba(9,24,13,0.94), rgba(2,8,3,0.98));
       box-shadow:
-        0 0 22px rgba(0,0,0,0.46),
+        0 0 24px rgba(0,0,0,0.46),
         inset 0 0 20px rgba(255,255,255,0.02);
       overflow: hidden;
     }
 
     .panelTitle {
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(121,255,159,0.18);
+      border-bottom: 1px solid rgba(124,255,155,0.18);
       background:
-        linear-gradient(90deg, rgba(255,49,90,0.20), rgba(121,255,159,0.06));
+        linear-gradient(90deg, rgba(255,49,88,0.20), rgba(124,255,155,0.06));
       color: var(--white);
       font-size: 12px;
       letter-spacing: 2px;
@@ -263,46 +266,46 @@
       padding: 12px;
     }
 
-    .lockConsole {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
     .priorityNote {
-      border: 1px dashed rgba(255,214,107,0.52);
-      background: rgba(255,214,107,0.07);
-      color: #f5dc96;
+      border: 1px dashed rgba(255,215,106,0.55);
+      background: rgba(255,215,106,0.075);
+      color: #f7dd95;
       padding: 10px;
       font-size: 12px;
       line-height: 1.45;
       text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .lockStack {
+      display: grid;
+      gap: 12px;
     }
 
     .lockCard {
       position: relative;
-      border: 2px solid rgba(121,255,159,0.26);
+      border: 2px solid rgba(124,255,155,0.28);
       background:
-        radial-gradient(circle at 88% 20%, rgba(255,49,90,0.13), transparent 32%),
-        linear-gradient(180deg, rgba(0,0,0,0.36), rgba(5,19,9,0.86));
+        radial-gradient(circle at 88% 20%, rgba(255,49,88,0.13), transparent 32%),
+        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(5,19,9,0.88));
       padding: 12px;
       min-height: 142px;
       box-shadow:
-        inset 0 0 18px rgba(121,255,159,0.04),
-        0 0 14px rgba(0,0,0,0.30);
+        inset 0 0 18px rgba(124,255,155,0.04),
+        0 0 14px rgba(0,0,0,0.32);
       overflow: hidden;
     }
 
     .lockCard::before {
       content: "";
       position: absolute;
-      right: -35px;
-      top: -35px;
-      width: 90px;
-      height: 90px;
-      border: 2px dashed rgba(255,49,90,0.30);
+      right: -38px;
+      top: -38px;
+      width: 96px;
+      height: 96px;
+      border: 2px dashed rgba(255,49,88,0.32);
       border-radius: 50%;
       animation: rotateRing 5s linear infinite;
     }
@@ -313,20 +316,20 @@
     }
 
     .lockCard.solved {
-      border-color: rgba(121,255,159,0.88);
+      border-color: rgba(124,255,155,0.90);
       background:
-        radial-gradient(circle at center, rgba(121,255,159,0.14), transparent 70%),
-        linear-gradient(180deg, rgba(0,0,0,0.36), rgba(10,45,20,0.86));
+        radial-gradient(circle at center, rgba(124,255,155,0.14), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(10,45,20,0.88));
       box-shadow:
-        0 0 18px rgba(121,255,159,0.24),
-        inset 0 0 18px rgba(121,255,159,0.08);
+        0 0 18px rgba(124,255,155,0.24),
+        inset 0 0 18px rgba(124,255,155,0.08);
     }
 
     .lockCard.error {
-      border-color: rgba(255,49,90,0.95);
+      border-color: rgba(255,49,88,0.95);
       background:
-        radial-gradient(circle at center, rgba(255,49,90,0.14), transparent 70%),
-        linear-gradient(180deg, rgba(0,0,0,0.36), rgba(49,5,14,0.82));
+        radial-gradient(circle at center, rgba(255,49,88,0.16), transparent 70%),
+        linear-gradient(180deg, rgba(0,0,0,0.38), rgba(49,5,14,0.84));
       animation: shake 0.34s ease;
     }
 
@@ -368,8 +371,8 @@
       position: relative;
       z-index: 2;
       width: 100%;
-      background: rgba(0,0,0,0.64);
-      border: 2px solid rgba(121,255,159,0.30);
+      background: rgba(0,0,0,0.66);
+      border: 2px solid rgba(124,255,155,0.32);
       color: var(--white);
       padding: 12px;
       font-family: var(--font);
@@ -380,8 +383,8 @@
     }
 
     input:focus {
-      border-color: rgba(255,214,107,0.88);
-      box-shadow: 0 0 12px rgba(255,214,107,0.22);
+      border-color: rgba(255,215,106,0.90);
+      box-shadow: 0 0 12px rgba(255,215,106,0.25);
     }
 
     button,
@@ -389,9 +392,9 @@
     .backButton {
       position: relative;
       z-index: 2;
-      border: 2px solid rgba(121,255,159,0.30);
+      border: 2px solid rgba(124,255,155,0.32);
       background:
-        linear-gradient(180deg, rgba(121,255,159,0.13), rgba(18,55,28,0.90));
+        linear-gradient(180deg, rgba(124,255,155,0.14), rgba(18,55,28,0.92));
       color: var(--white);
       padding: 11px 12px;
       font-family: var(--font);
@@ -407,9 +410,9 @@
     button:hover,
     .gameButton:hover,
     .backButton:hover {
-      border-color: rgba(255,214,107,0.88);
+      border-color: rgba(255,215,106,0.90);
       color: var(--yellow);
-      box-shadow: 0 0 14px rgba(255,214,107,0.20);
+      box-shadow: 0 0 14px rgba(255,215,106,0.22);
     }
 
     button:disabled {
@@ -423,10 +426,10 @@
 
     .gameButton {
       width: 100%;
-      border-color: rgba(255,214,107,0.44);
+      border-color: rgba(255,215,106,0.46);
       background:
-        radial-gradient(circle at center, rgba(255,214,107,0.12), transparent 70%),
-        linear-gradient(180deg, rgba(86,61,16,0.94), rgba(29,20,6,0.96));
+        radial-gradient(circle at center, rgba(255,215,106,0.14), transparent 70%),
+        linear-gradient(180deg, rgba(86,61,16,0.96), rgba(29,20,6,0.96));
       color: var(--yellow);
       margin-top: 8px;
     }
@@ -439,39 +442,46 @@
       margin-top: 4px;
     }
 
-    .chamber {
-      position: relative;
-      min-height: 690px;
-      border: 2px solid rgba(255,214,107,0.26);
-      background:
-        radial-gradient(circle at center, rgba(121,255,159,0.07), transparent 58%),
-        linear-gradient(180deg, rgba(5,14,7,0.96), rgba(0,0,0,0.98));
-      box-shadow:
-        inset 0 0 46px rgba(121,255,159,0.05),
-        0 0 28px rgba(0,0,0,0.42);
-      overflow: hidden;
+    .rightZone {
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 12px;
+      min-height: 0;
     }
 
-    .chamber::before {
+    .visualPanel {
+      position: relative;
+      border: 2px solid rgba(255,215,106,0.26);
+      background:
+        radial-gradient(circle at center, rgba(124,255,155,0.07), transparent 58%),
+        linear-gradient(180deg, rgba(5,14,7,0.96), rgba(0,0,0,0.98));
+      box-shadow:
+        inset 0 0 46px rgba(124,255,155,0.05),
+        0 0 28px rgba(0,0,0,0.44);
+      overflow: hidden;
+      min-height: 620px;
+    }
+
+    .visualPanel::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(90deg, rgba(121,255,159,0.055) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(121,255,159,0.055) 1px, transparent 1px);
-      background-size: 34px 34px;
+        linear-gradient(90deg, rgba(124,255,155,0.055) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(124,255,155,0.055) 1px, transparent 1px);
+      background-size: 36px 36px;
+      opacity: 0.76;
       pointer-events: none;
-      opacity: 0.75;
     }
 
-    .chamber::after {
+    .visualPanel::after {
       content: "";
       position: absolute;
       left: -10%;
       right: -10%;
       top: -120px;
       height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(121,255,159,0.22), transparent);
+      background: linear-gradient(180deg, transparent, rgba(124,255,155,0.22), transparent);
       animation: verticalScan 4s linear infinite;
       pointer-events: none;
       z-index: 4;
@@ -482,12 +492,12 @@
       to { top: 110%; }
     }
 
-    .chamberHeader {
+    .visualHeader {
       position: relative;
       z-index: 5;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,214,107,0.22);
-      background: rgba(255,214,107,0.06);
+      border-bottom: 1px solid rgba(255,215,106,0.24);
+      background: rgba(255,215,106,0.06);
       display: flex;
       justify-content: space-between;
       gap: 10px;
@@ -498,7 +508,7 @@
       font-weight: bold;
     }
 
-    .chamberHeader span:last-child {
+    .visualHeader span:last-child {
       color: var(--red);
       animation: blink 1.2s infinite;
     }
@@ -508,31 +518,53 @@
       49%, 85% { opacity: 0.26; }
     }
 
-    .containmentVisual {
+    .tankArea {
       position: relative;
       z-index: 3;
-      min-height: 360px;
+      min-height: 520px;
       display: grid;
       place-items: center;
       overflow: hidden;
-      border-bottom: 1px solid rgba(255,214,107,0.20);
+    }
+
+    .bioRing {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border: 2px dashed rgba(255,49,88,0.22);
+      border-radius: 50%;
+      animation: ringSpin 16s linear infinite;
+    }
+
+    .bioRing.two {
+      width: 380px;
+      height: 380px;
+      border-color: rgba(124,255,155,0.20);
+      animation-duration: 11s;
+      animation-direction: reverse;
+    }
+
+    @keyframes ringSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .glassTube {
       position: relative;
-      width: min(310px, 70vw);
-      height: 330px;
+      width: min(340px, 72vw);
+      height: 390px;
       border: 5px solid rgba(201,255,213,0.65);
-      border-radius: 150px 150px 40px 40px;
+      border-radius: 165px 165px 42px 42px;
       background:
-        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.20), transparent 18%),
+        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.22), transparent 18%),
         linear-gradient(90deg, rgba(255,255,255,0.14), transparent 18%, transparent 82%, rgba(255,255,255,0.10)),
-        rgba(121,255,159,0.05);
+        rgba(124,255,155,0.05);
       box-shadow:
-        inset 0 0 26px rgba(255,255,255,0.12),
-        0 0 30px rgba(121,255,159,0.25),
-        0 0 60px rgba(255,49,90,0.14);
+        inset 0 0 28px rgba(255,255,255,0.12),
+        0 0 32px rgba(124,255,155,0.26),
+        0 0 62px rgba(255,49,88,0.16);
       overflow: hidden;
+      z-index: 5;
     }
 
     .glassTube::before {
@@ -543,33 +575,33 @@
       bottom: 0;
       height: 36%;
       background:
-        linear-gradient(180deg, rgba(121,255,159,0.12), rgba(121,255,159,0.42));
+        linear-gradient(180deg, rgba(124,255,155,0.12), rgba(124,255,155,0.44));
       animation: liquidPulse 2.2s ease-in-out infinite;
     }
 
     @keyframes liquidPulse {
       0%, 100% { filter: brightness(1); height: 35%; }
-      50% { filter: brightness(1.35); height: 39%; }
+      50% { filter: brightness(1.35); height: 40%; }
     }
 
     .plant {
       position: absolute;
       left: 50%;
-      top: 48%;
-      width: 210px;
-      height: 260px;
+      top: 47%;
+      width: 225px;
+      height: 290px;
       transform: translate(-50%, -50%);
       filter:
-        drop-shadow(0 0 16px rgba(121,255,159,0.45))
-        drop-shadow(0 0 26px rgba(255,214,107,0.12));
+        drop-shadow(0 0 16px rgba(124,255,155,0.48))
+        drop-shadow(0 0 28px rgba(255,215,106,0.12));
     }
 
     .stem {
       position: absolute;
-      left: 101px;
-      top: 44px;
+      left: 108px;
+      top: 50px;
       width: 8px;
-      height: 205px;
+      height: 220px;
       background: linear-gradient(180deg, var(--yellow), var(--green2));
       border-radius: 999px;
       transform: rotate(-5deg);
@@ -577,34 +609,34 @@
 
     .leaf {
       position: absolute;
-      width: 86px;
-      height: 40px;
+      width: 92px;
+      height: 42px;
       border-radius: 90% 10% 90% 10%;
       background:
         radial-gradient(ellipse at 30% 35%, rgba(255,255,255,0.28), transparent 35%),
-        linear-gradient(135deg, rgba(121,255,159,0.86), rgba(40,170,87,0.78));
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.22);
+        linear-gradient(135deg, rgba(124,255,155,0.88), rgba(46,166,90,0.80));
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.24);
     }
 
-    .leaf.l1 { left: 20px; top: 82px; transform: rotate(-18deg); }
-    .leaf.l2 { right: 24px; top: 117px; transform: scaleX(-1) rotate(-15deg); }
-    .leaf.l3 { left: 30px; top: 164px; transform: rotate(-12deg); }
-    .leaf.l4 { right: 32px; top: 198px; transform: scaleX(-1) rotate(-20deg); }
+    .leaf.l1 { left: 20px; top: 92px; transform: rotate(-18deg); }
+    .leaf.l2 { right: 24px; top: 127px; transform: scaleX(-1) rotate(-15deg); }
+    .leaf.l3 { left: 30px; top: 178px; transform: rotate(-12deg); }
+    .leaf.l4 { right: 32px; top: 216px; transform: scaleX(-1) rotate(-20deg); }
 
     .flower {
       position: absolute;
-      left: 79px;
-      top: 10px;
-      width: 58px;
-      height: 58px;
+      left: 84px;
+      top: 12px;
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
       background:
         radial-gradient(circle at center, var(--yellow) 0 12%, var(--red) 13% 42%, transparent 43%),
-        radial-gradient(ellipse at 50% 8%, rgba(255,49,90,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 92% 50%, rgba(255,49,90,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 50% 92%, rgba(255,49,90,0.95) 0 25%, transparent 26%),
-        radial-gradient(ellipse at 8% 50%, rgba(255,49,90,0.95) 0 25%, transparent 26%);
-      filter: drop-shadow(0 0 14px rgba(255,49,90,0.58));
+        radial-gradient(ellipse at 50% 8%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
+        radial-gradient(ellipse at 92% 50%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
+        radial-gradient(ellipse at 50% 92%, rgba(255,49,88,0.95) 0 25%, transparent 26%),
+        radial-gradient(ellipse at 8% 50%, rgba(255,49,88,0.95) 0 25%, transparent 26%);
+      filter: drop-shadow(0 0 15px rgba(255,49,88,0.62));
     }
 
     .tubeLabel {
@@ -612,8 +644,8 @@
       left: 18px;
       right: 18px;
       bottom: 16px;
-      border: 1px solid rgba(255,214,107,0.38);
-      background: rgba(0,0,0,0.48);
+      border: 1px solid rgba(255,215,106,0.42);
+      background: rgba(0,0,0,0.52);
       padding: 10px;
       color: var(--yellow);
       font-size: 12px;
@@ -622,148 +654,25 @@
       z-index: 6;
     }
 
-    .entryDisplay {
+    .statusBar {
       position: relative;
       z-index: 5;
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .entryMetaGrid {
+      border-top: 1px solid rgba(255,215,106,0.24);
+      background: rgba(0,0,0,0.38);
+      padding: 12px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
 
-    .metaBox {
-      border: 1px solid rgba(255,214,107,0.24);
-      background: rgba(255,214,107,0.055);
-      padding: 9px;
-      min-height: 62px;
-    }
-
-    .metaBox small {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-
-    .metaBox strong {
-      color: var(--yellow);
-      font-size: 14px;
-      line-height: 1.25;
-    }
-
-    .entryTextCard {
-      border: 1px solid rgba(121,255,159,0.22);
-      background:
-        linear-gradient(180deg, rgba(121,255,159,0.055), rgba(0,0,0,0.22));
-      padding: 14px;
-    }
-
-    .entryTitle {
-      margin: 0 0 4px;
-      color: var(--white);
-      font-family: var(--hand);
-      font-size: 31px;
-      letter-spacing: 1px;
-    }
-
-    .entrySubtitle {
-      color: #b8d39b;
-      font-family: var(--hand);
-      font-style: italic;
-      font-size: 18px;
-      margin-bottom: 12px;
-    }
-
-    .annotation {
-      border-left: 4px solid rgba(255,49,90,0.76);
-      background: rgba(255,49,90,0.085);
-      padding: 10px 12px;
-      color: #ffb7c2;
-      font-family: var(--hand);
-      font-size: 17px;
-      line-height: 1.45;
-      margin-bottom: 12px;
-    }
-
-    .journalText {
-      color: #efe5c2;
-      font-family: var(--hand);
-      font-size: 18px;
-      line-height: 1.58;
-      white-space: pre-line;
-    }
-
-    .scratchText {
-      color: var(--yellow);
-      font-family: var(--hand);
-      font-style: italic;
-      font-size: 16px;
-      margin-top: 12px;
-    }
-
-    .specimenList {
-      display: grid;
-      gap: 9px;
-    }
-
-    .entryBtn {
-      width: 100%;
-      border: 1px solid rgba(121,255,159,0.22);
-      background:
-        linear-gradient(90deg, rgba(121,255,159,0.04), rgba(0,0,0,0.32));
-      color: var(--white);
-      padding: 11px;
-      text-align: left;
-      font-family: var(--font);
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-
-    .entryBtn:hover,
-    .entryBtn.active {
-      border-color: rgba(255,49,90,0.86);
-      background: rgba(255,49,90,0.13);
-      box-shadow: 0 0 14px rgba(255,49,90,0.22);
-      transform: translateX(3px);
-    }
-
-    .entryBtn strong {
-      display: block;
-      font-size: 13px;
-      color: var(--white);
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-
-    .entryBtn em {
-      font-style: normal;
-      color: #b8d39b;
-      font-size: 11px;
-    }
-
-    .statusStack {
-      display: grid;
-      gap: 10px;
-    }
-
-    .statusCard,
-    .ticketBox,
-    .logBox,
-    .unlockBox {
-      border: 1px solid rgba(121,255,159,0.22);
+    .statusCell {
+      border: 1px solid rgba(124,255,155,0.22);
       background: rgba(0,0,0,0.28);
-      padding: 11px;
+      padding: 10px;
+      min-height: 66px;
     }
 
-    .statusCard small {
+    .statusCell small {
       display: block;
       color: var(--muted);
       text-transform: uppercase;
@@ -772,32 +681,48 @@
       margin-bottom: 5px;
     }
 
-    .statusCard strong {
+    .statusCell strong {
       display: block;
       color: var(--yellow);
-      font-size: 18px;
+      font-size: 16px;
       letter-spacing: 1px;
     }
 
-    .ticketBox {
-      border: 2px dashed rgba(255,214,107,0.36);
-      background: rgba(255,214,107,0.06);
-      color: #e8d9a9;
-      font-size: 12px;
-      line-height: 1.5;
+    .bottomGrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 260px;
+      gap: 12px;
     }
 
-    .ticketBox h3 {
-      margin: 0 0 8px;
+    .miniPanel {
+      border: 2px solid rgba(124,255,155,0.22);
+      background:
+        radial-gradient(circle at center, rgba(124,255,155,0.06), transparent 64%),
+        linear-gradient(180deg, rgba(9,24,13,0.94), rgba(2,8,3,0.98));
+      padding: 12px;
+    }
+
+    .miniTitle {
       color: var(--yellow);
-      letter-spacing: 2px;
       text-transform: uppercase;
+      letter-spacing: 2px;
       font-size: 12px;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .miniText {
+      color: #c7dac4;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .logBox {
-      height: 130px;
+      height: 98px;
       overflow-y: auto;
+      border: 1px solid rgba(124,255,155,0.18);
+      background: rgba(0,0,0,0.36);
+      padding: 9px;
       color: #b8ffc9;
       font-size: 11px;
       line-height: 1.45;
@@ -806,29 +731,30 @@
 
     .unlockBox {
       display: none;
-      border: 2px solid rgba(121,255,159,0.82);
+      border: 2px solid rgba(124,255,155,0.84);
       background:
-        radial-gradient(circle at center, rgba(121,255,159,0.12), transparent 70%),
-        rgba(0,0,0,0.30);
-      box-shadow: 0 0 18px rgba(121,255,159,0.18);
+        radial-gradient(circle at center, rgba(124,255,155,0.13), transparent 70%),
+        rgba(0,0,0,0.36);
+      padding: 12px;
+      box-shadow: 0 0 18px rgba(124,255,155,0.20);
     }
 
     .unlockBox h2 {
       margin: 0 0 8px;
       color: var(--white);
       letter-spacing: 2px;
-      font-size: 18px;
       text-transform: uppercase;
+      font-size: 16px;
     }
 
     .fragment {
-      border: 2px dashed rgba(255,214,107,0.78);
-      background: rgba(255,214,107,0.08);
+      border: 2px dashed rgba(255,215,106,0.78);
+      background: rgba(255,215,106,0.08);
       color: var(--yellow);
       padding: 12px;
       text-align: center;
       font-weight: bold;
-      font-size: 22px;
+      font-size: 20px;
       letter-spacing: 3px;
     }
 
@@ -836,30 +762,22 @@
       width: 100%;
     }
 
-    @media (max-width: 1220px) {
+    @media (max-width: 1100px) {
       .mainGrid {
         grid-template-columns: 1fr;
       }
 
-      .lockConsole {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .priorityNote {
-        grid-column: 1 / -1;
-      }
-
-      .entryMetaGrid {
-        grid-template-columns: repeat(2, 1fr);
+      .bottomGrid {
+        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 720px) {
       .app {
         padding: 8px;
       }
 
-      .commandHeader {
+      .header {
         grid-template-columns: 1fr;
         text-align: center;
       }
@@ -870,42 +788,30 @@
       }
 
       .mainTitle {
-        font-size: 22px;
+        font-size: 23px;
       }
 
-      .lockConsole {
-        grid-template-columns: 1fr;
+      .visualPanel {
+        min-height: 500px;
       }
 
-      .entryMetaGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .chamber {
-        min-height: auto;
-      }
-
-      .containmentVisual {
-        min-height: 330px;
+      .tankArea {
+        min-height: 390px;
       }
 
       .glassTube {
-        height: 285px;
+        height: 315px;
       }
 
-      .entryTitle {
-        font-size: 25px;
-      }
-
-      .journalText {
-        font-size: 16px;
+      .statusBar {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="mist"></div>
+  <div class="fog"></div>
 
   <div class="spores" aria-hidden="true">
     <span></span>
@@ -919,43 +825,44 @@
   </div>
 
   <main class="app">
-    <header class="commandHeader">
+    <header class="header">
       <div class="headerSmall">
         St. Brigid's University<br>
         Botanical Chemistry Wing
       </div>
 
       <div class="titleBlock">
-        <div class="mainTitle">CONTAINMENT CONTROL</div>
-        <div class="subTitle">User: Dr. N. Thorne // Botanical private cache</div>
+        <div class="mainTitle">BOTANICAL LOCKDOWN</div>
+        <div class="subTitle">User: Dr. N. Thorne // quarantine access panel</div>
       </div>
 
       <div class="headerSmall right">
         Containment: unstable<br>
-        Archive layer: private
+        Access: restricted
       </div>
     </header>
 
     <div class="warningBanner">
-      Warning: specimen chamber locked. Complete puzzle verification to release the private fragment.
+      Complete the three inputs and the field game to release the private fragment.
     </div>
 
     <section class="mainGrid">
       <aside class="panel">
         <div class="panelTitle">
-          <span>Main Locks</span>
-          <span>Priority</span>
+          <span>Main Inputs</span>
+          <span>Required</span>
         </div>
 
         <div class="panelBody">
-          <div class="lockConsole">
-            <div class="priorityNote">
-              These inputs are the main task. The specimen chamber is atmosphere and story context.
-            </div>
+          <div class="priorityNote">
+            This is the important part of the page.
+            The right side is only atmosphere.
+          </div>
 
+          <div class="lockStack">
             <div class="lockCard" id="blockA">
               <div class="lockHeader">
-                <span>Lock A</span>
+                <span>Input A</span>
                 <span>missing piece</span>
               </div>
 
@@ -963,12 +870,12 @@
 
               <input id="answerA" autocomplete="off" placeholder="enter missing piece code">
 
-              <button class="checkButton" id="buttonA" onclick="checkA()">CHECK LOCK A</button>
+              <button class="checkButton" id="buttonA" onclick="checkA()">CHECK INPUT A</button>
             </div>
 
             <div class="lockCard" id="blockB">
               <div class="lockHeader">
-                <span>Lock B</span>
+                <span>Input B</span>
                 <span>card game</span>
               </div>
 
@@ -976,12 +883,12 @@
 
               <input id="answerB" autocomplete="off" placeholder="enter card game code">
 
-              <button class="checkButton" id="buttonB" onclick="checkB()">CHECK LOCK B</button>
+              <button class="checkButton" id="buttonB" onclick="checkB()">CHECK INPUT B</button>
             </div>
 
             <div class="lockCard" id="blockC">
               <div class="lockHeader">
-                <span>Lock C</span>
+                <span>Input C</span>
                 <span>latin name</span>
               </div>
 
@@ -989,13 +896,13 @@
 
               <input id="answerC" autocomplete="off" placeholder="enter latin name">
 
-              <button class="checkButton" id="buttonC" onclick="checkC()">CHECK LOCK C</button>
+              <button class="checkButton" id="buttonC" onclick="checkC()">CHECK INPUT C</button>
             </div>
 
             <div class="lockCard" id="blockGame">
               <div class="lockHeader">
-                <span>Lock D</span>
-                <span>field game</span>
+                <span>Field Game</span>
+                <span>external</span>
               </div>
 
               <div class="lockStatus" id="resultGame">Status: not completed</div>
@@ -1009,145 +916,83 @@
         </div>
       </aside>
 
-      <section class="chamber">
-        <div class="chamberHeader">
-          <span>Specimen Containment Chamber</span>
-          <span>biohazard trace active</span>
-        </div>
-
-        <div class="containmentVisual">
-          <div class="glassTube">
-            <div class="plant">
-              <div class="stem"></div>
-              <div class="leaf l1"></div>
-              <div class="leaf l2"></div>
-              <div class="leaf l3"></div>
-              <div class="leaf l4"></div>
-              <div class="flower"></div>
-            </div>
-
-            <div class="tubeLabel">
-              ACTIVE SPECIMEN<br>
-              private annotation layer recovered
-            </div>
-          </div>
-        </div>
-
-        <div class="entryDisplay">
-          <div class="entryMetaGrid">
-            <div class="metaBox">
-              <small>Specimen</small>
-              <strong id="entryNumber">01</strong>
-            </div>
-
-            <div class="metaBox">
-              <small>Location</small>
-              <strong id="entryLocation">Dublin</strong>
-            </div>
-
-            <div class="metaBox">
-              <small>Field topic</small>
-              <strong id="entryFocus">botany lesson planning</strong>
-            </div>
-
-            <div class="metaBox">
-              <small>Archive marker</small>
-              <strong id="entryMarker">personal reference detected</strong>
-            </div>
+      <section class="rightZone">
+        <section class="visualPanel">
+          <div class="visualHeader">
+            <span>Quarantine Chamber</span>
+            <span>biohazard trace active</span>
           </div>
 
-          <div class="entryTextCard">
-            <h1 class="entryTitle" id="entryTitle">Dublin // After the lecture</h1>
-            <div class="entrySubtitle" id="entrySubtitle">Botany is easier when students still believe plants are innocent.</div>
+          <div class="tankArea">
+            <div class="bioRing"></div>
+            <div class="bioRing two"></div>
 
-            <div class="annotation" id="redThread">
-              I taught them how to identify living systems. Jason taught me how easily systems can be used against people.
-            </div>
+            <div class="glassTube">
+              <div class="plant">
+                <div class="stem"></div>
+                <div class="leaf l1"></div>
+                <div class="leaf l2"></div>
+                <div class="leaf l3"></div>
+                <div class="leaf l4"></div>
+                <div class="flower"></div>
+              </div>
 
-            <div class="journalText" id="journalText"></div>
-
-            <div class="scratchText" id="scratchText">
-              The lesson was never only about plants.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <aside class="panel">
-        <div class="panelTitle">
-          <span>Specimen Files</span>
-          <span>Context</span>
-        </div>
-
-        <div class="panelBody">
-          <div class="specimenList">
-            <button class="entryBtn active" id="btn-entry1" onclick="selectEntry('entry1')">
-              <strong>SPECIMEN 01 // DUBLIN</strong>
-              <em>classroom preparation</em>
-            </button>
-
-            <button class="entryBtn" id="btn-entry2" onclick="selectEntry('entry2')">
-              <strong>SPECIMEN 02 // WALES</strong>
-              <em>coastal plant lesson</em>
-            </button>
-
-            <button class="entryBtn" id="btn-entry3" onclick="selectEntry('entry3')">
-              <strong>SPECIMEN 03 // TRAIN TO SPAIN</strong>
-              <em>M and Q observed</em>
-            </button>
-
-            <button class="entryBtn" id="btn-entry4" onclick="selectEntry('entry4')">
-              <strong>SPECIMEN 04 // SPAIN</strong>
-              <em>dry garden notes</em>
-            </button>
-
-            <button class="entryBtn" id="btn-entry5" onclick="selectEntry('entry5')">
-              <strong>SPECIMEN 05 // RETURN NORTH</strong>
-              <em>final lesson plan</em>
-            </button>
-          </div>
-
-          <div style="height: 12px;"></div>
-
-          <div class="statusStack">
-            <div class="statusCard">
-              <small>Archive</small>
-              <strong id="archiveCode">T-01</strong>
-            </div>
-
-            <div class="statusCard">
-              <small>Status</small>
-              <strong id="statusCode">OPEN</strong>
-            </div>
-
-            <div class="statusCard">
-              <small>Risk</small>
-              <strong id="riskCode">LOW</strong>
-            </div>
-
-            <div class="ticketBox">
-              <h3 id="ticketTitle">FIELDWORK RECEIPT</h3>
-              <div id="ticketText">
-                Staff travel approved.<br>
-                Department of Botanical Chemistry.<br>
-                Notes transferred to private archive.
+              <div class="tubeLabel">
+                ACTIVE SPECIMEN<br>
+                locked behind verification sequence
               </div>
             </div>
+          </div>
 
-            <div class="logBox" id="logBox">&gt; containment control loaded
-&gt; specimen chamber active
-&gt; puzzle locks waiting
+          <div class="statusBar">
+            <div class="statusCell">
+              <small>Specimen</small>
+              <strong>QH-05</strong>
+            </div>
+
+            <div class="statusCell">
+              <small>Archive</small>
+              <strong>BOTANY</strong>
+            </div>
+
+            <div class="statusCell">
+              <small>Status</small>
+              <strong>SEALED</strong>
+            </div>
+
+            <div class="statusCell">
+              <small>Risk</small>
+              <strong>HIGH</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="bottomGrid">
+          <div class="miniPanel">
+            <div class="miniTitle">System Note</div>
+            <div class="miniText">
+              Quarantine lock is active. Verification inputs must be completed before the private fragment can be released.
+            </div>
+          </div>
+
+          <div class="miniPanel">
+            <div class="miniTitle">System Log</div>
+            <div class="logBox" id="logBox">&gt; botanical lockdown loaded
+&gt; quarantine chamber sealed
+&gt; verification inputs waiting
 &gt; field game completion required</div>
+          </div>
 
+          <div class="miniPanel">
             <div class="unlockBox" id="unlockBox">
-              <h2>Private Fragment Released</h2>
+              <h2>Fragment Released</h2>
               <div class="fragment">PRIVATE CODE PART 2: N</div>
             </div>
 
             <a class="backButton" href="terminal.html">RETURN TO TERMINAL</a>
           </div>
-        </div>
-      </aside>
+        </section>
+      </section>
     </section>
   </main>
 
@@ -1155,143 +1000,6 @@
     const correctAnswerA = "614128";
     const correctAnswerB = "35721";
     const correctAnswerC = "GERANIUMSANGUINEUM";
-
-    const entries = {
-      entry1: {
-        number: "01",
-        location: "Dublin",
-        focus: "botany lesson planning",
-        marker: "personal reference detected",
-        title: "Dublin // After the lecture",
-        subtitle: "Botany is easier when students still believe plants are innocent.",
-        ticketTitle: "LECTURE NOTES",
-        ticketText:
-`Staff room copy.
-Department of Botanical Chemistry.
-Topic: plant defence systems.
-Filed after a private absence.`,
-        redThread:
-"I taught them how plants defend themselves when damaged. I did not tell them that people learn the same lesson.",
-        archive: "T-01",
-        status: "OPEN",
-        risk: "LOW",
-        scratch: "The first lesson was never only about plants.",
-        text:
-`Today I prepared the first-year lesson on plant defence. I wrote “adaptation” on the board and watched the students copy it as if the word were harmless. Thorns, bitter leaves, poisons, warning colours: ordinary things when a plant uses them to survive.
-
-Jason used to laugh at my examples. He said I made flowers sound like spies. I told him nature had invented secrecy long before governments did.
-
-I still catch myself writing notes for him in the margins, as if he will read them later and make some clever remark. The students only see diagrams. They do not see the parts I cross out. They do not see the names I refuse to explain.`
-      },
-
-      entry2: {
-        number: "02",
-        location: "Wales",
-        focus: "coastal plant lesson",
-        marker: "fieldwork entry modified",
-        title: "Wales // Salt wind",
-        subtitle: "A lesson on survival at the edge of the sea.",
-        ticketTitle: "FIELD TRIP RECORD",
-        ticketText:
-`Route: Dublin to Wales.
-Student worksheet draft.
-Coastal species comparison.
-Personal notes hidden in margins.`,
-        redThread:
-"Some plants survive by bending. Others survive by becoming impossible to eat.",
-        archive: "T-02",
-        status: "MARKED",
-        risk: "MED",
-        scratch: "Jason would have noticed the pattern before the students did.",
-        text:
-`The coastal path was wet, bright and cruel. I collected notes for a lesson about salt-tolerant plants and asked myself how much pressure a root can take before it twists into something new. My students will enjoy that question. They always like science more when it sounds like a riddle.
-
-In the evening I reread one of Jason’s old messages. There are gaps in it. Not technical gaps. Emotional ones. He always hid fear badly, even when he thought he sounded confident.
-
-I looked at the shore plants again. They do not complain about the wind. They adapt around it. Perhaps that is all I am doing too: adapting around a silence no one else seems willing to name.`
-      },
-
-      entry3: {
-        number: "03",
-        location: "Train to Spain",
-        focus: "mobile botany notes",
-        marker: "M and Q observed",
-        title: "Train to Spain // Two familiar strangers",
-        subtitle: "Botany notes written between stations.",
-        ticketTitle: "RAIL RECEIPT",
-        ticketText:
-`Route: northbound connection changed.
-Seat reservation altered.
-Two passengers observed.
-Initials used in private note: M / Q.`,
-        redThread:
-"They did not recognize me. That was useful. A notebook makes excellent camouflage.",
-        archive: "T-03",
-        status: "ACTIVE",
-        risk: "HIGH",
-        scratch: "M keeps time. Q keeps devices. Together they leave a trail.",
-        text:
-`On the train to Spain, I planned a lesson about seed dispersal: hooks, hairs, wings, pressure, accident. A seed only needs the right carrier. People are not so different. They carry habits, devices, routes, fears.
-
-I saw M first. Controlled posture, repeated checks of the platform clock. Then Q, pretending not to worry about the small case under the seat. They were careful, but careful people leave patterns because they trust their own methods too much.
-
-I kept my notebook open on Mediterranean plant adaptations and wrote beside the diagram: “They are real. They are reachable.” Jason always said observation was the beginning of control. For once, I think he was right.`
-      },
-
-      entry4: {
-        number: "04",
-        location: "Spain",
-        focus: "dry garden lesson",
-        marker: "private planning layer detected",
-        title: "Spain // Dry garden",
-        subtitle: "A lesson on water, pressure and patience.",
-        ticketTitle: "BOTANY WORKSHOP",
-        ticketText:
-`Local garden visit.
-Topic: drought resistance.
-Teaching examples copied.
-Private planning layer detected.`,
-        redThread:
-"A dry plant does not waste energy. It waits. Then it acts when conditions change.",
-        archive: "T-04",
-        status: "SEALED",
-        risk: "HIGH",
-        scratch: "A voice can survive inside a recording longer than it should.",
-        text:
-`The Spanish garden was built around absence: little water, hard soil, roots that search deeper than anyone expects. I told myself it was perfect material for class. Students understand drought because it looks simple. They do not see the hidden labour underground.
-
-That evening I sorted Jason’s old files again: fragments, unfinished messages, voice notes, half-deleted recordings. I told myself it was archival work. Preservation. Nothing more. But even preservation can become something active if you arrange it carefully enough.
-
-If M and Q hear what I choose to play, they will follow it. Not because they are foolish, but because they are trained to follow traces. A lesson plan works the same way.`
-      },
-
-      entry5: {
-        number: "05",
-        location: "Return north",
-        focus: "final botany lesson",
-        marker: "private sequence confirmed",
-        title: "Return north // Final lesson",
-        subtitle: "Every system has a pressure point.",
-        ticketTitle: "PRIVATE ITINERARY",
-        ticketText:
-`Return route hidden.
-Teaching journal encrypted.
-Final lesson sequence prepared.
-Personal archive thread confirmed.`,
-        redThread:
-"Jason is the missing piece they will recognize too late.",
-        archive: "T-05",
-        status: "LOCKED",
-        risk: "CRITICAL",
-        scratch: "Fear is a route. Love is a map. Memory is a key.",
-        text:
-`I wrote the final lesson on the return journey. Officially it concerns invasive species: how one small introduction can alter an entire ecosystem. Unofficially, it is about attention. Where people look. What they ignore. Which name makes them move faster.
-
-Jason understood systems better than anyone I knew. He also understood that people trust a familiar pattern, even when the pattern has been placed in front of them on purpose.
-
-M and Q will see fragments because I will leave fragments. They will solve what I let them solve. They will think the trail belongs to someone else, at least for a while. By the time they understand the lesson, they will already be inside it.`
-      }
-    };
 
     function normalize(value) {
       return String(value)
@@ -1308,41 +1016,6 @@ M and Q will see fragments because I will leave fragments. They will solve what 
       const log = document.getElementById("logBox");
       log.textContent += "\n" + text;
       log.scrollTop = log.scrollHeight;
-    }
-
-    function clearActiveButtons() {
-      document.querySelectorAll(".entryBtn").forEach(function(button) {
-        button.classList.remove("active");
-      });
-    }
-
-    function selectEntry(key) {
-      const entry = entries[key];
-
-      clearActiveButtons();
-
-      const active = document.getElementById("btn-" + key);
-      if (active) {
-        active.classList.add("active");
-      }
-
-      document.getElementById("entryNumber").textContent = entry.number;
-      document.getElementById("entryLocation").textContent = entry.location;
-      document.getElementById("entryFocus").textContent = entry.focus;
-      document.getElementById("entryMarker").textContent = entry.marker;
-      document.getElementById("entryTitle").textContent = entry.title;
-      document.getElementById("entrySubtitle").textContent = entry.subtitle;
-      document.getElementById("ticketTitle").textContent = entry.ticketTitle;
-      document.getElementById("ticketText").textContent = entry.ticketText;
-      document.getElementById("redThread").textContent = entry.redThread;
-      document.getElementById("archiveCode").textContent = entry.archive;
-      document.getElementById("statusCode").textContent = entry.status;
-      document.getElementById("riskCode").textContent = entry.risk;
-      document.getElementById("scratchText").textContent = entry.scratch;
-      document.getElementById("journalText").textContent = entry.text;
-
-      appendLog("> specimen file opened // " + entry.location);
-      appendLog("> containment note refreshed");
     }
 
     function markError(id, text) {
@@ -1373,9 +1046,9 @@ M and Q will see fragments because I will leave fragments. They will solve what 
       const value = normalize(document.getElementById("answerA").value);
 
       if (value === normalize(correctAnswerA)) {
-        markSolved("blockA", "buttonA", "resultA", "614128 accepted", "botanicalA", "> Lock A accepted");
+        markSolved("blockA", "buttonA", "resultA", "614128 accepted", "botanicalA", "> input A accepted");
       } else {
-        markError("blockA", "> Lock A rejected");
+        markError("blockA", "> input A rejected");
       }
     }
 
@@ -1383,9 +1056,9 @@ M and Q will see fragments because I will leave fragments. They will solve what 
       const value = normalize(document.getElementById("answerB").value);
 
       if (value === normalize(correctAnswerB)) {
-        markSolved("blockB", "buttonB", "resultB", "35721 accepted", "botanicalB", "> Lock B accepted");
+        markSolved("blockB", "buttonB", "resultB", "35721 accepted", "botanicalB", "> input B accepted");
       } else {
-        markError("blockB", "> Lock B rejected");
+        markError("blockB", "> input B rejected");
       }
     }
 
@@ -1393,9 +1066,9 @@ M and Q will see fragments because I will leave fragments. They will solve what 
       const value = normalize(document.getElementById("answerC").value);
 
       if (value === normalize(correctAnswerC)) {
-        markSolved("blockC", "buttonC", "resultC", "GERANIUM SANGUINEUM accepted", "botanicalC", "> Lock C accepted");
+        markSolved("blockC", "buttonC", "resultC", "GERANIUM SANGUINEUM accepted", "botanicalC", "> input C accepted");
       } else {
-        markError("blockC", "> Lock C rejected");
+        markError("blockC", "> input C rejected");
       }
     }
 
@@ -1463,7 +1136,6 @@ M and Q will see fragments because I will leave fragments. They will solve what 
       }
     });
 
-    selectEntry("entry1");
     updateSolvedState();
   </script>
 </body>
