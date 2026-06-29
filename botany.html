@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Botanical Archive Map</title>
+  <title>Dr. N. Thorne - Botanic Archive</title>
 
   <style>
     :root {
-      --dark: #080604;
-      --brown: #2a1d12;
-      --brown2: #4b321d;
-      --paper: #e8d6aa;
-      --paper2: #c9b07a;
+      --dark: #070503;
+      --brown: #2a1c10;
+      --brown2: #4a321f;
+      --paper: #ead9ae;
+      --paper2: #c9b078;
       --ink: #21170d;
-      --gold: #d2a94e;
+      --gold: #d4aa4f;
       --red: #8f2130;
       --red2: #d7364f;
       --green: #536b3e;
@@ -34,7 +34,7 @@
       font-family: var(--font);
       color: var(--paper);
       background:
-        radial-gradient(circle at 18% 16%, rgba(210,169,78,0.18), transparent 24%),
+        radial-gradient(circle at 18% 16%, rgba(212,170,79,0.18), transparent 24%),
         radial-gradient(circle at 82% 18%, rgba(143,33,48,0.18), transparent 28%),
         linear-gradient(135deg, #030201 0%, #171008 45%, #080302 100%);
       overflow-x: hidden;
@@ -64,7 +64,7 @@
       z-index: 91;
       pointer-events: none;
       background:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.20) 52%, rgba(0,0,0,0.82) 100%);
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.18) 52%, rgba(0,0,0,0.84) 100%);
     }
 
     .dust {
@@ -80,8 +80,8 @@
       width: 5px;
       height: 5px;
       border-radius: 50%;
-      background: rgba(232,214,170,0.42);
-      box-shadow: 0 0 10px rgba(232,214,170,0.45);
+      background: rgba(234,217,174,0.42);
+      box-shadow: 0 0 10px rgba(234,217,174,0.45);
       animation: drift 9s ease-in-out infinite;
     }
 
@@ -116,12 +116,12 @@
     }
 
     .header {
-      border: 3px double rgba(232,214,170,0.45);
+      border: 3px double rgba(234,217,174,0.45);
       background:
-        linear-gradient(90deg, rgba(143,33,48,0.22), rgba(232,214,170,0.08), rgba(83,107,62,0.14), rgba(143,33,48,0.22));
+        linear-gradient(90deg, rgba(143,33,48,0.22), rgba(234,217,174,0.08), rgba(83,107,62,0.14), rgba(143,33,48,0.22));
       box-shadow:
         0 0 28px rgba(0,0,0,0.55),
-        inset 0 0 24px rgba(232,214,170,0.05);
+        inset 0 0 24px rgba(234,217,174,0.05);
       padding: 14px 18px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -151,7 +151,7 @@
       font-size: 34px;
       letter-spacing: 3px;
       text-shadow:
-        0 0 14px rgba(210,169,78,0.35),
+        0 0 14px rgba(212,170,79,0.35),
         0 0 28px rgba(143,33,48,0.25);
     }
 
@@ -171,21 +171,21 @@
     }
 
     .lockPanel {
-      border: 3px double rgba(232,214,170,0.42);
+      border: 3px double rgba(234,217,174,0.42);
       background:
-        radial-gradient(circle at center, rgba(210,169,78,0.08), transparent 68%),
+        radial-gradient(circle at center, rgba(212,170,79,0.08), transparent 68%),
         linear-gradient(180deg, rgba(40,26,14,0.96), rgba(9,5,3,0.98));
       box-shadow:
         0 0 26px rgba(0,0,0,0.58),
-        inset 0 0 28px rgba(232,214,170,0.04);
+        inset 0 0 28px rgba(234,217,174,0.04);
       overflow: hidden;
     }
 
     .panelTitle {
       padding: 12px 14px;
-      border-bottom: 2px solid rgba(232,214,170,0.22);
+      border-bottom: 2px solid rgba(234,217,174,0.22);
       background:
-        linear-gradient(90deg, rgba(143,33,48,0.24), rgba(232,214,170,0.06));
+        linear-gradient(90deg, rgba(143,33,48,0.24), rgba(234,217,174,0.06));
       color: var(--white);
       font-size: 13px;
       letter-spacing: 2px;
@@ -204,8 +204,8 @@
     }
 
     .priorityNote {
-      border: 1px dashed rgba(210,169,78,0.62);
-      background: rgba(210,169,78,0.08);
+      border: 1px dashed rgba(212,170,79,0.62);
+      background: rgba(212,170,79,0.08);
       color: #eed99b;
       padding: 11px;
       font-size: 12px;
@@ -223,14 +223,14 @@
 
     .lockCard {
       position: relative;
-      border: 2px solid rgba(232,214,170,0.36);
+      border: 2px solid rgba(234,217,174,0.36);
       background:
         radial-gradient(circle at 86% 22%, rgba(143,33,48,0.14), transparent 34%),
         linear-gradient(180deg, rgba(0,0,0,0.28), rgba(43,29,16,0.88));
       padding: 13px;
       min-height: 142px;
       box-shadow:
-        inset 0 0 20px rgba(232,214,170,0.035),
+        inset 0 0 20px rgba(234,217,174,0.035),
         0 0 16px rgba(0,0,0,0.34);
       overflow: hidden;
     }
@@ -252,7 +252,7 @@
       position: absolute;
       right: 11px;
       top: 12px;
-      color: rgba(232,214,170,0.18);
+      color: rgba(234,217,174,0.18);
       font-size: 10px;
       letter-spacing: 2px;
       transform: rotate(8deg);
@@ -320,7 +320,7 @@
       z-index: 2;
       width: 100%;
       background: rgba(0,0,0,0.58);
-      border: 2px solid rgba(232,214,170,0.34);
+      border: 2px solid rgba(234,217,174,0.34);
       color: var(--white);
       padding: 12px;
       font-family: var(--font);
@@ -331,8 +331,8 @@
     }
 
     input:focus {
-      border-color: rgba(210,169,78,0.95);
-      box-shadow: 0 0 12px rgba(210,169,78,0.25);
+      border-color: rgba(212,170,79,0.95);
+      box-shadow: 0 0 12px rgba(212,170,79,0.25);
     }
 
     button,
@@ -340,9 +340,9 @@
     .backButton {
       position: relative;
       z-index: 2;
-      border: 2px solid rgba(232,214,170,0.34);
+      border: 2px solid rgba(234,217,174,0.34);
       background:
-        linear-gradient(180deg, rgba(210,169,78,0.14), rgba(75,50,29,0.92));
+        linear-gradient(180deg, rgba(212,170,79,0.14), rgba(75,50,29,0.92));
       color: var(--white);
       padding: 11px 12px;
       font-family: var(--font);
@@ -358,9 +358,9 @@
     button:hover,
     .gameButton:hover,
     .backButton:hover {
-      border-color: rgba(210,169,78,0.95);
+      border-color: rgba(212,170,79,0.95);
       color: var(--gold);
-      box-shadow: 0 0 14px rgba(210,169,78,0.22);
+      box-shadow: 0 0 14px rgba(212,170,79,0.22);
     }
 
     button:disabled {
@@ -374,9 +374,9 @@
 
     .gameButton {
       width: 100%;
-      border-color: rgba(210,169,78,0.52);
+      border-color: rgba(212,170,79,0.52);
       background:
-        radial-gradient(circle at center, rgba(210,169,78,0.14), transparent 70%),
+        radial-gradient(circle at center, rgba(212,170,79,0.14), transparent 70%),
         linear-gradient(180deg, rgba(86,61,16,0.96), rgba(29,20,6,0.96));
       color: var(--gold);
       margin-bottom: 8px;
@@ -392,12 +392,12 @@
 
     .mapPanel {
       position: relative;
-      border: 3px double rgba(232,214,170,0.42);
+      border: 3px double rgba(234,217,174,0.42);
       background: #1a1209;
       overflow: hidden;
       box-shadow:
         0 0 30px rgba(0,0,0,0.62),
-        inset 0 0 28px rgba(232,214,170,0.04);
+        inset 0 0 28px rgba(234,217,174,0.04);
       min-height: 760px;
     }
 
@@ -405,13 +405,13 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(rgba(24,15,7,0.10), rgba(24,15,7,0.42)),
+        linear-gradient(rgba(24,15,7,0.06), rgba(24,15,7,0.30)),
         url("botanic-garden-map.jpg") center center / cover no-repeat;
       filter:
-        sepia(0.28)
+        sepia(0.24)
         contrast(1.05)
-        brightness(0.82)
-        saturate(0.82);
+        brightness(0.86)
+        saturate(0.85);
       transform: scale(1.03);
     }
 
@@ -420,8 +420,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.15) 45%, rgba(0,0,0,0.70) 100%),
-        linear-gradient(90deg, rgba(210,169,78,0.10), transparent 30%, transparent 70%, rgba(143,33,48,0.12));
+        radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.62) 100%),
+        linear-gradient(90deg, rgba(212,170,79,0.08), transparent 30%, transparent 70%, rgba(143,33,48,0.10));
       z-index: 2;
       pointer-events: none;
     }
@@ -433,7 +433,7 @@
       right: -10%;
       top: -120px;
       height: 120px;
-      background: linear-gradient(180deg, transparent, rgba(232,214,170,0.16), transparent);
+      background: linear-gradient(180deg, transparent, rgba(234,217,174,0.16), transparent);
       animation: mapScan 5.5s linear infinite;
       z-index: 4;
       pointer-events: none;
@@ -448,7 +448,7 @@
       position: relative;
       z-index: 5;
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(232,214,170,0.30);
+      border-bottom: 1px solid rgba(234,217,174,0.30);
       background: rgba(20,12,6,0.78);
       display: flex;
       justify-content: space-between;
@@ -470,21 +470,21 @@
       49%, 85% { opacity: 0.28; }
     }
 
-    .archiveStory {
+    .personalNote {
       position: absolute;
       left: 24px;
-      top: 74px;
-      width: min(520px, calc(100% - 48px));
+      top: 70px;
+      width: min(500px, calc(100% - 48px));
       z-index: 6;
-      border: 2px solid rgba(232,214,170,0.40);
-      background: rgba(14,8,4,0.78);
+      border: 2px solid rgba(234,217,174,0.42);
+      background: rgba(14,8,4,0.82);
       padding: 14px;
       color: #ead8aa;
       box-shadow: 0 0 18px rgba(0,0,0,0.45);
       backdrop-filter: blur(2px);
     }
 
-    .archiveStory h2 {
+    .personalNote h2 {
       margin: 0 0 8px;
       color: var(--gold);
       font-family: var(--hand);
@@ -492,81 +492,116 @@
       letter-spacing: 1px;
     }
 
-    .archiveStory p {
+    .personalNote p {
       margin: 0 0 9px;
       font-size: 13px;
       line-height: 1.45;
     }
 
-    .archiveStory strong {
+    .personalNote strong {
       color: var(--white);
     }
 
-    .mapLabels {
+    .clickLayer {
       position: absolute;
       inset: 0;
-      z-index: 5;
+      z-index: 7;
+    }
+
+    .mapHotspot {
+      position: absolute;
+      border: 2px solid rgba(212,170,79,0.48);
+      background: rgba(212,170,79,0.08);
+      color: var(--white);
+      font-family: var(--font);
+      cursor: pointer;
+      padding: 0;
+      box-shadow:
+        0 0 14px rgba(0,0,0,0.40),
+        inset 0 0 16px rgba(212,170,79,0.08);
+      transition: 0.16s ease;
+    }
+
+    .mapHotspot:hover,
+    .mapHotspot.active {
+      border-color: rgba(255,244,208,0.95);
+      background: rgba(143,33,48,0.22);
+      box-shadow:
+        0 0 20px rgba(212,170,79,0.35),
+        inset 0 0 16px rgba(143,33,48,0.15);
+      transform: scale(1.02);
+    }
+
+    .mapHotspot span {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      display: inline-block;
+      border: 1px solid rgba(234,217,174,0.50);
+      background: rgba(12,7,3,0.72);
+      color: var(--gold);
+      padding: 5px 7px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       pointer-events: none;
     }
 
-    .mapMarker {
+    .hotspotA { left: 34%; top: 26%; width: 28%; height: 28%; }
+    .hotspotB { left: 8%; top: 28%; width: 24%; height: 28%; }
+    .hotspotC { left: 50%; top: 58%; width: 32%; height: 24%; }
+    .hotspotD { left: 68%; top: 18%; width: 22%; height: 26%; }
+    .hotspotE { left: 18%; top: 62%; width: 26%; height: 22%; }
+
+    .infoCard {
       position: absolute;
-      min-width: 145px;
-      border: 1px solid rgba(232,214,170,0.48);
-      background: rgba(12,7,3,0.72);
-      color: var(--paper);
-      padding: 8px 9px;
+      right: 24px;
+      top: 70px;
+      width: min(430px, calc(100% - 48px));
+      z-index: 8;
+      border: 2px solid rgba(234,217,174,0.44);
+      background:
+        radial-gradient(circle at center, rgba(212,170,79,0.08), transparent 70%),
+        rgba(14,8,4,0.88);
+      padding: 15px;
+      color: #ead8aa;
+      box-shadow: 0 0 22px rgba(0,0,0,0.50);
+      backdrop-filter: blur(3px);
+      min-height: 200px;
+    }
+
+    .infoCardLabel {
+      color: var(--muted);
       font-size: 11px;
-      letter-spacing: 1px;
-      box-shadow: 0 0 16px rgba(0,0,0,0.40);
-      backdrop-filter: blur(2px);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
     }
 
-    .mapMarker strong {
-      display: block;
+    .infoCard h2 {
+      margin: 0 0 8px;
       color: var(--gold);
-      font-size: 12px;
-      margin-bottom: 3px;
+      font-family: var(--hand);
+      font-size: 25px;
+      letter-spacing: 1px;
     }
 
-    .mapMarker.one { left: 9%; top: 40%; }
-    .mapMarker.two { right: 10%; top: 24%; }
-    .mapMarker.three { left: 14%; bottom: 20%; }
-    .mapMarker.four { right: 13%; bottom: 22%; }
-
-    .redPin {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--red2);
-      box-shadow:
-        0 0 14px rgba(215,54,79,0.95),
-        0 0 28px rgba(215,54,79,0.45);
-      animation: pinPulse 1.2s ease-in-out infinite;
+    .infoCard p {
+      margin: 0 0 9px;
+      color: #ead8aa;
+      font-size: 13px;
+      line-height: 1.48;
     }
 
-    .redPin::after {
-      content: "";
-      position: absolute;
-      inset: -9px;
-      border: 1px solid rgba(215,54,79,0.7);
-      border-radius: 50%;
-      animation: pinRing 1.4s ease-out infinite;
-    }
-
-    .pinA { left: 46%; top: 39%; }
-    .pinB { left: 58%; top: 54%; }
-    .pinC { left: 38%; top: 62%; }
-
-    @keyframes pinPulse {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.25); opacity: 1; }
-    }
-
-    @keyframes pinRing {
-      from { transform: scale(0.6); opacity: 1; }
-      to { transform: scale(2.2); opacity: 0; }
+    .infoCard .myNote {
+      margin-top: 11px;
+      border-left: 4px solid rgba(143,33,48,0.74);
+      background: rgba(143,33,48,0.12);
+      padding: 9px 10px;
+      color: #f1c1b8;
+      font-family: var(--hand);
+      font-size: 16px;
+      line-height: 1.45;
     }
 
     .bottomDeck {
@@ -574,15 +609,15 @@
       left: 14px;
       right: 14px;
       bottom: 14px;
-      z-index: 6;
+      z-index: 8;
       display: grid;
       grid-template-columns: 1fr 1fr 260px;
       gap: 12px;
     }
 
     .miniPanel {
-      border: 2px solid rgba(232,214,170,0.30);
-      background: rgba(14,8,4,0.82);
+      border: 2px solid rgba(234,217,174,0.30);
+      background: rgba(14,8,4,0.84);
       padding: 12px;
       backdrop-filter: blur(2px);
     }
@@ -605,7 +640,7 @@
     .logBox {
       height: 108px;
       overflow-y: auto;
-      border: 1px solid rgba(232,214,170,0.18);
+      border: 1px solid rgba(234,217,174,0.18);
       background: rgba(0,0,0,0.36);
       padding: 9px;
       color: #ead8aa;
@@ -634,8 +669,8 @@
     }
 
     .fragment {
-      border: 2px dashed rgba(210,169,78,0.78);
-      background: rgba(210,169,78,0.08);
+      border: 2px dashed rgba(212,170,79,0.78);
+      background: rgba(212,170,79,0.08);
       color: var(--gold);
       padding: 12px;
       text-align: center;
@@ -648,13 +683,13 @@
       width: 100%;
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       .mainGrid {
         grid-template-columns: 1fr;
       }
 
       .mapPanel {
-        min-height: 720px;
+        min-height: 800px;
       }
 
       .bottomDeck {
@@ -686,20 +721,28 @@
       }
 
       .mapPanel {
-        min-height: 850px;
+        min-height: 1000px;
       }
 
-      .archiveStory {
+      .personalNote,
+      .infoCard {
         position: relative;
         left: auto;
+        right: auto;
         top: auto;
         width: auto;
         margin: 14px;
       }
 
-      .mapMarker {
-        min-width: 120px;
-        font-size: 10px;
+      .clickLayer {
+        position: relative;
+        height: 380px;
+        margin: 14px;
+        border: 1px dashed rgba(234,217,174,0.24);
+      }
+
+      .mapHotspot span {
+        font-size: 9px;
       }
 
       .bottomDeck {
@@ -723,8 +766,8 @@
   <main class="app">
     <header class="header">
       <div class="headerSmall">
-        St. Brigid's University<br>
-        Historical Botanic Archive
+        My private workstation<br>
+        Historical botanic archive
       </div>
 
       <div class="titleBlock">
@@ -816,56 +859,69 @@
 
         <div class="mapHeader">
           <span>Historical Garden Map</span>
-          <span>private layer detected</span>
+          <span>click the archive zones</span>
         </div>
 
-        <section class="archiveStory">
-          <h2>Recovered Archive Layer</h2>
+        <section class="personalNote">
+          <h2>My archive note</h2>
 
           <p>
-            Dr. N. Thorne did not only study living plants. The recovered files show that the old botanic archive became part of the investigation.
+            I returned to the old botanic records because gardens keep better secrets than people.
           </p>
 
           <p>
-            Hidden garden plans, old collection notes and forgotten specimen records were compared with private research files. The archive was used to decode patterns that were never meant to be seen together.
+            Trinity’s botanic garden is now connected with Dartry, south of the main campus. But its story reaches back through older herb gardens, teaching collections and archive plans.
           </p>
 
           <p>
-            The map is not the puzzle itself. It is the place where the trail began: an old botanical archive, searched for secrets, routes and names that could unlock the next private fragment.
+            I marked this map for myself. Not as a puzzle. As a reminder: every collection has a hidden order, if you know where to look.
           </p>
         </section>
 
-        <div class="mapLabels">
-          <div class="redPin pinA"></div>
-          <div class="redPin pinB"></div>
-          <div class="redPin pinC"></div>
+        <div class="clickLayer">
+          <button class="mapHotspot hotspotA active" onclick="openMapInfo('origin', this)">
+            <span>Old Herb Garden</span>
+          </button>
 
-          <div class="mapMarker one">
-            <strong>ARCHIVE WING</strong>
-            old garden records
-          </div>
+          <button class="mapHotspot hotspotB" onclick="openMapInfo('dartry', this)">
+            <span>Dartry</span>
+          </button>
 
-          <div class="mapMarker two">
-            <strong>HIDDEN INDEX</strong>
-            forgotten specimen notes
-          </div>
+          <button class="mapHotspot hotspotC" onclick="openMapInfo('trinityHall', this)">
+            <span>Trinity Hall</span>
+          </button>
 
-          <div class="mapMarker three">
-            <strong>FIELD CACHE</strong>
-            decoded botanical route
-          </div>
+          <button class="mapHotspot hotspotD" onclick="openMapInfo('research', this)">
+            <span>Teaching Archive</span>
+          </button>
 
-          <div class="mapMarker four">
-            <strong>PRIVATE FRAGMENT</strong>
-            locked behind inputs
-          </div>
+          <button class="mapHotspot hotspotE" onclick="openMapInfo('visit', this)">
+            <span>Field Visit</span>
+          </button>
         </div>
+
+        <section class="infoCard" id="infoCard">
+          <div class="infoCardLabel">selected archive zone</div>
+          <h2 id="infoTitle">Old Herb Garden</h2>
+
+          <p id="infoTextA">
+            Trinity’s botanic garden developed from an earlier herb garden on the main college site.
+          </p>
+
+          <p id="infoTextB">
+            This matters because botany at Trinity was not only decorative. Herb gardens were connected with teaching, classification and the study of useful plants.
+          </p>
+
+          <div class="myNote" id="infoPersonal">
+            My note: the oldest layers are never the cleanest. They are where people stop looking.
+          </div>
+        </section>
 
         <div class="bottomDeck">
           <div class="miniPanel">
             <div class="miniTitle">Archive Note</div>
             <div class="miniText">
-              Dr. N. Thorne searched through the historical botanic archives to connect old garden records with hidden private research.
+              Click the marked archive zones on the map. The information is background for the real garden visit. The code inputs remain the main task.
             </div>
           </div>
 
@@ -873,7 +929,7 @@
             <div class="miniTitle">System Log</div>
             <div class="logBox" id="logBox">&gt; historical botanic map loaded
 &gt; archive locks waiting
-&gt; old garden records recovered
+&gt; interactive map layer active
 &gt; field game code required
 &gt; private fragment sealed</div>
           </div>
@@ -897,6 +953,43 @@
     const correctAnswerC = "GERANIUMSANGUINEUM";
     const correctGameCode = "WITTEKLAVER";
 
+    const mapInfo = {
+      origin: {
+        title: "Old Herb Garden",
+        textA: "Trinity’s botanic garden developed from an earlier herb garden on the main college site.",
+        textB: "That older herb-garden tradition matters: these gardens were used for teaching, classification and the study of useful plants, not just decoration.",
+        personal: "My note: the oldest layers are never the cleanest. They are where people stop looking."
+      },
+
+      dartry: {
+        title: "Dartry Site",
+        textA: "The present Trinity College Botanic Garden is in Dartry, about four kilometres south of Trinity’s main campus in Dublin.",
+        textB: "That distance makes the garden feel separate from the college, but it is still part of Trinity’s academic landscape.",
+        personal: "My note: distance is useful. It makes a place feel forgotten, even when it is still connected."
+      },
+
+      trinityHall: {
+        title: "Trinity Hall Grounds",
+        textA: "The botanic garden shares the Dartry site with Trinity Hall, Trinity College Dublin’s student residence.",
+        textB: "The garden became linked with the Dartry grounds after land connected with Trinity Hall was added in the 1960s.",
+        personal: "My note: students pass through places like this without seeing what has been buried in the records."
+      },
+
+      research: {
+        title: "Teaching and Research",
+        textA: "Botanic gardens are living collections. They support teaching, observation and scientific study of plant life.",
+        textB: "A garden like this is not only a place to walk through. It is also an organised archive of living specimens, labels, histories and hidden connections.",
+        personal: "My note: a living collection is still an archive. It just breathes."
+      },
+
+      visit: {
+        title: "Field Visit",
+        textA: "When you visit the garden, look at it as more than a green space. Notice paths, labels, old structures, plant groupings and quiet corners.",
+        textB: "The real garden gives context to the archive: a place where botany, history and private research can overlap.",
+        personal: "My note: let them walk the garden. Let them think they are only looking at plants."
+      }
+    };
+
     function normalize(value) {
       return String(value)
         .trim()
@@ -912,6 +1005,33 @@
       const log = document.getElementById("logBox");
       log.textContent += "\n" + text;
       log.scrollTop = log.scrollHeight;
+    }
+
+    function clearActiveHotspots() {
+      document.querySelectorAll(".mapHotspot").forEach(function(button) {
+        button.classList.remove("active");
+      });
+    }
+
+    function openMapInfo(key, button) {
+      const item = mapInfo[key];
+
+      if (!item) {
+        return;
+      }
+
+      clearActiveHotspots();
+
+      if (button) {
+        button.classList.add("active");
+      }
+
+      document.getElementById("infoTitle").textContent = item.title;
+      document.getElementById("infoTextA").textContent = item.textA;
+      document.getElementById("infoTextB").textContent = item.textB;
+      document.getElementById("infoPersonal").textContent = item.personal;
+
+      appendLog("> archive zone opened // " + item.title);
     }
 
     function markError(id, text) {
