@@ -165,7 +165,7 @@
 
     .mainGrid {
       display: grid;
-      grid-template-columns: 420px minmax(0, 1fr);
+      grid-template-columns: 440px minmax(0, 1fr);
       gap: 14px;
       min-height: 0;
     }
@@ -379,7 +379,7 @@
         radial-gradient(circle at center, rgba(210,169,78,0.14), transparent 70%),
         linear-gradient(180deg, rgba(86,61,16,0.96), rgba(29,20,6,0.96));
       color: var(--gold);
-      margin-top: 8px;
+      margin-bottom: 8px;
     }
 
     .gameButton small {
@@ -398,7 +398,7 @@
       box-shadow:
         0 0 30px rgba(0,0,0,0.62),
         inset 0 0 28px rgba(232,214,170,0.04);
-      min-height: 720px;
+      min-height: 760px;
     }
 
     .mapImage {
@@ -470,6 +470,38 @@
       49%, 85% { opacity: 0.28; }
     }
 
+    .archiveStory {
+      position: absolute;
+      left: 24px;
+      top: 74px;
+      width: min(520px, calc(100% - 48px));
+      z-index: 6;
+      border: 2px solid rgba(232,214,170,0.40);
+      background: rgba(14,8,4,0.78);
+      padding: 14px;
+      color: #ead8aa;
+      box-shadow: 0 0 18px rgba(0,0,0,0.45);
+      backdrop-filter: blur(2px);
+    }
+
+    .archiveStory h2 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-family: var(--hand);
+      font-size: 25px;
+      letter-spacing: 1px;
+    }
+
+    .archiveStory p {
+      margin: 0 0 9px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .archiveStory strong {
+      color: var(--white);
+    }
+
     .mapLabels {
       position: absolute;
       inset: 0;
@@ -497,10 +529,10 @@
       margin-bottom: 3px;
     }
 
-    .mapMarker.one { left: 9%; top: 20%; }
+    .mapMarker.one { left: 9%; top: 40%; }
     .mapMarker.two { right: 10%; top: 24%; }
-    .mapMarker.three { left: 14%; bottom: 18%; }
-    .mapMarker.four { right: 13%; bottom: 21%; }
+    .mapMarker.three { left: 14%; bottom: 20%; }
+    .mapMarker.four { right: 13%; bottom: 22%; }
 
     .redPin {
       position: absolute;
@@ -571,7 +603,7 @@
     }
 
     .logBox {
-      height: 98px;
+      height: 108px;
       overflow-y: auto;
       border: 1px solid rgba(232,214,170,0.18);
       background: rgba(0,0,0,0.36);
@@ -622,7 +654,7 @@
       }
 
       .mapPanel {
-        min-height: 620px;
+        min-height: 720px;
       }
 
       .bottomDeck {
@@ -654,7 +686,15 @@
       }
 
       .mapPanel {
-        min-height: 720px;
+        min-height: 850px;
+      }
+
+      .archiveStory {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: auto;
+        margin: 14px;
       }
 
       .mapMarker {
@@ -707,8 +747,7 @@
 
         <div class="panelBody">
           <div class="priorityNote">
-            Complete the three inputs and the field game.
-            The map is atmosphere and archive context.
+            Complete the three inputs, open the field game and enter the field-game code.
           </div>
 
           <div class="lockStack">
@@ -754,15 +793,19 @@
             <div class="lockCard" id="blockGame">
               <div class="lockHeader">
                 <span>Field Game</span>
-                <span>external</span>
+                <span>snake code</span>
               </div>
 
               <div class="lockStatus" id="resultGame">Status: not completed</div>
 
               <a class="gameButton" href="snake.html">
                 OPEN FIELD GAME
-                <small>return here after completion</small>
+                <small>play the snake game first</small>
               </a>
+
+              <input id="gameCode" autocomplete="off" placeholder="enter field game code">
+
+              <button class="checkButton" id="buttonGame" onclick="checkGameCode()">CHECK FIELD GAME CODE</button>
             </div>
           </div>
         </div>
@@ -776,6 +819,22 @@
           <span>private layer detected</span>
         </div>
 
+        <section class="archiveStory">
+          <h2>Recovered Archive Layer</h2>
+
+          <p>
+            Dr. N. Thorne did not only study living plants. The recovered files show that the old botanic archive became part of the investigation.
+          </p>
+
+          <p>
+            Hidden garden plans, old collection notes and forgotten specimen records were compared with private research files. The archive was used to decode patterns that were never meant to be seen together.
+          </p>
+
+          <p>
+            The map is not the puzzle itself. It is the place where the trail began: an old botanical archive, searched for secrets, routes and names that could unlock the next private fragment.
+          </p>
+        </section>
+
         <div class="mapLabels">
           <div class="redPin pinA"></div>
           <div class="redPin pinB"></div>
@@ -783,17 +842,17 @@
 
           <div class="mapMarker one">
             <strong>ARCHIVE WING</strong>
-            sealed botany records
+            old garden records
           </div>
 
           <div class="mapMarker two">
-            <strong>OLD GARDEN PLAN</strong>
-            restricted map layer
+            <strong>HIDDEN INDEX</strong>
+            forgotten specimen notes
           </div>
 
           <div class="mapMarker three">
             <strong>FIELD CACHE</strong>
-            specimen route unknown
+            decoded botanical route
           </div>
 
           <div class="mapMarker four">
@@ -806,8 +865,7 @@
           <div class="miniPanel">
             <div class="miniTitle">Archive Note</div>
             <div class="miniText">
-              The historical botanic garden map has been recovered from Dr. N. Thorne’s private cache.
-              The image is used as visual context for the botany lock.
+              Dr. N. Thorne searched through the historical botanic archives to connect old garden records with hidden private research.
             </div>
           </div>
 
@@ -815,8 +873,9 @@
             <div class="miniTitle">System Log</div>
             <div class="logBox" id="logBox">&gt; historical botanic map loaded
 &gt; archive locks waiting
-&gt; private fragment sealed
-&gt; field game completion required</div>
+&gt; old garden records recovered
+&gt; field game code required
+&gt; private fragment sealed</div>
           </div>
 
           <div class="miniPanel">
@@ -836,6 +895,7 @@
     const correctAnswerA = "614128";
     const correctAnswerB = "35721";
     const correctAnswerC = "GERANIUMSANGUINEUM";
+    const correctGameCode = "WITTEKLAVER";
 
     function normalize(value) {
       return String(value)
@@ -868,8 +928,11 @@
 
       block.classList.remove("error");
       block.classList.add("solved");
-      button.disabled = true;
-      button.textContent = "LOCKED";
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "LOCKED";
+      }
 
       document.getElementById(resultId).textContent = "Status: " + resultText;
 
@@ -908,6 +971,20 @@
       }
     }
 
+    function checkGameCode() {
+      const value = normalize(document.getElementById("gameCode").value);
+
+      if (value === normalize(correctGameCode)) {
+        localStorage.setItem("botanicalGame", "yes");
+        localStorage.setItem("botanicalGameSolved", "yes");
+        localStorage.setItem("snakeSolved", "yes");
+
+        markSolved("blockGame", "buttonGame", "resultGame", "WITTEKLAVER accepted", "botanicalGame", "> field game code accepted");
+      } else {
+        markError("blockGame", "> field game code rejected");
+      }
+    }
+
     function updateSolvedState() {
       const solvedA = localStorage.getItem("botanicalA") === "yes";
       const solvedB = localStorage.getItem("botanicalB") === "yes";
@@ -935,12 +1012,15 @@
       if (solvedC) {
         document.getElementById("blockC").classList.add("solved");
         document.getElementById("buttonC").disabled = true;
+        document.getElementById("buttonC").textContent = "LOCKED";
         document.getElementById("resultC").textContent = "Status: GERANIUM SANGUINEUM accepted";
       }
 
       if (gameSolved) {
         document.getElementById("blockGame").classList.add("solved");
-        document.getElementById("resultGame").textContent = "Status: completed";
+        document.getElementById("buttonGame").disabled = true;
+        document.getElementById("buttonGame").textContent = "LOCKED";
+        document.getElementById("resultGame").textContent = "Status: WITTEKLAVER accepted";
       } else {
         document.getElementById("resultGame").textContent = "Status: not completed";
       }
@@ -968,6 +1048,12 @@
     document.getElementById("answerC").addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         checkC();
+      }
+    });
+
+    document.getElementById("gameCode").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkGameCode();
       }
     });
 
