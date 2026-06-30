@@ -7,13 +7,11 @@
   <style>
     :root {
       --red: #ff264d;
-      --red2: #9d001d;
       --cyan: #00f6ff;
       --green: #5dff8b;
       --yellow: #ffd36a;
       --white: #ffffff;
       --muted: #8fb4bc;
-      --dark: #03070a;
       --panel: rgba(3, 12, 18, 0.92);
       --border: rgba(0, 246, 255, 0.34);
     }
@@ -247,6 +245,18 @@
       animation: distancePulse 1.15s ease-in-out infinite;
     }
 
+    @keyframes distancePulse {
+      0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+      }
+
+      50% {
+        filter: brightness(1.18);
+        transform: scale(1.015);
+      }
+    }
+
     .distanceBar {
       height: 22px;
       border: 2px solid rgba(255,211,106,0.62);
@@ -281,18 +291,6 @@
     .dangerBottom strong {
       color: var(--red);
       font-weight: bold;
-    }
-
-    @keyframes distancePulse {
-      0%, 100% {
-        filter: brightness(1);
-        transform: scale(1);
-      }
-
-      50% {
-        filter: brightness(1.18);
-        transform: scale(1.015);
-      }
     }
 
     .mainGrid {
@@ -359,6 +357,29 @@
       padding: 9px;
       font-size: 12px;
       line-height: 1.45;
+    }
+
+    .solutionGrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 11px;
+    }
+
+    .solutionPill {
+      border: 1px solid rgba(0,246,255,0.28);
+      background: rgba(0,0,0,0.32);
+      color: var(--muted);
+      padding: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .solutionPill.done {
+      color: var(--green);
+      border-color: rgba(93,255,139,0.5);
+      background: rgba(93,255,139,0.08);
     }
 
     .logBox {
@@ -584,8 +605,7 @@
     }
 
     .checkButton,
-    .finalButton,
-    .resetButton {
+    .finalButton {
       width: 100%;
       border: 1px solid rgba(0,246,255,0.5);
       background: rgba(0,246,255,0.10);
@@ -599,8 +619,7 @@
     }
 
     .checkButton:hover,
-    .finalButton:hover,
-    .resetButton:hover {
+    .finalButton:hover {
       border-color: var(--white);
       color: var(--white);
     }
@@ -702,29 +721,6 @@
     .gridCell.locked {
       pointer-events: none;
       opacity: 0.85;
-    }
-
-    .solutionGrid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-      font-size: 11px;
-    }
-
-    .solutionPill {
-      border: 1px solid rgba(0,246,255,0.28);
-      background: rgba(0,0,0,0.32);
-      color: var(--muted);
-      padding: 6px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .solutionPill.done {
-      color: var(--green);
-      border-color: rgba(93,255,139,0.5);
-      background: rgba(93,255,139,0.08);
     }
 
     .endOverlay {
@@ -879,21 +875,9 @@
         font-size: 20px;
       }
 
-      .missionProgressLabel {
-        font-size: 11px;
-      }
-
-      .dangerMeterTop {
-        padding: 12px;
-      }
-
       .dangerTopRow {
         grid-template-columns: 1fr;
         text-align: center;
-      }
-
-      .dangerLabel {
-        font-size: 14px;
       }
 
       .distanceValue {
@@ -901,26 +885,10 @@
         font-size: 42px;
       }
 
-      .distanceBar {
-        height: 18px;
-      }
-
       .dangerBottom {
         flex-direction: column;
         text-align: center;
         gap: 4px;
-      }
-
-      .mapWrap {
-        height: 250px;
-      }
-
-      .droneFeed video {
-        height: 240px;
-      }
-
-      .feedTelemetry {
-        grid-template-columns: 1fr;
       }
 
       .gridCell {
@@ -971,7 +939,7 @@
 
       <p>
         Once this mission starts, the approach bar cannot be paused.
-        Stop the drone before it reaches Hardenberg.
+        You have one hour to stop the drone before it reaches Hardenberg.
       </p>
 
       <button onclick="startFinalMission()">START FINAL MISSION</button>
@@ -1053,8 +1021,6 @@
 &gt; suspense audio standing by
 &gt; live drone feed standing by
 &gt; route solution required</div>
-
-        <button class="resetButton" onclick="resetMission()">RESET MISSION</button>
       </aside>
 
       <section class="panel">
@@ -1214,13 +1180,17 @@
       <p>
         The drone reached Hardenberg. The override window has closed.
       </p>
-      <button class="resetButton" onclick="resetMission()">RESET MISSION</button>
+      <p>
+        Reload the page only if the mission must be restarted from the beginning.
+      </p>
     </div>
   </div>
 
   <audio id="suspenseAudio" src="suspense.mp3" preload="auto" loop></audio>
 
   <script>
+    const missionDurationSeconds = 3600;
+
     const correctAB = "12";
     const correctBC = "31";
     const correctCD = "16";
@@ -1272,7 +1242,7 @@
 
     const activeGridCells = new Set();
 
-    let timeLeft = 300;
+    let timeLeft = missionDurationSeconds;
     let timerInterval = null;
     let finalMissionStarted = false;
     let missionFailed = false;
@@ -1295,7 +1265,7 @@
         return;
       }
 
-      const timeRatio = Math.max(0, Math.min(1, timeLeft / 300));
+      const timeRatio = Math.max(0, Math.min(1, timeLeft / missionDurationSeconds));
       const currentDistance = startingDroneDistanceKm * timeRatio;
       const fillPercent = timeRatio * 100;
 
@@ -1343,6 +1313,7 @@
 
       addLog("> final mission accepted");
       addLog("> danger meter started");
+      addLog("> one-hour override window active");
       addLog("> suspense audio armed");
       addLog("> live drone feed connected");
       addLog("> visual contact restored");
@@ -1643,55 +1614,6 @@
       localStorage.setItem("droneSolved", "yes");
 
       document.getElementById("endOverlay").style.display = "flex";
-    }
-
-    function resetMission() {
-      timeLeft = 300;
-      finalMissionStarted = false;
-      missionFailed = false;
-
-      solved.route = false;
-      solved.signal = false;
-      solved.gridlock = false;
-      solved.final = false;
-
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-
-      stopSuspenseAudio();
-
-      document.getElementById("abInput").value = "";
-      document.getElementById("bcInput").value = "";
-      document.getElementById("cdInput").value = "";
-
-      document.getElementById("sliderA").value = 50;
-      document.getElementById("sliderB").value = 50;
-      document.getElementById("sliderC").value = 50;
-
-      updateSliderLabels();
-      updateTimerDisplay();
-      resetGridlockState();
-      updatePills();
-
-      document.getElementById("checkGridlock").disabled = false;
-      document.getElementById("checkGridlock").textContent = "CHECK GRIDLOCK MATRIX";
-
-      document.getElementById("finalButton").classList.remove("ready");
-      document.getElementById("finalButton").textContent = "FINAL ABORT COMMAND";
-
-      document.getElementById("endOverlay").style.display = "none";
-      document.getElementById("failOverlay").style.display = "none";
-      document.getElementById("missionIntroOverlay").style.display = "flex";
-
-      document.getElementById("logBox").textContent =
-`> drone interface loaded
-> waiting for final mission start
-> danger meter inactive
-> suspense audio standing by
-> live drone feed standing by
-> route solution required`;
     }
 
     buildGridlock();
