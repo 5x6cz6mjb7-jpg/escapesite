@@ -926,12 +926,12 @@
           <span class="heartLabel">Wedding Proof</span>
         </button>
 
-        <a href="memory.html" class="heartIconButton">
+        <a href="memory.html" class="heartIconButton" onclick="trackEvent('open_memory_game')">
           <span class="heartIcon">★</span>
           <span class="heartLabel">Memory</span>
         </a>
 
-        <a href="terminal.html" class="heartIconButton">
+        <a href="terminal.html" class="heartIconButton" onclick="trackEvent('return_to_terminal')">
           <span class="heartIcon">⌂</span>
           <span class="heartLabel">Terminal</span>
         </a>
@@ -940,6 +940,40 @@
   </main>
 
   <script>
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "private.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const privatePassword = "THORNENESSA";
     let currentChatChapter = 0;
 
@@ -1262,22 +1296,26 @@ I kept the photograph because one day it might matter.`
       const value = normalizeCode(input.value);
 
       if (value === privatePassword) {
+        trackEvent("private_password_correct");
         message.style.color = "#ffd1ec";
         message.textContent = "ACCESS GRANTED // opening private archive...";
 
         localStorage.setItem("privateOpened", "yes");
+        trackEvent("private_archive_unlocked");
 
         setTimeout(function() {
           overlay.style.display = "none";
           showArchive();
         }, 650);
       } else {
+        trackEvent("private_password_wrong");
         message.style.color = "#ff3355";
         message.textContent = "ACCESS DENIED // incorrect private password.";
       }
     }
 
     function showArchive() {
+      trackEvent("private_archive_opened");
       document.getElementById("archiveScreen").style.display = "block";
       document.getElementById("bottomDock").style.display = "block";
       document.getElementById("viewerWindow").style.display = "none";
@@ -1368,6 +1406,7 @@ I kept the photograph because one day it might matter.`
     }
 
     function previousChatChapter() {
+      trackEvent("private_chat_previous");
       currentChatChapter--;
 
       if (currentChatChapter < 0) {
@@ -1378,6 +1417,7 @@ I kept the photograph because one day it might matter.`
     }
 
     function nextChatChapter() {
+      trackEvent("private_chat_next");
       currentChatChapter++;
 
       if (currentChatChapter >= chatChapters.length) {
@@ -1396,6 +1436,8 @@ I kept the photograph because one day it might matter.`
 
     function openFile(key, button) {
       const file = files[key];
+
+      trackEvent("private_file_opened", key);
 
       document.getElementById("emptyStage").style.display = "none";
       document.getElementById("viewerWindow").style.display = "block";
@@ -1437,6 +1479,7 @@ I kept the photograph because one day it might matter.`
       const blackStartPassword = document.getElementById("blackStartPassword");
 
       if (localStorage.getItem("privateOpened") === "yes") {
+        trackEvent("private_auto_open_cache");
         document.getElementById("blackStartOverlay").style.display = "none";
         showArchive();
         return;
