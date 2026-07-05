@@ -1190,6 +1190,40 @@
   <audio id="suspenseAudio" src="suspense.mp3" preload="auto" loop></audio>
 
   <script>
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "drone.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const missionDurationSeconds = 1800;
 
     const correctAB = "12";
@@ -1247,6 +1281,8 @@
     let timerInterval = null;
     let finalMissionStarted = false;
     let missionFailed = false;
+    let finalUnlockTracked = false;
+    let droneSolvedTracked = localStorage.getItem("droneSolvedTracked") === "yes";
 
     function addLog(text) {
       const logBox = document.getElementById("logBox");
@@ -1309,6 +1345,8 @@
       }
 
       finalMissionStarted = true;
+
+      trackEvent("drone_final_mission_started");
 
       document.getElementById("missionIntroOverlay").style.display = "none";
 
@@ -1375,6 +1413,8 @@
 
       stopSuspenseAudio();
 
+      trackEvent("drone_failed", "time_left=" + timeLeft);
+
       addLog("> drone reached Hardenberg sector");
       addLog("> drone override window closed");
 
@@ -1387,6 +1427,7 @@
       }
 
       timeLeft = Math.max(0, timeLeft - seconds);
+      trackEvent("drone_penalty_applied", "-" + seconds + " seconds; time_left=" + timeLeft);
       updateTimerDisplay();
 
       if (timeLeft <= 0) {
@@ -1406,21 +1447,32 @@
 
     function checkRoute() {
       if (!finalMissionStarted) {
+        trackEvent("drone_route_check_before_start");
         addLog("> mission not started");
         return;
       }
 
-      const ab = normalize(document.getElementById("abInput").value);
-      const bc = normalize(document.getElementById("bcInput").value);
-      const cd = normalize(document.getElementById("cdInput").value);
+      const rawAB = document.getElementById("abInput").value;
+      const rawBC = document.getElementById("bcInput").value;
+      const rawCD = document.getElementById("cdInput").value;
+
+      const ab = normalize(rawAB);
+      const bc = normalize(rawBC);
+      const cd = normalize(rawCD);
+
+      const routeDetails = "W-Z=" + rawAB + "; Z-N=" + rawBC + "; N-O=" + rawCD;
+
+      trackEvent("drone_route_entered", routeDetails);
 
       if (ab === correctAB && bc === correctBC && cd === correctCD) {
         solved.route = true;
+        trackEvent("drone_route_correct", routeDetails);
         addLog("> route wind-direction sequence accepted");
         addLog("> W-Z / Z-N / N-O distances verified");
         updatePills();
         checkFinalUnlock();
       } else {
+        trackEvent("drone_route_wrong", routeDetails);
         addLog("> route wind-direction mismatch");
         addLog("> penalty applied: -30 seconds");
         applyPenalty(30);
@@ -1435,6 +1487,7 @@
 
     function checkSliders() {
       if (!finalMissionStarted) {
+        trackEvent("drone_signal_check_before_start");
         addLog("> mission not started");
         return;
       }
@@ -1443,12 +1496,18 @@
       const b = Number(document.getElementById("sliderB").value);
       const c = Number(document.getElementById("sliderC").value);
 
+      const signalDetails = "A=" + a + "; B=" + b + "; C=" + c;
+
+      trackEvent("drone_signal_entered", signalDetails);
+
       if (a === correctSliderA && b === correctSliderB && c === correctSliderC) {
         solved.signal = true;
+        trackEvent("drone_signal_correct", signalDetails);
         addLog("> signal alignment accepted");
         updatePills();
         checkFinalUnlock();
       } else {
+        trackEvent("drone_signal_wrong", signalDetails);
         addLog("> signal alignment mismatch");
         addLog("> penalty applied: -30 seconds");
         applyPenalty(30);
@@ -1514,12 +1573,18 @@
 
     function checkGridlock() {
       if (!finalMissionStarted) {
+        trackEvent("drone_gridlock_check_before_start");
         addLog("> mission not started");
         return;
       }
 
-      const actual = Array.from(activeGridCells).sort().join(",");
-      const expected = gridlockCorrect.slice().sort().join(",");
+      const actualList = Array.from(activeGridCells).sort();
+      const expectedList = gridlockCorrect.slice().sort();
+
+      const actual = actualList.join(",");
+      const expected = expectedList.join(",");
+
+      trackEvent("drone_gridlock_entered", "selected=" + actualList.length + "; expected=" + expectedList.length);
 
       if (actual === expected) {
         solved.gridlock = true;
@@ -1533,10 +1598,12 @@
         button.disabled = true;
         button.textContent = "GRIDLOCK MATRIX ACCEPTED";
 
+        trackEvent("drone_gridlock_correct", "selected=" + actualList.length);
         addLog("> gridlock relay matrix accepted");
         updatePills();
         checkFinalUnlock();
       } else {
+        trackEvent("drone_gridlock_wrong", "selected=" + actualList.length + "; cells=" + actual);
         addLog("> gridlock relay mismatch");
         addLog("> penalty applied: -30 seconds");
         applyPenalty(30);
@@ -1580,6 +1647,12 @@
       if (solved.route && solved.signal && solved.gridlock) {
         finalButton.classList.add("ready");
         finalButton.textContent = "FINAL ABORT COMMAND READY";
+
+        if (!finalUnlockTracked) {
+          finalUnlockTracked = true;
+          trackEvent("drone_final_abort_unlocked");
+        }
+
         addLog("> all override systems accepted");
         addLog("> final abort command unlocked");
       }
@@ -1587,11 +1660,13 @@
 
     function finalAbort() {
       if (!finalMissionStarted) {
+        trackEvent("drone_final_abort_before_start");
         addLog("> mission not started");
         return;
       }
 
       if (!(solved.route && solved.signal && solved.gridlock)) {
+        trackEvent("drone_final_abort_locked");
         addLog("> final abort command locked");
         addLog("> all systems must be accepted first");
         applyPenalty(30);
@@ -1607,6 +1682,14 @@
       }
 
       stopSuspenseAudio();
+
+      if (!droneSolvedTracked) {
+        droneSolvedTracked = true;
+        localStorage.setItem("droneSolvedTracked", "yes");
+        trackEvent("drone_solved", "time_left=" + timeLeft);
+      }
+
+      trackEvent("drone_final_abort_accepted", "time_left=" + timeLeft);
 
       addLog("> final abort command accepted");
       addLog("> drone payload sequence interrupted");
