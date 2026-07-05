@@ -779,7 +779,7 @@
 
               <div class="lockStatus" id="resultGame">Status: not completed</div>
 
-              <a class="gameButton" href="snake.html">
+              <a class="gameButton" href="snake.html" onclick="trackEvent('open_field_game')">
                 OPEN FIELD GAME
                 <small>play the snake game first</small>
               </a>
@@ -854,7 +854,7 @@ My note: a garden built for medicine can also teach other lessons.
               <div class="fragment">PRIVATE CODE PART 2: N</div>
             </div>
 
-            <a class="backButton" href="terminal.html">RETURN TO TERMINAL</a>
+            <a class="backButton" href="terminal.html" onclick="trackEvent('return_to_terminal')">RETURN TO TERMINAL</a>
           </div>
         </div>
       </section>
@@ -862,10 +862,57 @@ My note: a garden built for medicine can also teach other lessons.
   </main>
 
   <script>
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "botany.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      const payload = JSON.stringify(data);
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
+        navigator.sendBeacon(TRACKING_URL, blob);
+        return;
+      }
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: payload
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const correctAnswerA = "614128";
     const correctAnswerB = "35721";
     const correctAnswerC = "GERANIUMSANGUINEUM";
     const correctGameCode = "WITTEKLAVER";
+
+    let botanySolvedTracked = localStorage.getItem("botanySolvedTracked") === "yes";
 
     const diaryEntries = {
       physic: {
@@ -971,6 +1018,7 @@ Most people visit a botanic garden and think they are looking at plants. That is
       document.getElementById("diaryQuote").textContent = entry.quote;
 
       appendLog("> diary note opened // " + entry.title);
+      trackEvent("botany_diary_opened", key);
     }
 
     function markError(id, text) {
@@ -1004,8 +1052,10 @@ Most people visit a botanic garden and think they are looking at plants. That is
       const value = normalize(document.getElementById("answerA").value);
 
       if (value === normalize(correctAnswerA)) {
+        trackEvent("botany_input_a_correct");
         markSolved("blockA", "buttonA", "resultA", "614128 accepted", "botanicalA", "> input A accepted");
       } else {
+        trackEvent("botany_input_a_wrong");
         markError("blockA", "> input A rejected");
       }
     }
@@ -1014,8 +1064,10 @@ Most people visit a botanic garden and think they are looking at plants. That is
       const value = normalize(document.getElementById("answerB").value);
 
       if (value === normalize(correctAnswerB)) {
+        trackEvent("botany_input_b_correct");
         markSolved("blockB", "buttonB", "resultB", "35721 accepted", "botanicalB", "> input B accepted");
       } else {
+        trackEvent("botany_input_b_wrong");
         markError("blockB", "> input B rejected");
       }
     }
@@ -1024,8 +1076,10 @@ Most people visit a botanic garden and think they are looking at plants. That is
       const value = normalize(document.getElementById("answerC").value);
 
       if (value === normalize(correctAnswerC)) {
+        trackEvent("botany_input_c_correct");
         markSolved("blockC", "buttonC", "resultC", "GERANIUM SANGUINEUM accepted", "botanicalC", "> input C accepted");
       } else {
+        trackEvent("botany_input_c_wrong");
         markError("blockC", "> input C rejected");
       }
     }
@@ -1038,8 +1092,10 @@ Most people visit a botanic garden and think they are looking at plants. That is
         localStorage.setItem("botanicalGameSolved", "yes");
         localStorage.setItem("snakeSolved", "yes");
 
+        trackEvent("botany_field_game_code_correct");
         markSolved("blockGame", "buttonGame", "resultGame", "WITTEKLAVER accepted", "botanicalGame", "> field game code accepted");
       } else {
+        trackEvent("botany_field_game_code_wrong");
         markError("blockGame", "> field game code rejected");
       }
     }
@@ -1084,9 +1140,21 @@ Most people visit a botanic garden and think they are looking at plants. That is
         document.getElementById("resultGame").textContent = "Status: not completed";
       }
 
+      const solvedCount = [solvedA, solvedB, solvedC, gameSolved].filter(Boolean).length;
+
+      if (solvedCount > 0) {
+        trackEvent("botany_progress_state", solvedCount + " / 4");
+      }
+
       if (solvedA && solvedB && solvedC && gameSolved) {
         document.getElementById("unlockBox").style.display = "block";
         localStorage.setItem("botanicalSolved", "yes");
+
+        if (!botanySolvedTracked) {
+          botanySolvedTracked = true;
+          localStorage.setItem("botanySolvedTracked", "yes");
+          trackEvent("botany_solved", "PRIVATE CODE PART 2: N");
+        }
       } else {
         document.getElementById("unlockBox").style.display = "none";
       }
