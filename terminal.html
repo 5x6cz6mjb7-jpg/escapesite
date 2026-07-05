@@ -1585,7 +1585,7 @@
 
         <div class="desktopMain">
           <nav class="iconColumn">
-            <a class="desktopIcon" href="chemistry.html">
+            <a class="desktopIcon" href="chemistry.html" onclick="trackEvent('open_chemistry')">
               <span class="folder95 chemistry">
                 <span class="tab"></span>
                 <span class="back"></span>
@@ -1594,7 +1594,7 @@
               <span class="iconName">Chemistry</span>
             </a>
 
-            <a class="desktopIcon" href="botany.html">
+            <a class="desktopIcon" href="botany.html" onclick="trackEvent('open_botany')">
               <span class="folder95 botany">
                 <span class="tab"></span>
                 <span class="back"></span>
@@ -1603,7 +1603,7 @@
               <span class="iconName">Botany</span>
             </a>
 
-            <a class="desktopIcon" href="private.html">
+            <a class="desktopIcon" href="private.html" onclick="trackEvent('open_private')">
               <span class="folder95 private">
                 <span class="tab"></span>
                 <span class="back"></span>
@@ -1617,7 +1617,7 @@
               <span class="iconName">My Computer</span>
             </button>
 
-            <a class="desktopIcon" href="shoot.html">
+            <a class="desktopIcon" href="shoot.html" onclick="trackEvent('open_backup_disk')">
               <span class="oldIcon diskIcon"></span>
               <span class="iconName">Backup Disk</span>
             </a>
@@ -1911,6 +1911,51 @@ Click an item to recover readable text.</div>
     const correctEmail = "n.thorne@stbrigid-lab.ie";
     const correctPassword = "BLOODYCRANESBILL";
 
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "terminal.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      const payload = JSON.stringify(data);
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
+        navigator.sendBeacon(TRACKING_URL, blob);
+        return;
+      }
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: payload
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const easterEggs = {
       poem: {
         title: "old_poem_fragment_final2.txt",
@@ -2038,18 +2083,24 @@ Reason: survives quietly where no one pays attention.`
 
         localStorage.setItem("thorneLoggedIn", "yes");
 
+        trackEvent("terminal_login_success");
+
         setTimeout(function() {
           openDesktop();
         }, 900);
       } else {
         message.style.color = "#ff5555";
         message.textContent = "ACCESS DENIED // invalid email or password.";
+
+        trackEvent("terminal_login_failed");
       }
     }
 
     function showPasswordHint() {
       const hintBox = document.getElementById("hintBox");
       const message = document.getElementById("loginMessage");
+
+      trackEvent("password_recovery_opened");
 
       hintBox.style.display = "block";
       message.style.color = "#ffee66";
@@ -2093,10 +2144,14 @@ Reason: survives quietly where no one pays attention.`
         passwordReveal.style.display = "block";
 
         localStorage.setItem("passwordRecoverySolved", "yes");
+
+        trackEvent("password_recovery_solved");
       } else {
         recoveryMessage.style.color = "#ff5555";
         recoveryMessage.textContent = "RECOVERY RECORD MISMATCH // name and lesson must both match the poisoned coffee incident.";
         passwordReveal.style.display = "none";
+
+        trackEvent("password_recovery_failed");
       }
     }
 
@@ -2109,6 +2164,8 @@ Reason: survives quietly where no one pays attention.`
     }
 
     function openReadme() {
+      trackEvent("open_readme");
+
       document.getElementById("readmeWindow").style.display = "block";
       document.getElementById("myComputerWindow").style.display = "none";
       document.getElementById("recycleWindow").style.display = "none";
@@ -2120,6 +2177,8 @@ Reason: survives quietly where no one pays attention.`
     }
 
     function openMyComputer() {
+      trackEvent("open_my_computer");
+
       document.getElementById("myComputerWindow").style.display = "block";
       document.getElementById("readmeWindow").style.display = "none";
       document.getElementById("recycleWindow").style.display = "none";
@@ -2135,6 +2194,8 @@ Reason: survives quietly where no one pays attention.`
 
     function openDriveInfo(type) {
       const output = document.getElementById("driveOutput");
+
+      trackEvent("open_drive_info", type);
 
       if (type === "cdrive") {
         output.innerHTML =
@@ -2184,6 +2245,8 @@ Reason: survives quietly where no one pays attention.`
     }
 
     function openRecycle() {
+      trackEvent("open_recycle_bin");
+
       document.getElementById("recycleWindow").style.display = "block";
       document.getElementById("myComputerWindow").style.display = "none";
       document.getElementById("readmeWindow").style.display = "none";
@@ -2197,6 +2260,8 @@ Reason: survives quietly where no one pays attention.`
 
     function openEasterEgg(type) {
       const file = easterEggs[type];
+
+      trackEvent("open_deleted_file", type);
 
       document.getElementById("easterEggTitle").textContent = file.title;
       document.getElementById("easterEggHeader").textContent = file.header;
@@ -2271,6 +2336,8 @@ Reason: survives quietly where no one pays attention.`
       appendCommandLine("C:\\THORNE> " + rawCommand);
 
       if (command === "echoseed") {
+        trackEvent("terminal_command_echoseed");
+
         appendCommandLine("> backup disk code accepted");
         appendCommandLine("> dormant command layer responding...");
         appendCommandLine("> audio payload detected");
@@ -2287,6 +2354,8 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command === "goldeneye") {
+        trackEvent("terminal_command_goldeneye");
+
         appendCommandLine("> GOLDENEYE code accepted");
         appendCommandLine("> memory code verified");
         appendCommandLine("> final drone environment unlocked");
@@ -2302,6 +2371,8 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command === "drone") {
+        trackEvent("terminal_command_drone_attempt");
+
         appendCommandLine("> command rejected");
         appendCommandLine("> direct drone access disabled");
         appendCommandLine("> final access requires recovered memory code");
@@ -2309,6 +2380,8 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command === "help") {
+        trackEvent("terminal_command_help");
+
         appendCommandLine("> available actions: open desktop folders manually");
         appendCommandLine("> readable directories: Chemistry, Botany, Private");
         appendCommandLine("> mounted disk: Backup Disk");
@@ -2326,6 +2399,8 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command === "dir" || command === "ls") {
+        trackEvent("terminal_command_directory");
+
         appendCommandLine("> DIRECTORY LIST");
         appendCommandLine("> Chemistry");
         appendCommandLine("> Botany");
@@ -2337,6 +2412,8 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command.includes("jason")) {
+        trackEvent("terminal_command_jason");
+
         appendCommandLine("> external name reference found");
         appendCommandLine("> context unavailable from terminal shell");
         appendCommandLine("> open archive folders manually");
@@ -2344,11 +2421,15 @@ Reason: survives quietly where no one pays attention.`
       }
 
       if (command.includes("thorne") || command.includes("professor") || command.includes("n.thorne")) {
+        trackEvent("terminal_command_thorne");
+
         appendCommandLine("> user profile: DR. N. THORNE");
         appendCommandLine("> former lecturer // botanical chemistry");
         appendCommandLine("> private archive integrity: unstable");
         return;
       }
+
+      trackEvent("terminal_command_unknown", rawCommand);
 
       const response = randomTerminalResponses[Math.floor(Math.random() * randomTerminalResponses.length)];
       appendCommandLine(response);
@@ -2412,6 +2493,7 @@ Reason: survives quietly where no one pays attention.`
     });
 
     if (localStorage.getItem("thorneLoggedIn") === "yes") {
+      trackEvent("terminal_auto_login_cache");
       openDesktop();
     }
 
