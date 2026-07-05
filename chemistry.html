@@ -882,7 +882,7 @@
             3. External chemistry game code
           </div>
 
-          <a class="gameLink" href="tetris.html">OPEN CHEMISTRY GAME</a>
+          <a class="gameLink" href="tetris.html" onclick="trackEvent('open_chemistry_game')">OPEN CHEMISTRY GAME</a>
 
           <div class="checkBlock" id="blockGame">
             <div class="checkHeader">PROTOCOL CODE</div>
@@ -896,13 +896,58 @@
             Deeper layer sealed.
           </div>
 
-          <a href="terminal.html" class="backLink">RETURN TO DESKTOP</a>
+          <a href="terminal.html" class="backLink" onclick="trackEvent('return_to_terminal')">RETURN TO DESKTOP</a>
         </div>
       </aside>
     </section>
   </main>
 
   <script>
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "chemistry.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      const payload = JSON.stringify(data);
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: "text/plain;charset=utf-8" });
+        navigator.sendBeacon(TRACKING_URL, blob);
+        return;
+      }
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: payload
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const correctAnswerA = "CBAB";
     const correctAnswerBOptions = ["KWIK", "MERCURY"];
     const correctGameCode = "ROZENBOTTEL";
@@ -910,6 +955,7 @@
     let aSolved = false;
     let bSolved = false;
     let gameSolved = false;
+    let chemistrySolvedTracked = localStorage.getItem("chemistrySolvedTracked") === "yes";
 
     function normalize(value) {
       return String(value)
@@ -961,10 +1007,12 @@
         aSolved = true;
         localStorage.setItem("chemistryA", "yes");
         setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
+        trackEvent("chemistry_input_a_correct");
       } else {
         aSolved = false;
         localStorage.removeItem("chemistryA");
         setWrong("blockA", "answerA", "statusA", "Input A rejected.");
+        trackEvent("chemistry_input_a_wrong");
       }
 
       checkUnlock();
@@ -977,10 +1025,12 @@
         bSolved = true;
         localStorage.setItem("chemistryB", "yes");
         setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
+        trackEvent("chemistry_input_b_correct");
       } else {
         bSolved = false;
         localStorage.removeItem("chemistryB");
         setWrong("blockB", "answerB", "statusB", "Input B rejected.");
+        trackEvent("chemistry_input_b_wrong");
       }
 
       checkUnlock();
@@ -993,10 +1043,12 @@
         gameSolved = true;
         localStorage.setItem("chemistryGame", "yes");
         setCorrect("blockGame", "gameCode", "statusGame", "Protocol accepted.");
+        trackEvent("chemistry_game_code_correct");
       } else {
         gameSolved = false;
         localStorage.removeItem("chemistryGame");
         setWrong("blockGame", "gameCode", "statusGame", "Protocol rejected.");
+        trackEvent("chemistry_game_code_wrong");
       }
 
       checkUnlock();
@@ -1021,22 +1073,38 @@
 
       document.getElementById("recoveredEnvironment").style.display = "block";
       document.getElementById("recoveredEnvironment").scrollIntoView({ behavior: "smooth" });
+
+      if (!chemistrySolvedTracked) {
+        chemistrySolvedTracked = true;
+        localStorage.setItem("chemistrySolvedTracked", "yes");
+        trackEvent("chemistry_solved", "PRIVATE CODE PART 1: THORNE");
+      }
     }
 
     function restoreProgress() {
+      let restoredSomething = false;
+
       if (localStorage.getItem("chemistryA") === "yes") {
         aSolved = true;
+        restoredSomething = true;
         setCorrect("blockA", "answerA", "statusA", "Input A accepted.");
       }
 
       if (localStorage.getItem("chemistryB") === "yes") {
         bSolved = true;
+        restoredSomething = true;
         setCorrect("blockB", "answerB", "statusB", "Input B accepted.");
       }
 
       if (localStorage.getItem("chemistryGame") === "yes") {
         gameSolved = true;
+        restoredSomething = true;
         setCorrect("blockGame", "gameCode", "statusGame", "Protocol accepted.");
+      }
+
+      if (restoredSomething) {
+        const solvedCount = [aSolved, bSolved, gameSolved].filter(Boolean).length;
+        trackEvent("chemistry_progress_restored", solvedCount + " / 3");
       }
 
       if (localStorage.getItem("chemistrySolved") === "yes") {
