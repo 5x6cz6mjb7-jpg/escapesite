@@ -635,7 +635,8 @@
           <div class="buttonRow">
             <button onclick="startGame()" id="startButton">START GAME</button>
             <button onclick="resetGame()">RESET</button>
-            <a href="private.html" class="buttonLink">RETURN TO PRIVATE</a>
+            <a href="private.html" class="buttonLink" onclick="trackEvent('return_to_private')">RETURN TO PRIVATE</a>
+            <a href="terminal.html" class="buttonLink" onclick="trackEvent('return_to_terminal')">RETURN TO TERMINAL</a>
           </div>
         </div>
       </aside>
@@ -665,12 +666,47 @@
       <div class="codeBox" id="codeBox">GOLDENEYE</div>
       <div class="buttonRow" style="justify-content:center;">
         <button onclick="closeOverlay()">CONTINUE</button>
-        <a href="private.html" class="buttonLink">RETURN TO PRIVATE</a>
+        <a href="private.html" class="buttonLink" onclick="trackEvent('return_to_private')">RETURN TO PRIVATE</a>
+        <a href="terminal.html" class="buttonLink" onclick="trackEvent('return_to_terminal')">RETURN TO TERMINAL</a>
       </div>
     </div>
   </div>
 
   <script>
+    /* === ESCAPE ROOM TRACKING === */
+    const TRACKING_URL = "https://script.google.com/macros/s/AKfycbzjLiqV-YEPy9WuThSybDWIAXiOcHhjhERw2TrZUkKfpe7faHgnkmVE9w_3vNgdh0WG/exec";
+
+    function getEscapeSessionId() {
+      let sessionId = localStorage.getItem("escapeSessionId");
+
+      if (!sessionId) {
+        sessionId = "team-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+        localStorage.setItem("escapeSessionId", sessionId);
+      }
+
+      return sessionId;
+    }
+
+    function trackEvent(action, details = "") {
+      const data = {
+        page: window.location.pathname.split("/").pop() || "memory.html",
+        action: action,
+        session: getEscapeSessionId(),
+        details: details
+      };
+
+      fetch(TRACKING_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(data)
+      }).catch(function(error) {
+        console.log("Tracking failed:", error);
+      });
+    }
+
+    trackEvent("page_opened");
+    /* === EINDE TRACKING === */
+
     const unlockCode = "GOLDENEYE";
     const totalTime = 120;
 
@@ -873,6 +909,7 @@
     }
 
     function startGame() {
+      trackEvent("memory_game_started");
       resetGameState();
       buildDeck();
       renderCards();
@@ -918,6 +955,7 @@
     }
 
     function resetGame() {
+      trackEvent("memory_game_reset", "moves=" + moves + "; pairs=" + matchedPairs + "; timeLeft=" + timeLeft);
       resetGameState();
       buildDeck();
       renderCards();
@@ -936,6 +974,7 @@
 
       cardButton.classList.add("flipped");
       flippedCards.push(index);
+      trackEvent("memory_card_flipped", cards[index].id);
 
       if (flippedCards.length === 2) {
         moves++;
@@ -962,6 +1001,7 @@
           secondButton.classList.add("matched");
 
           matchedPairs++;
+          trackEvent("memory_pair_matched", firstCard.id + "; pairs=" + matchedPairs + "; moves=" + moves);
           document.getElementById("pairsFound").textContent = matchedPairs + " / 10";
           document.getElementById("progressPill").textContent = "Matched " + matchedPairs + " of 10";
 
@@ -973,6 +1013,7 @@
           }
         }, 450);
       } else {
+        trackEvent("memory_pair_wrong", firstCard.id + " + " + secondCard.id + "; moves=" + moves);
         setTimeout(function() {
           firstButton.classList.remove("flipped");
           secondButton.classList.remove("flipped");
@@ -990,6 +1031,7 @@
 
       localStorage.setItem("memorySolved", "yes");
       localStorage.setItem("memoryCode", unlockCode);
+      trackEvent("memory_solved", "code=" + unlockCode + "; moves=" + moves + "; timeLeft=" + timeLeft);
 
       document.getElementById("gameStatus").textContent = "UNLOCKED";
       document.getElementById("progressPill").textContent = "Code recovered";
@@ -1007,6 +1049,7 @@
       clearInterval(timerInterval);
       gameStarted = false;
       lockBoard = true;
+      trackEvent("memory_failed", "moves=" + moves + "; pairs=" + matchedPairs);
 
       document.getElementById("gameStatus").textContent = "FAILED";
       document.getElementById("progressPill").textContent = "Time expired";
@@ -1020,6 +1063,7 @@
     }
 
     function closeOverlay() {
+      trackEvent("memory_result_closed");
       document.getElementById("resultOverlay").style.display = "none";
     }
 
@@ -1029,5 +1073,3 @@
   </script>
 </body>
 </html>
-
-<a href="terminal.html" class="buttonLink">RETURN TO TERMINAL</a>
