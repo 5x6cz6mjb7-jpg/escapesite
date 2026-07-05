@@ -939,7 +939,7 @@
 
       <p>
         Once this mission starts, the approach bar cannot be paused.
-        You have one hour to stop the drone before it reaches Hardenberg.
+        You have half an hour to stop the drone before it reaches Hardenberg.
       </p>
 
       <button onclick="startFinalMission()">START FINAL MISSION</button>
@@ -999,6 +999,7 @@
           <div class="hudRow"><span>Drone feed</span><span>connected</span></div>
           <div class="hudRow"><span>Route data</span><span>damaged</span></div>
           <div class="hudRow"><span>Manual input</span><span>required</span></div>
+          <div class="hudRow"><span>Mission window</span><span>30 minutes</span></div>
           <div class="hudRow"><span>Wrong input penalty</span><span>-30 seconds</span></div>
         </div>
 
@@ -1189,7 +1190,7 @@
   <audio id="suspenseAudio" src="suspense.mp3" preload="auto" loop></audio>
 
   <script>
-    const missionDurationSeconds = 3600;
+    const missionDurationSeconds = 1800;
 
     const correctAB = "12";
     const correctBC = "31";
@@ -1313,7 +1314,7 @@
 
       addLog("> final mission accepted");
       addLog("> danger meter started");
-      addLog("> one-hour override window active");
+      addLog("> half-hour override window active");
       addLog("> suspense audio armed");
       addLog("> live drone feed connected");
       addLog("> visual contact restored");
