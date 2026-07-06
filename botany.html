@@ -910,7 +910,7 @@ My note: a garden built for medicine can also teach other lessons.
     const correctAnswerA = "614128";
     const correctAnswerB = "35721";
     const correctAnswerC = "GERANIUMSANGUINEUM";
-    const correctGameCode = "WITTEKLAVER";
+    const correctGameCode = "NIGHTSHADE";
 
     let botanySolvedTracked = localStorage.getItem("botanySolvedTracked") === "yes";
 
@@ -1093,7 +1093,7 @@ Most people visit a botanic garden and think they are looking at plants. That is
         localStorage.setItem("snakeSolved", "yes");
 
         trackEvent("botany_field_game_code_correct");
-        markSolved("blockGame", "buttonGame", "resultGame", "WITTEKLAVER accepted", "botanicalGame", "> field game code accepted");
+        markSolved("blockGame", "buttonGame", "resultGame", "nightshade accepted", "botanicalGame", "> field game code accepted");
       } else {
         trackEvent("botany_field_game_code_wrong");
         markError("blockGame", "> field game code rejected");
@@ -1135,7 +1135,7 @@ Most people visit a botanic garden and think they are looking at plants. That is
         document.getElementById("blockGame").classList.add("solved");
         document.getElementById("buttonGame").disabled = true;
         document.getElementById("buttonGame").textContent = "LOCKED";
-        document.getElementById("resultGame").textContent = "Status: WITTEKLAVER accepted";
+        document.getElementById("resultGame").textContent = "Status: NIGHTSHADE accepted";
       } else {
         document.getElementById("resultGame").textContent = "Status: not completed";
       }
